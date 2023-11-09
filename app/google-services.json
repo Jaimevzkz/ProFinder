@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "268154570339",
+    "project_id": "profinder-9545f",
+    "storage_bucket": "profinder-9545f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268154570339:android:94e90cbd201ac2d7589a56",
+        "android_client_info": {
+          "package_name": "com.vzkz.profinder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkuzCvBlOsT9An5BTQbW2G1d_b7v5JNas"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268154570339:android:862d47b0cf692dd1589a56",
+        "android_client_info": {
+          "package_name": "com.vzkz.profinder.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkuzCvBlOsT9An5BTQbW2G1d_b7v5JNas"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
