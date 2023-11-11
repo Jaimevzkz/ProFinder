@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(val signUpUseCase: SignUpUseCase): BaseViewModel<SignUpState, SignUpIntent>(SignUpState.initial) {
+class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCase): BaseViewModel<SignUpState, SignUpIntent>(SignUpState.initial) {
 
     override fun reduce(state: SignUpState, intent: SignUpIntent): SignUpState { //This function reduces each intent with a when
         return when (intent) {
@@ -22,7 +22,7 @@ class SignUpViewModel @Inject constructor(val signUpUseCase: SignUpUseCase): Bas
 
             is SignUpIntent.SignUp -> state.copy(
                 error = Error(false, null),
-                userName = intent.username,
+                nickname = intent.username,
                 loading = false,
                 success = true
             )
@@ -42,15 +42,16 @@ class SignUpViewModel @Inject constructor(val signUpUseCase: SignUpUseCase): Bas
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
-    fun onSignUp(email: String, password: String) {
+    fun onSignUp(email: String, password: String, nickname: String) {
         dispatch(SignUpIntent.Loading(isLoading = true))
         viewModelScope.launch {
             try {
-                val result = withContext(Dispatchers.IO) { signUpUseCase(email, password) }
+                val result = withContext(Dispatchers.IO) { signUpUseCase(email, password, nickname) }
                 if (result != null) {
-                    dispatch(SignUpIntent.SignUp(result.user))
+                    //signUp worked and we have the uid, now we should link to firestore using nickname (should be unique)
+                    dispatch(SignUpIntent.SignUp(result.nickname))
                 } else {
-                    Log.e("Jaime", "The code should never get here (Exception controlled)")
+                    Log.e("Jaime", "nickname already exists")
                     dispatch(SignUpIntent.Error(""))
                 }
             } catch (e: Exception) {

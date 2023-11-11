@@ -99,8 +99,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     //Analytics
     implementation("com.google.firebase:firebase-analytics")
-//    //FireStore
-//    implementation("com.google.firebase:firebase-firestore-ktx")
+    //FireStore
+    implementation("com.google.firebase:firebase-firestore-ktx")
 
     //Animation
     implementation("androidx.compose.animation:animation:1.5.4")

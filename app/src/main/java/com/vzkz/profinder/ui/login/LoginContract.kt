@@ -6,14 +6,14 @@ import com.vzkz.profinder.core.boilerplate.State
 
 data class LoginState(
     val loading: Boolean,
-    val userName: String?,
+    val nickname: String?,
     val success: Boolean,
     val error: Error
 ) : State {
     companion object {
         val initial: LoginState = LoginState(
             loading = false,
-            userName = null,
+            nickname = null,
             success = false,
             error = Error(false, null)
         )

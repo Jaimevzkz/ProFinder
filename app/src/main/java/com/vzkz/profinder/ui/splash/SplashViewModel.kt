@@ -1,21 +1,15 @@
 package com.vzkz.profinder.ui.splash
 
-import com.vzkz.profinder.core.boilerplate.BaseViewModel
+import androidx.lifecycle.ViewModel
+import com.vzkz.profinder.domain.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 @HiltViewModel
-class SplashViewModel @Inject constructor(): BaseViewModel<SplashState, SplashIntent>(SplashState.initial) {
-
-    override fun reduce(state: SplashState, intent: SplashIntent): SplashState { //This function reduces each intent with a when
-        TODO("Not yet implemented")
-    }
-
-    //Observe events from UI and dispatch them
-    fun onX(){ //Example fun
-        dispatch(SplashIntent.Loading)
-    }
-
-
+class SplashViewModel @Inject constructor(private val repository: Repository): ViewModel() {
+    //This viewmodel doesn't implement MVI because of the simplicity of the code
+    fun getDestination(): SplashDestinations =
+        if (repository.isUserLogged()) SplashDestinations.HomeDest else SplashDestinations.LoginDest
 }
+
+

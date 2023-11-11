@@ -13,4 +13,14 @@
     <string name="ok">Ok</string>
     <string name="error_during_sign_up">Error during sign up</string>
     <string name="account_already_exists">An account with that email already exists. The account wasn\'t created</string>
+    <string name="this_email_is_already_in_use">This email is already in use</string>
+    <string name="home">Home</string>
+    <string name="map">Map</string>
+    <string name="chat">Chat</string>
+    <string name="profile">Profile</string>
+    <string name="network_failure_while_checking_user_existence">Network Failure while checking user existence</string>
+    <string name="user_not_found">user not found</string>
+    <string name="couldn_t_insert_user_in_database">Couldn\'t insert user in database</string>
+    <string name="username_already_in_use">Username already in use</string>
+    <string name="logout">Logout</string>
 </resources>

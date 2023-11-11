@@ -1,5 +1,6 @@
 package com.vzkz.profinder.core.boilerplate.template
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -28,6 +29,12 @@ private fun ScreenBody() {
 
 @Preview
 @Composable
-fun SplashPreview() {
-    ScreenBody()
+fun LightPreview() {
+
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun DarkPreview() {
+
 }

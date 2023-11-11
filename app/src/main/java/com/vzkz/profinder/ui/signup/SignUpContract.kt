@@ -2,19 +2,18 @@ package com.vzkz.profinder.ui.signup
 
 import com.vzkz.profinder.core.boilerplate.Intent
 import com.vzkz.profinder.core.boilerplate.State
-import com.vzkz.profinder.ui.login.LoginIntent
 
 
 data class SignUpState(
     val loading: Boolean,
-    val userName: String?,
+    val nickname: String?,
     val success: Boolean,
     val error: Error
 ) : State {
     companion object {
         val initial: SignUpState = SignUpState(
             loading = false,
-            userName = null,
+            nickname = null,
             success = false,
             error = Error(false, null)
         )

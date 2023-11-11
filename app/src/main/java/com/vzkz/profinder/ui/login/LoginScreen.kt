@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
-import com.vzkz.profinder.destinations.DestinationScreenDestination
+import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.SignUpScreenDestination
 import com.vzkz.profinder.ui.components.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyAuthHeader
@@ -45,7 +45,7 @@ fun LoginScreen(
 ) {
     val state = loginViewModel.state
     if (state.success) {
-        navigator.navigate(DestinationScreenDestination)
+        navigator.navigate(HomeScreenDestination)
     } else if (state.loading) {
         MyCircularProgressbar(backGroundColor = MaterialTheme.colorScheme.background)
     } else {
@@ -125,7 +125,7 @@ private fun ScreenBody(
 
         MyAlertDialog(
             title = stringResource(R.string.error_during_login),
-            text = stringResource(R.string.wrong_email_or_password),
+            text = state.error.errorMsg ?: stringResource(R.string.invalid_password),
             onDismiss = { loginViewModel.onCloseDialog() },
             onConfirm = { loginViewModel.onCloseDialog() },
             showDialog = showDialog

@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
-import com.vzkz.profinder.destinations.DestinationScreenDestination
+import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.SignUpScreenDestination
 import com.vzkz.profinder.ui.components.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyAuthHeader
@@ -47,7 +47,7 @@ fun SignUpScreen(
 ) {
     val state = signUpViewModel.state
     if (state.success) {
-        navigator.navigate(DestinationScreenDestination)
+        navigator.navigate(HomeScreenDestination)
     } else if (state.loading) {
         MyCircularProgressbar(backGroundColor = MaterialTheme.colorScheme.background)
     } else {
@@ -73,7 +73,7 @@ private fun ScreenBody(
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
         var repeatPassword by remember { mutableStateOf("") }
-        var userName by remember { mutableStateOf("") }
+        var nickname by remember { mutableStateOf("") }
         //validation
         var isEmailValid by remember { mutableStateOf(true) }
         var isPasswordValid by remember { mutableStateOf(true) }
@@ -138,9 +138,9 @@ private fun ScreenBody(
             MySpacer(size = 8)
             MyGenericTextField(
                 modifier = Modifier,
-                text = userName,
+                text = nickname,
                 hint = stringResource(R.string.user_name),
-                onTextChanged = { userName = it })
+                onTextChanged = { nickname = it })
             MySpacer(16)
             Text(
                 text = stringResource(R.string.signup),
@@ -153,7 +153,7 @@ private fun ScreenBody(
         Button(
             onClick = {
                 if (isEmailValid && isPasswordValid && isSamePassword) {
-                    signUpViewModel.onSignUp(email, password)
+                    signUpViewModel.onSignUp(email, password, nickname)
                 }
             },
             Modifier
@@ -166,7 +166,7 @@ private fun ScreenBody(
 
         MyAlertDialog(
             title = stringResource(R.string.error_during_sign_up),
-            text = stringResource(R.string.account_already_exists),
+            text = state.error.errorMsg ?: stringResource(R.string.account_already_exists),
             onDismiss = { signUpViewModel.onCloseDialog() },
             onConfirm = { signUpViewModel.onCloseDialog() },
             showDialog = showDialog

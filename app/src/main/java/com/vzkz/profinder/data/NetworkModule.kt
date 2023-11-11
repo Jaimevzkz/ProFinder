@@ -1,7 +1,9 @@
 package com.vzkz.profinder.data
 
 import com.google.firebase.auth.FirebaseAuth
-import com.vzkz.profinder.data.auth.AuthService
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.vzkz.profinder.domain.Repository
 import dagger.Module
 import dagger.Provides
@@ -17,8 +19,16 @@ object NetworkModule {
     fun provideFireBaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
 
+    @Singleton
     @Provides
-    fun provideRepository(authService: AuthService): Repository {
-        return RepositoryImpl(authService)
+    fun provideRepository(
+        authService: AuthService,
+        firestoreService: FirestoreService
+    ): Repository {
+        return RepositoryImpl(authService, firestoreService)
     }
+
+    @Singleton
+    @Provides
+    fun provideFireStore(): FirebaseFirestore = Firebase.firestore
 }

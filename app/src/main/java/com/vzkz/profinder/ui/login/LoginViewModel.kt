@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) :
+class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase) :
     BaseViewModel<LoginState, LoginIntent>(LoginState.initial) {
 
     override fun reduce(
@@ -26,7 +26,7 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) :
 
             is LoginIntent.Login -> state.copy(
                 error = Error(false, null),
-                userName = intent.username,
+                nickname = intent.username,
                 loading = false,
                 success = true
             )
@@ -53,7 +53,7 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) :
             try {
                 val result = withContext(Dispatchers.IO) { loginUseCase(email, password) }
                 if (result != null) {
-                    dispatch(LoginIntent.Login(result.user))
+                    dispatch(LoginIntent.Login(result.nickname))
                 } else {
                     Log.e("Jaime", "The code should never get here (Exception controlled)")
                     dispatch(LoginIntent.Error(""))
