@@ -6,6 +6,10 @@ import javax.inject.Inject
 
 class SignUpUseCase @Inject constructor(private val repository: Repository) {
     suspend operator fun invoke(email: String, password: String, nickname: String): UserModel? {
-        return repository.signUp(email, password, nickname)
+        val result = repository.signUp(email, password, nickname)
+        if(result != null){ //Insert User to db
+            repository.insertUserToDB(result)
+        }
+        return result
     }
 }

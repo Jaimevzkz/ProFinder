@@ -22,7 +22,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
 
             is SignUpIntent.SignUp -> state.copy(
                 error = Error(false, null),
-                nickname = intent.username,
+                user = intent.user,
                 loading = false,
                 success = true
             )
@@ -49,7 +49,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
                 val result = withContext(Dispatchers.IO) { signUpUseCase(email, password, nickname) }
                 if (result != null) {
                     //signUp worked and we have the uid, now we should link to firestore using nickname (should be unique)
-                    dispatch(SignUpIntent.SignUp(result.nickname))
+                    dispatch(SignUpIntent.SignUp(result))
                 } else {
                     Log.e("Jaime", "nickname already exists")
                     dispatch(SignUpIntent.Error(""))

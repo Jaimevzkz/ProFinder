@@ -1,4 +1,4 @@
-package com.vzkz.profinder.data
+package com.vzkz.profinder.data.firebase
 
 import android.content.res.Resources
 import com.google.firebase.auth.FirebaseAuth

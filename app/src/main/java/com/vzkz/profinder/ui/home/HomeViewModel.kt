@@ -6,15 +6,15 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(): BaseViewModel<tState, tIntent>(tState.initial) {
+class HomeViewModel @Inject constructor(): BaseViewModel<HomeState, HomeIntent>(HomeState.initial) {
 
-    override fun reduce(state: tState, intent: tIntent): tState { //This function reduces each intent with a when
+    override fun reduce(state: HomeState, intent: HomeIntent): HomeState { //This function reduces each intent with a when
         TODO("Not yet implemented")
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onX(){ //Example fun
-        dispatch(tIntent.Loading(true))
+        dispatch(HomeIntent.Loading(true))
     }
 
 

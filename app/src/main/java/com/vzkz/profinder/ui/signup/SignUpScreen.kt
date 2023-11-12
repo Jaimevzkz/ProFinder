@@ -143,7 +143,7 @@ private fun ScreenBody(
                 onTextChanged = { nickname = it })
             MySpacer(16)
             Text(
-                text = stringResource(R.string.signup),
+                text = stringResource(R.string.login),
                 Modifier
                     .clickable { onSignInClicked() },
                 color = MaterialTheme.colorScheme.primary
