@@ -73,12 +73,14 @@ private fun ScreenBody(
                 .background(MaterialTheme.colorScheme.background)
                 .fillMaxSize(), contentAlignment = Alignment.Center
         ) {
-            Column {
-                Text(text = nickname, style = MaterialTheme.typography.bodyMedium)
+            Text(text = nickname, style = MaterialTheme.typography.bodyLarge)
+            Column(modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)) {
 
-            }
-            Button(onClick = { profileViewModel.onLogout() }, modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)) {
-                Text(text = stringResource(R.string.logout))
+
+                Button(onClick = { profileViewModel.onLogout() }) {
+                    Text(text = stringResource(R.string.logout))
+                }
+
             }
         }
     }

@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
 import com.vzkz.profinder.R
+import com.vzkz.profinder.data.firebase.Constants.NICKNAME
 import com.vzkz.profinder.data.firebase.Constants.UID
 import com.vzkz.profinder.data.firebase.Constants.USERS_COLLECTION
 import com.vzkz.profinder.domain.model.UserModel
@@ -14,31 +15,35 @@ import javax.inject.Inject
 private object  Constants{
     const val USERS_COLLECTION = "users"
     const val UID = "uid"
+    const val NICKNAME = "nickname"
 }
 
 
 class FirestoreService @Inject constructor(private val firestore: FirebaseFirestore) {
-    suspend fun userExists(nickname: String): Boolean { //TO test
-        try {
-            val documentSnapshot = firestore.collection("users")
-                .document(nickname)
-                .get()
-                .await()
+    suspend fun userExists(nickname: String): Boolean {
+        val userInfo = firestore.collection(USERS_COLLECTION).whereEqualTo(NICKNAME, nickname).get().await()
+        return !userInfo.isEmpty
 
-            return documentSnapshot.exists()
-        } catch (e: Exception) {
-            Log.e("Jaime", "error getting doc. ${e.message}")
-            throw Exception("Network Failure while checking user existence")
-        }
+//        try {
+//            val documentSnapshot = firestore.collection(USERS_COLLECTION)
+//                .document(nickname)
+//                .get()
+//                .await()
+//
+//            return documentSnapshot.exists()
+//        } catch (e: Exception) {
+//            Log.e("Jaime", "error getting doc. ${e.message}")
+//            throw Exception("Network Failure while checking user existence")
+//        }
     }
 
     fun insertUser(userData: UserModel?){
-        if (userData == null) throw Exception(Resources.getSystem().getString(R.string.couldn_t_insert_user_in_database))
+        if (userData == null) throw Exception("Couldn't insert user in database")
         val user = hashMapOf(
-            UID to userData.uid
+            NICKNAME to userData.nickname
         )
         //At this point, we know for a fact that nickname is unique
-        firestore.collection(USERS_COLLECTION).document(userData.nickname).set(user).addOnSuccessListener {
+        firestore.collection(USERS_COLLECTION).document(userData.uid).set(user).addOnSuccessListener {
             Log.i("Jaime", "Success inserting in database")
         }
         .addOnFailureListener {
@@ -48,14 +53,29 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
     }
 
     suspend fun getUserData(uid: String): String { //returns nickname //TO test
-        var nickname = ""
-        val source = Source.DEFAULT
-        val userInfo = firestore.collection(USERS_COLLECTION).whereEqualTo(UID, uid).get(source).await()
-        if(userInfo.isEmpty) throw Exception("User not found") //This exception should never be thrown
-        userInfo.forEach{
-            nickname = it.id
+        try {
+            val documentSnapshot = firestore.collection(USERS_COLLECTION)
+                .document(uid)
+                .get()
+                .await()
+            if(documentSnapshot.exists()){
+                return documentSnapshot.data?.get(NICKNAME).toString()
+            }
+            else throw Exception("Couldn't find the user.")
+        } catch (e: Exception) {
+            Log.e("Jaime", "error getting doc. ${e.message}")
+            throw Exception("Network Failure while checking user existence")
         }
-        return nickname
+
+
+//        var nickname = ""
+//        val source = Source.DEFAULT
+//        val userInfo = firestore.collection(USERS_COLLECTION).whereEqualTo(UID, uid).get(source).await()
+//        if(userInfo.isEmpty) throw Exception("User not found") //This exception should never be thrown
+//        userInfo.forEach{
+//            nickname = it.id
+//        }
+//        return nickname
     }
 
 }
