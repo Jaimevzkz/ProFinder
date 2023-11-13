@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.usecases.LoginUseCase
+import com.vzkz.profinder.domain.usecases.SaveUserDataStoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase) :
+class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase, private val saveUserDataStore: SaveUserDataStoreUseCase) :
     BaseViewModel<LoginState, LoginIntent>(LoginState.initial) {
 
     override fun reduce(
@@ -53,7 +54,7 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase)
             try {
                 val result = withContext(Dispatchers.IO) { loginUseCase(email, password) }
                 if (result != null) {
-
+                    withContext(Dispatchers.IO) { saveUserDataStore(result) }
                     dispatch(LoginIntent.Login(result))
                 } else {
                     Log.e("Jaime", "The code should never get here (Exception controlled)")

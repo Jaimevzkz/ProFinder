@@ -3,6 +3,7 @@ package com.vzkz.profinder.ui.signup
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
+import com.vzkz.profinder.domain.usecases.SaveUserDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCase): BaseViewModel<SignUpState, SignUpIntent>(SignUpState.initial) {
+class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCase, private val saveUserDataStore: SaveUserDataStoreUseCase): BaseViewModel<SignUpState, SignUpIntent>(SignUpState.initial) {
 
     override fun reduce(state: SignUpState, intent: SignUpIntent): SignUpState { //This function reduces each intent with a when
         return when (intent) {
@@ -48,7 +49,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
             try {
                 val result = withContext(Dispatchers.IO) { signUpUseCase(email, password, nickname) }
                 if (result != null) {
-                    //signUp worked and we have the uid, now we should link to firestore using nickname (should be unique)
+                    withContext(Dispatchers.IO) { saveUserDataStore(result) }
                     dispatch(SignUpIntent.SignUp(result))
                 } else {
                     Log.e("Jaime", "nickname already exists")

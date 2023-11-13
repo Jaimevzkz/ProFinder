@@ -3,26 +3,33 @@ package com.vzkz.profinder.data.firebase
 import android.content.res.Resources
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 import com.vzkz.profinder.R
+import com.vzkz.profinder.data.firebase.Constants.UID
+import com.vzkz.profinder.data.firebase.Constants.USERS_COLLECTION
 import com.vzkz.profinder.domain.model.UserModel
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-const val USERS_COLLECTION = "users"
-const val UID = "uid"
+private object  Constants{
+    const val USERS_COLLECTION = "users"
+    const val UID = "uid"
+}
+
 
 class FirestoreService @Inject constructor(private val firestore: FirebaseFirestore) {
-    fun userExists(nickname: String): Boolean{
-        var exists = false
+    suspend fun userExists(nickname: String): Boolean { //TO test
+        try {
+            val documentSnapshot = firestore.collection("users")
+                .document(nickname)
+                .get()
+                .await()
 
-        firestore.collection(USERS_COLLECTION).document(nickname).get()
-            .addOnSuccessListener { document ->
-                exists = document != null
-            }
-            .addOnFailureListener { exception ->
-                Log.e("Jaime", "error getting doc. ${exception.message}")
-                throw Exception(Resources.getSystem().getString(R.string.network_failure_while_checking_user_existence))
-            }
-        return exists
+            return documentSnapshot.exists()
+        } catch (e: Exception) {
+            Log.e("Jaime", "error getting doc. ${e.message}")
+            throw Exception("Network Failure while checking user existence")
+        }
     }
 
     fun insertUser(userData: UserModel?){
@@ -40,14 +47,13 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
 
     }
 
-    fun getUserData(uid: String?): String{ //returns nickname
+    suspend fun getUserData(uid: String): String { //returns nickname //TO test
         var nickname = ""
-        firestore.collection(USERS_COLLECTION).whereEqualTo(UID, uid).get().addOnSuccessListener{ documents ->
-            documents.forEach{//Size will always be 1 (uid is unique)
-                nickname = it.id
-            }
-        }.addOnFailureListener {
-            throw Exception(Resources.getSystem().getString(R.string.user_not_found)) //This exception should never be thrown
+        val source = Source.DEFAULT
+        val userInfo = firestore.collection(USERS_COLLECTION).whereEqualTo(UID, uid).get(source).await()
+        if(userInfo.isEmpty) throw Exception("User not found") //This exception should never be thrown
+        userInfo.forEach{
+            nickname = it.id
         }
         return nickname
     }

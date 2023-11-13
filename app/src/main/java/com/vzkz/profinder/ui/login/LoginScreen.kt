@@ -69,8 +69,8 @@ private fun ScreenBody(
         contentAlignment = Alignment.Center
     ) {
 
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
+        var email by remember { mutableStateOf("jaimevzkz1+2@gmail.com") }
+        var password by remember { mutableStateOf("1234Qwerty") }
         var isValid by remember { mutableStateOf(true) }
         var showDialog by remember { mutableStateOf(false) }
         showDialog = state.error.isError

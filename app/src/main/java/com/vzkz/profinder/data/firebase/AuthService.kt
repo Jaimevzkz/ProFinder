@@ -2,25 +2,25 @@ package com.vzkz.profinder.data.firebase
 
 import android.content.res.Resources
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.vzkz.profinder.R
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) {
+class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) { //TO Test
 
-    suspend fun login(email: String, password: String): FirebaseUser? {
+    suspend fun login(email: String, password: String): FirebaseUser? {//TO Test
 
         return suspendCancellableCoroutine { cancellableContinuation ->
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
-                    val user = it.user
-                    cancellableContinuation.resume(user)
+                    cancellableContinuation.resume(it.user)
                 }
                 .addOnFailureListener {
+//                    val exception = FirebaseAuthException("", Resources.getSystem().getString(R.string.wrong_email_or_password))
                     cancellableContinuation.resumeWithException(it)
                 }
 
@@ -28,24 +28,14 @@ class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) {
     }
 
 
-    suspend fun signUp(email: String, password: String): FirebaseUser? {
+    suspend fun signUp(email: String, password: String): FirebaseUser? {//TO Test
         return suspendCancellableCoroutine { cancellableContinuation ->
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
-                    val profileUpdates = UserProfileChangeRequest
-                        .Builder()
-                        .setDisplayName("1234")
-                        .build()
-
-                    val user = it.user
-                    user?.updateProfile(profileUpdates)?.addOnSuccessListener {
-                        cancellableContinuation.resume(user)
-                    }?.addOnFailureListener {
-                        val exception = Exception(Resources.getSystem().getString(R.string.this_email_is_already_in_use))
-                        cancellableContinuation.resumeWithException(exception)
-                    }
+                    cancellableContinuation.resume(it.user)
                 }
                 .addOnFailureListener {
+//                    val exception = Throwable(Resources.getSystem().getString(R.string.account_already_exists))
                     cancellableContinuation.resumeWithException(it)
                 }
         }

@@ -70,10 +70,10 @@ private fun ScreenBody(
             .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
-        var repeatPassword by remember { mutableStateOf("") }
-        var nickname by remember { mutableStateOf("") }
+        var email by remember { mutableStateOf("jaimevzkz1+2@gmail.com") }
+        var password by remember { mutableStateOf("1234Qwerty") }
+        var repeatPassword by remember { mutableStateOf("1234Qwerty") }
+        var nickname by remember { mutableStateOf("jaimee") }
         //validation
         var isEmailValid by remember { mutableStateOf(true) }
         var isPasswordValid by remember { mutableStateOf(true) }
