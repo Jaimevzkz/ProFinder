@@ -33,7 +33,7 @@ fun SettingsScreen(
     navigator: DestinationsNavigator,
     settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
-
+    settingsViewModel.onInit()
     ScreenBody(settingsViewModel)
 }
 
