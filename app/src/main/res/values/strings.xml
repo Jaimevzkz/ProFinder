@@ -23,4 +23,5 @@
     <string name="couldn_t_insert_user_in_database">Couldn\'t insert user in database</string>
     <string name="username_already_in_use">Username already in use</string>
     <string name="logout">Logout</string>
+    <string name="dark_mode">Dark Mode:</string>
 </resources>

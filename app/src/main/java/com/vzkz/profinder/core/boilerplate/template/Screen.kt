@@ -1,8 +1,10 @@
 package com.vzkz.profinder.core.boilerplate.template
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +22,7 @@ fun TScreen(navigator: DestinationsNavigator) {
 private fun ScreenBody() {
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize().background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         //TODO

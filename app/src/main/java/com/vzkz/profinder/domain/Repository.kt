@@ -11,4 +11,5 @@ interface Repository {
     suspend fun logout()
 
     fun isUserLogged(): Boolean
+
 }

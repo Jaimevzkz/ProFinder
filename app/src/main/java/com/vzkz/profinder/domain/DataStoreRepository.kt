@@ -7,4 +7,8 @@ interface DataStoreRepository {
     suspend fun saveUser(user: UserModel)
 
     suspend fun getUser(): UserModel
+
+    suspend fun setAppTheme(): Boolean
+
+    suspend fun getAppTheme(): Flow<Boolean>
 }

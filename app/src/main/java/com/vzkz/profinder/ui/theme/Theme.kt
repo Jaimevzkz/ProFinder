@@ -74,7 +74,7 @@ private val DarkColors = darkColorScheme(
 
 @Composable
 fun ProFinderTheme(
-  useDarkTheme: Boolean = false/*isSystemInDarkTheme()*/,
+  useDarkTheme: Boolean = isSystemInDarkTheme(),
   content: @Composable() () -> Unit
 ) {
   val colors = if (!useDarkTheme) {

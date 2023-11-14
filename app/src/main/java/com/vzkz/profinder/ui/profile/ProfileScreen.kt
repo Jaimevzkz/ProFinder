@@ -6,8 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,6 +33,7 @@ import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
 import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.destinations.ProfileScreenDestination
+import com.vzkz.profinder.destinations.SettingsScreenDestination
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBar
 
 @Destination
@@ -47,7 +52,11 @@ fun ProfileScreen(
             }
         }
 
-        false -> ScreenBody(profileViewModel) { navigator.navigate(it) }
+        false -> ScreenBody(
+            profileViewModel,
+            onBottomBarClicked = { navigator.navigate(it) },
+            onSettingsClicked = { navigator.navigate(SettingsScreenDestination) }
+        )
     }
 
 }
@@ -56,7 +65,8 @@ fun ProfileScreen(
 @Composable
 private fun ScreenBody(
     profileViewModel: ProfileViewModel = hiltViewModel(),
-    onBottomBarClicked: (DirectionDestinationSpec) -> Unit
+    onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
+    onSettingsClicked: () -> Unit
 ) {
     var nickname by remember { mutableStateOf("") }
 
@@ -73,14 +83,25 @@ private fun ScreenBody(
                 .background(MaterialTheme.colorScheme.background)
                 .fillMaxSize(), contentAlignment = Alignment.Center
         ) {
+            IconButton(
+                onClick = { onSettingsClicked() }, modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Settings,
+                    contentDescription = "App Settings Button"
+                )
+            }
             Text(text = nickname, style = MaterialTheme.typography.bodyLarge)
-            Column(modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)) {
-
-
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp)
+            ) {
                 Button(onClick = { profileViewModel.onLogout() }) {
                     Text(text = stringResource(R.string.logout))
                 }
-
             }
         }
     }
@@ -89,7 +110,7 @@ private fun ScreenBody(
 @Preview
 @Composable
 fun LightPreview() {
-
+    ScreenBody(onBottomBarClicked = {}, onSettingsClicked = {})
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
