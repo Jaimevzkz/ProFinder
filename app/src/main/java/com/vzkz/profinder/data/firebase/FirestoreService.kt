@@ -1,6 +1,7 @@
 package com.vzkz.profinder.data.firebase
 
 import android.util.Log
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vzkz.profinder.data.firebase.Constants.NICKNAME
 import com.vzkz.profinder.data.firebase.Constants.USERS_COLLECTION
@@ -21,7 +22,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
     }
 
     fun insertUser(userData: UserModel?){
-        if (userData == null) throw Exception("Couldn't insert user in database")
+        if (userData == null) throw Exception()
         val user = hashMapOf(
             NICKNAME to userData.nickname
         )
@@ -36,19 +37,36 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
     }
 
     suspend fun getUserData(uid: String): String { //returns nickname //TO test
+        val documentSnapshot: DocumentSnapshot
         try {
-            val documentSnapshot = firestore.collection(USERS_COLLECTION)
+            documentSnapshot = firestore.collection(USERS_COLLECTION)
                 .document(uid)
                 .get()
                 .await()
             if(documentSnapshot.exists()){
                 return documentSnapshot.data?.get(NICKNAME).toString()
             }
-            else throw Exception("Couldn't find the user.")
+            else throw Exception("NU")
         } catch (e: Exception) {
             Log.e("Jaime", "error getting doc. ${e.message}")
-            throw Exception("Network Failure while checking user existence")
+            throw Exception("NF")
         }
+    }
+
+    suspend fun modifyUserData(oldUser: UserModel, newUser: UserModel){
+        val newUserObject = hashMapOf(
+            NICKNAME to newUser.nickname
+        )
+        if(oldUser.nickname != newUser.nickname)
+            if(userExists(newUser.nickname)) throw Exception()
+
+        firestore.collection(USERS_COLLECTION).document(oldUser.uid).update(newUserObject as Map<String, Any>).addOnSuccessListener {
+            Log.i("Jaime", "Data updated succesfully")
+        }.addOnFailureListener {
+            Log.i("Jaime", "Error updating data")
+            throw Exception("NF")
+        }
+
     }
 
 }

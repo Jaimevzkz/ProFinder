@@ -25,9 +25,10 @@ object NetworkModule {
     @Provides
     fun provideRepository(
         authService: AuthService,
-        firestoreService: FirestoreService
+        firestoreService: FirestoreService,
+        @ApplicationContext context: Context
     ): Repository {
-        return RepositoryImpl(authService, firestoreService)
+        return RepositoryImpl(authService, firestoreService, context)
     }
 
     @Singleton

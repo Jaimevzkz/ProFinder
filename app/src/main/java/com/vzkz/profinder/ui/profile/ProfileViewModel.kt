@@ -5,6 +5,7 @@ import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.UserModel
 import com.vzkz.profinder.domain.usecases.GetUserDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.LogoutUseCase
+import com.vzkz.profinder.ui.settings.SettingsIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -33,13 +34,13 @@ class ProfileViewModel @Inject constructor(private val getUserDataStoreUseCase: 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInitProfile(){
         viewModelScope.launch(Dispatchers.IO) {
-            val user = getUserDataStoreUseCase()
-
-            if(user.uid.isEmpty()) dispatch(ProfileIntent.Error("Couldn't find user in DataStore"))
-            else dispatch(ProfileIntent.SetUserFromDS(user))
-
+            viewModelScope.launch(Dispatchers.IO) {
+                getUserDataStoreUseCase().collect{user ->
+                    if(user.uid == "") dispatch(ProfileIntent.Error("Couldn't find user in DataStore"))
+                    else dispatch(ProfileIntent.SetUserFromDS(user))
+                }
+            }
         }
-
     }
     fun onLogout(){
         viewModelScope.launch(Dispatchers.IO) {

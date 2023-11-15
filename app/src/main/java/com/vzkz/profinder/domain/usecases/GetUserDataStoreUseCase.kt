@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetUserDataStoreUseCase @Inject constructor(private val dataStoreRepository: DataStoreRepository) {
-    suspend operator fun invoke(): UserModel {
+    suspend operator fun invoke(): Flow<UserModel> {
         return dataStoreRepository.getUser()
     }
 }

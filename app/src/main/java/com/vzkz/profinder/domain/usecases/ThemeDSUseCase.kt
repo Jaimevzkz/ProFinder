@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ThemeDSUseCase @Inject constructor(private val dataStoreRepository: DataStoreRepository) {
-    suspend fun switchTheme(): Boolean {
-        return dataStoreRepository.setAppTheme()
+    suspend fun switchTheme() {
+        dataStoreRepository.switchAppTheme()
     }
 
     suspend operator fun invoke(): Flow<Boolean> {

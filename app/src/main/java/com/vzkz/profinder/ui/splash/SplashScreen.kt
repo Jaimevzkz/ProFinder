@@ -43,7 +43,7 @@ private fun ScreenBody() {
         verticalArrangement = Arrangement.Center
     ) {
         MyImageLogo()
-        Text(text= "ProFinder",modifier = Modifier, style = MaterialTheme.typography.titleLarge)
+        Text(text= "ProFinder",modifier = Modifier, style = MaterialTheme.typography.displayLarge)
     }
 }
 

@@ -29,6 +29,7 @@ import com.vzkz.profinder.R
 
 @Destination
 @Composable
+
 fun SettingsScreen(
     navigator: DestinationsNavigator,
     settingsViewModel: SettingsViewModel = hiltViewModel()

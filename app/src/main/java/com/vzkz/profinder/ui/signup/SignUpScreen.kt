@@ -27,6 +27,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.destinations.HomeScreenDestination
+import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.destinations.SignUpScreenDestination
 import com.vzkz.profinder.ui.components.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyAuthHeader
@@ -52,7 +53,7 @@ fun SignUpScreen(
         MyCircularProgressbar(backGroundColor = MaterialTheme.colorScheme.background)
     } else {
         ScreenBody(onSignInClicked = {
-            navigator.navigate(SignUpScreenDestination)
+            navigator.navigate(LoginScreenDestination)
         }, signUpViewModel, state)
     }
 }

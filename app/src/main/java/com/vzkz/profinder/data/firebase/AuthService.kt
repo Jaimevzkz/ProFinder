@@ -1,10 +1,8 @@
 package com.vzkz.profinder.data.firebase
 
-import android.content.res.Resources
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
-import com.vzkz.profinder.R
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -12,7 +10,7 @@ import kotlin.coroutines.resumeWithException
 
 class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) { //TO Test
 
-    suspend fun login(email: String, password: String): FirebaseUser? {//TO Test
+    suspend fun login(email: String, password: String): FirebaseUser? {
 
         return suspendCancellableCoroutine { cancellableContinuation ->
             firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -20,7 +18,7 @@ class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) { 
                     cancellableContinuation.resume(it.user)
                 }
                 .addOnFailureListener {
-//                    val exception = FirebaseAuthException("", Resources.getSystem().getString(R.string.wrong_email_or_password))
+                    Log.e("Jaime", "${it.message}")
                     cancellableContinuation.resumeWithException(it)
                 }
 
@@ -28,14 +26,14 @@ class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) { 
     }
 
 
-    suspend fun signUp(email: String, password: String): FirebaseUser? {//TO Test
+    suspend fun signUp(email: String, password: String): FirebaseUser? {
         return suspendCancellableCoroutine { cancellableContinuation ->
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
                     cancellableContinuation.resume(it.user)
                 }
                 .addOnFailureListener {
-//                    val exception = Throwable(Resources.getSystem().getString(R.string.account_already_exists))
+                    Log.e("Jaime", "${it.message}")
                     cancellableContinuation.resumeWithException(it)
                 }
         }

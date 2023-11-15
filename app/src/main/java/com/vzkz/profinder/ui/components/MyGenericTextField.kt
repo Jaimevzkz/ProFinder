@@ -7,8 +7,10 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,13 +30,15 @@ fun MyGenericTextField(
     modifier: Modifier,
     hint: String,
     text: String,
-    onTextChanged: (String) -> Unit
+    readOnly: Boolean = false,
+    onTextChanged: (String) -> Unit,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     OutlinedTextField(
         modifier = modifier,
         value = text,
         onValueChange = { onTextChanged(it) },
-        placeholder = {
+        label = {
             Text(
                 text = hint,
                 fontSize = 16.sp
@@ -42,6 +46,12 @@ fun MyGenericTextField(
         },
         keyboardOptions = KeyboardOptions.Default,
         singleLine = true,
+        readOnly = readOnly,
+        trailingIcon = trailingIcon,
+        colors = if (readOnly) TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
+        ) else TextFieldDefaults.outlinedTextFieldColors()
     )
 }
 
@@ -50,13 +60,14 @@ fun MyGenericTextField(
 fun MyEmailTextField(
     modifier: Modifier,
     text: String,
-    onTextChanged: (String) -> Unit
-) {
+    onTextChanged: (String) -> Unit,
+
+    ) {
     OutlinedTextField(
         modifier = modifier,
         value = text,
         onValueChange = { onTextChanged(it) },
-        placeholder = {
+        label = {
             Text(
                 text = stringResource(R.string.email),
                 fontSize = 16.sp
@@ -65,7 +76,7 @@ fun MyEmailTextField(
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Email
         ),
-        singleLine = true,
+        singleLine = true
     )
 }
 
@@ -83,7 +94,7 @@ fun MyPasswordTextField(
         modifier = modifier,
         value = text,
         onValueChange = { onTextChanged(it) },
-        placeholder = {
+        label = {
             Text(
                 text = hint,
                 fontSize = 16.sp

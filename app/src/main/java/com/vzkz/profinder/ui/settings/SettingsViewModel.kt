@@ -4,10 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.usecases.ThemeDSUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +18,7 @@ class SettingsViewModel @Inject constructor(private val themeDSUseCase: ThemeDSU
         intent: SettingsIntent
     ): SettingsState { //This function reduces each intent with a when
         return when (intent) {
-            is SettingsIntent.Theme -> state.copy(darkTheme = intent.isDark)
+            is SettingsIntent.Theme -> state //no-op
             is SettingsIntent.Init -> state.copy(darkTheme = intent.theme)
         }
     }
@@ -36,7 +33,8 @@ class SettingsViewModel @Inject constructor(private val themeDSUseCase: ThemeDSU
     }
     fun onThemeSwitch() {
         viewModelScope.launch(Dispatchers.IO) {
-            dispatch(SettingsIntent.Theme(themeDSUseCase.switchTheme()))
+            themeDSUseCase.switchTheme()
+            dispatch(SettingsIntent.Theme)
         }
     }
 

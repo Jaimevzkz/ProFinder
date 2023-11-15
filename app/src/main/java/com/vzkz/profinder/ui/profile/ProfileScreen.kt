@@ -2,6 +2,7 @@ package com.vzkz.profinder.ui.profile
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,6 +32,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
+import com.vzkz.profinder.destinations.EditProfileScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.destinations.ProfileScreenDestination
 import com.vzkz.profinder.destinations.SettingsScreenDestination
@@ -55,7 +57,8 @@ fun ProfileScreen(
         false -> ScreenBody(
             profileViewModel,
             onBottomBarClicked = { navigator.navigate(it) },
-            onSettingsClicked = { navigator.navigate(SettingsScreenDestination) }
+            onSettingsClicked = { navigator.navigate(SettingsScreenDestination) },
+            onEditProfileClicked = { navigator.navigate(EditProfileScreenDestination) }
         )
     }
 
@@ -66,7 +69,8 @@ fun ProfileScreen(
 private fun ScreenBody(
     profileViewModel: ProfileViewModel = hiltViewModel(),
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
-    onSettingsClicked: () -> Unit
+    onSettingsClicked: () -> Unit,
+    onEditProfileClicked: () -> Unit
 ) {
     var nickname by remember { mutableStateOf("") }
 
@@ -93,12 +97,18 @@ private fun ScreenBody(
                     contentDescription = "App Settings Button"
                 )
             }
-            Text(text = nickname, style = MaterialTheme.typography.bodyLarge)
+            Text(text = nickname, style = MaterialTheme.typography.titleLarge)
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(16.dp)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
+                Button(onClick = { onEditProfileClicked() }) {
+                    Text(text = stringResource(R.string.edit_profile))
+                }
+
                 Button(onClick = { profileViewModel.onLogout() }) {
                     Text(text = stringResource(R.string.logout))
                 }
@@ -110,7 +120,7 @@ private fun ScreenBody(
 @Preview
 @Composable
 fun LightPreview() {
-    ScreenBody(onBottomBarClicked = {}, onSettingsClicked = {})
+    ScreenBody(onBottomBarClicked = {}, onSettingsClicked = {}, onEditProfileClicked = {})
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)

@@ -12,4 +12,6 @@ interface Repository {
 
     fun isUserLogged(): Boolean
 
+    suspend fun modifyUserData(oldUser: UserModel, newUser: UserModel)
+
 }

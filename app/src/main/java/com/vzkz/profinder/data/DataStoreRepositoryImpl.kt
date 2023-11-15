@@ -40,20 +40,20 @@ class DataStoreRepositoryImpl @Inject constructor(private val context: Context) 
         }
     }
 
-    override suspend fun getUser(): UserModel {
-        val preferences = context.dataStore.data.first()
-        return UserModel(
-            uid = preferences[stringPreferencesKey(UID)] ?: "",
-            nickname = preferences[stringPreferencesKey(NICKNAME)] ?: ""
-        )
+    override suspend fun getUser(): Flow<UserModel> {
+        return context.dataStore.data.map { preferences ->
+            UserModel(
+                uid = preferences[stringPreferencesKey(UID)] ?: "",
+                nickname = preferences[stringPreferencesKey(NICKNAME)] ?: ""
+            )
+        }
     }
 
-    override suspend fun setAppTheme(): Boolean {
+    override suspend fun switchAppTheme() {
         context.dataStore.edit { preferences ->
             val value = preferences[booleanPreferencesKey(THEME)] ?: false
             preferences[booleanPreferencesKey(THEME)] = !value
         }
-        return context.dataStore.data.first()[booleanPreferencesKey(THEME)] ?: false
     }
 
     override suspend fun getAppTheme(): Flow<Boolean> {

@@ -17,6 +17,6 @@ data class SettingsState(
 data class Error(val isError: Boolean, val errorMsg: String?)
 
 sealed class SettingsIntent: Intent {
-    data class Theme(val isDark: Boolean): SettingsIntent()
+    data object Theme: SettingsIntent()
     data class Init(val theme: Boolean): SettingsIntent()
 }
