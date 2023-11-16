@@ -49,8 +49,8 @@ fun MyGenericTextField(
         readOnly = readOnly,
         trailingIcon = trailingIcon,
         colors = if (readOnly) TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colorScheme.tertiary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.primary
         ) else TextFieldDefaults.outlinedTextFieldColors()
     )
 }

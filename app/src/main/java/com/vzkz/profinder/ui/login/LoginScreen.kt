@@ -47,7 +47,7 @@ fun LoginScreen(
     if (state.success) {
         navigator.navigate(HomeScreenDestination)
     } else if (state.loading) {
-        MyCircularProgressbar(backGroundColor = MaterialTheme.colorScheme.background)
+        MyCircularProgressbar()
     } else {
         ScreenBody(onSignUpClicked = {
             navigator.navigate(SignUpScreenDestination)

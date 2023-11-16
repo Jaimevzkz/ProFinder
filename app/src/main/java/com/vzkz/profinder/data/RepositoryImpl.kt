@@ -60,7 +60,7 @@ class RepositoryImpl @Inject constructor(
     override fun isUserLogged() = authService.isUserLogged()
     override suspend fun modifyUserData(oldUser: UserModel, newUser: UserModel) {
         try{
-            firestoreService.modifyUserData(oldUser, newUser)
+            firestoreService.modifyUserData(oldUser = oldUser, newUser = newUser)
         } catch (e: Exception){
             if(e.message == "NF") throw Exception(context.getString(R.string.error_modifying_user_data_the_user_wasn_t_modified))
             else throw Exception(context.getString(R.string.username_already_in_use_couldn_t_modify_user))

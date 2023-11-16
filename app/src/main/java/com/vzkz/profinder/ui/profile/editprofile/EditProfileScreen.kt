@@ -4,11 +4,14 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,8 +32,10 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.destinations.ProfileScreenDestination
+import com.vzkz.profinder.ui.components.MyAlertDialog
+import com.vzkz.profinder.ui.components.MyCircularProgressbar
+import com.vzkz.profinder.ui.components.MyConfirmDialog
 import com.vzkz.profinder.ui.components.MyGenericTextField
-import com.vzkz.profinder.ui.components.MySpacer
 
 @Destination
 @Composable
@@ -39,13 +44,23 @@ fun EditProfileScreen(
     editProfileViewModel: EditProfileViewModel = hiltViewModel()
 ) {
     editProfileViewModel.onInit()
-    ScreenBody(editProfileViewModel){
+    val state = editProfileViewModel.state
+    if (state.success) {
         navigator.navigate(ProfileScreenDestination)
+    } else if (state.loading) {
+        MyCircularProgressbar()
+    } else {
+        ScreenBody(editProfileViewModel){
+            navigator.navigate(ProfileScreenDestination)
+        }
     }
 }
 
 @Composable
-private fun ScreenBody(editProfileViewModel: EditProfileViewModel = hiltViewModel(), onProfileSavedOrCanccelled: () -> Unit) {
+private fun ScreenBody(
+    editProfileViewModel: EditProfileViewModel = hiltViewModel(),
+    onBackClicked: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -56,50 +71,84 @@ private fun ScreenBody(editProfileViewModel: EditProfileViewModel = hiltViewMode
         var nickname by remember { mutableStateOf("") }
         var readOnlyNickname by remember { mutableStateOf(true) }
         var firstTime by remember { mutableStateOf(true) }
-        if (firstTime || nickname == "") {
+        var showAlertDialog by remember { mutableStateOf(false) }
+        showAlertDialog = editProfileViewModel.state.error.isError
+        var showConfirmDialog by remember { mutableStateOf(false) }
+
+        if (firstTime) {
             nickname = editProfileViewModel.state.user?.nickname ?: ""
             firstTime = false
         }
-        MyGenericTextField(
-            modifier = Modifier.align(Alignment.TopCenter),
-            hint = stringResource(R.string.nickname),
-            text = nickname,
-            onTextChanged = { nickname = it },
-            readOnly = readOnlyNickname,
-            trailingIcon = {
-                IconButton(onClick = { readOnlyNickname = !readOnlyNickname }) {
-                    Icon(imageVector = Icons.Filled.Edit, contentDescription = "Edit Icon")
+        IconButton(modifier = Modifier.align(Alignment.TopStart), onClick = {
+            onBackClicked()
+        }) {
+            Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Cancel")
+        }
+
+        Column(modifier = Modifier
+            .align(Alignment.TopCenter)
+            .padding(top = 48.dp)) {
+            MyGenericTextField(
+                modifier = Modifier,
+                hint = stringResource(R.string.nickname),
+                text = nickname,
+                onTextChanged = { nickname = it },
+                readOnly = readOnlyNickname,
+                trailingIcon = {
+                    IconButton(onClick = { readOnlyNickname = !readOnlyNickname }) {
+                        Icon(imageVector = Icons.Filled.Edit, contentDescription = "Edit Icon")
+                    }
                 }
-            }
-        )
+            )
+        }
         Row(
             modifier = Modifier
-                .align(Alignment.BottomCenter),
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(onClick = {
-                if (editProfileViewModel.state.user != null) {
-                    val newUser = editProfileViewModel.state.user!!.copy(nickname = nickname)
-                    editProfileViewModel.onModifyUserData(
-                        newUser,
-                        editProfileViewModel.state.user!!
-                    ) //We know the user is not null
-                    onProfileSavedOrCanccelled()
-                }
+            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+                showConfirmDialog = true
             }) {
                 Text(text = stringResource(R.string.save))
             }
-            MySpacer(size = 16)
-            Button(onClick = {
-                nickname = ""
-                readOnlyNickname = true
-                firstTime = true
-                onProfileSavedOrCanccelled()
-            }) {
-                Text(text = stringResource(R.string.cancel))
-            }
         }
+
+        MyConfirmDialog(
+            title = "Are you sure?",
+            text = "Profile changes like username may not be undoable",
+            onDismiss = {
+                readOnlyNickname = true
+                showConfirmDialog = false
+            },
+            onConfirm = {
+                readOnlyNickname = true
+                showConfirmDialog = false
+                if (editProfileViewModel.state.user != null) {
+                    val newUser = editProfileViewModel.state.user!!.copy(nickname = nickname)
+                    editProfileViewModel.onModifyUserData(
+                        newUser = newUser,
+                        oldUser = editProfileViewModel.state.user!!
+                    ) //We know the user is not null
+                }
+            },
+            showDialog = showConfirmDialog
+        )
+
+        MyAlertDialog( //Error Dialog
+            title = stringResource(R.string.error_during_profile_modification),
+            text = editProfileViewModel.state.error.errorMsg
+                ?: stringResource(R.string.username_already_in_use),
+            onDismiss = {
+                editProfileViewModel.onCloseDialog()
+            },
+            onConfirm = {
+                editProfileViewModel.onCloseDialog()
+            },
+            showDialog = showAlertDialog
+        )
     }
 }
 

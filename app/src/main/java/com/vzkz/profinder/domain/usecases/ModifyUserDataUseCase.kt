@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class ModifyUserDataUseCase @Inject constructor(private val repository: Repository){
     suspend operator fun invoke(oldUser: UserModel, newUser: UserModel) {
-        return repository.modifyUserData(oldUser, newUser)
+        return repository.modifyUserData(oldUser = oldUser, newUser = newUser)
     }
 }

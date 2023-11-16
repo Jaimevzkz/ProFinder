@@ -10,6 +10,7 @@ import com.vzkz.profinder.ui.profile.Error
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -27,19 +28,40 @@ class EditProfileViewModel @Inject constructor(
     ): EditProfileState { //This function reduces each intent with a when
         return when (intent) {
             is EditProfileIntent.Error -> state.copy(
-                error = Error(true, intent.errorMsg)
+                error = Error(true, intent.errorMsg),
+                success = false,
+                loading = false
             )
 
             is EditProfileIntent.SetUserFromDS -> state.copy(
                 user = intent.user,
-                error = Error(false, null)
+                success = false,
+                loading = false
+            )
+
+            EditProfileIntent.CloseError -> state.copy(
+                error = Error(false, null),
+                success = false,
+                loading = false
+            )
+
+            EditProfileIntent.Success -> state.copy(
+                error = Error(false, null),
+                success = true,
+                loading = false
+            )
+
+            is EditProfileIntent.Loading -> state.copy(
+                success = false,
+                loading = true
             )
         }
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
-        viewModelScope.launch(Dispatchers.IO) {
+        dispatch(EditProfileIntent.Loading)
+        viewModelScope.launch {
             getUserDataStoreUseCase().collect { user ->
                 if (user.uid == "") dispatch(EditProfileIntent.Error("Couldn't find user in DataStore"))
                 else dispatch(EditProfileIntent.SetUserFromDS(user))
@@ -48,16 +70,23 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun onModifyUserData(newUser: UserModel, oldUser: UserModel) {
-        viewModelScope.launch(Dispatchers.IO) {
+        dispatch(EditProfileIntent.Loading)
+        viewModelScope.launch {
             try {
-                modifyUserDataUseCase(newUser, oldUser)
+                withContext(Dispatchers.IO){
+                    modifyUserDataUseCase(newUser = newUser, oldUser = oldUser)
+                    saveUserDataStoreUseCase(newUser)
+                }
+                dispatch(EditProfileIntent.Success)
+
             } catch (e: Exception) {
                 dispatch(EditProfileIntent.Error("${e.message}"))
             }
-            saveUserDataStoreUseCase(newUser)
         }
 
     }
+
+    fun onCloseDialog() = dispatch(EditProfileIntent.CloseError)
 
 
 }

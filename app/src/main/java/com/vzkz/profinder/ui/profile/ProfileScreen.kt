@@ -5,9 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +38,7 @@ import com.vzkz.profinder.destinations.EditProfileScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.destinations.ProfileScreenDestination
 import com.vzkz.profinder.destinations.SettingsScreenDestination
+import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBar
 
 @Destination
@@ -75,7 +78,6 @@ private fun ScreenBody(
     var nickname by remember { mutableStateOf("") }
 
     nickname = profileViewModel.state.user?.nickname ?: ""
-
     Scaffold(bottomBar = {
         MyBottomBar(
             currentDestination = ProfileScreenDestination,
@@ -87,15 +89,31 @@ private fun ScreenBody(
                 .background(MaterialTheme.colorScheme.background)
                 .fillMaxSize(), contentAlignment = Alignment.Center
         ) {
-            IconButton(
-                onClick = { onSettingsClicked() }, modifier = Modifier
+            Row(
+                modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(16.dp)
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Settings,
-                    contentDescription = "App Settings Button"
-                )
+                IconButton(
+                    onClick = { onEditProfileClicked() }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Edit,
+                        contentDescription = "App Profile Button"
+                    )
+                }
+                MySpacer(size = 8)
+                IconButton(
+                    onClick = { onSettingsClicked() }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Settings,
+                        contentDescription = "App Settings Button"
+                    )
+                }
+
             }
             Text(text = nickname, style = MaterialTheme.typography.titleLarge)
             Column(
@@ -105,10 +123,6 @@ private fun ScreenBody(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Button(onClick = { onEditProfileClicked() }) {
-                    Text(text = stringResource(R.string.edit_profile))
-                }
-
                 Button(onClick = { profileViewModel.onLogout() }) {
                     Text(text = stringResource(R.string.logout))
                 }

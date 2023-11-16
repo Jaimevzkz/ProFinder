@@ -57,8 +57,11 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         val newUserObject = hashMapOf(
             NICKNAME to newUser.nickname
         )
-        if(oldUser.nickname != newUser.nickname)
-            if(userExists(newUser.nickname)) throw Exception()
+        if(oldUser.nickname != newUser.nickname){
+            val dummy = userExists(newUser.nickname)
+            if(dummy) throw Exception()
+
+        }
 
         firestore.collection(USERS_COLLECTION).document(oldUser.uid).update(newUserObject as Map<String, Any>).addOnSuccessListener {
             Log.i("Jaime", "Data updated succesfully")
