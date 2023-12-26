@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             ProFinderTheme(useDarkTheme = darkTheme) {
-                // A surface container using the 'background' color from the theme
+                // A surface container using the 'backgThere are a lot of ways to configure this destination. Lets start with an example where all those are used:There are a lot of ways to configure this destination. Lets start with an example where all those are used:round' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

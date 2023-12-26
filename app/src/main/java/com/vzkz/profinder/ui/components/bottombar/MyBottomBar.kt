@@ -14,7 +14,7 @@ fun MyBottomBar(
     onClick: (DirectionDestinationSpec) -> Unit
 ) {
     NavigationBar {
-        BottomBarDestination.values().forEach { destination ->
+        BottomBarDestination.entries.forEach { destination ->
             NavigationBarItem(
                 selected = destination.direction == currentDestination,
                 onClick = {

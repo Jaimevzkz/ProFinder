@@ -17,9 +17,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
+import com.vzkz.profinder.destinations.ChatScreenDestination
 import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.MapScreenDestination
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBar
+import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 
 @Destination
 @Composable
@@ -27,14 +29,12 @@ fun MapScreen(navigator: DestinationsNavigator) {
     ScreenBody { navigator.navigate(it) }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenBody(onBottomBarClicked: (DirectionDestinationSpec) -> Unit) {
-    Scaffold(bottomBar = {
-        MyBottomBar(
-            currentDestination = MapScreenDestination,
-            onClick = { onBottomBarClicked(it) })
-    }) { paddingValues ->
+    MyBottomBarScaffold(
+        currentDestination = MapScreenDestination,
+        onBottomBarClicked = { onBottomBarClicked(it) }
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .padding(paddingValues)
