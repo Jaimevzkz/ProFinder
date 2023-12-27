@@ -36,6 +36,7 @@ import com.vzkz.profinder.ui.components.MyImageLogo
 import com.vzkz.profinder.ui.components.MyPasswordTextField
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.validateEmail
+import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
 @Composable
@@ -49,16 +50,24 @@ fun LoginScreen(
     } else if (state.loading) {
         MyCircularProgressbar()
     } else {
-        ScreenBody(onSignUpClicked = {
-            navigator.navigate(SignUpScreenDestination)
-        }, loginViewModel, state)
+        ScreenBody(
+            onCloseDialog = { loginViewModel.onCloseDialog() },
+            onLogin = { email, password ->
+                loginViewModel.onLogin(email = email, password = password)
+            },
+            onSignUpClicked = {
+                navigator.navigate(SignUpScreenDestination)
+            },
+            state = state
+        )
     }
 }
 
 @Composable
 private fun ScreenBody(
+    onLogin: (String, String) -> Unit,
     onSignUpClicked: () -> Unit,
-    loginViewModel: LoginViewModel = hiltViewModel(),
+    onCloseDialog: () -> Unit,
     state: LoginState
 ) {
     Box(
@@ -79,7 +88,9 @@ private fun ScreenBody(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth().offset(y = (-70).dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(y = (-70).dp)
         ) {
             MyImageLogo()
             MySpacer(16)
@@ -112,7 +123,7 @@ private fun ScreenBody(
         Button(
             onClick = {
                 if (isValid) {
-                    loginViewModel.onLogin(email, password)
+                    onLogin(email, password)
                 }
             },
             Modifier
@@ -126,8 +137,8 @@ private fun ScreenBody(
         MyAlertDialog(
             title = stringResource(R.string.error_during_login),
             text = state.error.errorMsg ?: stringResource(R.string.invalid_password),
-            onDismiss = { loginViewModel.onCloseDialog() },
-            onConfirm = { loginViewModel.onCloseDialog() },
+            onDismiss = { onCloseDialog() },
+            onConfirm = { onCloseDialog() },
             showDialog = showDialog
         )
     }
@@ -136,5 +147,7 @@ private fun ScreenBody(
 @Preview
 @Composable
 fun LoginPreview() {
-    ScreenBody(onSignUpClicked = {}, state = LoginState.initial)
+    ProFinderTheme {
+        ScreenBody(onLogin = {_,_ ->}, onSignUpClicked = {}, onCloseDialog = {}, state = LoginState.initial)
+    }
 }

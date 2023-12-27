@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
 @Composable
@@ -22,7 +23,8 @@ fun TScreen(navigator: DestinationsNavigator) {
 private fun ScreenBody() {
     Box(
         modifier = Modifier
-            .fillMaxSize().background(MaterialTheme.colorScheme.background),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         //TODO
@@ -32,6 +34,9 @@ private fun ScreenBody() {
 @Preview
 @Composable
 fun LightPreview() {
+    ProFinderTheme {
+        ScreenBody()
+    }
 
 }
 

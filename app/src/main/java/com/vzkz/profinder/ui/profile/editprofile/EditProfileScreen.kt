@@ -1,6 +1,5 @@
 package com.vzkz.profinder.ui.profile.editprofile
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,11 +30,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
+import com.vzkz.profinder.core.boilerplate.USERMODELFORTESTS
 import com.vzkz.profinder.destinations.ProfileScreenDestination
+import com.vzkz.profinder.domain.model.UserModel
 import com.vzkz.profinder.ui.components.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyConfirmDialog
 import com.vzkz.profinder.ui.components.MyGenericTextField
+import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
 @Composable
@@ -50,15 +52,32 @@ fun EditProfileScreen(
     } else if (state.loading) {
         MyCircularProgressbar()
     } else {
-        ScreenBody(editProfileViewModel){
-            navigator.navigate(ProfileScreenDestination)
-        }
+        var user: UserModel? by remember { mutableStateOf(null) }
+        user = editProfileViewModel.state.user
+        var isError by remember { mutableStateOf(false) }
+        isError = editProfileViewModel.state.error.isError
+        var errorMsg: String? by remember { mutableStateOf(null) }
+        errorMsg = editProfileViewModel.state.error.errorMsg
+        ScreenBody(
+            isError = isError,
+            user = user,
+            errorMsg = errorMsg,
+            onModifyUserData = { newUser, oldUser ->
+                editProfileViewModel.onModifyUserData(newUser = newUser, oldUser = oldUser)
+            },
+            onCloseDialog = { editProfileViewModel.onCloseDialog() },
+            onBackClicked = { navigator.navigate(ProfileScreenDestination) }
+        )
     }
 }
 
 @Composable
 private fun ScreenBody(
-    editProfileViewModel: EditProfileViewModel = hiltViewModel(),
+    isError: Boolean,
+    user: UserModel?,
+    errorMsg: String?,
+    onModifyUserData: (UserModel, UserModel) -> Unit,
+    onCloseDialog: () -> Unit,
     onBackClicked: () -> Unit
 ) {
     Box(
@@ -72,11 +91,11 @@ private fun ScreenBody(
         var readOnlyNickname by remember { mutableStateOf(true) }
         var firstTime by remember { mutableStateOf(true) }
         var showAlertDialog by remember { mutableStateOf(false) }
-        showAlertDialog = editProfileViewModel.state.error.isError
+        showAlertDialog = isError
         var showConfirmDialog by remember { mutableStateOf(false) }
 
         if (firstTime) {
-            nickname = editProfileViewModel.state.user?.nickname ?: ""
+            nickname = user?.nickname ?: ""
             firstTime = false
         }
         IconButton(modifier = Modifier.align(Alignment.TopStart), onClick = {
@@ -85,9 +104,11 @@ private fun ScreenBody(
             Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Cancel")
         }
 
-        Column(modifier = Modifier
-            .align(Alignment.TopCenter)
-            .padding(top = 48.dp)) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 48.dp)
+        ) {
             MyGenericTextField(
                 modifier = Modifier,
                 hint = stringResource(R.string.nickname),
@@ -126,12 +147,9 @@ private fun ScreenBody(
             onConfirm = {
                 readOnlyNickname = true
                 showConfirmDialog = false
-                if (editProfileViewModel.state.user != null) {
-                    val newUser = editProfileViewModel.state.user!!.copy(nickname = nickname)
-                    editProfileViewModel.onModifyUserData(
-                        newUser = newUser,
-                        oldUser = editProfileViewModel.state.user!!
-                    ) //We know the user is not null
+                if (user != null) {
+                    val newUser = user.copy(nickname = nickname)
+                    onModifyUserData(newUser, user) //We know the user is not null
                 }
             },
             showDialog = showConfirmDialog
@@ -139,13 +157,13 @@ private fun ScreenBody(
 
         MyAlertDialog( //Error Dialog
             title = stringResource(R.string.error_during_profile_modification),
-            text = editProfileViewModel.state.error.errorMsg
+            text = errorMsg
                 ?: stringResource(R.string.username_already_in_use),
             onDismiss = {
-                editProfileViewModel.onCloseDialog()
+                onCloseDialog()
             },
             onConfirm = {
-                editProfileViewModel.onCloseDialog()
+                onCloseDialog()
             },
             showDialog = showAlertDialog
         )
@@ -155,11 +173,14 @@ private fun ScreenBody(
 @Preview
 @Composable
 fun LightPreview() {
-    ScreenBody(){}
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun DarkPreview() {
-
+    ProFinderTheme {
+        ScreenBody(
+            isError = false,
+            user = USERMODELFORTESTS,
+            errorMsg = null,
+            onModifyUserData = {_,_->},
+            onCloseDialog = {}) {
+            
+        }
+    }
 }

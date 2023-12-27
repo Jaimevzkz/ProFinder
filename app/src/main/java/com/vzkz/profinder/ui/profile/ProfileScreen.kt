@@ -1,5 +1,6 @@
 package com.vzkz.profinder.ui.profile
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,12 +32,16 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
+import com.vzkz.profinder.core.boilerplate.USERMODELFORTESTS
 import com.vzkz.profinder.destinations.EditProfileScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.destinations.ProfileScreenDestination
 import com.vzkz.profinder.destinations.SettingsScreenDestination
+import com.vzkz.profinder.domain.model.UserModel
+import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
+import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
 @Composable
@@ -44,18 +49,22 @@ fun ProfileScreen(
     navigator: DestinationsNavigator,
     profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
-    profileViewModel.onInitProfile()
-    when (profileViewModel.state.logout) {
-        true -> {
-            navigator.navigate(LoginScreenDestination) {
-                popUpTo(LoginScreenDestination) {
-                    inclusive = true
-                }
+    if (profileViewModel.state.logout) {
+        navigator.navigate(LoginScreenDestination) {
+            popUpTo(LoginScreenDestination) {
+                inclusive = true
             }
         }
+    } else {
+        profileViewModel.onInitProfile()
+        var user: UserModel? by remember { mutableStateOf(null) }
+        user = profileViewModel.state.user
+        val start = profileViewModel.state.start
 
-        false -> ScreenBody(
-            profileViewModel,
+        ScreenBody(
+            user = user,
+            start = start,
+            onLogout = { profileViewModel.onLogout() },
             onBottomBarClicked = { navigator.navigate(it) },
             onSettingsClicked = { navigator.navigate(SettingsScreenDestination) },
             onEditProfileClicked = { navigator.navigate(EditProfileScreenDestination) }
@@ -66,60 +75,67 @@ fun ProfileScreen(
 
 @Composable
 private fun ScreenBody(
-    profileViewModel: ProfileViewModel = hiltViewModel(),
+    user: UserModel?,
+    onLogout: () -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
+    start: Boolean,
     onSettingsClicked: () -> Unit,
     onEditProfileClicked: () -> Unit
 ) {
+    val defaultVal = "- "
     var nickname by remember { mutableStateOf("") }
+    nickname = user?.nickname ?: defaultVal
 
-    nickname = profileViewModel.state.user?.nickname ?: ""
     MyBottomBarScaffold(
         currentDestination = ProfileScreenDestination,
         onBottomBarClicked = { onBottomBarClicked(it) }
     ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background)
-                .fillMaxSize(), contentAlignment = Alignment.Center
-        ) {
-            Row(
+        if (!start) {
+            MyCircularProgressbar()
+        } else {
+            Box(
                 modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(paddingValues)
+                    .background(MaterialTheme.colorScheme.background)
+                    .fillMaxSize(), contentAlignment = Alignment.Center
             ) {
-                IconButton(
-                    onClick = { onEditProfileClicked() }
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = "App Profile Button"
-                    )
-                }
-                MySpacer(size = 8)
-                IconButton(
-                    onClick = { onSettingsClicked() }
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Settings,
-                        contentDescription = "App Settings Button"
-                    )
-                }
+                    IconButton(
+                        onClick = { onEditProfileClicked() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = "App Profile Button"
+                        )
+                    }
+                    MySpacer(size = 8)
+                    IconButton(
+                        onClick = { onSettingsClicked() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = "App Settings Button"
+                        )
+                    }
 
-            }
-            Text(text = nickname, style = MaterialTheme.typography.titleLarge)
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Button(onClick = { profileViewModel.onLogout() }) {
-                    Text(text = stringResource(R.string.logout))
+                }
+                Text(text = nickname, style = MaterialTheme.typography.titleLarge)
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Button(onClick = { onLogout() }) {
+                        Text(text = stringResource(R.string.logout))
+                    }
                 }
             }
         }
@@ -129,5 +145,14 @@ private fun ScreenBody(
 @Preview
 @Composable
 fun LightPreview() {
-    ScreenBody(onBottomBarClicked = {}, onSettingsClicked = {}, onEditProfileClicked = {})
+    ProFinderTheme {
+        ScreenBody(
+            user = USERMODELFORTESTS,
+            onLogout = { },
+            onBottomBarClicked = {},
+            start = true,
+            onSettingsClicked = {  }) {
+
+        }
+    }
 }

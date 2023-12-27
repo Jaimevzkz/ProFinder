@@ -21,12 +21,14 @@ class ProfileViewModel @Inject constructor(private val getUserDataStoreUseCase: 
             ProfileIntent.Logout -> state.copy(logout = true)
             is ProfileIntent.Error -> state.copy(
                 logout = false,
-                error = Error(true, intent.errorMsg)
+                error = Error(true, intent.errorMsg),
+                start = false
             )
             is ProfileIntent.SetUserFromDS -> state.copy(
                 logout = false,
                 user = intent.user,
-                error = Error(false, null)
+                error = Error(false, null),
+                start = true
             )
         }
     }

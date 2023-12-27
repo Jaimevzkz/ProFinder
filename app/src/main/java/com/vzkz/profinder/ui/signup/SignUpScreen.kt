@@ -28,7 +28,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
-import com.vzkz.profinder.destinations.SignUpScreenDestination
 import com.vzkz.profinder.ui.components.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyAuthHeader
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
@@ -39,6 +38,7 @@ import com.vzkz.profinder.ui.components.MyPasswordTextField
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.validateEmail
 import com.vzkz.profinder.ui.components.validatePassword
+import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
 @Composable
@@ -52,16 +52,24 @@ fun SignUpScreen(
     } else if (state.loading) {
         MyCircularProgressbar(backGroundColor = MaterialTheme.colorScheme.background)
     } else {
-        ScreenBody(onSignInClicked = {
-            navigator.navigate(LoginScreenDestination)
-        }, signUpViewModel, state)
+        ScreenBody(
+            onSignInClicked = {
+                navigator.navigate(LoginScreenDestination)
+            },
+            onSignUp = { email, password, nickname ->
+                signUpViewModel.onSignUp(email = email, password = password, nickname = nickname)
+            },
+            state = state,
+            onCloseDialog = { signUpViewModel.onCloseDialog() },
+        )
     }
 }
 
 @Composable
 private fun ScreenBody(
     onSignInClicked: () -> Unit,
-    signUpViewModel: SignUpViewModel = hiltViewModel(),
+    onSignUp: (String, String, String) -> Unit,
+    onCloseDialog: () -> Unit,
     state: SignUpState
 ) {
     Box(
@@ -154,7 +162,7 @@ private fun ScreenBody(
         Button(
             onClick = {
                 if (isEmailValid && isPasswordValid && isSamePassword) {
-                    signUpViewModel.onSignUp(email, password, nickname)
+                    onSignUp(email, password, nickname)
                 }
             },
             Modifier
@@ -168,8 +176,8 @@ private fun ScreenBody(
         MyAlertDialog(
             title = stringResource(R.string.error_during_sign_up),
             text = state.error.errorMsg ?: stringResource(R.string.account_already_exists),
-            onDismiss = { signUpViewModel.onCloseDialog() },
-            onConfirm = { signUpViewModel.onCloseDialog() },
+            onDismiss = { onCloseDialog() },
+            onConfirm = { onCloseDialog() },
             showDialog = showDialog
         )
     }
@@ -178,5 +186,12 @@ private fun ScreenBody(
 @Preview
 @Composable
 fun SignUpPreview() {
-    ScreenBody(onSignInClicked = {}, state = SignUpState.initial)
+    ProFinderTheme {
+        ScreenBody(
+            onSignInClicked = {  },
+            onSignUp = {_,_,_ ->},
+            onCloseDialog = { /*TODO*/ },
+            state = SignUpState.initial
+        )
+    }
 }

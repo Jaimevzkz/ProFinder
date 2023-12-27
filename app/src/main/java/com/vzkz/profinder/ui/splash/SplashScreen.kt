@@ -17,6 +17,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.ui.components.MyImageLogo
+import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @RootNavGraph(start = true)
 @Destination
@@ -50,5 +51,7 @@ private fun ScreenBody() {
 @Preview
 @Composable
 fun SplashPreview() {
-    ScreenBody()
+    ProFinderTheme {
+        ScreenBody()
+    }
 }
