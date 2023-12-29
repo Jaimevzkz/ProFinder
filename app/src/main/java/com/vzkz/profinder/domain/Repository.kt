@@ -14,4 +14,6 @@ interface Repository {
 
     suspend fun modifyUserData(oldUser: UserModel, newUser: UserModel)
 
+    suspend fun getUserFromFirestore(uid: String): UserModel
+
 }

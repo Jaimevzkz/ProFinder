@@ -2,28 +2,33 @@ package com.vzkz.profinder.ui.profile
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.model.UserModel
-import com.vzkz.profinder.domain.usecases.GetUserDataStoreUseCase
+import com.vzkz.profinder.domain.usecases.GetUidDataStoreUseCase
+import com.vzkz.profinder.domain.usecases.GetUserUseCase
 import com.vzkz.profinder.domain.usecases.LogoutUseCase
-import com.vzkz.profinder.ui.settings.SettingsIntent
+import com.vzkz.profinder.ui.profile.editprofile.EditProfileIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(private val getUserDataStoreUseCase: GetUserDataStoreUseCase, private val logoutUseCase: LogoutUseCase): BaseViewModel<ProfileState, ProfileIntent>(ProfileState.initial) {
-    override fun reduce(state: ProfileState, intent: ProfileIntent): ProfileState { //This function reduces each intent with a when
-        return when(intent){
+class ProfileViewModel @Inject constructor(
+    private val getUserUseCase: GetUserUseCase,
+    private val logoutUseCase: LogoutUseCase
+) : BaseViewModel<ProfileState, ProfileIntent>(ProfileState.initial) {
+    override fun reduce(
+        state: ProfileState,
+        intent: ProfileIntent
+    ): ProfileState { //This function reduces each intent with a when
+        return when (intent) {
             ProfileIntent.Logout -> state.copy(logout = true)
             is ProfileIntent.Error -> state.copy(
                 logout = false,
                 error = Error(true, intent.errorMsg),
                 start = false
             )
+
             is ProfileIntent.SetUserFromDS -> state.copy(
                 logout = false,
                 user = intent.user,
@@ -34,17 +39,18 @@ class ProfileViewModel @Inject constructor(private val getUserDataStoreUseCase: 
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
-    fun onInitProfile(){
-        viewModelScope.launch(Dispatchers.IO) {
+    fun onInit() {
+        try {
             viewModelScope.launch(Dispatchers.IO) {
-                getUserDataStoreUseCase().collect{user ->
-                    if(user.uid == "") dispatch(ProfileIntent.Error("Couldn't find user in DataStore"))
-                    else dispatch(ProfileIntent.SetUserFromDS(user))
-                }
+                val user = getUserUseCase()
+                dispatch(ProfileIntent.SetUserFromDS(user))
             }
+        } catch (e: Exception) {
+            dispatch(ProfileIntent.Error(e.message ?: "Error getting user"))
         }
     }
-    fun onLogout(){
+
+    fun onLogout() {
         viewModelScope.launch(Dispatchers.IO) {
             logoutUseCase()
         }

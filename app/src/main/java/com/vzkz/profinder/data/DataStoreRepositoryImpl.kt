@@ -7,7 +7,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.vzkz.profinder.data.UserFields.NICKNAME
 import com.vzkz.profinder.data.UserFields.UID
 import com.vzkz.profinder.domain.DataStoreRepository
 import com.vzkz.profinder.domain.model.UserModel
@@ -20,7 +19,6 @@ private const val PREFERENCES_NAME = "my_preferences"
 
 private object UserFields {
     const val UID = "uid"
-    const val NICKNAME = "nickname"
 }
 
 private const val THEME = "theme"
@@ -29,9 +27,8 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 class DataStoreRepositoryImpl @Inject constructor(private val context: Context) :
     DataStoreRepository {
-    override suspend fun saveUser(user: UserModel) {
-        saveUserField(UID, user.uid)
-        saveUserField(NICKNAME, user.nickname)
+    override suspend fun saveUid(uid: String) {
+        saveUserField(UID, uid)
     }
 
     private suspend fun saveUserField(key: String, value: String) {
@@ -40,15 +37,13 @@ class DataStoreRepositoryImpl @Inject constructor(private val context: Context) 
         }
     }
 
-    override suspend fun getUser(): Flow<UserModel> {
+    override suspend fun getUid(): String {
         return context.dataStore.data.map { preferences ->
-            UserModel(
-                uid = preferences[stringPreferencesKey(UID)] ?: "",
-                nickname = preferences[stringPreferencesKey(NICKNAME)] ?: ""
-            )
-        }
+            preferences[stringPreferencesKey(UID)] ?: ""
+        }.first()
     }
 
+    //Theme
     override suspend fun switchAppTheme() {
         context.dataStore.edit { preferences ->
             val value = preferences[booleanPreferencesKey(THEME)] ?: false

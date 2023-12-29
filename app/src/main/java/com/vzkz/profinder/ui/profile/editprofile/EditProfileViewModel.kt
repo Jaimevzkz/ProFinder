@@ -3,9 +3,8 @@ package com.vzkz.profinder.ui.profile.editprofile
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.UserModel
-import com.vzkz.profinder.domain.usecases.GetUserDataStoreUseCase
+import com.vzkz.profinder.domain.usecases.GetUserUseCase
 import com.vzkz.profinder.domain.usecases.ModifyUserDataUseCase
-import com.vzkz.profinder.domain.usecases.SaveUserDataStoreUseCase
 import com.vzkz.profinder.ui.profile.Error
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,9 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
-    private val getUserDataStoreUseCase: GetUserDataStoreUseCase,
     private val modifyUserDataUseCase: ModifyUserDataUseCase,
-    private val saveUserDataStoreUseCase: SaveUserDataStoreUseCase
+    private val getUserUseCase: GetUserUseCase
 ) :
     BaseViewModel<EditProfileState, EditProfileIntent>(EditProfileState.initial) {
 
@@ -61,11 +59,13 @@ class EditProfileViewModel @Inject constructor(
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
         dispatch(EditProfileIntent.Loading)
-        viewModelScope.launch {
-            getUserDataStoreUseCase().collect { user ->
-                if (user.uid == "") dispatch(EditProfileIntent.Error("Couldn't find user in DataStore"))
-                else dispatch(EditProfileIntent.SetUserFromDS(user))
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                val user = getUserUseCase()
+                dispatch(EditProfileIntent.SetUserFromDS(user))
             }
+        } catch (e: Exception) {
+            dispatch(EditProfileIntent.Error(e.message ?: "Error getting user"))
         }
     }
 
@@ -73,9 +73,11 @@ class EditProfileViewModel @Inject constructor(
         dispatch(EditProfileIntent.Loading)
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO){
-                    modifyUserDataUseCase(newUser = newUser, oldUser = oldUser)
-                    saveUserDataStoreUseCase(newUser)
+                withContext(Dispatchers.IO) {
+                    modifyUserDataUseCase(
+                        newUser = newUser,
+                        oldUser = oldUser
+                    )
                 }
                 dispatch(EditProfileIntent.Success)
 
