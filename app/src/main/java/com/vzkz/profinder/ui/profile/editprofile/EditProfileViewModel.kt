@@ -28,10 +28,10 @@ class EditProfileViewModel @Inject constructor(
             is EditProfileIntent.Error -> state.copy(
                 error = Error(true, intent.errorMsg),
                 success = false,
-                loading = false
+                loading = true
             )
 
-            is EditProfileIntent.SetUserFromDS -> state.copy(
+            is EditProfileIntent.SetUser -> state.copy(
                 user = intent.user,
                 success = false,
                 loading = false
@@ -39,14 +39,12 @@ class EditProfileViewModel @Inject constructor(
 
             EditProfileIntent.CloseError -> state.copy(
                 error = Error(false, null),
-                success = false,
-                loading = false
+                success = true
             )
 
             EditProfileIntent.Success -> state.copy(
                 error = Error(false, null),
-                success = true,
-                loading = false
+                success = false
             )
 
             is EditProfileIntent.Loading -> state.copy(
@@ -58,11 +56,10 @@ class EditProfileViewModel @Inject constructor(
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
-        dispatch(EditProfileIntent.Loading)
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 val user = getUserUseCase()
-                dispatch(EditProfileIntent.SetUserFromDS(user))
+                dispatch(EditProfileIntent.SetUser(user))
             }
         } catch (e: Exception) {
             dispatch(EditProfileIntent.Error(e.message ?: "Error getting user"))

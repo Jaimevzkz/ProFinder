@@ -36,7 +36,8 @@ class RepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             when (e.message) {
                 CONNECTION_ERROR -> throw Exception(context.getString(R.string.network_failure_while_checking_user_existence))
-                else -> throw Exception(context.getString(R.string.couldn_t_find_the_user))
+//                else -> throw Exception(context.getString(R.string.couldn_t_find_the_user))
+                else -> throw Exception("Unknown exception ocurr during login")
             }
         }
     }

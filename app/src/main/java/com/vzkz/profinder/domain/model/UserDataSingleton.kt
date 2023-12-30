@@ -27,8 +27,14 @@ class UserDataSingleton(private val repository: Repository) {
         }
     }
 
+    fun flushCache() {
+        cachedUser = null
+    }
+
     private suspend fun fetchDataFromFirestore(uid: String): UserModel {
-        return repository.getUserFromFirestore(uid)
+        val user = repository.getUserFromFirestore(uid)
+        cachedUser = user
+        return user
     }
 
 }

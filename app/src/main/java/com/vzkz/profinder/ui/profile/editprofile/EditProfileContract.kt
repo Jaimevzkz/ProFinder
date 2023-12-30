@@ -17,7 +17,7 @@ data class EditProfileState(
             user = null,
             error = Error(false, null),
             success = false,
-            loading = false
+            loading = true
         )
     }
 }
@@ -25,7 +25,7 @@ data class EditProfileState(
 data class Error(val isError: Boolean, val errorMsg: String?)
 
 sealed class EditProfileIntent: Intent {
-    data class SetUserFromDS(val user: UserModel?): EditProfileIntent()
+    data class SetUser(val user: UserModel?): EditProfileIntent()
     data class Error(val errorMsg: String): EditProfileIntent()
     data object CloseError: EditProfileIntent()
     data object  Success: EditProfileIntent()

@@ -47,9 +47,10 @@ fun EditProfileScreen(
 ) {
     editProfileViewModel.onInit()
     val state = editProfileViewModel.state
+    val loading = state.loading
     if (state.success) {
         navigator.navigate(ProfileScreenDestination)
-    } else if (state.loading) {
+    } else if (loading) {
         MyCircularProgressbar()
     } else {
         var user: UserModel? by remember { mutableStateOf(null) }

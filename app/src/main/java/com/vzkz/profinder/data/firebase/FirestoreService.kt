@@ -56,12 +56,10 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
 
             // Asegurarse de que userData no sea nulo
             if (userData != null) {
-
                 val userModel = UserModel(
-                    uid = userData[UID] as String,
+                    uid = uid,
                     nickname = userData[NICKNAME] as String,
                 )
-
                 userModel
             } else throw Exception(CONNECTION_ERROR)
 

@@ -1,6 +1,5 @@
 package com.vzkz.profinder.ui.profile
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,14 +55,14 @@ fun ProfileScreen(
             }
         }
     } else {
-        profileViewModel.onInitProfile()
+        profileViewModel.onInit()
         var user: UserModel? by remember { mutableStateOf(null) }
         user = profileViewModel.state.user
-        val start = profileViewModel.state.start
+        val loading = profileViewModel.state.loading
 
         ScreenBody(
             user = user,
-            start = start,
+            loading = loading,
             onLogout = { profileViewModel.onLogout() },
             onBottomBarClicked = { navigator.navigate(it) },
             onSettingsClicked = { navigator.navigate(SettingsScreenDestination) },
@@ -78,7 +77,7 @@ private fun ScreenBody(
     user: UserModel?,
     onLogout: () -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
-    start: Boolean,
+    loading: Boolean,
     onSettingsClicked: () -> Unit,
     onEditProfileClicked: () -> Unit
 ) {
@@ -90,7 +89,7 @@ private fun ScreenBody(
         currentDestination = ProfileScreenDestination,
         onBottomBarClicked = { onBottomBarClicked(it) }
     ) { paddingValues ->
-        if (!start) {
+        if (loading) {
             MyCircularProgressbar()
         } else {
             Box(
@@ -150,7 +149,7 @@ fun LightPreview() {
             user = USERMODELFORTESTS,
             onLogout = { },
             onBottomBarClicked = {},
-            start = true,
+            loading = true,
             onSettingsClicked = {  }) {
 
         }

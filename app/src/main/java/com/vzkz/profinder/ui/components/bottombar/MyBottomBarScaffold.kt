@@ -20,7 +20,8 @@ fun MyBottomBarScaffold(
         bottomBar = {
             MyBottomBar(
                 currentDestination = currentDestination,
-                onClick = { onBottomBarClicked(it) })
+                onClick = { if (currentDestination != it) onBottomBarClicked(it) }
+            )
         }
     ) { paddingValues ->
         content(paddingValues)

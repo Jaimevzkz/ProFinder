@@ -2,10 +2,8 @@ package com.vzkz.profinder.ui.profile
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.usecases.GetUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.GetUserUseCase
 import com.vzkz.profinder.domain.usecases.LogoutUseCase
-import com.vzkz.profinder.ui.profile.editprofile.EditProfileIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,14 +24,14 @@ class ProfileViewModel @Inject constructor(
             is ProfileIntent.Error -> state.copy(
                 logout = false,
                 error = Error(true, intent.errorMsg),
-                start = false
+                loading = true
             )
 
-            is ProfileIntent.SetUserFromDS -> state.copy(
+            is ProfileIntent.SetUser -> state.copy(
                 logout = false,
                 user = intent.user,
                 error = Error(false, null),
-                start = true
+                loading = false
             )
         }
     }
@@ -43,7 +41,7 @@ class ProfileViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 val user = getUserUseCase()
-                dispatch(ProfileIntent.SetUserFromDS(user))
+                dispatch(ProfileIntent.SetUser(user))
             }
         } catch (e: Exception) {
             dispatch(ProfileIntent.Error(e.message ?: "Error getting user"))

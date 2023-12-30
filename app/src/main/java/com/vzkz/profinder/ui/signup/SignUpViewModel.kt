@@ -3,7 +3,7 @@ package com.vzkz.profinder.ui.signup
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.usecases.SaveUserDataStoreUseCase
+import com.vzkz.profinder.domain.usecases.SaveUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,9 +13,15 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCase, private val saveUserDataStore: SaveUserDataStoreUseCase): BaseViewModel<SignUpState, SignUpIntent>(SignUpState.initial) {
+class SignUpViewModel @Inject constructor(
+    private val signUpUseCase: SignUpUseCase,
+    private val saveUidDataStoreUseCase: SaveUidDataStoreUseCase
+) : BaseViewModel<SignUpState, SignUpIntent>(SignUpState.initial) {
 
-    override fun reduce(state: SignUpState, intent: SignUpIntent): SignUpState { //This function reduces each intent with a when
+    override fun reduce(
+        state: SignUpState,
+        intent: SignUpIntent
+    ): SignUpState { //This function reduces each intent with a when
         return when (intent) {
             is SignUpIntent.Loading -> state.copy(
                 loading = intent.isLoading
@@ -47,12 +53,13 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
         dispatch(SignUpIntent.Loading(isLoading = true))
         viewModelScope.launch {
             try {
-                val result = withContext(Dispatchers.IO) { signUpUseCase(email, password, nickname) }
+                val result =
+                    withContext(Dispatchers.IO) { signUpUseCase(email, password, nickname) }
                 if (result != null) {
-                    withContext(Dispatchers.IO) { saveUserDataStore(result) }
+                    withContext(Dispatchers.IO) { saveUidDataStoreUseCase(result.uid) }
                     dispatch(SignUpIntent.SignUp(result))
                 } else {
-                    Log.e("Jaime", "nickname already exists")
+                    Log.e("Jaime", "Error signing in")
                     dispatch(SignUpIntent.Error(""))
                 }
             } catch (e: Exception) {
