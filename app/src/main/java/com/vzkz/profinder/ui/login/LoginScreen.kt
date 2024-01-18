@@ -106,18 +106,21 @@ private fun ScreenBody(
                 )
             }
             MySpacer(size = 8)
-            MyPasswordTextField(
-                modifier = Modifier,
-                text = password,
-                hint = stringResource(R.string.password),
-                onTextChanged = { password = it })
-            MySpacer(16)
-            Text(
-                text = stringResource(R.string.signup),
-                Modifier
-                    .clickable { onSignUpClicked() },
-                color = MaterialTheme.colorScheme.primary
-            )
+            Column {
+                MyPasswordTextField(
+                    modifier = Modifier,
+                    text = password,
+                    hint = stringResource(R.string.password),
+                    onTextChanged = { password = it })
+                MySpacer(8)
+                Text(
+                    text = stringResource(R.string.signup),
+                    Modifier
+                        .clickable { onSignUpClicked() }
+                        .align(Alignment.End),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
         }
 
         Button(

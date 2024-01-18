@@ -3,8 +3,13 @@ package com.vzkz.profinder.domain.model
 object Constants {
     //User
     const val USERS_COLLECTION = "users"
-    const val UID = "uid"
     const val NICKNAME = "nickname"
+    const val FIRSTNAME = "firstname"
+    const val LASTNAME = "lastname"
+    const val DESCRIPTION = "description"
+    const val ISUSER = "isUser"
+    const val PROFESSION = "profession"
+    const val STATE = "state"
 
     //Errors
     const val ERRORSTR = "error"

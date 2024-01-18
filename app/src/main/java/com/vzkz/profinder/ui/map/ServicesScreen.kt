@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,22 +15,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
-import com.vzkz.profinder.destinations.ChatScreenDestination
-import com.vzkz.profinder.destinations.HomeScreenDestination
-import com.vzkz.profinder.destinations.MapScreenDestination
-import com.vzkz.profinder.ui.components.bottombar.MyBottomBar
+import com.vzkz.profinder.destinations.ServicesScreenDestination
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 
 @Destination
 @Composable
-fun MapScreen(navigator: DestinationsNavigator) {
+fun ServicesScreen(navigator: DestinationsNavigator) {
     ScreenBody { navigator.navigate(it) }
 }
 
 @Composable
 private fun ScreenBody(onBottomBarClicked: (DirectionDestinationSpec) -> Unit) {
     MyBottomBarScaffold(
-        currentDestination = MapScreenDestination,
+        currentDestination = ServicesScreenDestination,
         onBottomBarClicked = { onBottomBarClicked(it) }
     ) { paddingValues ->
         Box(

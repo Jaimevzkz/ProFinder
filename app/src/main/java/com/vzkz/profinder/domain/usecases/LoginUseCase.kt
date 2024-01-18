@@ -1,15 +1,15 @@
 package com.vzkz.profinder.domain.usecases
 
 import com.vzkz.profinder.domain.Repository
-import com.vzkz.profinder.domain.model.UserModel
+import com.vzkz.profinder.domain.model.ActorModel
 import javax.inject.Inject
 
 
 interface LoginUseCase {
-    suspend operator fun invoke(email: String, password: String): UserModel?
+    suspend operator fun invoke(email: String, password: String): ActorModel?
 }
 class LoginUseCaseImpl @Inject constructor(private val repository: Repository): LoginUseCase {
-    override suspend operator fun invoke(email: String, password: String): UserModel? {
+    override suspend operator fun invoke(email: String, password: String): ActorModel? {
         return repository.login(email, password)
     }
 }

@@ -6,10 +6,11 @@ import com.vzkz.profinder.R
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.domain.Repository
+import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Constants
 import com.vzkz.profinder.domain.model.Constants.CONNECTION_ERROR
-import com.vzkz.profinder.domain.model.Constants.MODIFICATION_ERROR
-import com.vzkz.profinder.domain.model.UserModel
+import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.Professions
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
@@ -19,7 +20,7 @@ class RepositoryImpl @Inject constructor(
 ) : Repository {
 
     //Firestore
-    override suspend fun login(email: String, password: String): UserModel? {
+    override suspend fun login(email: String, password: String): ActorModel? {
         val user: FirebaseUser?
         try{
             user = authService.login(email, password)
@@ -30,14 +31,13 @@ class RepositoryImpl @Inject constructor(
         else null
     }
 
-    override suspend fun getUserFromFirestore(uid: String): UserModel {
+    override suspend fun getUserFromFirestore(uid: String): ActorModel {
         try {
             return firestoreService.getUserData(uid)
         } catch (e: Exception) {
             when (e.message) {
                 CONNECTION_ERROR -> throw Exception(context.getString(R.string.network_failure_while_checking_user_existence))
-//                else -> throw Exception(context.getString(R.string.couldn_t_find_the_user))
-                else -> throw Exception("Unknown exception ocurr during login")
+                else -> throw Exception(context.getString(R.string.unknown_exception_occurred_during_login))
             }
         }
     }
@@ -45,18 +45,26 @@ class RepositoryImpl @Inject constructor(
     override suspend fun signUp(
         email: String,
         password: String,
-        nickname: String
-    ): UserModel {
+        nickname: String,
+        firstname: String,
+        lastname: String,
+        actor: Actors,
+        profession: Professions?
+    ): ActorModel {
         if (firestoreService.nicknameExists(nickname)) {
             throw Exception(context.getString(R.string.username_already_in_use))
         } else {
-            val user: UserModel
+            val user: ActorModel
             try {
                 val firestoreUser = authService.signUp(email, password)
                 if (firestoreUser != null) {
-                    user = UserModel(
+                    user = ActorModel(
                         nickname = nickname,
-                        uid = firestoreUser.uid
+                        uid = firestoreUser.uid,
+                        firstname = firstname,
+                        lastname = lastname,
+                        actor = actor,
+                        profession = profession
                     )
                 } else {
                     throw Exception()
@@ -76,7 +84,7 @@ class RepositoryImpl @Inject constructor(
     override suspend fun logout() = authService.logout()
 
     override fun isUserLogged() = authService.isUserLogged()
-    override suspend fun modifyUserData(oldUser: UserModel, newUser: UserModel) {
+    override suspend fun modifyUserData(oldUser: ActorModel, newUser: ActorModel) {
         try{
             firestoreService.modifyUserData(oldUser = oldUser, newUser = newUser)
         } catch (e: Exception){

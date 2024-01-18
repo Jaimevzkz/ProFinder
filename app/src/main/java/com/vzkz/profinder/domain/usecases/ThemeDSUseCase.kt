@@ -1,7 +1,6 @@
 package com.vzkz.profinder.domain.usecases
 
 import com.vzkz.profinder.domain.DataStoreRepository
-import com.vzkz.profinder.domain.model.UserModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

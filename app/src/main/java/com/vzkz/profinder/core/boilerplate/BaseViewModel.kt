@@ -24,7 +24,6 @@ abstract class BaseViewModel<S : State, I: Intent> (initialState: S): ViewModel(
                 state = reduce(state, intent)
             }
         }
-
     }
 
     abstract fun reduce(state: S, intent: I): S

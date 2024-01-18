@@ -2,7 +2,6 @@ package com.vzkz.profinder.domain.usecases
 
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.model.UserDataSingleton
-import com.vzkz.profinder.domain.model.UserModel
 import javax.inject.Inject
 
 interface LogoutUseCase {

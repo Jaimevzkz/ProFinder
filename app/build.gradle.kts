@@ -69,11 +69,14 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+//    implementation("androidx.room:room-ktx:2.6.1")
 
     //Unit Test
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("io.mockk:mockk:1.12.3")
+    val coroutinesTestVersion = "1.6.1"
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion")
 
     //Ui Test
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

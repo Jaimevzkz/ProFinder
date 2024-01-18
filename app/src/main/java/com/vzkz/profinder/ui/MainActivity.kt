@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
             flow = themeDSUseCase()
         }
         setContent {
-            var darkTheme by remember{ mutableStateOf(false) }
+            var darkTheme by remember { mutableStateOf(false) }
             LaunchedEffect(flow) {
                 flow.collect { value ->
                     darkTheme = value

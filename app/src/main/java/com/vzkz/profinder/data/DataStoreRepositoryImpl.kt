@@ -9,7 +9,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.vzkz.profinder.data.UserFields.UID
 import com.vzkz.profinder.domain.DataStoreRepository
-import com.vzkz.profinder.domain.model.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

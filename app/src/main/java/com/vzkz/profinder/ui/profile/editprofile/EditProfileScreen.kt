@@ -1,10 +1,8 @@
 package com.vzkz.profinder.ui.profile.editprofile
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,11 +30,12 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.USERMODELFORTESTS
 import com.vzkz.profinder.destinations.ProfileScreenDestination
-import com.vzkz.profinder.domain.model.UserModel
+import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.ui.components.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyConfirmDialog
 import com.vzkz.profinder.ui.components.MyGenericTextField
+import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
@@ -53,7 +52,7 @@ fun EditProfileScreen(
     } else if (loading) {
         MyCircularProgressbar()
     } else {
-        var user: UserModel? by remember { mutableStateOf(null) }
+        var user: ActorModel? by remember { mutableStateOf(null) }
         user = editProfileViewModel.state.user
         var isError by remember { mutableStateOf(false) }
         isError = editProfileViewModel.state.error.isError
@@ -75,9 +74,9 @@ fun EditProfileScreen(
 @Composable
 private fun ScreenBody(
     isError: Boolean,
-    user: UserModel?,
+    user: ActorModel?,
     errorMsg: String?,
-    onModifyUserData: (UserModel, UserModel) -> Unit,
+    onModifyUserData: (ActorModel, ActorModel) -> Unit,
     onCloseDialog: () -> Unit,
     onBackClicked: () -> Unit
 ) {
@@ -90,6 +89,10 @@ private fun ScreenBody(
     ) {
         var nickname by remember { mutableStateOf("") }
         var readOnlyNickname by remember { mutableStateOf(true) }
+
+        var actor by remember { mutableStateOf("") }
+        var readOnlyActor by remember { mutableStateOf(true) }
+
         var firstTime by remember { mutableStateOf(true) }
         var showAlertDialog by remember { mutableStateOf(false) }
         showAlertDialog = isError
@@ -97,6 +100,7 @@ private fun ScreenBody(
 
         if (firstTime) {
             nickname = user?.nickname ?: ""
+            actor = user?.actor?.name ?: ""
             firstTime = false
         }
         IconButton(modifier = Modifier.align(Alignment.TopStart), onClick = {
@@ -122,20 +126,20 @@ private fun ScreenBody(
                     }
                 }
             )
+            MySpacer(size = 8)
+
+            
         }
-        Row(
+        Button(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
                 .fillMaxWidth()
+                .align(Alignment.BottomCenter)
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+            onClick = {
                 showConfirmDialog = true
-            }) {
-                Text(text = stringResource(R.string.save))
             }
+        ) {
+            Text(text = stringResource(R.string.save))
         }
 
         MyConfirmDialog(
@@ -143,13 +147,16 @@ private fun ScreenBody(
             text = "Profile changes like username may not be undoable",
             onDismiss = {
                 readOnlyNickname = true
+                readOnlyActor = true
                 showConfirmDialog = false
             },
             onConfirm = {
                 readOnlyNickname = true
+                readOnlyActor = true
                 showConfirmDialog = false
                 if (user != null) {
-                    val newUser = user.copy(nickname = nickname)
+                    val newUser = user
+//                    val newUser = user.copy(nickname = nickname) //TODO Refactor this to be scalable
                     onModifyUserData(newUser, user) //We know the user is not null
                 }
             },
@@ -179,9 +186,9 @@ fun LightPreview() {
             isError = false,
             user = USERMODELFORTESTS,
             errorMsg = null,
-            onModifyUserData = {_,_->},
+            onModifyUserData = { _, _ -> },
             onCloseDialog = {}) {
-            
+
         }
     }
 }

@@ -2,12 +2,12 @@ package com.vzkz.profinder.ui.signup
 
 import com.vzkz.profinder.core.boilerplate.Intent
 import com.vzkz.profinder.core.boilerplate.State
-import com.vzkz.profinder.domain.model.UserModel
+import com.vzkz.profinder.domain.model.ActorModel
 
 
 data class SignUpState(
     val loading: Boolean,
-    val user: UserModel?,
+    val user: ActorModel?,
     val success: Boolean,
     val error: Error
 ) : State {
@@ -25,7 +25,7 @@ data class Error(val isError: Boolean, val errorMsg: String?)
 
 sealed class SignUpIntent: Intent {
     data class Loading(val isLoading: Boolean): SignUpIntent()
-    data class SignUp(val user: UserModel): SignUpIntent()
+    data class SignUp(val user: ActorModel): SignUpIntent()
     data class Error(val errorMsg: String): SignUpIntent()
     data object CloseError: SignUpIntent()
 }

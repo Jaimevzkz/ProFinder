@@ -9,8 +9,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +36,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
+import com.vzkz.profinder.domain.model.Actors
+import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.ui.components.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyAuthHeader
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
@@ -56,8 +66,16 @@ fun SignUpScreen(
             onSignInClicked = {
                 navigator.navigate(LoginScreenDestination)
             },
-            onSignUp = { email, password, nickname ->
-                signUpViewModel.onSignUp(email = email, password = password, nickname = nickname)
+            onSignUp = { email, password, nickname, firstname, lastname, actor, profession ->
+                signUpViewModel.onSignUp(
+                    email = email,
+                    password = password,
+                    nickname = nickname,
+                    firstname = firstname,
+                    lastname = lastname,
+                    actor = actor,
+                    profession = profession
+                )
             },
             state = state,
             onCloseDialog = { signUpViewModel.onCloseDialog() },
@@ -65,10 +83,11 @@ fun SignUpScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenBody(
     onSignInClicked: () -> Unit,
-    onSignUp: (String, String, String) -> Unit,
+    onSignUp: (String, String, String, String, String, Actors, Professions?) -> Unit,
     onCloseDialog: () -> Unit,
     state: SignUpState
 ) {
@@ -83,12 +102,17 @@ private fun ScreenBody(
         var password by remember { mutableStateOf("") } //1234Qwerty
         var repeatPassword by remember { mutableStateOf("") } //1234Qwerty
         var nickname by remember { mutableStateOf("") } //jaimee
+        var firstname by remember { mutableStateOf("") } //Jaime
+        var lastname by remember { mutableStateOf("") } //Vázquez
         //validation
         var isEmailValid by remember { mutableStateOf(true) }
         var isPasswordValid by remember { mutableStateOf(true) }
         var isSamePassword by remember { mutableStateOf(true) }
         var showDialog by remember { mutableStateOf(false) }
         showDialog = state.error.isError
+
+        var actorType: Actors? by remember { mutableStateOf(null) }
+        var profession: Professions? by remember { mutableStateOf(null) }
 
         MyAuthHeader(Modifier.align(Alignment.TopEnd))
 
@@ -145,24 +169,67 @@ private fun ScreenBody(
                 )
             }
             MySpacer(size = 8)
+
             MyGenericTextField(
                 modifier = Modifier,
                 text = nickname,
-                hint = stringResource(R.string.user_name),
+                hint = stringResource(R.string.nickname),
                 onTextChanged = { nickname = it })
-            MySpacer(16)
-            Text(
-                text = stringResource(R.string.login),
-                Modifier
-                    .clickable { onSignInClicked() },
-                color = MaterialTheme.colorScheme.primary
-            )
+            MySpacer(size = 8)
+            Column {// In order to align login button at end
+                Box(modifier = Modifier) {
+                    var expandedDropdownMenu by remember { mutableStateOf(false) }
+                    OutlinedTextField(
+                        value = actorType?.name ?: "",
+                        onValueChange = {/*Only read*/ },
+                        label = { Text(stringResource(R.string.user_professional)) },
+                        leadingIcon = {
+                            IconButton(onClick = { expandedDropdownMenu = true }) {
+                                Icon(
+                                    imageVector = Icons.Filled.ArrowDropDown,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    )
+                    DropdownMenu(
+                        modifier = Modifier,
+                        expanded = expandedDropdownMenu,
+                        onDismissRequest = { expandedDropdownMenu = false }) {
+                        Actors.entries.forEach {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(it.name, style = MaterialTheme.typography.bodyMedium)
+                                },
+                                onClick = {
+                                    actorType = it
+                                    expandedDropdownMenu = false
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        it.icon,
+                                        contentDescription = null
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }
+                MySpacer(8)
+                Text(
+                    text = stringResource(R.string.login),
+                    Modifier
+                        .clickable { onSignInClicked() }
+                        .align(Alignment.End),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
         }
 
         Button(
             onClick = {
                 if (isEmailValid && isPasswordValid && isSamePassword) {
-                    onSignUp(email, password, nickname)
+                    onSignUp(email, password, nickname, firstname, lastname, actorType!!, profession) //todo gestionar errores de entrada
                 }
             },
             Modifier
@@ -188,9 +255,9 @@ private fun ScreenBody(
 fun SignUpPreview() {
     ProFinderTheme {
         ScreenBody(
-            onSignInClicked = {  },
-            onSignUp = {_,_,_ ->},
-            onCloseDialog = { /*TODO*/ },
+            onSignInClicked = { },
+            onSignUp = { _, _, _, _, _, _, _ -> },
+            onCloseDialog = { },
             state = SignUpState.initial
         )
     }

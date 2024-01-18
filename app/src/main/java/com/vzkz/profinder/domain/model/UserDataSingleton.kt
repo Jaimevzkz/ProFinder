@@ -15,11 +15,11 @@ class UserDataSingleton(private val repository: Repository) {
         }
     }
 
-    private var cachedUser: UserModel? = null // Stores the user locally
+    private var cachedUser: ActorModel? = null // Stores the user locally
 
     fun cachedUser(): Boolean = cachedUser != null
 
-    suspend fun getData(uid: String = ""): UserModel { //gets cached user or calls firebase
+    suspend fun getData(uid: String = ""): ActorModel { //gets cached user or calls firebase
         return if (cachedUser == null) {
             fetchDataFromFirestore(uid) //get user from firestore
         } else {
@@ -31,7 +31,7 @@ class UserDataSingleton(private val repository: Repository) {
         cachedUser = null
     }
 
-    private suspend fun fetchDataFromFirestore(uid: String): UserModel {
+    private suspend fun fetchDataFromFirestore(uid: String): ActorModel {
         val user = repository.getUserFromFirestore(uid)
         cachedUser = user
         return user

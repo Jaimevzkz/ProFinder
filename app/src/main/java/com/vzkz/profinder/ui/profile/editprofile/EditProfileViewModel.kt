@@ -2,7 +2,7 @@ package com.vzkz.profinder.ui.profile.editprofile
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.model.UserModel
+import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.usecases.GetUserUseCase
 import com.vzkz.profinder.domain.usecases.ModifyUserDataUseCase
 import com.vzkz.profinder.ui.profile.Error
@@ -66,7 +66,7 @@ class EditProfileViewModel @Inject constructor(
         }
     }
 
-    fun onModifyUserData(newUser: UserModel, oldUser: UserModel) {
+    fun onModifyUserData(newUser: ActorModel, oldUser: ActorModel) {
         dispatch(EditProfileIntent.Loading)
         viewModelScope.launch {
             try {
@@ -75,8 +75,8 @@ class EditProfileViewModel @Inject constructor(
                         newUser = newUser,
                         oldUser = oldUser
                     )
+                    dispatch(EditProfileIntent.Success)
                 }
-                dispatch(EditProfileIntent.Success)
 
             } catch (e: Exception) {
                 dispatch(EditProfileIntent.Error("${e.message}"))

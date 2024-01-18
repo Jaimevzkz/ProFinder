@@ -36,7 +36,7 @@ import com.vzkz.profinder.destinations.EditProfileScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.destinations.ProfileScreenDestination
 import com.vzkz.profinder.destinations.SettingsScreenDestination
-import com.vzkz.profinder.domain.model.UserModel
+import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
@@ -56,7 +56,7 @@ fun ProfileScreen(
         }
     } else {
         profileViewModel.onInit()
-        var user: UserModel? by remember { mutableStateOf(null) }
+        var user: ActorModel? by remember { mutableStateOf(null) }
         user = profileViewModel.state.user
         val loading = profileViewModel.state.loading
 
@@ -74,7 +74,7 @@ fun ProfileScreen(
 
 @Composable
 private fun ScreenBody(
-    user: UserModel?,
+    user: ActorModel?,
     onLogout: () -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
     loading: Boolean,
@@ -84,6 +84,8 @@ private fun ScreenBody(
     val defaultVal = "- "
     var nickname by remember { mutableStateOf("") }
     nickname = user?.nickname ?: defaultVal
+    var actor by remember { mutableStateOf("") }
+    actor = user?.actor?.name ?: defaultVal
 
     MyBottomBarScaffold(
         currentDestination = ProfileScreenDestination,
@@ -124,7 +126,10 @@ private fun ScreenBody(
                     }
 
                 }
-                Text(text = nickname, style = MaterialTheme.typography.titleLarge)
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    Text(text = nickname, style = MaterialTheme.typography.titleLarge)
+                    Text(text = actor, style = MaterialTheme.typography.titleLarge)
+                }
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
@@ -149,7 +154,7 @@ fun LightPreview() {
             user = USERMODELFORTESTS,
             onLogout = { },
             onBottomBarClicked = {},
-            loading = true,
+            loading = false,
             onSettingsClicked = {  }) {
 
         }

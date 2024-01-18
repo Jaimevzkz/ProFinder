@@ -33,4 +33,8 @@
     <string name="nickname_already_in_use_couldn_t_modify_user">Nickname already in use. Couldn\'t modify user.</string>
     <string name="error_during_profile_modification">Error during profile modification</string>
     <string name="confirm">Confirm</string>
+    <string name="unknown_exception_occurred_during_login">Unknown exception occurred during login</string>
+    <string name="user_type">User type</string>
+    <string name="services">Services</string>
+    <string name="user_professional">User/Professional</string>
 </resources>

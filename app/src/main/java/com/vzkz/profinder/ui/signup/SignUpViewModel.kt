@@ -3,6 +3,8 @@ package com.vzkz.profinder.ui.signup
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
+import com.vzkz.profinder.domain.model.Actors
+import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.usecases.SaveUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,12 +51,30 @@ class SignUpViewModel @Inject constructor(
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
-    fun onSignUp(email: String, password: String, nickname: String) {
+    fun onSignUp(
+        email: String,
+        password: String,
+        nickname: String,
+        firstname: String,
+        lastname: String,
+        actor: Actors,
+        profession: Professions?
+    ) {
         dispatch(SignUpIntent.Loading(isLoading = true))
         viewModelScope.launch {
             try {
                 val result =
-                    withContext(Dispatchers.IO) { signUpUseCase(email, password, nickname) }
+                    withContext(Dispatchers.IO) {
+                        signUpUseCase(
+                            email = email,
+                            password = password,
+                            nickname = nickname,
+                            actor = actor,
+                            firstname = firstname,
+                            lastname = lastname,
+                            profession = profession
+                        )
+                    }
                 if (result != null) {
                     withContext(Dispatchers.IO) { saveUidDataStoreUseCase(result.uid) }
                     dispatch(SignUpIntent.SignUp(result))

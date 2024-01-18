@@ -3,15 +3,22 @@ package com.vzkz.profinder.data.firebase
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Constants.CONNECTION_ERROR
+import com.vzkz.profinder.domain.model.Constants.DESCRIPTION
+import com.vzkz.profinder.domain.model.Constants.FIRSTNAME
+import com.vzkz.profinder.domain.model.Constants.ISUSER
+import com.vzkz.profinder.domain.model.Constants.LASTNAME
 import com.vzkz.profinder.domain.model.Constants.MODIFICATION_ERROR
 import com.vzkz.profinder.domain.model.Constants.NICKNAME
 import com.vzkz.profinder.domain.model.Constants.NICKNAME_IN_USE
 import com.vzkz.profinder.domain.model.Constants.NULL_USERDATA
-import com.vzkz.profinder.domain.model.Constants.UID
+import com.vzkz.profinder.domain.model.Constants.STATE
 import com.vzkz.profinder.domain.model.Constants.UNKNOWN_EXCEPTION
 import com.vzkz.profinder.domain.model.Constants.USERS_COLLECTION
-import com.vzkz.profinder.domain.model.UserModel
+import com.vzkz.profinder.domain.model.Actors
+import com.vzkz.profinder.domain.model.ProfState
+import com.vzkz.profinder.domain.model.Professions
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -26,16 +33,15 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         return !userInfo.isEmpty
     }
 
-    fun insertUser(userData: UserModel?) {
+    fun insertUser(userData: ActorModel?) {
         if (userData == null) throw Exception(NULL_USERDATA)
 
         val userDocument = usersCollection.document(userData.uid)
 
-        val user: Map<String, Any?> = userData.toMap()
+        val userMap: Map<String, Any?> = userData.toMap()
 
-
-        // We use SetOptions.merge() to add the user without overriding other potential fields
-        userDocument.set(user, SetOptions.merge())
+        //SetOptions.merge() used to add the user without overriding other potential fields
+        userDocument.set(userMap, SetOptions.merge())
             .addOnSuccessListener {
                 Log.i("Jaime", "Success inserting in database")
             }
@@ -45,20 +51,43 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
 
     }
 
-    suspend fun getUserData(uid: String): UserModel {
+    suspend fun getUserData(uid: String): ActorModel {
         return try {
             val userDocumentRef = usersCollection.document(uid)
 
             val userDoc = userDocumentRef.get().await()
 
-
             val userData = userDoc.data
 
-            // Asegurarse de que userData no sea nulo
             if (userData != null) {
-                val userModel = UserModel(
+                val isUser = userData[ISUSER] as Boolean
+                val description = if (userData[DESCRIPTION] == "-") null else userData[DESCRIPTION]
+                val profession = if (isUser) null else {
+                    when (userData[DESCRIPTION]) {
+                        Professions.Plumber.name -> Professions.Plumber
+                        Professions.Hairdresser.name -> Professions.Hairdresser
+                        Professions.Electrician.name -> Professions.Electrician
+                        else -> Professions.Plumber //This should never happen
+                    }
+                }
+                val state = if (isUser) null else {
+                    when (userData[STATE]) {
+                        ProfState.Active.name -> ProfState.Active
+                        ProfState.Working.name -> ProfState.Working
+                        ProfState.Inactive.name -> ProfState.Inactive
+                        else -> ProfState.Active //This should never happen
+                    }
+                }
+                val userModel = ActorModel(
                     uid = uid,
                     nickname = userData[NICKNAME] as String,
+                    firstname = userData[FIRSTNAME] as String,
+                    lastname = userData[LASTNAME] as String,
+                    actor = if (isUser) Actors.User else Actors.Professional,
+                    description = description as String?,
+                    profession = profession,
+                    state = state
+
                 )
                 userModel
             } else throw Exception(CONNECTION_ERROR)
@@ -72,7 +101,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         }
     }
 
-    suspend fun modifyUserData(oldUser: UserModel, newUser: UserModel) {
+    suspend fun modifyUserData(oldUser: ActorModel, newUser: ActorModel) {
         if ((oldUser.nickname != newUser.nickname) && (nicknameExists(newUser.nickname))) {
             throw Exception(NICKNAME_IN_USE)
         }
