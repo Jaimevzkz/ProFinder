@@ -65,3 +65,9 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 
 val seed = Color(0xFF00796B)
+val active = Color(0xFF44C022)
+val working = Color(0xFFD38B1F)
+val inactive = Color(0xFFDF1318)
+val dialogContainer = Color(0xFFDEECE8)
+val d = Color(0xFF1F302D)
+

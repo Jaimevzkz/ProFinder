@@ -7,7 +7,7 @@ import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Constants.CONNECTION_ERROR
 import com.vzkz.profinder.domain.model.Constants.DESCRIPTION
 import com.vzkz.profinder.domain.model.Constants.FIRSTNAME
-import com.vzkz.profinder.domain.model.Constants.ISUSER
+import com.vzkz.profinder.domain.model.Constants.IS_USER
 import com.vzkz.profinder.domain.model.Constants.LASTNAME
 import com.vzkz.profinder.domain.model.Constants.MODIFICATION_ERROR
 import com.vzkz.profinder.domain.model.Constants.NICKNAME
@@ -17,14 +17,23 @@ import com.vzkz.profinder.domain.model.Constants.STATE
 import com.vzkz.profinder.domain.model.Constants.UNKNOWN_EXCEPTION
 import com.vzkz.profinder.domain.model.Constants.USERS_COLLECTION
 import com.vzkz.profinder.domain.model.Actors
+import com.vzkz.profinder.domain.model.Categories
+import com.vzkz.profinder.domain.model.Constants.CATEGORY
+import com.vzkz.profinder.domain.model.Constants.ERRORSTR
+import com.vzkz.profinder.domain.model.Constants.IS_ACTIVE
+import com.vzkz.profinder.domain.model.Constants.NAME
+import com.vzkz.profinder.domain.model.Constants.SERVICES_COLLECTION
+import com.vzkz.profinder.domain.model.Constants.SERV_DESCRIPTION
+import com.vzkz.profinder.domain.model.Constants.UID
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
+import com.vzkz.profinder.domain.model.ServiceModel
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
 class FirestoreService @Inject constructor(private val firestore: FirebaseFirestore) {
-
+    //Users
     private val usersCollection = firestore.collection(USERS_COLLECTION)
 
     suspend fun nicknameExists(nickname: String): Boolean {
@@ -43,10 +52,10 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         //SetOptions.merge() used to add the user without overriding other potential fields
         userDocument.set(userMap, SetOptions.merge())
             .addOnSuccessListener {
-                Log.i("Jaime", "Success inserting in database")
+                Log.i("Jaime", "Success inserting user in database")
             }
             .addOnFailureListener {
-                Log.e("Jaime", "Failure ${it.message}")
+                Log.e("Jaime", "Failure inserting user: ${it.message}")
             }
 
     }
@@ -60,7 +69,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             val userData = userDoc.data
 
             if (userData != null) {
-                val isUser = userData[ISUSER] as Boolean
+                val isUser = userData[IS_USER] as Boolean
                 val description = if (userData[DESCRIPTION] == "-") null else userData[DESCRIPTION]
                 val profession = if (isUser) null else {
                     when (userData[DESCRIPTION]) {
@@ -93,7 +102,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             } else throw Exception(CONNECTION_ERROR)
 
         } catch (e: Exception) {
-            Log.e("Jaime", "error getting doc. ${e.message}")
+            Log.e("Jaime", "error getting user doc. ${e.message}")
             when (e.message) {
                 CONNECTION_ERROR -> throw Exception(CONNECTION_ERROR)
                 else -> throw Exception(UNKNOWN_EXCEPTION)
@@ -113,14 +122,147 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         val newUserMap = newUser.toMap()
 
         // Updates firestore data and wait for the update to complete
-        userDocumentReference.update(newUserMap).addOnSuccessListener {
-            Log.i("Jaime", "User data updated successfully")
-        }
+        userDocumentReference.update(newUserMap)
+            .addOnSuccessListener {
+                Log.i("Jaime", "User data updated successfully")
+            }
             .addOnFailureListener {
-                Log.e("Jaime", "Error updating user data")
+                Log.e("Jaime", "Error updating user data: ${it.message}")
                 throw Exception(MODIFICATION_ERROR)
             }
-
     }
+
+    fun changeProfState(uid: String, state: ProfState){
+        usersCollection.document(uid).update(STATE, state.name)
+            .addOnSuccessListener {
+                Log.i("Jaime", "State updated successfully")
+            }
+            .addOnFailureListener {
+                Log.e("Jaime", "Error updating state: ${it.message}")
+                throw Exception(MODIFICATION_ERROR)
+            }
+    }
+
+    //Services
+    private val servicesCollection = firestore.collection(SERVICES_COLLECTION)
+
+    suspend fun getServiceList(uid: String): List<ServiceModel>{
+        val serviceList = mutableListOf<ServiceModel>()
+        try{
+            val querySnapshot = servicesCollection
+                .whereEqualTo("uid", uid)
+                .get()
+                .await()
+            for(document in querySnapshot.documents){
+                val category = when(document.getString(CATEGORY)){
+                    Categories.Beauty.name -> Categories.Beauty
+                    Categories.Household.name -> Categories.Household
+                    else -> Categories.Beauty
+                }
+                serviceList.add(
+                    ServiceModel(
+                        sid = document.id,
+                        uid = document.getString(UID) ?: ERRORSTR,
+                        name = document.getString(NAME) ?: ERRORSTR,
+                        isActive = document.getBoolean(IS_ACTIVE) ?: false,
+                        category = category,
+                        servDescription = document.getString(SERV_DESCRIPTION) ?: ERRORSTR
+                    )
+                )
+            }
+            return serviceList.toList()
+        } catch(e: Exception){
+            Log.e("Jaime", "error getting services doc. ${e.message}")
+            throw Exception(UNKNOWN_EXCEPTION)
+        }
+    }
+
+    fun insertService(service: ServiceModel) {
+        val serviceDocument = servicesCollection.document()
+
+        val serviceMap: Map<String, Any?> = service.toMap()
+
+        //SetOptions.merge() used to add the user without overriding other potential fields
+        serviceDocument.set(serviceMap, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.i("Jaime", "Success inserting service in database")
+            }
+            .addOnFailureListener {
+                Log.e("Jaime", "Failure inserting service: ${it.message}")
+            }
+    }
+
+    fun deleteService(sid: String){
+        servicesCollection.document(sid).delete()
+            .addOnSuccessListener{
+                Log.i("Jaime", "Service deleted correctly")
+            }
+            .addOnFailureListener{
+                Log.e("Jaime", "Error deleting service: ${it.message}")
+            }
+    }
+
+    fun modifyServiceActivity(sid: String, newValue: Boolean){
+        servicesCollection.document(sid).update(IS_ACTIVE, newValue)
+            .addOnSuccessListener{
+                Log.i("Jaime", "Service activity modified correctly")
+            }
+            .addOnFailureListener{
+                Log.e("Jaime", "Error modifying service activity: ${it.message}")
+            }
+    }
+
+    suspend fun getService(sid: String): ServiceModel {
+        return try {
+            val servicesDocumentRef = servicesCollection.document(sid)
+
+            val servicesDoc = servicesDocumentRef.get().await()
+
+            val serviceData = servicesDoc.data
+
+            if (serviceData != null) {
+                val servCat = when(serviceData[CATEGORY]){
+                    Categories.Beauty.name -> Categories.Beauty
+                    Categories.Household.name -> Categories.Household
+                    else -> Categories.Beauty //<- Error
+                }
+                val serviceModel = ServiceModel(
+                    sid = sid,
+                    uid = serviceData[UID] as String,
+                    name = serviceData[NAME] as String,
+                    isActive = serviceData[IS_ACTIVE] as Boolean,
+                    category = servCat,
+                    servDescription = serviceData[SERV_DESCRIPTION] as String
+                )
+                serviceModel
+            } else throw Exception(CONNECTION_ERROR)
+
+        } catch (e: Exception) {
+            Log.e("Jaime", "error getting services doc. ${e.message}")
+            when (e.message) {
+                CONNECTION_ERROR -> throw Exception(CONNECTION_ERROR)
+                else -> throw Exception(UNKNOWN_EXCEPTION)
+            }
+        }
+    }
+
+    suspend fun modifyService(oldService: ServiceModel, newService: ServiceModel) {
+        // Gets the reference to the user document
+        val serviceDocumentReference = servicesCollection.document(oldService.sid)
+
+        // Casts the new UserModel to map in order to update only the needed fields
+        val newServiceMap = newService.toMap()
+
+        // Updates firestore data and wait for the update to complete
+        serviceDocumentReference.update(newServiceMap)
+            .addOnSuccessListener {
+                Log.i("Jaime", "Service data updated successfully")
+            }
+            .addOnFailureListener {
+                Log.e("Jaime", "Error updating service data")
+                throw Exception(MODIFICATION_ERROR)
+            }
+    }
+
 
 }

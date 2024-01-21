@@ -1,4 +1,4 @@
-package com.vzkz.profinder.domain.usecases
+package com.vzkz.profinder.domain.usecases.user
 
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.model.ActorModel

@@ -3,6 +3,7 @@ package com.vzkz.profinder.data
 import android.content.Context
 import com.google.firebase.auth.FirebaseUser
 import com.vzkz.profinder.R
+import com.vzkz.profinder.core.boilerplate.SERVICELISTFORTEST
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.domain.Repository
@@ -10,7 +11,9 @@ import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Constants
 import com.vzkz.profinder.domain.model.Constants.CONNECTION_ERROR
 import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
+import com.vzkz.profinder.domain.model.ServiceModel
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
@@ -23,6 +26,9 @@ class RepositoryImpl @Inject constructor(
     override suspend fun login(email: String, password: String): ActorModel? {
         val user: FirebaseUser?
         try{
+//            for(service in SERVICELISTFORTEST){ todo delete
+//                firestoreService.insertService(service)
+//            }
             user = authService.login(email, password)
         } catch (e: Exception){
             throw Exception(context.getString(R.string.wrong_email_or_password))
@@ -40,6 +46,18 @@ class RepositoryImpl @Inject constructor(
                 else -> throw Exception(context.getString(R.string.unknown_exception_occurred_during_login))
             }
         }
+    }
+
+    override suspend fun getServiceListFromFirestore(uid: String): List<ServiceModel>{
+        return firestoreService.getServiceList(uid)
+    }
+
+    override fun insertServiceInFirestore(service: ServiceModel){
+        firestoreService.insertService(service)
+    }
+
+    override fun deleteService(sid: String){
+        firestoreService.deleteService(sid)
     }
 
     override suspend fun signUp(
@@ -91,6 +109,13 @@ class RepositoryImpl @Inject constructor(
             if(e.message == Constants.NICKNAME_IN_USE) throw Exception(context.getString(R.string.nickname_already_in_use_couldn_t_modify_user))
             else throw Exception(context.getString(R.string.error_modifying_user_data_the_user_wasn_t_modified))
         }
+    }
+    override fun changeProfState(uid: String, state: ProfState){
+        firestoreService.changeProfState(uid, state)
+    }
+
+    override fun modifyServiceActivity(sid: String, newValue: Boolean){
+        firestoreService.modifyServiceActivity(sid, newValue)
     }
 
 }

@@ -1,4 +1,4 @@
-package com.vzkz.profinder.ui.components
+package com.vzkz.profinder.ui.components.dialogs
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

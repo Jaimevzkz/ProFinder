@@ -24,6 +24,7 @@ fun ChatScreen(navigator: DestinationsNavigator) {
     ScreenBody { navigator.navigate(it) }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenBody(onBottomBarClicked: (DirectionDestinationSpec) -> Unit) {
     MyBottomBarScaffold(

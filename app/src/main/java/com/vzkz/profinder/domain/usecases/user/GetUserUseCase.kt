@@ -1,7 +1,7 @@
-package com.vzkz.profinder.domain.usecases
+package com.vzkz.profinder.domain.usecases.user
 
 import com.vzkz.profinder.domain.Repository
-import com.vzkz.profinder.domain.model.UserDataSingleton.Companion.getInstance
+import com.vzkz.profinder.domain.model.singletons.UserDataSingleton.Companion.getUserInstance
 import com.vzkz.profinder.domain.model.ActorModel
 import javax.inject.Inject
 
@@ -13,8 +13,8 @@ interface GetUserUseCase {
 class GetUserUseCaseImpl @Inject constructor(
     repository: Repository,
     private val getUidDataStoreUseCase: GetUidDataStoreUseCase
-):  GetUserUseCase{ //TODO Throws Exception
-    private val instance = getInstance(repository)
+): GetUserUseCase { //TODO Throws Exception when firestore call fails
+    private val instance = getUserInstance(repository)
     override suspend operator fun invoke(): ActorModel {
         return if (!instance.cachedUser()) {
             instance.getData(getUidDataStoreUseCase())

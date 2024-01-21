@@ -1,8 +1,6 @@
 package com.vzkz.profinder.fake.usecases
 
-import com.vzkz.profinder.domain.DataStoreRepository
-import com.vzkz.profinder.domain.usecases.GetUidDataStoreUseCase
-import javax.inject.Inject
+import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
 
 
 class FakeGetUidDataStoreUseCase: GetUidDataStoreUseCase {

@@ -1,6 +1,6 @@
 package com.vzkz.profinder.fake.usecases
 
-import com.vzkz.profinder.domain.usecases.SaveUidDataStoreUseCase
+import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
 
 
 class FakeSaveUidDataStoreUseCase : SaveUidDataStoreUseCase {

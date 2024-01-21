@@ -38,7 +38,7 @@ import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Professions
-import com.vzkz.profinder.ui.components.MyAlertDialog
+import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyAuthHeader
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyEmailTextField
@@ -98,21 +98,27 @@ private fun ScreenBody(
             .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
-        var email by remember { mutableStateOf("") } //jaimevzkz1+2@gmail.com
-        var password by remember { mutableStateOf("") } //1234Qwerty
-        var repeatPassword by remember { mutableStateOf("") } //1234Qwerty
-        var nickname by remember { mutableStateOf("") } //jaimee
-        var firstname by remember { mutableStateOf("") } //Jaime
-        var lastname by remember { mutableStateOf("") } //Vázquez
+        var email by remember { mutableStateOf("jaimevzkz1+1@gmail.com") } //jaimevzkz1+2@gmail.com
+        var password by remember { mutableStateOf("1234Qwerty") } //1234Qwerty
+        var repeatPassword by remember { mutableStateOf("1234Qwerty") } //1234Qwerty
+        var nickname by remember { mutableStateOf("jaimee1") } //jaimee
+        var firstname by remember { mutableStateOf("Jaime") } //Jaime
+        var lastname by remember { mutableStateOf("Vázquez") } //Vázquez
+        var actorType: Actors by remember { mutableStateOf(Actors.User) }
+        var profession: Professions? by remember { mutableStateOf(null) }
         //validation
+        var enableSignup by remember { mutableStateOf(false) }
         var isEmailValid by remember { mutableStateOf(true) }
         var isPasswordValid by remember { mutableStateOf(true) }
         var isSamePassword by remember { mutableStateOf(true) }
         var showDialog by remember { mutableStateOf(false) }
         showDialog = state.error.isError
+        var isFirstnameValid by remember { mutableStateOf(true) }
+        var isLastnameValid by remember { mutableStateOf(true) }
+        var isProfessionValid by remember { mutableStateOf(true) }
 
-        var actorType: Actors? by remember { mutableStateOf(null) }
-        var profession: Professions? by remember { mutableStateOf(null) }
+        if(profession != null) isProfessionValid = true
+        if(actorType == Actors.User) profession = null
 
         MyAuthHeader(Modifier.align(Alignment.TopEnd))
 
@@ -121,12 +127,13 @@ private fun ScreenBody(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(y = (-70).dp)
+                .offset(y = (-50).dp)
         ) {
             MyImageLogo()
             MySpacer(16)
             MyEmailTextField(modifier = Modifier, text = email, onTextChanged = {
                 isEmailValid = validateEmail(it)
+                enableSignup = true
                 email = it
             })
             if (!isEmailValid) {
@@ -174,17 +181,55 @@ private fun ScreenBody(
                 modifier = Modifier,
                 text = nickname,
                 hint = stringResource(R.string.nickname),
-                onTextChanged = { nickname = it })
+                onTextChanged = { nickname = it }
+            )
+            MySpacer(size = 8)
+
+            MyGenericTextField(
+                modifier = Modifier,
+                text = firstname,
+                hint = stringResource(R.string.first_name),
+                onTextChanged = {
+                    firstname = it
+                    isFirstnameValid = firstname.isNotEmpty()
+                }
+            )
+            if (!isFirstnameValid) {
+                Text(
+                    text = stringResource(R.string.first_name_should_not_be_empty),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            MySpacer(size = 8)
+
+            MyGenericTextField(
+                modifier = Modifier,
+                text = lastname,
+                hint = stringResource(R.string.last_name),
+                onTextChanged = {
+                    lastname = it
+                    isLastnameValid = lastname.isNotEmpty()
+                }
+            )
+
+            if (!isLastnameValid) {
+                Text(
+                    text = stringResource(R.string.last_name_should_not_be_empty),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
             MySpacer(size = 8)
             Column {// In order to align login button at end
                 Box(modifier = Modifier) {
-                    var expandedDropdownMenu by remember { mutableStateOf(false) }
+                    var expandedActorDropdownMenu by remember { mutableStateOf(false) }
                     OutlinedTextField(
-                        value = actorType?.name ?: "",
+                        value = actorType.name,
                         onValueChange = {/*Only read*/ },
                         label = { Text(stringResource(R.string.user_professional)) },
                         leadingIcon = {
-                            IconButton(onClick = { expandedDropdownMenu = true }) {
+                            IconButton(onClick = { expandedActorDropdownMenu = true }) {
                                 Icon(
                                     imageVector = Icons.Filled.ArrowDropDown,
                                     contentDescription = null
@@ -194,8 +239,8 @@ private fun ScreenBody(
                     )
                     DropdownMenu(
                         modifier = Modifier,
-                        expanded = expandedDropdownMenu,
-                        onDismissRequest = { expandedDropdownMenu = false }) {
+                        expanded = expandedActorDropdownMenu,
+                        onDismissRequest = { expandedActorDropdownMenu = false }) {
                         Actors.entries.forEach {
                             DropdownMenuItem(
                                 text = {
@@ -203,7 +248,7 @@ private fun ScreenBody(
                                 },
                                 onClick = {
                                     actorType = it
-                                    expandedDropdownMenu = false
+                                    expandedActorDropdownMenu = false
                                 },
                                 leadingIcon = {
                                     Icon(
@@ -215,7 +260,57 @@ private fun ScreenBody(
                         }
                     }
                 }
-                MySpacer(8)
+                MySpacer(size = 8)
+                if(actorType == Actors.Professional){
+                    Box(modifier = Modifier) {
+                        var expandedProfessionDropdownMenu by remember { mutableStateOf(false) }
+                        Column {
+                            OutlinedTextField(
+                                value = profession?.name ?: "",
+                                onValueChange = {/*Only read*/ },
+                                label = { Text("Profession") },
+                                leadingIcon = {
+                                    IconButton(onClick = { expandedProfessionDropdownMenu = true }) {
+                                        Icon(
+                                            imageVector = Icons.Filled.ArrowDropDown,
+                                            contentDescription = null
+                                        )
+                                    }
+                                }
+                            )
+                            if(!isProfessionValid){
+                                Text(
+                                    text = stringResource(R.string.choose_a_profession_to_continue),
+                                    color = MaterialTheme.colorScheme.error,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
+                        }
+                        DropdownMenu(
+                            modifier = Modifier,
+                            expanded = expandedProfessionDropdownMenu,
+                            onDismissRequest = { expandedProfessionDropdownMenu = false }) {
+                            Professions.entries.forEach {
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(it.name, style = MaterialTheme.typography.bodyMedium)
+                                    },
+                                    onClick = {
+                                        profession = it
+                                        expandedProfessionDropdownMenu = false
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            imageVector = it.icon,
+                                            contentDescription = null
+                                        )
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    MySpacer(8)
+                }
                 Text(
                     text = stringResource(R.string.login),
                     Modifier
@@ -227,9 +322,14 @@ private fun ScreenBody(
         }
 
         Button(
-            onClick = {
-                if (isEmailValid && isPasswordValid && isSamePassword) {
-                    onSignUp(email, password, nickname, firstname, lastname, actorType!!, profession) //todo gestionar errores de entrada
+            onClick = { //if(actortype == null)  if(profession == null) gestionar
+                if(actorType == Actors.Professional && profession ==  null){
+                    isProfessionValid = false
+                } else{
+                    isProfessionValid = true
+                    if (enableSignup && isEmailValid && isPasswordValid && isSamePassword && isFirstnameValid && isLastnameValid) {
+                        onSignUp(email, password, nickname, firstname, lastname, actorType, profession)
+                    }
                 }
             },
             Modifier

@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.usecases.LoginUseCase
-import com.vzkz.profinder.domain.usecases.SaveUidDataStoreUseCase
+import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -31,9 +31,9 @@ import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.USERMODELFORTESTS
 import com.vzkz.profinder.destinations.ProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
-import com.vzkz.profinder.ui.components.MyAlertDialog
+import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
-import com.vzkz.profinder.ui.components.MyConfirmDialog
+import com.vzkz.profinder.ui.components.dialogs.MyConfirmDialog
 import com.vzkz.profinder.ui.components.MyGenericTextField
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.theme.ProFinderTheme

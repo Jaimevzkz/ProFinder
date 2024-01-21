@@ -3,8 +3,8 @@ package com.vzkz.profinder.ui.profile.editprofile
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.ActorModel
-import com.vzkz.profinder.domain.usecases.GetUserUseCase
-import com.vzkz.profinder.domain.usecases.ModifyUserDataUseCase
+import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
+import com.vzkz.profinder.domain.usecases.user.ModifyUserDataUseCase
 import com.vzkz.profinder.ui.profile.Error
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

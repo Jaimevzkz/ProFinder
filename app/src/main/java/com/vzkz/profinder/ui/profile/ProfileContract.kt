@@ -3,6 +3,7 @@ package com.vzkz.profinder.ui.profile
 import com.vzkz.profinder.core.boilerplate.Intent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.ProfState
 
 
 data class ProfileState(
@@ -27,4 +28,5 @@ sealed class ProfileIntent : Intent {
     data object Logout : ProfileIntent()
     data class SetUser(val user: ActorModel?) : ProfileIntent()
     data class Error(val errorMsg: String) : ProfileIntent()
+    data class SetState(val state: ProfState) : ProfileIntent()
 }

@@ -2,8 +2,12 @@ package com.vzkz.profinder.ui.profile
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.usecases.GetUserUseCase
+import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.ProfState
+import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import com.vzkz.profinder.domain.usecases.LogoutUseCase
+import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCase
+import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCaseImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val changeStateUseCase: ChangeStateUseCase
 ) : BaseViewModel<ProfileState, ProfileIntent>(ProfileState.initial) {
     override fun reduce(
         state: ProfileState,
@@ -33,6 +38,10 @@ class ProfileViewModel @Inject constructor(
                 error = Error(false, null),
                 loading = false
             )
+
+            is ProfileIntent.SetState -> {
+                state.copy(user = state.user?.copy(state = intent.state))
+            }
         }
     }
 
@@ -53,6 +62,11 @@ class ProfileViewModel @Inject constructor(
             logoutUseCase()
         }
         dispatch(ProfileIntent.Logout)
+    }
+    
+    fun onChangeState(uid: String, state: ProfState){
+        viewModelScope.launch(Dispatchers.IO) { changeStateUseCase(uid = uid, state = state) }
+        dispatch(ProfileIntent.SetState(state))
     }
 
 

@@ -7,12 +7,22 @@ object Constants {
     const val FIRSTNAME = "firstname"
     const val LASTNAME = "lastname"
     const val DESCRIPTION = "description"
-    const val ISUSER = "isUser"
+    const val IS_USER = "isUser"
     const val PROFESSION = "profession"
     const val STATE = "state"
 
+    //Services
+    const val SERVICES_COLLECTION = "services"
+    const val UID = "uid"
+    const val NAME = "name"
+    const val IS_ACTIVE = "isActive"
+    const val CATEGORY = "category"
+    const val SERV_DESCRIPTION = "description"
+
+
     //Errors
     const val ERRORSTR = "error"
+    const val VALUENOTSET = "value not set"
     const val ERRORINT = -1
 
     //Exceptions

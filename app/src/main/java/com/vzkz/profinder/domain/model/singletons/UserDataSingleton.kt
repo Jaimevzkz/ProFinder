@@ -1,13 +1,14 @@
-package com.vzkz.profinder.domain.model
+package com.vzkz.profinder.domain.model.singletons
 
 import com.vzkz.profinder.domain.Repository
+import com.vzkz.profinder.domain.model.ActorModel
 
 class UserDataSingleton(private val repository: Repository) {
 
     companion object { //Singleton
         private var instance: UserDataSingleton? = null
 
-        fun getInstance(repository: Repository): UserDataSingleton {
+        fun getUserInstance(repository: Repository): UserDataSingleton {
             if (instance == null) {
                 instance = UserDataSingleton(repository)
             }
