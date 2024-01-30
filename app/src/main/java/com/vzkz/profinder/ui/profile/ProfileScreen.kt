@@ -144,7 +144,7 @@ private fun ScreenBody(
                         .fillMaxWidth()
                         .align(Alignment.TopCenter)
                         .padding(horizontal = 20.dp)
-                ) {
+                ) { 
                     //Top screen
                     Row(
                         modifier = Modifier
