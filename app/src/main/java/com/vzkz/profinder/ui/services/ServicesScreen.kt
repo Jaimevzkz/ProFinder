@@ -98,20 +98,23 @@ private fun ScreenBody(
                         style = MaterialTheme.typography.displaySmall,
                     )
                 },
-                colors = centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                colors = centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { addDialogVisibility = true },
                 modifier = Modifier,
-                shape = CircleShape
+                shape = MaterialTheme.shapes.medium,
+//                containerColor = MaterialTheme.colorScheme.secondary
 
             ) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = null)
             }
         },
     ) { paddingValues ->
+        val cardColor = MaterialTheme.colorScheme.surfaceVariant
+        val cardContentColor = MaterialTheme.colorScheme.onSurfaceVariant
         if (loading) {
             MyCircularProgressbar()
         } else {
@@ -139,6 +142,8 @@ private fun ScreenBody(
                             title = serviceModel.name,
                             category = serviceModel.category,
                             description = serviceModel.servDescription,
+                            backgroundColor = cardColor,
+                            fontColor = cardContentColor,
                             onDelete = {
                                 sidToDelete = serviceModel.sid
                                 confirmDialogVisibility = true
@@ -163,6 +168,8 @@ private fun ScreenBody(
                             title = serviceModel.name,
                             category = serviceModel.category,
                             description = serviceModel.servDescription,
+                            backgroundColor = cardColor,
+                            fontColor = cardContentColor,
                             onDelete = {
                                 sidToDelete = serviceModel.sid
                                 confirmDialogVisibility = true

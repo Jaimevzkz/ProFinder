@@ -59,4 +59,4 @@ val SERVICEMODEL3FORTEST = ServiceModel(
     servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4)
 )
 
-val SERVICELISTFORTEST = listOf(SERVICEMODELFORTEST, SERVICEMODEL1FORTEST, SERVICEMODEL2FORTEST, SERVICEMODEL3FORTEST)
+val SERVICELISTFORTEST = listOf(SERVICEMODELFORTEST, SERVICEMODEL1FORTEST)

@@ -9,12 +9,10 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.EditOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,11 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vzkz.profinder.R
@@ -40,13 +38,15 @@ fun ServiceCard(
     category: Categories,
     description: String,
     active: Boolean,
+    backgroundColor: Color,
+    fontColor: Color,
     onActivityChange: () -> Unit,
     onDelete: () -> Unit
 ) {
     MyColumn(
         modifier = modifier
             .shadow(4.dp, shape = MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .background(backgroundColor)
     ) {
         var editing by remember { mutableStateOf(false) }
         val paddingHorizontal = 24.dp
@@ -71,13 +71,14 @@ fun ServiceCard(
                     )
                 }
             }
-            Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = fontColor)
             Spacer(modifier = Modifier.weight(0.5f))
 
             Text(
                 text = category.name,
                 fontSize = 20.sp,
-                fontStyle = FontStyle.Italic
+                fontStyle = FontStyle.Italic,
+                color = fontColor
             )
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = {
@@ -96,7 +97,8 @@ fun ServiceCard(
                 .padding(horizontal = paddingHorizontal)
                 .padding(bottom = 24.dp)
                 .clickable { expanded = !expanded },
-            maxLines = if (expanded) Int.MAX_VALUE else 3
+            maxLines = if (expanded) Int.MAX_VALUE else 3,
+            color = fontColor
         )
         if (expanded) {
             Button(onClick = {
@@ -106,7 +108,7 @@ fun ServiceCard(
                 Text(
                     text = if (active) stringResource(R.string.set_as_inactive) else stringResource(
                         R.string.set_as_active
-                    )
+                    ), color = fontColor
                 )
             }
         }
@@ -125,7 +127,9 @@ private fun ServiceCardPreview() {
             ),
             active = true,
             onActivityChange = {},
-            onDelete = {}
+            onDelete = {},
+            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+            fontColor = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
 }

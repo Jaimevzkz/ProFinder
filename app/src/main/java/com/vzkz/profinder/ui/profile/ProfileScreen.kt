@@ -63,7 +63,6 @@ import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.theme.ProFinderTheme
-import com.vzkz.profinder.ui.theme.dialogContainer
 
 @Destination
 @Composable
@@ -109,6 +108,8 @@ private fun ScreenBody(
     onSettingsClicked: () -> Unit,
     onEditProfileClicked: () -> Unit
 ) {
+    val cardColor = MaterialTheme.colorScheme.surfaceVariant
+    val cardContentColor = MaterialTheme.colorScheme.onSurfaceVariant
     val defaultVal = "- "
     var nickname by remember { mutableStateOf("") }
     nickname = user?.nickname ?: defaultVal
@@ -144,7 +145,7 @@ private fun ScreenBody(
                         .fillMaxWidth()
                         .align(Alignment.TopCenter)
                         .padding(horizontal = 20.dp)
-                ) { 
+                ) {
                     //Top screen
                     Row(
                         modifier = Modifier
@@ -195,13 +196,13 @@ private fun ScreenBody(
                             Text(
                                 text = firstname,
                                 style = MaterialTheme.typography.displaySmall,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = lastname,
                                 style = MaterialTheme.typography.displaySmall,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -215,7 +216,7 @@ private fun ScreenBody(
                                     changeStateVisibility = true
                                 }
                                 .shadow(elevation = 10.dp, shape = RoundedCornerShape(40))
-                                .background(MaterialTheme.colorScheme.secondaryContainer)
+                                .background(cardColor)
                                 .padding(20.dp)
                                 .padding(horizontal = 16.dp)
                                 .align(Alignment.CenterHorizontally),
@@ -233,7 +234,7 @@ private fun ScreenBody(
                             Text(
                                 text = profession!!.name,
                                 style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                                color = cardContentColor
                             )
                         }
                     }
@@ -242,7 +243,7 @@ private fun ScreenBody(
                     Column(
                         modifier = Modifier
                             .shadow(elevation = 10.dp, shape = RoundedCornerShape(10))
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .background(cardColor)
                             .padding(horizontal = 16.dp)
                             .weight(1f)
                             .fillMaxWidth()
@@ -257,24 +258,24 @@ private fun ScreenBody(
                             text = stringResource(R.string.nickname),
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                            color = cardContentColor
                         )
                         MySpacer(size = innerSpaceBetween)
                         Text(
                             text = nickname, style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                            color = cardContentColor
                         )
                         MySpacer(size = spaceBetween)
                         Text(
                             text = stringResource(R.string.description),
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                            color = cardContentColor
                         )
                         MySpacer(size = innerSpaceBetween)
                         Text(
                             text = description, style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                            color = cardContentColor
                         )
                     }
 
