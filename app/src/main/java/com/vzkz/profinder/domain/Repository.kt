@@ -8,7 +8,7 @@ import com.vzkz.profinder.domain.model.ServiceModel
 
 interface Repository {
 
-    suspend fun login(email: String, password: String): ActorModel?
+    suspend fun login(email: String, password: String): Result<ActorModel>
 
     suspend fun signUp(
         email: String,
@@ -18,7 +18,7 @@ interface Repository {
         lastname: String,
         actor: Actors,
         profession: Professions?
-    ): ActorModel?
+    ): Result<ActorModel>
 
     suspend fun logout()
 

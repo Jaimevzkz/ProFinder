@@ -35,11 +35,13 @@ import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.SERVICELISTFORTEST
 import com.vzkz.profinder.destinations.ServicesScreenDestination
 import com.vzkz.profinder.domain.model.ServiceModel
+import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.ServiceCard
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.AddServiceDialog
+import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.dialogs.MyConfirmDialog
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
@@ -55,11 +57,13 @@ fun ServicesScreen(
     activeServices = servicesViewModel.state.activeServiceList
     var inActiveServices: List<ServiceModel> by remember { mutableStateOf(emptyList()) }
     inActiveServices = servicesViewModel.state.inActiveServiceList
+    val error = servicesViewModel.state.error
 
     ScreenBody(
         loading = loading,
         activeServices = activeServices,
         inactiveServices = inActiveServices,
+        error = error,
         onActivityChange = { service ->
             servicesViewModel.onChangeActivity(service)
         },
@@ -67,7 +71,8 @@ fun ServicesScreen(
         onServiceDeleted = { sid ->
             servicesViewModel.onDeleteService(sid)
         },
-        onBottomBarClicked = { navigator.navigate(it) }
+        onBottomBarClicked = { navigator.navigate(it) },
+        onCloseDialog = { servicesViewModel.onCloseDialog() }
     )
 }
 
@@ -77,6 +82,8 @@ private fun ScreenBody(
     loading: Boolean,
     activeServices: List<ServiceModel>,
     inactiveServices: List<ServiceModel>,
+    error: UiError,
+    onCloseDialog: () -> Unit,
     onActivityChange: (ServiceModel) -> Unit,
     onServiceAdded: (ServiceModel) -> Unit,
     onServiceDeleted: (String) -> Unit,
@@ -106,8 +113,6 @@ private fun ScreenBody(
                 onClick = { addDialogVisibility = true },
                 modifier = Modifier,
                 shape = MaterialTheme.shapes.medium,
-//                containerColor = MaterialTheme.colorScheme.secondary
-
             ) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = null)
             }
@@ -198,6 +203,13 @@ private fun ScreenBody(
                     },
                     showDialog = confirmDialogVisibility
                 )
+                MyAlertDialog(
+                    title = stringResource(R.string.error),
+                    text = error.errorMsg.orEmpty(),
+                    onDismiss = { onCloseDialog() },
+                    onConfirm = { onCloseDialog() },
+                    showDialog = error.isError
+                )
             }
         }
     }
@@ -211,10 +223,12 @@ fun LightPreview() {
             loading = false,
             activeServices = SERVICELISTFORTEST,
             inactiveServices = SERVICELISTFORTEST,
+            error = UiError(false, ""),
             onActivityChange = {},
             onServiceAdded = {},
             onServiceDeleted = {},
-            onBottomBarClicked = {}
+            onBottomBarClicked = {},
+            onCloseDialog = {}
         )
     }
 }

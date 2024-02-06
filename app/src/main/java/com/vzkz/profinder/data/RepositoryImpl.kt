@@ -3,7 +3,6 @@ package com.vzkz.profinder.data
 import android.content.Context
 import com.google.firebase.auth.FirebaseUser
 import com.vzkz.profinder.R
-import com.vzkz.profinder.core.boilerplate.SERVICELISTFORTEST
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.domain.Repository
@@ -23,15 +22,15 @@ class RepositoryImpl @Inject constructor(
 ) : Repository {
 
     //Firestore
-    override suspend fun login(email: String, password: String): ActorModel? {
+    override suspend fun login(email: String, password: String): Result<ActorModel> {
         val user: FirebaseUser?
         try{
             user = authService.login(email, password)
         } catch (e: Exception){
-            throw Exception(context.getString(R.string.wrong_email_or_password))
+            return Result.failure(Exception(context.getString(R.string.wrong_email_or_password)))
         }
-        return if(user != null) getUserFromFirestore(user.uid)
-        else null
+        return if(user != null) Result.success(getUserFromFirestore(user.uid))
+        else Result.failure(Exception(context.getString(R.string.error_logging_in_user)))
     }
 
     override suspend fun getUserFromFirestore(uid: String): ActorModel {
@@ -45,15 +44,15 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getServiceListFromFirestore(uid: String): List<ServiceModel>{
+    override suspend fun getServiceListFromFirestore(uid: String): List<ServiceModel>{ //throws exception
         return firestoreService.getServiceList(uid)
     }
 
-    override fun insertServiceInFirestore(service: ServiceModel){
+    override fun insertServiceInFirestore(service: ServiceModel){ //throws exception
         firestoreService.insertService(service)
     }
 
-    override fun deleteService(sid: String){
+    override fun deleteService(sid: String){ //throws exception
         firestoreService.deleteService(sid)
     }
 
@@ -65,17 +64,17 @@ class RepositoryImpl @Inject constructor(
         lastname: String,
         actor: Actors,
         profession: Professions?
-    ): ActorModel {
+    ): Result<ActorModel> {
         if (firestoreService.nicknameExists(nickname)) {
-            throw Exception(context.getString(R.string.username_already_in_use))
+            return Result.failure(Exception(context.getString(R.string.username_already_in_use)))
         } else {
             val user: ActorModel
             try {
-                val firestoreUser = authService.signUp(email, password)
-                if (firestoreUser != null) {
+                val firebaseUser = authService.signUp(email, password)
+                if (firebaseUser != null) {
                     user = ActorModel(
                         nickname = nickname,
-                        uid = firestoreUser.uid,
+                        uid = firebaseUser.uid,
                         firstname = firstname,
                         lastname = lastname,
                         actor = actor,
@@ -85,14 +84,14 @@ class RepositoryImpl @Inject constructor(
                     throw Exception()
                 }
             } catch (e: Exception){
-                throw Exception(context.getString(R.string.account_already_exists))
+                return Result.failure(Exception(context.getString(R.string.account_already_exists)))
             }
-            try{
+            return try{
                 firestoreService.insertUser(user)
+                Result.success(user)
             } catch (e: Exception){
-                throw Exception(context.getString(R.string.couldn_t_insert_user_in_database))
+                Result.failure(Exception(context.getString(R.string.couldn_t_insert_user_in_database)))
             }
-            return user
         }
     }
 
@@ -107,11 +106,11 @@ class RepositoryImpl @Inject constructor(
             else throw Exception(context.getString(R.string.error_modifying_user_data_the_user_wasn_t_modified))
         }
     }
-    override fun changeProfState(uid: String, state: ProfState){
+    override fun changeProfState(uid: String, state: ProfState){ //throws exception
         firestoreService.changeProfState(uid, state)
     }
 
-    override fun modifyServiceActivity(sid: String, newValue: Boolean){
+    override fun modifyServiceActivity(sid: String, newValue: Boolean){ //throws exception
         firestoreService.modifyServiceActivity(sid, newValue)
     }
 

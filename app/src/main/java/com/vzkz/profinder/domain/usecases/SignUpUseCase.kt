@@ -15,7 +15,7 @@ interface SignUpUseCase {
         lastname: String,
         actor: Actors,
         profession: Professions?
-    ): ActorModel?
+    ): Result<ActorModel>
 }
 
 class SignUpUseCaseImpl @Inject constructor(private val repository: Repository) : SignUpUseCase {
@@ -27,7 +27,7 @@ class SignUpUseCaseImpl @Inject constructor(private val repository: Repository) 
         lastname: String,
         actor: Actors,
         profession: Professions?
-    ): ActorModel? {
+    ): Result<ActorModel> {
         return repository.signUp(
             email = email,
             password = password,

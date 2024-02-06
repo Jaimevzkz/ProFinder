@@ -61,33 +61,24 @@ class SignUpViewModel @Inject constructor(
         profession: Professions?
     ) {
         dispatch(SignUpIntent.Loading(isLoading = true))
-        viewModelScope.launch {
-            try {
-                val result =
-                    withContext(Dispatchers.IO) {
-                        signUpUseCase(
-                            email = email,
-                            password = password,
-                            nickname = nickname,
-                            actor = actor,
-                            firstname = firstname,
-                            lastname = lastname,
-                            profession = profession
-                        )
-                    }
-                if (result != null) {
-                    withContext(Dispatchers.IO) { saveUidDataStoreUseCase(result.uid) }
-                    dispatch(SignUpIntent.SignUp(result))
-                } else {
-                    Log.e("Jaime", "Error signing in")
-                    dispatch(SignUpIntent.Error(""))
-                }
-            } catch (e: Exception) {
+        viewModelScope.launch(Dispatchers.IO) {
+            signUpUseCase(
+                email = email,
+                password = password,
+                nickname = nickname,
+                actor = actor,
+                firstname = firstname,
+                lastname = lastname,
+                profession = profession
+            ).onSuccess { actor ->
+                withContext(Dispatchers.IO) { saveUidDataStoreUseCase(actor.uid) }
+                dispatch(SignUpIntent.SignUp(actor))
+
+            }.onFailure { e ->
                 Log.e("Jaime", e.message.orEmpty())
                 dispatch(SignUpIntent.Error(e.message.orEmpty()))
             }
         }
-
     }
 
     fun onCloseDialog() = dispatch(SignUpIntent.CloseError)

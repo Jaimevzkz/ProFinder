@@ -3,6 +3,7 @@ package com.vzkz.profinder.ui.login
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
+import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.LoginUseCase
 import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,20 +27,20 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase,
             )
 
             is LoginIntent.Login -> state.copy(
-                error = Error(false, null),
+                error = UiError(false, null),
                 user = intent.user,
                 loading = false,
                 success = true
             )
 
             is LoginIntent.Error -> state.copy(
-                error = Error(true, intent.errorMsg),
+                error = UiError(true, intent.errorMsg),
                 loading = false,
                 success = false
             )
 
             LoginIntent.CloseError -> state.copy(
-                error = Error(false, null),
+                error = UiError(false, null),
                 loading = false,
                 success = false
             )
@@ -50,22 +51,15 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase,
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onLogin(email: String, password: String) {
         dispatch(LoginIntent.Loading(isLoading = true))
-        viewModelScope.launch {
-            try {
-                val result = withContext(Dispatchers.IO) { loginUseCase(email, password) }
-                if (result != null) {
-                    withContext(Dispatchers.IO) { saveUidDataStoreUseCase(result.uid) }
-                    dispatch(LoginIntent.Login(result))
-                } else {
-                    Log.e("Jaime", "The code should never get here (Exception controlled)")
-                    dispatch(LoginIntent.Error(""))
-                }
-            } catch (e: Exception) {
+        viewModelScope.launch(Dispatchers.IO) {
+            loginUseCase(email, password).onSuccess { actor ->
+                withContext(Dispatchers.IO) { saveUidDataStoreUseCase(actor.uid) }
+                dispatch(LoginIntent.Login(actor))
+            }.onFailure { e ->
                 Log.e("Jaime", e.message.orEmpty())
                 dispatch(LoginIntent.Error(e.message.orEmpty()))
             }
         }
-
     }
 
     fun onCloseDialog() = dispatch(LoginIntent.CloseError)

@@ -28,13 +28,14 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.SignUpScreenDestination
-import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
+import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyAuthHeader
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyEmailTextField
 import com.vzkz.profinder.ui.components.MyImageLogo
 import com.vzkz.profinder.ui.components.MyPasswordTextField
 import com.vzkz.profinder.ui.components.MySpacer
+import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.validateEmail
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
@@ -50,6 +51,7 @@ fun LoginScreen(
     } else if (state.loading) {
         MyCircularProgressbar()
     } else {
+        val error = state.error
         ScreenBody(
             onCloseDialog = { loginViewModel.onCloseDialog() },
             onLogin = { email, password ->
@@ -58,7 +60,7 @@ fun LoginScreen(
             onSignUpClicked = {
                 navigator.navigate(SignUpScreenDestination)
             },
-            state = state
+            error = error
         )
     }
 }
@@ -68,7 +70,7 @@ private fun ScreenBody(
     onLogin: (String, String) -> Unit,
     onSignUpClicked: () -> Unit,
     onCloseDialog: () -> Unit,
-    state: LoginState
+    error: UiError
 ) {
     Box(
         modifier = Modifier
@@ -81,8 +83,6 @@ private fun ScreenBody(
         var email by remember { mutableStateOf("jaimevzkz1@gmail.com") } //todo delete
         var password by remember { mutableStateOf("1234Qwerty") }
         var isValid by remember { mutableStateOf(true) }
-        var showDialog by remember { mutableStateOf(false) }
-        showDialog = state.error.isError
 
         MyAuthHeader(Modifier.align(Alignment.TopEnd))
         Column(
@@ -139,10 +139,10 @@ private fun ScreenBody(
 
         MyAlertDialog(
             title = stringResource(R.string.error_during_login),
-            text = state.error.errorMsg ?: stringResource(R.string.invalid_password),
+            text = error.errorMsg ?: stringResource(R.string.invalid_password),
             onDismiss = { onCloseDialog() },
             onConfirm = { onCloseDialog() },
-            showDialog = showDialog
+            showDialog = error.isError
         )
     }
 }
@@ -151,6 +151,11 @@ private fun ScreenBody(
 @Composable
 fun LoginPreview() {
     ProFinderTheme {
-        ScreenBody(onLogin = {_,_ ->}, onSignUpClicked = {}, onCloseDialog = {}, state = LoginState.initial)
+        ScreenBody(
+            onLogin = { _, _ -> },
+            onSignUpClicked = {},
+            onCloseDialog = {},
+            error = UiError(false, "")
+        )
     }
 }

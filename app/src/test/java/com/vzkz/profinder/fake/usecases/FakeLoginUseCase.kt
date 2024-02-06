@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 
 class FakeLoginUseCase @Inject constructor(private val repository: Repository): LoginUseCase {
-    override suspend operator fun invoke(email: String, password: String): ActorModel? {
+    override suspend operator fun invoke(email: String, password: String): Result<ActorModel> {
         TODO("Not yet implemented")
     }
 }

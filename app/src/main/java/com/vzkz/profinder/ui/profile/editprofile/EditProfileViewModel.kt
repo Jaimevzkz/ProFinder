@@ -3,9 +3,9 @@ package com.vzkz.profinder.ui.profile.editprofile
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import com.vzkz.profinder.domain.usecases.user.ModifyUserDataUseCase
-import com.vzkz.profinder.ui.profile.Error
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ class EditProfileViewModel @Inject constructor(
     ): EditProfileState { //This function reduces each intent with a when
         return when (intent) {
             is EditProfileIntent.Error -> state.copy(
-                error = Error(true, intent.errorMsg),
+                error = UiError(true, intent.errorMsg),
                 success = false,
                 loading = true
             )
@@ -38,12 +38,12 @@ class EditProfileViewModel @Inject constructor(
             )
 
             EditProfileIntent.CloseError -> state.copy(
-                error = Error(false, null),
+                error = UiError(false, null),
                 success = true
             )
 
             EditProfileIntent.Success -> state.copy(
-                error = Error(false, null),
+                error = UiError(false, null),
                 success = false
             )
 

@@ -60,3 +60,13 @@ val SERVICEMODEL3FORTEST = ServiceModel(
 )
 
 val SERVICELISTFORTEST = listOf(SERVICEMODELFORTEST, SERVICEMODEL1FORTEST)
+
+
+/*
+Column {
+    Text(
+        text = "Functionality not yet developed...",
+        style = MaterialTheme.typography.bodyLarge
+    )
+}
+            */

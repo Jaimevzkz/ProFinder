@@ -50,4 +50,6 @@
     <string name="category">Category</string>
     <string name="set_as_inactive">Set as Inactive</string>
     <string name="set_as_active">Set as active</string>
+    <string name="error_logging_in_user">Error logging in user</string>
+    <string name="error">ERROR</string>
 </resources>

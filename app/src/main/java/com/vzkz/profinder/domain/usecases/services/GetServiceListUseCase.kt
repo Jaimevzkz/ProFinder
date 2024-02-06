@@ -14,7 +14,7 @@ interface GetServiceListUseCase {
 class GetServiceListUseCaseImpl @Inject constructor(
     repository: Repository,
     private val getUidDataStoreUseCase: GetUidDataStoreUseCase
-): GetServiceListUseCase { //TODO Throws Exception when firestore call fails
+): GetServiceListUseCase {
 
     private val instance = getServiceListInstance(repository)
     override suspend operator fun invoke(): Pair<List<ServiceModel>, List<ServiceModel>> { //Pair.first -> Active services

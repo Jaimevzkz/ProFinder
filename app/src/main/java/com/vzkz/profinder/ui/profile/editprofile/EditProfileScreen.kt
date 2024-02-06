@@ -165,8 +165,7 @@ private fun ScreenBody(
 
         MyAlertDialog( //Error Dialog
             title = stringResource(R.string.error_during_profile_modification),
-            text = errorMsg
-                ?: stringResource(R.string.username_already_in_use),
+            text = errorMsg.orEmpty(),
             onDismiss = {
                 onCloseDialog()
             },

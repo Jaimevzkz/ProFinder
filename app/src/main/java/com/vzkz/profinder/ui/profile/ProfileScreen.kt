@@ -57,11 +57,13 @@ import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Constants.ERRORSTR
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
+import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
+import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
@@ -81,10 +83,13 @@ fun ProfileScreen(
         var user: ActorModel? by remember { mutableStateOf(null) }
         user = profileViewModel.state.user
         val loading = profileViewModel.state.loading
+        val error = profileViewModel.state.error
 
         ScreenBody(
             user = user,
             loading = loading,
+            error = error,
+            onCloseDialog = {profileViewModel.onCloseDialog()},
             onChangeState = {
                 profileViewModel.onChangeState(user?.uid ?: ERRORSTR, it)
             },
@@ -102,8 +107,10 @@ fun ProfileScreen(
 private fun ScreenBody(
     user: ActorModel?,
     onLogout: () -> Unit,
+    error: UiError,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
     loading: Boolean,
+    onCloseDialog: () -> Unit,
     onChangeState: (ProfState) -> Unit,
     onSettingsClicked: () -> Unit,
     onEditProfileClicked: () -> Unit
@@ -303,6 +310,13 @@ private fun ScreenBody(
                         }
                     )
                 }
+                MyAlertDialog(
+                    title = stringResource(R.string.error),
+                    text = error.errorMsg.orEmpty(),
+                    onDismiss = { onCloseDialog() },
+                    onConfirm = { onCloseDialog() },
+                    showDialog = error.isError
+                )
             }
         }
     }
@@ -354,6 +368,8 @@ fun LightPreview() {
 //            user = USERMODELFORTESTS,
             user = PROFESSIONALMODELFORTESTS,
             onLogout = { },
+            onCloseDialog = {},
+            error = UiError(false, ""),
             onBottomBarClicked = {},
             loading = false,
             onChangeState = {},

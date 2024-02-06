@@ -6,10 +6,10 @@ import javax.inject.Inject
 
 
 interface LoginUseCase {
-    suspend operator fun invoke(email: String, password: String): ActorModel?
+    suspend operator fun invoke(email: String, password: String): Result<ActorModel>
 }
 class LoginUseCaseImpl @Inject constructor(private val repository: Repository): LoginUseCase {
-    override suspend operator fun invoke(email: String, password: String): ActorModel? {
+    override suspend operator fun invoke(email: String, password: String): Result<ActorModel> {
         return repository.login(email, password)
     }
 }

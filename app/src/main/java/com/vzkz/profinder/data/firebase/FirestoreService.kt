@@ -189,6 +189,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             }
             .addOnFailureListener {
                 Log.e("Jaime", "Failure inserting service: ${it.message}")
+                throw Exception()
             }
     }
 
@@ -199,6 +200,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             }
             .addOnFailureListener{
                 Log.e("Jaime", "Error deleting service: ${it.message}")
+                throw Exception()
             }
     }
 
@@ -209,6 +211,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             }
             .addOnFailureListener{
                 Log.e("Jaime", "Error modifying service activity: ${it.message}")
+                throw Exception()
             }
     }
 
