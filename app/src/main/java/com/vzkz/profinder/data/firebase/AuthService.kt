@@ -11,7 +11,6 @@ import kotlin.coroutines.resumeWithException
 class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) { //TO Test
 
     suspend fun login(email: String, password: String): FirebaseUser? {
-
         return suspendCancellableCoroutine { cancellableContinuation ->
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener {

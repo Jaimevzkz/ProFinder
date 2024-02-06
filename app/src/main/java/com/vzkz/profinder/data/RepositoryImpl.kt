@@ -26,9 +26,6 @@ class RepositoryImpl @Inject constructor(
     override suspend fun login(email: String, password: String): ActorModel? {
         val user: FirebaseUser?
         try{
-//            for(service in SERVICELISTFORTEST){ todo delete
-//                firestoreService.insertService(service)
-//            }
             user = authService.login(email, password)
         } catch (e: Exception){
             throw Exception(context.getString(R.string.wrong_email_or_password))
