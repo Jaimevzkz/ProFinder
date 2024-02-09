@@ -75,8 +75,11 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("io.mockk:mockk:1.12.3")
-    val coroutinesTestVersion = "1.6.1"
+    val coroutinesTestVersion = "1.7.1"
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion")
+    //mockito
+    val mockitoKotlinVersion = "5.2.1"
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion")
 
     //Ui Test
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -99,7 +102,7 @@ dependencies {
     ksp("io.github.raamcosta.compose-destinations:ksp:$destinationsVersion")
 
     //Icons Extended
-    implementation("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation("androidx.compose.material:material-icons-extended:1.6.1")
 
     //FireBase
     val bomVersion = "32.5.0"
@@ -112,9 +115,12 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
 
     //Animation
-    implementation("androidx.compose.animation:animation:1.5.4")
+    implementation("androidx.compose.animation:animation:1.6.1")
 
     //DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
 }

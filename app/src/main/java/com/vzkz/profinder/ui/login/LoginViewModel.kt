@@ -14,7 +14,10 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase, private val saveUidDataStoreUseCase: SaveUidDataStoreUseCase) :
+class LoginViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase,
+    private val saveUidDataStoreUseCase: SaveUidDataStoreUseCase
+) :
     BaseViewModel<LoginState, LoginIntent>(LoginState.initial) {
 
     override fun reduce(

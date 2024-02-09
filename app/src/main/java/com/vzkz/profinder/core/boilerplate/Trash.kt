@@ -32,7 +32,9 @@ val SERVICEMODELFORTEST = ServiceModel(
     name = "Plumbing",
     isActive = true,
     category = Categories.Household,
-    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4)
+    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+    owner = PROFESSIONALMODELFORTESTS,
+    price = 18.0
 )
 val SERVICEMODEL1FORTEST = ServiceModel(
     sid = "-1",
@@ -40,7 +42,9 @@ val SERVICEMODEL1FORTEST = ServiceModel(
     name = "Tap check",
     isActive = true,
     category = Categories.Household,
-    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4)
+    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+    owner = PROFESSIONALMODELFORTESTS,
+    price = 12.0
 )
 val SERVICEMODEL2FORTEST = ServiceModel(
     sid = "-1",
@@ -48,7 +52,9 @@ val SERVICEMODEL2FORTEST = ServiceModel(
     name = "Toilet fix",
     isActive = false,
     category = Categories.Household,
-    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4)
+    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+    owner = PROFESSIONALMODELFORTESTS,
+    price = 16.5
 )
 val SERVICEMODEL3FORTEST = ServiceModel(
     sid = "-1",
@@ -56,7 +62,9 @@ val SERVICEMODEL3FORTEST = ServiceModel(
     name = "Boiler installation",
     isActive = false,
     category = Categories.Household,
-    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4)
+    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+    owner = PROFESSIONALMODELFORTESTS,
+    price = 9.99
 )
 
 val SERVICELISTFORTEST = listOf(SERVICEMODELFORTEST, SERVICEMODEL1FORTEST)

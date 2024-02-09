@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -132,6 +133,7 @@ private fun ScreenBody(
     profession = user?.profession
     var state: ProfState? by remember { mutableStateOf(null) }
     state = user?.state
+    var profilePhoto by remember { mutableStateOf(user?.profilePhoto) }
 
     MyBottomBarScaffold(
         currentDestination = ProfileScreenDestination,
@@ -189,15 +191,27 @@ private fun ScreenBody(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image(
-                            modifier = Modifier
-                                .size(120.dp)
-                                .clip(shape = CircleShape)
-                                .padding(12.dp),
-                            painter = painterResource(id = R.drawable.defaultprofile),
-                            contentDescription = "Profile photo",
-                            contentScale = ContentScale.Crop
-                        )
+                        if (profilePhoto != null) {
+                            AsyncImage(
+                                modifier = Modifier
+                                    .size(120.dp)
+                                    .padding(12.dp)
+                                    .clip(shape = CircleShape),
+                                model = profilePhoto,
+                                contentDescription = "Profile photo",
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Image(
+                                modifier = Modifier
+                                    .size(120.dp)
+                                    .clip(shape = CircleShape)
+                                    .padding(12.dp),
+                                painter = painterResource(id = R.drawable.defaultprofile),
+                                contentDescription = "Profile photo",
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                         MySpacer(size = 4)
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text(

@@ -1,49 +1,160 @@
 package com.vzkz.profinder.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.EditOff
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.outlined.Error
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.vzkz.profinder.R
+import com.vzkz.profinder.core.boilerplate.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.domain.model.Categories
+import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Composable
 fun ServiceCard(
     modifier: Modifier = Modifier,
-    title: String,
-    category: Categories,
-    description: String,
-    active: Boolean,
+    service: ServiceModel,
     backgroundColor: Color,
     fontColor: Color,
     onActivityChange: () -> Unit,
     onDelete: () -> Unit
 ) {
-    MyColumn(
+    Box(
+        modifier = modifier
+            .shadow(4.dp, shape = MaterialTheme.shapes.large)
+            .fillMaxWidth()
+            .height(220.dp)
+            .background(backgroundColor),
+        contentAlignment = Alignment.Center
+    ) {
+        val pictureSize = 90.dp
+        val picturePadding = 16.dp
+        if (service.owner.profilePhoto != null) {
+            Box(modifier = Modifier.align(Alignment.TopStart)) {
+                AsyncImage(
+                    modifier = Modifier
+                        .size(pictureSize)
+                        .padding(picturePadding)
+                        .clip(shape = CircleShape)
+//                    .align(Alignment.TopStart
+                    ,
+                    model = service.owner.profilePhoto,
+                    contentDescription = "Profile photo",
+                    contentScale = ContentScale.Crop
+                )
+            }
+        } else {
+            Image(
+                modifier = Modifier
+                    .size(pictureSize)
+                    .clip(shape = CircleShape)
+                    .align(Alignment.TopStart)
+                    .padding(picturePadding),
+                painter = painterResource(id = R.drawable.defaultprofile),
+                contentDescription = "Profile photo",
+                contentScale = ContentScale.Crop
+            )
+        }
+        IconButton(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.MoreVert,
+                contentDescription = "Options",
+                tint = fontColor
+            )
+        }
+        MyColumn {
+            val fontSize = 32
+            Icon(
+                imageVector = service.owner.profession?.icon ?: Icons.Outlined.Error,
+                contentDescription = "Profession icon",
+                tint = fontColor,
+                modifier = Modifier
+                    .size((fontSize + 4).dp)
+            )
+            Text(
+                text = service.name,
+                fontSize = fontSize.sp,
+                fontWeight = FontWeight.Bold,
+                color = fontColor
+            )
+        }
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(12.dp)
+                .shadow(1.dp, shape = CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = service.price.toString() + " $/h",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = fontColor
+            )
+        }
+        IconButton(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(8.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Info,
+                contentDescription = "Service info",
+                tint = fontColor
+            )
+        }
+    }
+}
+
+@Composable
+@Preview(showSystemUi = true)
+private fun ServiceCardPreview() {
+    ProFinderTheme {
+        ServiceCard(
+            service = SERVICEMODEL1FORTEST,
+            onActivityChange = {},
+            onDelete = {},
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            fontColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+
+/*
+ MyColumn(
         modifier = modifier
             .shadow(4.dp, shape = MaterialTheme.shapes.large)
             .background(backgroundColor)
@@ -113,23 +224,4 @@ fun ServiceCard(
             }
         }
     }
-}
-
-@Composable
-@Preview(showSystemUi = true)
-private fun ServiceCardPreview() {
-    ProFinderTheme {
-        ServiceCard(
-            title = "Plumbing",
-            category = Categories.Household,
-            description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
-                4
-            ),
-            active = true,
-            onActivityChange = {},
-            onDelete = {},
-            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-            fontColor = MaterialTheme.colorScheme.onPrimaryContainer
-        )
-    }
-}
+*/

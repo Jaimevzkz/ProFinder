@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.vzkz.profinder.R
+import com.vzkz.profinder.core.boilerplate.PROFESSIONALMODELFORTESTS
+import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Categories
 import com.vzkz.profinder.domain.model.Constants.VALUENOTSET
 import com.vzkz.profinder.domain.model.ServiceModel
@@ -34,6 +36,7 @@ import com.vzkz.profinder.ui.theme.ProFinderTheme
 @Composable
 fun AddServiceDialog(
     modifier: Modifier = Modifier,
+    owner : ActorModel,
     onDismiss: () -> Unit,
     onConfirm: (ServiceModel) -> Unit,
 ) {
@@ -53,8 +56,9 @@ fun AddServiceDialog(
                             name = name,
                             isActive = true,
                             category = category,
-                            servDescription = description
-
+                            servDescription = description,
+                            owner = owner,
+                            price = 0.0 //todo develop functionality
                         )
                     )
                 }
@@ -144,7 +148,8 @@ private fun AddServiceDialogPreview() {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             AddServiceDialog(
                 onDismiss = {},
-                onConfirm = {}
+                onConfirm = {},
+                owner = PROFESSIONALMODELFORTESTS
             )
         }
     }

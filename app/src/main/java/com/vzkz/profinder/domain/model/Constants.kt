@@ -18,6 +18,7 @@ object Constants {
     const val IS_ACTIVE = "isActive"
     const val CATEGORY = "category"
     const val SERV_DESCRIPTION = "description"
+    const val PRICE = "price"
 
 
     //Errors

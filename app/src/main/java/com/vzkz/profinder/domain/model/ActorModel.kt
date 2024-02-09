@@ -1,5 +1,6 @@
 package com.vzkz.profinder.domain.model
 
+import android.net.Uri
 import com.vzkz.profinder.domain.model.Constants.DESCRIPTION
 import com.vzkz.profinder.domain.model.Constants.FIRSTNAME
 import com.vzkz.profinder.domain.model.Constants.IS_USER
@@ -16,8 +17,16 @@ data class ActorModel(
     val description: String? = null,
     val actor: Actors,
     val profession: Professions? = null, //Only for professionals
-    var state: ProfState? = null //Only for professionals
+    var state: ProfState? = null, //Only for professionals
+    var profilePhoto: Uri? = null
 ){
+    constructor(): this(
+        nickname = "",
+        uid = "",
+        firstname = "",
+        lastname = "",
+        actor = Actors.User
+    )
     fun toMap(): Map<String, Any?> {
         val isUser = actor == Actors.User
         val descriptionToInsert = description ?: "-"

@@ -78,6 +78,7 @@ class SignUpViewModel @Inject constructor(
                 Log.e("Jaime", e.message.orEmpty())
                 dispatch(SignUpIntent.Error(e.message.orEmpty()))
             }
+
         }
     }
 

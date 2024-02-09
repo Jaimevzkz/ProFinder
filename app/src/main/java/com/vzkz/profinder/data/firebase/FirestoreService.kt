@@ -22,6 +22,7 @@ import com.vzkz.profinder.domain.model.Constants.CATEGORY
 import com.vzkz.profinder.domain.model.Constants.ERRORSTR
 import com.vzkz.profinder.domain.model.Constants.IS_ACTIVE
 import com.vzkz.profinder.domain.model.Constants.NAME
+import com.vzkz.profinder.domain.model.Constants.PRICE
 import com.vzkz.profinder.domain.model.Constants.SERVICES_COLLECTION
 import com.vzkz.profinder.domain.model.Constants.SERV_DESCRIPTION
 import com.vzkz.profinder.domain.model.Constants.UID
@@ -110,7 +111,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         }
     }
 
-    suspend fun modifyUserData(oldUser: ActorModel, newUser: ActorModel) {
+    suspend fun modifyUserData(oldUser: ActorModel, newUser: ActorModel) { //todo this functionality does not work
         if ((oldUser.nickname != newUser.nickname) && (nicknameExists(newUser.nickname))) {
             throw Exception(NICKNAME_IN_USE)
         }
@@ -159,14 +160,18 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                     Categories.Household.name -> Categories.Household
                     else -> Categories.Beauty
                 }
+                val ownerUid = document.getString(UID) ?: ERRORSTR
+                val owner = getUserData(ownerUid)
                 serviceList.add(
                     ServiceModel(
                         sid = document.id,
-                        uid = document.getString(UID) ?: ERRORSTR,
+                        uid = ownerUid,
                         name = document.getString(NAME) ?: ERRORSTR,
                         isActive = document.getBoolean(IS_ACTIVE) ?: false,
                         category = category,
-                        servDescription = document.getString(SERV_DESCRIPTION) ?: ERRORSTR
+                        servDescription = document.getString(SERV_DESCRIPTION) ?: ERRORSTR,
+                        price = document.getLong(PRICE)?.toDouble() ?: 0.0,
+                        owner = owner
                     )
                 )
             }
@@ -229,13 +234,17 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                     Categories.Household.name -> Categories.Household
                     else -> Categories.Beauty //<- Error
                 }
+                val uid = serviceData[UID] as String
+                val owner = getUserData(uid)
                 val serviceModel = ServiceModel(
                     sid = sid,
                     uid = serviceData[UID] as String,
                     name = serviceData[NAME] as String,
                     isActive = serviceData[IS_ACTIVE] as Boolean,
                     category = servCat,
-                    servDescription = serviceData[SERV_DESCRIPTION] as String
+                    servDescription = serviceData[SERV_DESCRIPTION] as String,
+                    owner = owner,
+                    price = serviceData[PRICE] as Double
                 )
                 serviceModel
             } else throw Exception(CONNECTION_ERROR)

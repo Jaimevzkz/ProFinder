@@ -54,7 +54,7 @@ private fun ScreenBody(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LightPreview() {
     ProFinderTheme {

@@ -2,8 +2,8 @@ package com.vzkz.profinder.ui.profile.editprofile
 
 import com.vzkz.profinder.fake.usecases.FakeGetUserUsecase
 import com.vzkz.profinder.fake.usecases.FakeModifyUserDataUseCase
-import com.vzkz.profinder.fake.user1
-import com.vzkz.profinder.fake.user2
+import com.vzkz.profinder.fake.user1_test
+import com.vzkz.profinder.fake.user2_test
 import com.vzkz.profinder.util.CoroutineRule
 import org.junit.Rule
 import org.junit.Test
@@ -24,7 +24,7 @@ class EditProfileViewModelTest {
 
         //Act
         coroutineRule.testDispatcher.scheduler.runCurrent()
-        viewmodel.onModifyUserData(user1, user2)
+        viewmodel.onModifyUserData(user1_test, user2_test)
 
         //Assert
         assert(viewmodel.state.error.isError)

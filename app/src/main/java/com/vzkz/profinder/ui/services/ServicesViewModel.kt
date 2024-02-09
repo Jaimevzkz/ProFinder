@@ -8,6 +8,7 @@ import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
 import com.vzkz.profinder.domain.usecases.services.GetServiceListUseCase
 import com.vzkz.profinder.domain.usecases.services.InsertServiceUseCase
+import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import com.vzkz.profinder.ui.profile.ProfileIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,7 @@ class ServicesViewModel @Inject constructor(
     private val insertServiceUseCase: InsertServiceUseCase,
     private val deleteServiceUseCase: DeleteServiceUseCase,
     private val changeServiceActivityUseCase: ChangeServiceActivityUseCase,
+    private val getUserUseCase: GetUserUseCase,
 ): BaseViewModel<ServicesState, ServicesIntent>(ServicesState.initial) {
 
     override fun reduce(state: ServicesState, intent: ServicesIntent): ServicesState {
@@ -40,6 +42,12 @@ class ServicesViewModel @Inject constructor(
                 error = UiError(false, null),
                 loading = false
             )
+
+            is ServicesIntent.SetUser -> state.copy(
+                user = intent.user,
+                error = UiError(false, null),
+                loading = false
+            )
         }
     }
 
@@ -48,7 +56,9 @@ class ServicesViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 val serviceLists = getServiceListUseCase()
+                val user = getUserUseCase()
                 dispatch(ServicesIntent.SetServiceLists(serviceLists))
+                dispatch(ServicesIntent.SetUser(user))
             }
         } catch (e: Exception) {
             dispatch(ServicesIntent.Error(e.message.orEmpty()))
@@ -65,6 +75,7 @@ class ServicesViewModel @Inject constructor(
             dispatch(ServicesIntent.Error(e.message.orEmpty()))
         }
     }
+
 
     fun onDeleteService(sid: String){
         try{
