@@ -74,12 +74,11 @@ dependencies {
     //Unit Test
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-    testImplementation("io.mockk:mockk:1.12.3")
     val coroutinesTestVersion = "1.7.1"
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion")
-    //mockito
-    val mockitoKotlinVersion = "5.2.1"
-    testImplementation ("org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion")
+    //mockk
+    val mockkVersion = "1.13.9"
+    testImplementation("io.mockk:mockk:${mockkVersion}")
 
     //Ui Test
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

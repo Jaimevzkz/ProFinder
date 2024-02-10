@@ -63,6 +63,7 @@ import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
+import com.vzkz.profinder.ui.components.ProfilePicture
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.theme.ProFinderTheme
@@ -191,27 +192,7 @@ private fun ScreenBody(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (profilePhoto != null) {
-                            AsyncImage(
-                                modifier = Modifier
-                                    .size(120.dp)
-                                    .padding(12.dp)
-                                    .clip(shape = CircleShape),
-                                model = profilePhoto,
-                                contentDescription = "Profile photo",
-                                contentScale = ContentScale.Crop
-                            )
-                        } else {
-                            Image(
-                                modifier = Modifier
-                                    .size(120.dp)
-                                    .clip(shape = CircleShape)
-                                    .padding(12.dp),
-                                painter = painterResource(id = R.drawable.defaultprofile),
-                                contentDescription = "Profile photo",
-                                contentScale = ContentScale.Crop
-                            )
-                        }
+                        ProfilePicture(modifier = Modifier, profilePhoto = profilePhoto, size = 100)
                         MySpacer(size = 4)
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text(

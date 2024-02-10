@@ -9,14 +9,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +36,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.SERVICEMODEL1FORTEST
+import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Categories
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.theme.ProFinderTheme
@@ -52,47 +66,71 @@ fun ServiceCard(
             .background(backgroundColor),
         contentAlignment = Alignment.Center
     ) {
-        val pictureSize = 90.dp
-        val picturePadding = 16.dp
-        if (service.owner.profilePhoto != null) {
-            Box(modifier = Modifier.align(Alignment.TopStart)) {
-                AsyncImage(
-                    modifier = Modifier
-                        .size(pictureSize)
-                        .padding(picturePadding)
-                        .clip(shape = CircleShape)
-//                    .align(Alignment.TopStart
-                    ,
-                    model = service.owner.profilePhoto,
-                    contentDescription = "Profile photo",
-                    contentScale = ContentScale.Crop
-                )
-            }
-        } else {
-            Image(
-                modifier = Modifier
-                    .size(pictureSize)
-                    .clip(shape = CircleShape)
-                    .align(Alignment.TopStart)
-                    .padding(picturePadding),
-                painter = painterResource(id = R.drawable.defaultprofile),
-                contentDescription = "Profile photo",
-                contentScale = ContentScale.Crop
-            )
-        }
-        IconButton(
-            onClick = { /*TODO*/ },
+        ProfilePicture(
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.TopStart),
+            profilePhoto = service.owner.profilePhoto,
+            size = 70
+        )
+
+        Box(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(8.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.MoreVert,
-                contentDescription = "Options",
-                tint = fontColor
-            )
+        ) { //options Icon
+            var expandedActorDropdownMenu by remember { mutableStateOf(false) }
+            IconButton(
+                onClick = { expandedActorDropdownMenu = true },
+                modifier = Modifier
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.MoreVert,
+                    contentDescription = "Options",
+                    tint = fontColor
+                )
+            }
+            DropdownMenu(
+                modifier = Modifier,
+                expanded = expandedActorDropdownMenu,
+                onDismissRequest = { expandedActorDropdownMenu = false }) {
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = if (service.isActive) "Set as inactive" else "Set as active",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
+                    onClick = {
+                        expandedActorDropdownMenu = false
+                        onActivityChange()
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = if (service.isActive) Icons.Filled.Remove else Icons.Filled.Add,
+                            contentDescription = "Edit service"
+                        )
+                    }
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(text = "Delete", style = MaterialTheme.typography.bodyMedium)
+                    },
+                    onClick = {
+                        expandedActorDropdownMenu = false
+                        onDelete()
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "Delete service"
+                        )
+                    }
+                )
+            }
         }
-        MyColumn {
+
+        MyColumn {//Main content
             val fontSize = 32
             Icon(
                 imageVector = service.owner.profession?.icon ?: Icons.Outlined.Error,
@@ -108,6 +146,7 @@ fun ServiceCard(
                 color = fontColor
             )
         }
+
         Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -115,20 +154,21 @@ fun ServiceCard(
                 .shadow(1.dp, shape = CircleShape)
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(16.dp)
-        ) {
+        ) {//Price
             Text(
-                text = service.price.toString() + " $/h",
+                text = service.price.toString() + stringResource(R.string.h),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = fontColor
             )
         }
+
         IconButton(
             onClick = { /*TODO*/ },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(8.dp)
-        ) {
+        ) { //Show info
             Icon(
                 imageVector = Icons.Outlined.Info,
                 contentDescription = "Service info",

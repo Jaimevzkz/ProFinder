@@ -54,4 +54,5 @@
     <string name="error">ERROR</string>
     <string name="active">Active</string>
     <string name="inactive">Inactive</string>
+    <string name="h">" $/h"</string>
 </resources>
