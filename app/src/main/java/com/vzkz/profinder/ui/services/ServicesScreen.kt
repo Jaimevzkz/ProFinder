@@ -11,13 +11,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults.centerAlignedTopAppBarColors
@@ -45,6 +48,7 @@ import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyColumn
+import com.vzkz.profinder.ui.components.MyGenericTextField
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.ServiceCard
@@ -60,6 +64,13 @@ fun ServicesScreen(
     navigator: DestinationsNavigator,
     servicesViewModel: ServicesViewModel = hiltViewModel()
 ) {
+    //todo
+    // - arreglar que no se muestre de primeras la pantalla de user
+    // - configurar bien la lista de servicios de user 
+    // - develop busqueda
+    // - develop view profile
+    // - develop lista de favoritos
+    // - develop fotos de perfil
     servicesViewModel.onInit()
 
     val loading = servicesViewModel.state.loading
@@ -105,13 +116,13 @@ private fun ScreenBody(
     onServiceAdded: (ServiceModel) -> Unit,
     onServiceDeleted: (String) -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
-){
-    if(actor == Actors.User){
+) {
+    if (actor == Actors.User) {
         UserScreenBody(
+            serviceList = activeServices,
             onBottomBarClicked = { onBottomBarClicked(it) }
         )
-    }
-    else{
+    } else {
         ProfessionalScreenBody(
             user = user,
             loading = loading,
@@ -135,8 +146,9 @@ private fun ScreenBody(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UserScreenBody(
+    serviceList: List<ServiceModel>,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
-){
+) {
     MyBottomBarScaffold(
         currentDestination = ServicesScreenDestination,
         onBottomBarClicked = { onBottomBarClicked(it) },
@@ -152,6 +164,61 @@ private fun UserScreenBody(
             )
         },
     ) { paddingValues ->
+        var query by remember { mutableStateOf("") }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            MyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp)
+            ) {
+                MyGenericTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    hint = stringResource(R.string.type_a_service_to_search),
+                    shape = CircleShape,
+                    text = query,
+                    onTextChanged = {
+                        query = it
+                    }
+                )
+                MySpacer(size = 16)
+                LazyColumn {
+                    items(serviceList) { serviceModel ->
+                        ServiceCard(
+                            userCalling = true,
+                            service = serviceModel,
+                            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                            fontColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            onServiceInfo = {
+                                //todo
+                            },
+                            onDelete = {
+                                //do nothing
+                            },
+                            onActiveChange = {
+                                //do nothing
+                            }
+                        )
+                        MySpacer(size = 16)
+                    }
+                }
+
+            }
+
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(8.dp)
+                    ,
+                onClick = { /*TODO*/ }
+            ) {
+                Icon(imageVector = Icons.Outlined.Map, contentDescription = "Show map view")
+            }
+        }
 
     }
 
@@ -314,14 +381,18 @@ private fun ShowProfessionalServiceList(
         ) {
             items(servicesToShow) { serviceModel ->
                 ServiceCard(
+                    userCalling = false,
                     service = serviceModel,
                     backgroundColor = cardColor,
                     fontColor = cardContentColor,
+                    onServiceInfo = {
+                        //Do nothing
+                    },
                     onDelete = {
                         onChangeSidToDelete(serviceModel.sid)
                         onConfirmDialogVisibilityChange(true)
                     },
-                    onActivityChange = { onActivityChange(serviceModel) }
+                    onActiveChange = { onActivityChange(serviceModel) }
                 )
                 MySpacer(size = 16)
             }
@@ -334,7 +405,7 @@ private fun ShowProfessionalServiceList(
 fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
-            actor = Actors.Professional,
+            actor = Actors.User,
             loading = false,
             activeServices = SERVICELISTFORTEST,
             inactiveServices = SERVICELISTFORTEST,

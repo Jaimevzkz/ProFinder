@@ -1,5 +1,6 @@
 package com.vzkz.profinder.ui.components.dialogs
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -9,11 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +30,7 @@ import com.vzkz.profinder.core.boilerplate.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
+import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.ProfilePicture
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
@@ -35,7 +39,9 @@ fun ServiceDetailsDialog(
     modifier: Modifier = Modifier,
     service: ServiceModel,
     backgroundColor: Color,
-    fontColor: Color
+    fontColor: Color,
+    onSeeProfile: () -> Unit,
+    onRequest: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -44,25 +50,65 @@ fun ServiceDetailsDialog(
             .height(500.dp)
             .background(backgroundColor),
     ) {
-        MyRow(modifier = Modifier.padding(8.dp)) {
-            MyColumn(modifier = Modifier) {
+        MyColumn(modifier = Modifier.padding(12.dp)) {
+            MyRow {
                 ProfilePicture(profilePhoto = service.owner.profilePhoto, size = 90)
-                Text(text = service.owner.nickname, fontSize = 14.sp)
-                OutlinedButton(
-                    modifier = Modifier.size(92.dp, 36.dp),
-                    onClick = { /*TODO*/ }
-                ) {
-                    Text(text = "See profile", fontSize = 9.sp)
+                Spacer(modifier = Modifier.weight(1f))
+                MyColumn(modifier = Modifier) {
+                    Text(
+                        text = service.owner.firstname,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(text = service.owner.nickname, fontSize = 16.sp)
+                    OutlinedButton(
+                        modifier = Modifier
+                            .size(92.dp, 34.dp)
+                            .padding(top = 4.dp),
+                        onClick = { onSeeProfile() },
+                        contentPadding = ButtonDefaults.TextButtonContentPadding,
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+
+                    ) {
+                        Text(text = "See profile", fontSize = 12.sp)
+                    }
                 }
+                Spacer(modifier = Modifier.weight(3f))
+
             }
-            Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = service.name,
-                modifier = Modifier,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.displaySmall,
+                color = fontColor
             )
-            Spacer(modifier = Modifier.weight(3f))
+            Text(
+                text = service.category.name,
+                style = MaterialTheme.typography.bodyLarge,
+                color = fontColor,
+                fontWeight = FontWeight.Light,
+                fontSize = 18.sp
+            )
+            MySpacer(size = 8)
+            Text(
+                text = service.servDescription,
+                style = MaterialTheme.typography.bodyLarge,
+                color = fontColor
+            )
+
+        }
+        OutlinedButton(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 18.dp),
+            contentPadding = ButtonDefaults.TextButtonContentPadding,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+            onClick = { onRequest() }
+        ) {
+            Text(
+                text = "Request",
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                fontSize = 16.sp
+            )
         }
         IconButton(
             modifier = Modifier.align(Alignment.TopEnd),
@@ -75,7 +121,6 @@ fun ServiceDetailsDialog(
     }
 }
 
-
 @Composable
 @Preview(showSystemUi = true)
 private fun ServiceCardPreview() {
@@ -83,7 +128,9 @@ private fun ServiceCardPreview() {
         ServiceDetailsDialog(
             service = SERVICEMODEL1FORTEST,
             backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            fontColor = MaterialTheme.colorScheme.onSecondaryContainer
+            fontColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            onSeeProfile = {},
+            onRequest = {}
         )
     }
 }

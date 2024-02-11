@@ -12,12 +12,10 @@ class SignUpViewModelTest {
 
 
 
+
     @Test
     fun `Calling onCloseError puts error to false`() {
-        //Arrange
-        val valueToReturn = Result.success(user1_test)
-        val expectedValue = user1_test
-//        whenever(mockSignUpUseCase()).doReturn(liveDataToReturn)
+
 
 
     }

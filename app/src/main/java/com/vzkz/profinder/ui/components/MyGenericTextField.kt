@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -35,6 +36,7 @@ fun MyGenericTextField(
     onTextChanged: (String) -> Unit,
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
+    shape: Shape = TextFieldDefaults.outlinedShape,
     outlined: Boolean = true
 ) {
     if (outlined){
@@ -53,6 +55,7 @@ fun MyGenericTextField(
             readOnly = readOnly,
             trailingIcon = trailingIcon,
             leadingIcon = leadingIcon,
+            shape = shape,
             colors = if (readOnly) TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = MaterialTheme.colorScheme.primary
@@ -71,6 +74,7 @@ fun MyGenericTextField(
             },
             keyboardOptions = KeyboardOptions.Default,
             singleLine = true,
+            shape = shape,
             readOnly = readOnly,
             trailingIcon = trailingIcon,
             leadingIcon = leadingIcon,
