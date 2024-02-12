@@ -44,8 +44,12 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getServiceListFromFirestore(uid: String): List<ServiceModel>{ //throws exception
-        return firestoreService.getServiceList(uid)
+    override suspend fun getServiceListByUidFromFirestore(uid: String): List<ServiceModel>{ //throws exception
+        return firestoreService.getServiceListByUid(uid)
+    }
+
+    override suspend fun getActiveServiceListFromFirestore(): List<ServiceModel>{ //throws exception
+        return firestoreService.getActiveServiceList()
     }
 
     override fun insertServiceInFirestore(service: ServiceModel){ //throws exception

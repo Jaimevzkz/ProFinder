@@ -1,6 +1,7 @@
 package com.vzkz.profinder.ui.services
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults.centerAlignedTopAppBarColors
 import androidx.compose.runtime.Composable
@@ -31,6 +33,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +45,7 @@ import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.PROFESSIONALMODELFORTESTS
 import com.vzkz.profinder.core.boilerplate.SERVICELISTFORTEST
+import com.vzkz.profinder.core.boilerplate.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.destinations.ServicesScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
@@ -56,6 +61,7 @@ import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.AddServiceDialog
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.dialogs.MyConfirmDialog
+import com.vzkz.profinder.ui.components.dialogs.ServiceDetailsDialog
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
@@ -65,8 +71,6 @@ fun ServicesScreen(
     servicesViewModel: ServicesViewModel = hiltViewModel()
 ) {
     //todo
-    // - arreglar que no se muestre de primeras la pantalla de user
-    // - configurar bien la lista de servicios de user 
     // - develop busqueda
     // - develop view profile
     // - develop lista de favoritos
@@ -86,7 +90,7 @@ fun ServicesScreen(
 
     ScreenBody(
         user = user ?: ActorModel(),
-        actor = actor ?: Actors.User,
+        actor = actor,
         loading = loading,
         activeServices = activeServices,
         inactiveServices = inActiveServices,
@@ -103,131 +107,11 @@ fun ServicesScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenBody(
     user: ActorModel,
-    actor: Actors,
-    loading: Boolean,
-    activeServices: List<ServiceModel>,
-    inactiveServices: List<ServiceModel>,
-    error: UiError,
-    onCloseDialog: () -> Unit,
-    onActivityChange: (ServiceModel) -> Unit,
-    onServiceAdded: (ServiceModel) -> Unit,
-    onServiceDeleted: (String) -> Unit,
-    onBottomBarClicked: (DirectionDestinationSpec) -> Unit
-) {
-    if (actor == Actors.User) {
-        UserScreenBody(
-            serviceList = activeServices,
-            onBottomBarClicked = { onBottomBarClicked(it) }
-        )
-    } else {
-        ProfessionalScreenBody(
-            user = user,
-            loading = loading,
-            activeServices = activeServices,
-            inactiveServices = inactiveServices,
-            error = error,
-            onCloseDialog = { onCloseDialog() },
-            onActivityChange = { service ->
-                onActivityChange(service)
-            },
-            onServiceAdded = { onServiceAdded(it) },
-            onServiceDeleted = { sid ->
-                onServiceDeleted(sid)
-            },
-            onBottomBarClicked = { onBottomBarClicked(it) }
-        )
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun UserScreenBody(
-    serviceList: List<ServiceModel>,
-    onBottomBarClicked: (DirectionDestinationSpec) -> Unit
-) {
-    MyBottomBarScaffold(
-        currentDestination = ServicesScreenDestination,
-        onBottomBarClicked = { onBottomBarClicked(it) },
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        "Services",
-                        style = MaterialTheme.typography.displaySmall,
-                    )
-                },
-                colors = centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
-            )
-        },
-    ) { paddingValues ->
-        var query by remember { mutableStateOf("") }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            MyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp)
-            ) {
-                MyGenericTextField(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    hint = stringResource(R.string.type_a_service_to_search),
-                    shape = CircleShape,
-                    text = query,
-                    onTextChanged = {
-                        query = it
-                    }
-                )
-                MySpacer(size = 16)
-                LazyColumn {
-                    items(serviceList) { serviceModel ->
-                        ServiceCard(
-                            userCalling = true,
-                            service = serviceModel,
-                            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                            fontColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            onServiceInfo = {
-                                //todo
-                            },
-                            onDelete = {
-                                //do nothing
-                            },
-                            onActiveChange = {
-                                //do nothing
-                            }
-                        )
-                        MySpacer(size = 16)
-                    }
-                }
-
-            }
-
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(8.dp)
-                    ,
-                onClick = { /*TODO*/ }
-            ) {
-                Icon(imageVector = Icons.Outlined.Map, contentDescription = "Show map view")
-            }
-        }
-
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ProfessionalScreenBody(
-    user: ActorModel,
+    actor: Actors?,
     loading: Boolean,
     activeServices: List<ServiceModel>,
     inactiveServices: List<ServiceModel>,
@@ -239,10 +123,6 @@ private fun ProfessionalScreenBody(
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
 ) {
     var addDialogVisibility by remember { mutableStateOf(false) }
-    var confirmDialogVisibility by remember { mutableStateOf(false) }
-    var sidToDelete by remember { mutableStateOf("") }
-    var showActiveServices by remember { mutableStateOf(true) }
-
     MyBottomBarScaffold(
         currentDestination = ServicesScreenDestination,
         onBottomBarClicked = { onBottomBarClicked(it) },
@@ -258,117 +138,262 @@ private fun ProfessionalScreenBody(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { addDialogVisibility = true },
-                modifier = Modifier,
-                shape = MaterialTheme.shapes.medium,
-            ) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+            if (actor == Actors.Professional) {
+                FloatingActionButton(
+                    onClick = { addDialogVisibility = true },
+                    modifier = Modifier,
+                    shape = MaterialTheme.shapes.medium,
+                ) {
+                    Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+                }
             }
         },
     ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                MyColumn(Modifier.padding(12.dp)) {
-                    MyRow {
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = stringResource(R.string.active),
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.clickable {
-                                showActiveServices = true
-                            }
-                        )
-                        Spacer(modifier = Modifier.weight(2f))
-                        Text(
-                            text = stringResource(R.string.inactive),
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.clickable {
-                                showActiveServices = false
-                            }
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                    MySpacer(size = 4)
-                    MyRow {
-                        if (!showActiveServices) {
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
-                        Divider(
-                            modifier = Modifier.weight(1f),
-                            thickness = 2.dp,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                        if (showActiveServices) {
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
-                    }
-                }
-                val serviceList = if (showActiveServices) activeServices else inactiveServices
-                ShowProfessionalServiceList(
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp)
-                        .padding(top = 12.dp),
-                    user = user,
-                    loading = loading,
-                    servicesToShow = serviceList,
-                    onChangeSidToDelete = { sidToDelete = it },
-                    onConfirmDialogVisibilityChange = { confirmDialogVisibility = it },
-                    onActivityChange = onActivityChange,
+        when (actor) {
+            Actors.User -> {
+                UserScreenBody(
+                    modifier = Modifier.padding(paddingValues),
+                    serviceList = activeServices
                 )
             }
 
-            if (addDialogVisibility) {
-                AddServiceDialog(
-                    onDismiss = { addDialogVisibility = false },
-                    onConfirm = {
-                        addDialogVisibility = false
-                        onServiceAdded(it)
+            Actors.Professional -> {
+                ProfessionalScreenBody(
+                    modifier = Modifier.padding(paddingValues),
+                    user = user,
+                    loading = loading,
+                    activeServices = activeServices,
+                    inactiveServices = inactiveServices,
+                    error = error,
+                    addDialogVisibility = addDialogVisibility,
+                    onConfirmDialogVisibilityChange = { addDialogVisibility = it },
+                    onCloseDialog = { onCloseDialog() },
+                    onActivityChange = { service ->
+                        onActivityChange(service)
                     },
-                    owner = user
+                    onServiceAdded = { onServiceAdded(it) },
+                    onServiceDeleted = { sid ->
+                        onServiceDeleted(sid)
+                    }
                 )
             }
-            MyConfirmDialog(
-                title = stringResource(R.string.are_you_sure),
-                text = stringResource(R.string.deletions_are_not_undoable),
-                onDismiss = { confirmDialogVisibility = false },
-                onConfirm = {
-                    onServiceDeleted(sidToDelete)
-                    confirmDialogVisibility = false
-                },
-                showDialog = confirmDialogVisibility
+
+            else -> MyCircularProgressbar()
+        }
+    }
+
+}
+
+@Composable
+private fun UserScreenBody(
+    modifier: Modifier = Modifier,
+    serviceList: List<ServiceModel>
+) {
+
+    var query by remember { mutableStateOf("") }
+    var showServiceInfo by remember { mutableStateOf(false) }
+    var serviceToShow: ServiceModel? by remember { mutableStateOf(null) }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        MyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+        ) {
+            MyGenericTextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                hint = stringResource(R.string.type_a_service_to_search),
+                shape = CircleShape,
+                text = query,
+                onTextChanged = {
+                    query = it
+                }
             )
-            MyAlertDialog(
-                title = stringResource(R.string.error),
-                text = error.errorMsg.orEmpty(),
-                onDismiss = { onCloseDialog() },
-                onConfirm = { onCloseDialog() },
-                showDialog = error.isError
+            MySpacer(size = 16)
+            LazyColumn {
+                items(serviceList) { serviceModel ->
+                    ServiceCard(
+                        userCalling = true,
+                        service = serviceModel,
+                        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                        fontColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        onServiceInfo = {
+                            serviceToShow = serviceModel
+                            showServiceInfo = true
+                        },
+                        onDelete = {
+                            //do nothing
+                        },
+                        onActiveChange = {
+                            //do nothing
+                        }
+                    )
+                    MySpacer(size = 16)
+                }
+            }
+
+        }
+        IconButton(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(10.dp)
+                .shadow(1.dp, shape = CircleShape)
+                .background(MaterialTheme.colorScheme.primary),
+            onClick = { /*TODO*/ }
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Map,
+                contentDescription = "Show map view",
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }
+    }
+
+    if (serviceToShow != null) {
+        Box(
+            modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6f))
+        ) {
+            ServiceDetailsDialog(
+                modifier = Modifier
+                        .align(Alignment.Center)
+                    .padding(horizontal = 12.dp),
+                isVisible = showServiceInfo,
+                service = serviceToShow!!,
+                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+                fontColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                onSeeProfile = { /*TODO*/ },
+                onRequest = { /*TODO*/ },
+                onCloseDialog = {
+                    serviceToShow = null
+                    showServiceInfo = false
+                }
+            )
+        }
+    }
+
+}
+
+@Composable
+private fun ProfessionalScreenBody(
+    modifier: Modifier = Modifier,
+    user: ActorModel,
+    loading: Boolean,
+    activeServices: List<ServiceModel>,
+    inactiveServices: List<ServiceModel>,
+    error: UiError,
+    addDialogVisibility: Boolean,
+    onConfirmDialogVisibilityChange: (Boolean) -> Unit,
+    onCloseDialog: () -> Unit,
+    onActivityChange: (ServiceModel) -> Unit,
+    onServiceAdded: (ServiceModel) -> Unit,
+    onServiceDeleted: (String) -> Unit,
+) {
+    var confirmDialogVisibility by remember { mutableStateOf(false) }
+    var sidToDelete by remember { mutableStateOf("") }
+    var showActiveServices by remember { mutableStateOf(true) }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            MyColumn(Modifier.padding(12.dp)) {
+                MyRow {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = stringResource(R.string.active),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.clickable {
+                            showActiveServices = true
+                        }
+                    )
+                    Spacer(modifier = Modifier.weight(2f))
+                    Text(
+                        text = stringResource(R.string.inactive),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.clickable {
+                            showActiveServices = false
+                        }
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+                MySpacer(size = 4)
+                MyRow {
+                    if (!showActiveServices) {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                    Divider(
+                        modifier = Modifier.weight(1f),
+                        thickness = 2.dp,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    if (showActiveServices) {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
+            }
+            val serviceList = if (showActiveServices) activeServices else inactiveServices
+            ShowProfessionalServiceList(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .padding(top = 12.dp),
+                loading = loading,
+                servicesToShow = serviceList,
+                onChangeSidToDelete = { sidToDelete = it },
+                onConfirmDialogVisibilityChange = { confirmDialogVisibility = it },
+                onActivityChange = onActivityChange,
+            )
+        }
+
+        if (addDialogVisibility) {
+            AddServiceDialog(
+                onDismiss = { onConfirmDialogVisibilityChange(false) },
+                onConfirm = {
+                    onConfirmDialogVisibilityChange(false)
+                    onServiceAdded(it)
+                },
+                owner = user
+            )
+        }
+        MyConfirmDialog(
+            title = stringResource(R.string.are_you_sure),
+            text = stringResource(R.string.deletions_are_not_undoable),
+            onDismiss = { confirmDialogVisibility = false },
+            onConfirm = {
+                onServiceDeleted(sidToDelete)
+                confirmDialogVisibility = false
+            },
+            showDialog = confirmDialogVisibility
+        )
+        MyAlertDialog(
+            title = stringResource(R.string.error),
+            text = error.errorMsg.orEmpty(),
+            onDismiss = { onCloseDialog() },
+            onConfirm = { onCloseDialog() },
+            showDialog = error.isError
+        )
     }
 }
 
 @Composable
 private fun ShowProfessionalServiceList(
     modifier: Modifier = Modifier,
-    user: ActorModel,
     loading: Boolean,
     servicesToShow: List<ServiceModel>,
     onChangeSidToDelete: (String) -> Unit,
     onConfirmDialogVisibilityChange: (Boolean) -> Unit,
     onActivityChange: (ServiceModel) -> Unit,
 ) {
-
-
     val cardColor = MaterialTheme.colorScheme.surfaceVariant
     val cardContentColor = MaterialTheme.colorScheme.onSurfaceVariant
     if (loading) {

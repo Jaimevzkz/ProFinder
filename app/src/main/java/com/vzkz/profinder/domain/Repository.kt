@@ -30,7 +30,9 @@ interface Repository {
 
     suspend fun getUserFromFirestore(uid: String): ActorModel
 
-    suspend fun getServiceListFromFirestore(uid: String): List<ServiceModel>
+    suspend fun getServiceListByUidFromFirestore(uid: String): List<ServiceModel>
+
+    suspend fun getActiveServiceListFromFirestore(): List<ServiceModel>
 
     fun insertServiceInFirestore(service: ServiceModel)
 

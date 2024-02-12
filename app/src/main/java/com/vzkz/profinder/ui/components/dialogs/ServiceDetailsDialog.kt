@@ -37,87 +37,89 @@ import com.vzkz.profinder.ui.theme.ProFinderTheme
 @Composable
 fun ServiceDetailsDialog(
     modifier: Modifier = Modifier,
+    isVisible: Boolean,
     service: ServiceModel,
     backgroundColor: Color,
     fontColor: Color,
     onSeeProfile: () -> Unit,
-    onRequest: () -> Unit
+    onRequest: () -> Unit,
+    onCloseDialog: () -> Unit
 ) {
-    Box(
-        modifier = modifier
-            .shadow(4.dp, shape = MaterialTheme.shapes.large)
-            .fillMaxWidth()
-            .height(500.dp)
-            .background(backgroundColor),
-    ) {
-        MyColumn(modifier = Modifier.padding(12.dp)) {
-            MyRow {
-                ProfilePicture(profilePhoto = service.owner.profilePhoto, size = 90)
-                Spacer(modifier = Modifier.weight(1f))
-                MyColumn(modifier = Modifier) {
-                    Text(
-                        text = service.owner.firstname,
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(text = service.owner.nickname, fontSize = 16.sp)
-                    OutlinedButton(
-                        modifier = Modifier
-                            .size(92.dp, 34.dp)
-                            .padding(top = 4.dp),
-                        onClick = { onSeeProfile() },
-                        contentPadding = ButtonDefaults.TextButtonContentPadding,
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+    if (isVisible){
+        Box(
+            modifier = modifier
+                .shadow(4.dp, shape = MaterialTheme.shapes.large)
+                .fillMaxWidth()
+                .height(500.dp)
+                .background(backgroundColor),
+        ) {
+            MyColumn(modifier = Modifier.padding(12.dp)) {
+                MyRow {
+                    ProfilePicture(profilePhoto = service.owner.profilePhoto, size = 90)
+                    Spacer(modifier = Modifier.weight(1f))
+                    MyColumn(modifier = Modifier) {
+                        Text(
+                            text = service.owner.firstname,
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(text = service.owner.nickname, fontSize = 16.sp)
+                        OutlinedButton(
+                            modifier = Modifier
+                                .size(92.dp, 34.dp)
+                                .padding(top = 4.dp),
+                            onClick = { onSeeProfile() },
+                            contentPadding = ButtonDefaults.TextButtonContentPadding,
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
 
-                    ) {
-                        Text(text = "See profile", fontSize = 12.sp)
+                        ) {
+                            Text(text = "See profile", fontSize = 12.sp)
+                        }
                     }
+                    Spacer(modifier = Modifier.weight(3f))
+
                 }
-                Spacer(modifier = Modifier.weight(3f))
+                Text(
+                    text = service.name,
+                    style = MaterialTheme.typography.displaySmall,
+                    color = fontColor
+                )
+                Text(
+                    text = service.category.name,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = fontColor,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 18.sp
+                )
+                MySpacer(size = 8)
+                Text(
+                    text = service.servDescription,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = fontColor
+                )
 
             }
-            Text(
-                text = service.name,
-                style = MaterialTheme.typography.displaySmall,
-                color = fontColor
-            )
-            Text(
-                text = service.category.name,
-                style = MaterialTheme.typography.bodyLarge,
-                color = fontColor,
-                fontWeight = FontWeight.Light,
-                fontSize = 18.sp
-            )
-            MySpacer(size = 8)
-            Text(
-                text = service.servDescription,
-                style = MaterialTheme.typography.bodyLarge,
-                color = fontColor
-            )
-
+            OutlinedButton(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 18.dp),
+                contentPadding = ButtonDefaults.TextButtonContentPadding,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                onClick = { onRequest() }
+            ) {
+                Text(
+                    text = "Request",
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                    fontSize = 16.sp
+                )
+            }
+            IconButton(
+                modifier = Modifier.align(Alignment.TopEnd),
+                onClick = { onCloseDialog() }
+            ) {
+                Icon(imageVector = Icons.Filled.Close, contentDescription = "Close description")
+            }
         }
-        OutlinedButton(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 18.dp),
-            contentPadding = ButtonDefaults.TextButtonContentPadding,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-            onClick = { onRequest() }
-        ) {
-            Text(
-                text = "Request",
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
-                fontSize = 16.sp
-            )
-        }
-        IconButton(
-            modifier = Modifier.align(Alignment.TopEnd),
-            onClick = { /*TODO*/ }
-        ) {
-            Icon(imageVector = Icons.Filled.Close, contentDescription = "Close description")
-        }
-
-
     }
 }
 
@@ -126,11 +128,13 @@ fun ServiceDetailsDialog(
 private fun ServiceCardPreview() {
     ProFinderTheme {
         ServiceDetailsDialog(
+            isVisible = true,
             service = SERVICEMODEL1FORTEST,
             backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
             fontColor = MaterialTheme.colorScheme.onSecondaryContainer,
             onSeeProfile = {},
-            onRequest = {}
+            onRequest = {},
+            onCloseDialog = {}
         )
     }
 }

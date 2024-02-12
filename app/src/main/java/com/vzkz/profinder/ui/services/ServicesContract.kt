@@ -28,6 +28,7 @@ data class ServicesState(
 
 sealed class ServicesIntent : Intent {
     data class SetServiceLists(val lists: Pair<List<ServiceModel>, List<ServiceModel>>) : ServicesIntent()
+    data class SetActiveServiceLists(val list: List<ServiceModel>) : ServicesIntent()
     data class Error(val errorMsg: String) : ServicesIntent()
     data object CloseError: ServicesIntent()
     data class SetUser(val user: ActorModel?) : ServicesIntent()

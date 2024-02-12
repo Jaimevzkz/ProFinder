@@ -3,14 +3,14 @@ package com.vzkz.profinder.domain.model.singletons
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.model.ServiceModel
 
-class ServiceListSingleton(private val repository: Repository) {
+class ActiveServiceListSingleton(private val repository: Repository) {
 
     companion object { //Singleton
-        private var instance: ServiceListSingleton? = null
+        private var instance: ActiveServiceListSingleton? = null
 
-        fun getServiceListInstance(repository: Repository): ServiceListSingleton {
+        fun getActiveServiceListInstance(repository: Repository): ActiveServiceListSingleton {
             if (instance == null) {
-                instance = ServiceListSingleton(repository)
+                instance = ActiveServiceListSingleton(repository)
             }
             return instance!!
         }
@@ -20,9 +20,9 @@ class ServiceListSingleton(private val repository: Repository) {
 
     fun cachedServiceList(): Boolean = cachedServiceList != null
 
-    suspend fun getData(uid: String = ""): List<ServiceModel> { //gets cached user or calls firebase
+    suspend fun getData(): List<ServiceModel> { //gets cached user or calls firebase
         return if (cachedServiceList == null) {
-            fetchServiceListFromFirestore(uid) //get user from firestore
+            fetchServiceListFromFirestore() //get user from firestore
         } else {
             cachedServiceList!! //user cached locally
         }
@@ -32,8 +32,8 @@ class ServiceListSingleton(private val repository: Repository) {
         cachedServiceList = null
     }
 
-    private suspend fun fetchServiceListFromFirestore(uid: String): List<ServiceModel> {
-        val list = repository.getServiceListByUidFromFirestore(uid)
+    private suspend fun fetchServiceListFromFirestore(): List<ServiceModel> {
+        val list = repository.getActiveServiceListFromFirestore()
         cachedServiceList = list
         return list
     }

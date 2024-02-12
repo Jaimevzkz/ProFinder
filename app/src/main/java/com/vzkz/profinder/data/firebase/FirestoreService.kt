@@ -2,6 +2,7 @@ package com.vzkz.profinder.data.firebase
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Constants.CONNECTION_ERROR
@@ -147,39 +148,56 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
     //Services
     private val servicesCollection = firestore.collection(SERVICES_COLLECTION)
 
-    suspend fun getServiceList(uid: String): List<ServiceModel>{
-        val serviceList = mutableListOf<ServiceModel>()
+    suspend fun getServiceListByUid(uid: String): List<ServiceModel>{
         try{
             val querySnapshot = servicesCollection
-                .whereEqualTo("uid", uid)
+                .whereEqualTo(UID, uid)
                 .get()
                 .await()
-            for(document in querySnapshot.documents){
-                val category = when(document.getString(CATEGORY)){
-                    Categories.Beauty.name -> Categories.Beauty
-                    Categories.Household.name -> Categories.Household
-                    else -> Categories.Beauty
-                }
-                val ownerUid = document.getString(UID) ?: ERRORSTR
-                val owner = getUserData(ownerUid)
-                serviceList.add(
-                    ServiceModel(
-                        sid = document.id,
-                        uid = ownerUid,
-                        name = document.getString(NAME) ?: ERRORSTR,
-                        isActive = document.getBoolean(IS_ACTIVE) ?: false,
-                        category = category,
-                        servDescription = document.getString(SERV_DESCRIPTION) ?: ERRORSTR,
-                        price = document.getLong(PRICE)?.toDouble() ?: 0.0,
-                        owner = owner
-                    )
-                )
-            }
-            return serviceList.toList()
+            return fillList(querySnapshot)
         } catch(e: Exception){
             Log.e("Jaime", "error getting services doc. ${e.message}")
             throw Exception(UNKNOWN_EXCEPTION)
         }
+    }
+
+    suspend fun getActiveServiceList(): List<ServiceModel>{
+        try{
+            val querySnapshot = servicesCollection
+                .whereEqualTo(IS_ACTIVE, true)
+                .get()
+                .await()
+            return fillList(querySnapshot)
+        } catch(e: Exception){
+            Log.e("Jaime", "error getting services doc. ${e.message}")
+            throw Exception(UNKNOWN_EXCEPTION)
+        }
+    }
+
+    private suspend fun fillList(querySnapshot: QuerySnapshot): List<ServiceModel> {
+        val serviceList = mutableListOf<ServiceModel>()
+        for(document in querySnapshot.documents){
+            val category = when(document.getString(CATEGORY)){
+                Categories.Beauty.name -> Categories.Beauty
+                Categories.Household.name -> Categories.Household
+                else -> Categories.Beauty
+            }
+            val ownerUid = document.getString(UID) ?: ERRORSTR
+            val owner = getUserData(ownerUid)
+            serviceList.add(
+                ServiceModel(
+                    sid = document.id,
+                    uid = ownerUid,
+                    name = document.getString(NAME) ?: ERRORSTR,
+                    isActive = document.getBoolean(IS_ACTIVE) ?: false,
+                    category = category,
+                    servDescription = document.getString(SERV_DESCRIPTION) ?: ERRORSTR,
+                    price = document.getLong(PRICE)?.toDouble() ?: 0.0,
+                    owner = owner
+                )
+            )
+        }
+        return serviceList.toList()
     }
 
     fun insertService(service: ServiceModel) {

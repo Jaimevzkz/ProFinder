@@ -12,6 +12,8 @@ import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCaseImpl
+import com.vzkz.profinder.domain.usecases.services.GetActiveServiceListUseCase
+import com.vzkz.profinder.domain.usecases.services.GetActiveServiceListUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.GetServiceListUseCase
 import com.vzkz.profinder.domain.usecases.services.GetServiceListUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.InsertServiceUseCase
@@ -53,6 +55,8 @@ abstract class UseCaseModule {
     abstract fun bindThemeDSUseCase(impl: ThemeDSUseCaseImpl): ThemeDSUseCase
     @Binds
     abstract fun bindGetServiceListUseCase(impl: GetServiceListUseCaseImpl): GetServiceListUseCase
+    @Binds
+    abstract fun bindGetActiveServiceListUseCase(impl: GetActiveServiceListUseCaseImpl): GetActiveServiceListUseCase
     @Binds
     abstract fun bindInsertServiceUseCase(impl: InsertServiceUseCaseImpl): InsertServiceUseCase
     @Binds
