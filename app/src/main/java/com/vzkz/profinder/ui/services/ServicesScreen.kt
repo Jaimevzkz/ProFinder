@@ -23,7 +23,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults.centerAlignedTopAppBarColors
 import androidx.compose.runtime.Composable
@@ -34,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,8 +43,8 @@ import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.PROFESSIONALMODELFORTESTS
 import com.vzkz.profinder.core.boilerplate.SERVICELISTFORTEST
-import com.vzkz.profinder.core.boilerplate.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.destinations.ServicesScreenDestination
+import com.vzkz.profinder.destinations.ViewProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ServiceModel
@@ -71,8 +69,6 @@ fun ServicesScreen(
     servicesViewModel: ServicesViewModel = hiltViewModel()
 ) {
     //todo
-    // - develop busqueda
-    // - develop view profile
     // - develop lista de favoritos
     // - develop fotos de perfil
     servicesViewModel.onInit()
@@ -103,7 +99,11 @@ fun ServicesScreen(
         onServiceDeleted = { sid ->
             servicesViewModel.onDeleteService(sid)
         },
-        onBottomBarClicked = { navigator.navigate(it) }
+        onBottomBarClicked = { navigator.navigate(it) },
+        onSeeProfile = {
+            servicesViewModel.onSetProfileToSee(it)
+            navigator.navigate(ViewProfileScreenDestination(it.uid))
+        }
     )
 }
 
@@ -120,7 +120,8 @@ private fun ScreenBody(
     onActivityChange: (ServiceModel) -> Unit,
     onServiceAdded: (ServiceModel) -> Unit,
     onServiceDeleted: (String) -> Unit,
-    onBottomBarClicked: (DirectionDestinationSpec) -> Unit
+    onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
+    onSeeProfile: (ActorModel) -> Unit
 ) {
     var addDialogVisibility by remember { mutableStateOf(false) }
     MyBottomBarScaffold(
@@ -153,7 +154,8 @@ private fun ScreenBody(
             Actors.User -> {
                 UserScreenBody(
                     modifier = Modifier.padding(paddingValues),
-                    serviceList = activeServices
+                    serviceList = activeServices,
+                    onSeeProfile = { onSeeProfile(it) }
                 )
             }
 
@@ -187,13 +189,13 @@ private fun ScreenBody(
 @Composable
 private fun UserScreenBody(
     modifier: Modifier = Modifier,
+    onSeeProfile: (ActorModel) -> Unit,
     serviceList: List<ServiceModel>
 ) {
 
     var query by remember { mutableStateOf("") }
     var showServiceInfo by remember { mutableStateOf(false) }
     var serviceToShow: ServiceModel? by remember { mutableStateOf(null) }
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -215,7 +217,12 @@ private fun UserScreenBody(
             )
             MySpacer(size = 16)
             LazyColumn {
-                items(serviceList) { serviceModel ->
+                items(serviceList.filter {
+                    it.name.contains(
+                        other = query,
+                        ignoreCase = true
+                    )
+                }) { serviceModel ->
                     ServiceCard(
                         userCalling = true,
                         service = serviceModel,
@@ -225,12 +232,8 @@ private fun UserScreenBody(
                             serviceToShow = serviceModel
                             showServiceInfo = true
                         },
-                        onDelete = {
-                            //do nothing
-                        },
-                        onActiveChange = {
-                            //do nothing
-                        }
+                        onDelete = {/*do nothing*/},
+                        onActiveChange = {/*do nothing*/}
                     )
                     MySpacer(size = 16)
                 }
@@ -261,13 +264,13 @@ private fun UserScreenBody(
         ) {
             ServiceDetailsDialog(
                 modifier = Modifier
-                        .align(Alignment.Center)
+                    .align(Alignment.Center)
                     .padding(horizontal = 12.dp),
                 isVisible = showServiceInfo,
                 service = serviceToShow!!,
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                 fontColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                onSeeProfile = { /*TODO*/ },
+                onSeeProfile = { if(serviceToShow != null) onSeeProfile(serviceToShow!!.owner) },
                 onRequest = { /*TODO*/ },
                 onCloseDialog = {
                     serviceToShow = null
@@ -410,9 +413,7 @@ private fun ShowProfessionalServiceList(
                     service = serviceModel,
                     backgroundColor = cardColor,
                     fontColor = cardContentColor,
-                    onServiceInfo = {
-                        //Do nothing
-                    },
+                    onServiceInfo = {/*Do nothing*/},
                     onDelete = {
                         onChangeSidToDelete(serviceModel.sid)
                         onConfirmDialogVisibilityChange(true)
@@ -440,7 +441,8 @@ fun LightPreview() {
             onServiceDeleted = {},
             onBottomBarClicked = {},
             onCloseDialog = {},
-            user = PROFESSIONALMODELFORTESTS
+            user = PROFESSIONALMODELFORTESTS,
+            onSeeProfile = {}
         )
     }
 }

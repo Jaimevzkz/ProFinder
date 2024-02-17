@@ -7,6 +7,7 @@ import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.LoginUseCase
 import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val saveUidDataStoreUseCase: SaveUidDataStoreUseCase
+    private val saveUidDataStoreUseCase: SaveUidDataStoreUseCase,
+    private val dispatcher: CoroutineDispatcher
 ) :
     BaseViewModel<LoginState, LoginIntent>(LoginState.initial) {
 
@@ -54,7 +56,7 @@ class LoginViewModel @Inject constructor(
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onLogin(email: String, password: String) {
         dispatch(LoginIntent.Loading(isLoading = true))
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             loginUseCase(email, password).onSuccess { actor ->
                 withContext(Dispatchers.IO) { saveUidDataStoreUseCase(actor.uid) }
                 dispatch(LoginIntent.Login(actor))

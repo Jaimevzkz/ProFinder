@@ -2,6 +2,7 @@ package com.vzkz.profinder.ui.services
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
+import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.domain.model.UiError
@@ -11,6 +12,7 @@ import com.vzkz.profinder.domain.usecases.services.GetActiveServiceListUseCase
 import com.vzkz.profinder.domain.usecases.services.GetServiceListUseCase
 import com.vzkz.profinder.domain.usecases.services.InsertServiceUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
+import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCase
 import com.vzkz.profinder.ui.profile.ProfileIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +28,7 @@ class ServicesViewModel @Inject constructor(
     private val deleteServiceUseCase: DeleteServiceUseCase,
     private val changeServiceActivityUseCase: ChangeServiceActivityUseCase,
     private val getUserUseCase: GetUserUseCase,
+    private val userProfileToSeeUseCase: UserProfileToSeeUseCase
 ) : BaseViewModel<ServicesState, ServicesIntent>(ServicesState.initial) {
 
     override fun reduce(state: ServicesState, intent: ServicesIntent): ServicesState {
@@ -116,6 +119,8 @@ class ServicesViewModel @Inject constructor(
             dispatch(ServicesIntent.Error(e.message.orEmpty()))
         }
     }
+
+    fun onSetProfileToSee(actor: ActorModel) = userProfileToSeeUseCase.setUser(actor)
 
     fun onCloseDialog() = dispatch(ServicesIntent.CloseError)
 }

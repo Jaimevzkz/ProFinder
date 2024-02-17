@@ -28,6 +28,8 @@ import com.vzkz.profinder.domain.usecases.user.ModifyUserDataUseCase
 import com.vzkz.profinder.domain.usecases.user.ModifyUserDataUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCaseImpl
+import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCase
+import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -65,5 +67,7 @@ abstract class UseCaseModule {
     abstract fun bindChangeStateUseCase(impl: ChangeStateUseCaseImpl): ChangeStateUseCase
     @Binds
     abstract fun bindChangeServiceActivityUseCase(impl: ChangeServiceActivityUseCaseImpl): ChangeServiceActivityUseCase
+    @Binds
+    abstract fun bindUserProfileToSeeUseCase(impl: UserProfileToSeeUseCaseImpl): UserProfileToSeeUseCase
 
 }
