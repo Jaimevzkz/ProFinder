@@ -20,6 +20,8 @@ import com.vzkz.profinder.domain.usecases.services.InsertServiceUseCase
 import com.vzkz.profinder.domain.usecases.services.InsertServiceUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCase
 import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCaseImpl
+import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
+import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
@@ -69,5 +71,7 @@ abstract class UseCaseModule {
     abstract fun bindChangeServiceActivityUseCase(impl: ChangeServiceActivityUseCaseImpl): ChangeServiceActivityUseCase
     @Binds
     abstract fun bindUserProfileToSeeUseCase(impl: UserProfileToSeeUseCaseImpl): UserProfileToSeeUseCase
+    @Binds
+    abstract fun bindFavouriteListUseCase(impl: FavouriteListUseCaseImpl): FavouriteListUseCase
 
 }

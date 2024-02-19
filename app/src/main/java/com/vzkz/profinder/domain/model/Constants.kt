@@ -10,6 +10,7 @@ object Constants {
     const val IS_USER = "isUser"
     const val PROFESSION = "profession"
     const val STATE = "state"
+    const val FAVOURITES = "favourites"
 
     //Services
     const val SERVICES_COLLECTION = "services"

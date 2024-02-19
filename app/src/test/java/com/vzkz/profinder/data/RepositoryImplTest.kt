@@ -6,18 +6,22 @@ import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.fake.user1_test
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.just
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 class RepositoryImplTest{
     /*
-    * Methods tested:
+    * Functions tested:
     *   - login
     *   - getUserFromFirestore
+    *   - signUp
     * */
 
     private lateinit var repositoryImpl: RepositoryImpl
@@ -81,6 +85,98 @@ class RepositoryImplTest{
         //Assert
         assert(result.isSuccess)
         assert(result.getOrNull() == user1_test)
+    }
+    
+    @Test
+    fun `When firestoreService throws an exception, getUserFromFirestore throws an exception`() = runTest{
+        //Arrange
+        every { context.getString(any()) } returns "Network failure while checking user existence"
+        coEvery { firestoreService.getUserData(any()) } throws Exception()
+
+        //Act
+        val result = runCatching { repositoryImpl.getUserFromFirestore("") }
+
+        //Assert
+        assert(result.isFailure)
+        assert(result.exceptionOrNull()?.message == "Network failure while checking user existence")
+    }
+
+    @Test
+    fun `When nickname does not exist and authService signUp is successful, signUp returns Result success`() = runTest {
+        // Arrange
+        val email = "test@test.com"
+        val password = "password"
+
+        val actorModel = user1_test
+
+        every { firebaseUser.uid } returns user1_test.uid
+        coEvery { firestoreService.nicknameExists(any()) } returns false
+        coEvery { authService.signUp(email, password) } returns firebaseUser
+        coEvery { firestoreService.insertUser(actorModel) } just Runs
+
+        // Act
+        val result = repositoryImpl.signUp(email, password, user1_test.nickname, user1_test.firstname, user1_test.lastname, user1_test.actor, user1_test.profession)
+
+        // Assert
+        assert(result.isSuccess)
+        assertEquals(actorModel, result.getOrNull())
+    }
+
+    @Test
+    fun `When nickname already exists, returns failure`() = runTest {
+        // Arrange
+        val email = "test@test.com"
+        val password = "password"
+
+
+        coEvery { firestoreService.nicknameExists(any()) } returns true
+        every { context.getString(any()) } returns "Username already in use"
+
+        // Act
+        val result = repositoryImpl.signUp(email, password, user1_test.nickname, user1_test.firstname, user1_test.lastname, user1_test.actor, user1_test.profession)
+
+        // Assert
+        assert(result.isFailure)
+        assert(result.exceptionOrNull()?.message == "Username already in use")
+    }
+
+    @Test
+    fun `When authService signUp fails, returns failure`() = runTest {
+        // Arrange
+        val email = "test@test.com"
+        val password = "password"
+        val exceptionMsg = "An account with that email already exists. The account wasn\\'t created."
+
+        coEvery { firestoreService.nicknameExists(any()) } returns false
+        every { context.getString(any()) } returns exceptionMsg
+        coEvery { authService.signUp(email, password) } throws Exception()
+
+        // Act
+        val result = repositoryImpl.signUp(email, password, user1_test.nickname, user1_test.firstname, user1_test.lastname, user1_test.actor, user1_test.profession)
+
+        // Assert
+        assert(result.isFailure)
+        assert(result.exceptionOrNull()?.message == exceptionMsg)
+    }
+
+    @Test
+    fun `When db insertion fails, returns failure`() = runTest {
+        // Arrange
+        val email = "test@test.com"
+        val password = "password"
+        val exceptionMsg = "Couldn\\'t insert user in database"
+
+        coEvery { firestoreService.nicknameExists(any()) } returns false
+        every { context.getString(any()) } returns exceptionMsg
+        coEvery { authService.signUp(email, password) } returns firebaseUser
+        coEvery { firestoreService.insertUser(any()) } throws Exception()
+
+        // Act
+        val result = repositoryImpl.signUp(email, password, user1_test.nickname, user1_test.firstname, user1_test.lastname, user1_test.actor, user1_test.profession)
+
+        // Assert
+        assert(result.isFailure)
+        assert(result.exceptionOrNull()?.message == exceptionMsg)
     }
 
 }

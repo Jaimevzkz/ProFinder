@@ -1,6 +1,7 @@
 package com.vzkz.profinder.data.firebase
 
 import android.util.Log
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
@@ -21,6 +22,7 @@ import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Categories
 import com.vzkz.profinder.domain.model.Constants.CATEGORY
 import com.vzkz.profinder.domain.model.Constants.ERRORSTR
+import com.vzkz.profinder.domain.model.Constants.FAVOURITES
 import com.vzkz.profinder.domain.model.Constants.IS_ACTIVE
 import com.vzkz.profinder.domain.model.Constants.NAME
 import com.vzkz.profinder.domain.model.Constants.PRICE
@@ -98,7 +100,6 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                     description = description as String?,
                     profession = profession,
                     state = state
-
                 )
                 userModel
             } else throw Exception(CONNECTION_ERROR)
@@ -143,6 +144,45 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                 Log.e("Jaime", "Error updating state: ${it.message}")
                 throw Exception(MODIFICATION_ERROR)
             }
+    }
+
+    fun changeFavouritesList(uidListOwner: String, uidToChange: String, add: Boolean){
+        val docRef = usersCollection.document(uidListOwner)
+        if(add){
+            docRef.update(FAVOURITES, FieldValue.arrayUnion(uidToChange))
+                .addOnSuccessListener {
+                    Log.i("Jaime", "Favourite added successfully")
+                }
+                .addOnFailureListener {
+                    Log.e("Jaime", "Error adding favourite: ${it.message}")
+                    throw Exception(MODIFICATION_ERROR)
+                }
+        } else {
+            docRef.update(FAVOURITES, FieldValue.arrayRemove(uidToChange))
+                .addOnSuccessListener {
+                    Log.i("Jaime", "Favourite removed successfully")
+                }
+                .addOnFailureListener {
+                    Log.e("Jaime", "Error removing favourite: ${it.message}")
+                    throw Exception(MODIFICATION_ERROR)
+                }
+        }
+    }
+
+    suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean{
+        val doc = usersCollection.document(uidListOwner).get().await()
+        val favList = doc[FAVOURITES] as List<String>
+        return favList.contains(uidToCheck)
+    }
+
+    suspend fun getFavouritesList(uid: String): List<ActorModel>{
+        val doc = usersCollection.document(uid).get().await()
+        val favList = doc[FAVOURITES] as List<String>
+        val favActorList = mutableListOf<ActorModel>()
+        for(fav in favList){
+            favActorList.add(getUserData(fav))
+        }
+        return favActorList.toList()
     }
 
     //Services

@@ -14,9 +14,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,11 +43,9 @@ import com.vzkz.profinder.core.boilerplate.PROFESSIONALMODELFORTESTS
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.UiError
-import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.ProfilePicture
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
-import com.vzkz.profinder.ui.profile.ProfileViewModel
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
@@ -60,11 +57,16 @@ fun ViewProfileScreen(
 ) {
     viewProfileViewModel.onInit(uidToSee)
     val error = viewProfileViewModel.state.error
-    var actorModel: ActorModel? by remember { mutableStateOf(null) }
-    actorModel = viewProfileViewModel.state.user
+    var userToSee: ActorModel? by remember { mutableStateOf(null) }
+    userToSee = viewProfileViewModel.state.userToSee
+    val isFavourite = viewProfileViewModel.state.isFavourite
     ScreenBody(
-        actor = actorModel ?: ActorModel(),
+        userToSee = userToSee ?: ActorModel(),
         error = error,
+        isFavourite = isFavourite,
+        onChangeFavourite = {
+            viewProfileViewModel.onFavouriteChanged(uidToChange = uidToSee, add = !isFavourite)
+        },
         onCloseDialog = {
             viewProfileViewModel.onCloseDialog()
         },
@@ -76,8 +78,10 @@ fun ViewProfileScreen(
 
 @Composable
 private fun ScreenBody(
-    actor: ActorModel,
+    userToSee: ActorModel,
     error: UiError,
+    isFavourite: Boolean,
+    onChangeFavourite: () -> Unit,
     onCloseDialog: () -> Unit,
     onNavBack: () -> Unit
 ) {
@@ -91,17 +95,23 @@ private fun ScreenBody(
         val cardColor = MaterialTheme.colorScheme.surfaceVariant
         val cardContentColor = MaterialTheme.colorScheme.onSurfaceVariant
         val defaultVal = "- "
-        IconButton(onClick = { onNavBack() }, modifier = Modifier
-            .align(Alignment.TopEnd)
-            .padding(12.dp)) {
-            Icon(imageVector = Icons.Filled.Close, contentDescription = "Navigate back", tint = MaterialTheme.colorScheme.onBackground)
+        IconButton(
+            onClick = { onNavBack() }, modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(12.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "Navigate back",
+                tint = MaterialTheme.colorScheme.onBackground
+            )
         }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
                 .padding(horizontal = 20.dp)
-        ){
+        ) {
             //Header
             MySpacer(size = 32)
             Row(
@@ -110,17 +120,21 @@ private fun ScreenBody(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ProfilePicture(modifier = Modifier, profilePhoto = actor.profilePhoto, size = 100)
+                ProfilePicture(
+                    modifier = Modifier,
+                    profilePhoto = userToSee.profilePhoto,
+                    size = 100
+                )
                 MySpacer(size = 4)
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(
-                        text = actor.firstname,
+                        text = userToSee.firstname,
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = actor.lastname,
+                        text = userToSee.lastname,
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold
@@ -128,7 +142,7 @@ private fun ScreenBody(
                 }
             }
             //Status
-            if (actor.actor == Actors.Professional) {
+            if (userToSee.actor == Actors.Professional) {
                 //State
                 MySpacer(size = 8)
                 Row(
@@ -137,8 +151,14 @@ private fun ScreenBody(
                     horizontalArrangement = Arrangement.Start
                 ) {
 
-                    IconButton(onClick = { onNavBack() }, modifier = Modifier) {
-                        Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = "Navigate back", tint = MaterialTheme.colorScheme.onBackground)
+                    IconButton(onClick = {
+                        onChangeFavourite()
+                    }, modifier = Modifier) {
+                        Icon(
+                            imageVector = if (!isFavourite) Icons.Outlined.FavoriteBorder else Icons.Filled.Favorite,
+                            contentDescription = "Navigate back",
+                            tint = if (!isFavourite) MaterialTheme.colorScheme.onBackground else Color.Red
+                        )
                     }
                     MySpacer(size = 8)
                     Row(
@@ -146,21 +166,20 @@ private fun ScreenBody(
                             .shadow(elevation = 10.dp, shape = RoundedCornerShape(40))
                             .background(cardColor)
                             .padding(20.dp)
-                            .padding(horizontal = 16.dp)
-                            ,
+                            .padding(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {//Profession and state should never be null
                         Icon(
                             painter = painterResource(id = R.drawable.ic_dot),
                             contentDescription = null,
-                            tint = actor.state?.tint ?: Color.Transparent,
+                            tint = userToSee.state?.tint ?: Color.Transparent,
                             modifier = Modifier
                                 .size(20.dp),
                         )
                         MySpacer(size = 16)
                         Text(
-                            text = actor.profession!!.name,
+                            text = userToSee.profession!!.name,
                             style = MaterialTheme.typography.titleLarge,
                             color = cardContentColor
                         )
@@ -193,7 +212,7 @@ private fun ScreenBody(
                 )
                 MySpacer(size = innerSpaceBetween)
                 Text(
-                    text = actor.nickname, style = MaterialTheme.typography.titleLarge,
+                    text = userToSee.nickname, style = MaterialTheme.typography.titleLarge,
                     color = cardContentColor
                 )
                 MySpacer(size = spaceBetween)
@@ -205,7 +224,8 @@ private fun ScreenBody(
                 )
                 MySpacer(size = innerSpaceBetween)
                 Text(
-                    text = actor.description ?: defaultVal, style = MaterialTheme.typography.titleLarge,
+                    text = userToSee.description ?: defaultVal,
+                    style = MaterialTheme.typography.titleLarge,
                     color = cardContentColor
                 )
             }
@@ -227,8 +247,10 @@ private fun ScreenBody(
 private fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
-            actor = PROFESSIONALMODELFORTESTS,
+            userToSee = PROFESSIONALMODELFORTESTS,
             error = UiError(false, "Account wasn't created"),
+            isFavourite = true,
+            onChangeFavourite = {},
             onCloseDialog = {},
             onNavBack = {}
         )

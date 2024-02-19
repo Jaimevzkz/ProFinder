@@ -40,4 +40,8 @@ interface Repository {
 
     fun modifyServiceActivity(sid: String, newValue: Boolean)
 
+    fun changeFavouriteList(uidListOwner: String, uidToChange: String, add: Boolean)
+
+    suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean
+
 }

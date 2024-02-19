@@ -118,4 +118,12 @@ class RepositoryImpl @Inject constructor(
         firestoreService.modifyServiceActivity(sid, newValue)
     }
 
+    override fun changeFavouriteList(uidListOwner: String, uidToChange: String, add: Boolean){
+        firestoreService.changeFavouritesList(uidListOwner = uidListOwner, uidToChange = uidToChange, add = add)
+    }
+
+    override suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean{
+        return firestoreService.checkIsFavourite(uidListOwner = uidListOwner, uidToCheck = uidToCheck)
+    }
+
 }
