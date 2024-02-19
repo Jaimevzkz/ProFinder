@@ -44,4 +44,6 @@ interface Repository {
 
     suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean
 
+    suspend fun getFavouriteList(uid: String): List<ActorModel>
+
 }

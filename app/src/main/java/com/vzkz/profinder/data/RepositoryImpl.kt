@@ -24,12 +24,12 @@ class RepositoryImpl @Inject constructor(
     //Firestore
     override suspend fun login(email: String, password: String): Result<ActorModel> {
         val user: FirebaseUser?
-        try{
+        try {
             user = authService.login(email, password)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             return Result.failure(Exception(context.getString(R.string.wrong_email_or_password)))
         }
-        return if(user != null) Result.success(getUserFromFirestore(user.uid))
+        return if (user != null) Result.success(getUserFromFirestore(user.uid))
         else Result.failure(Exception(context.getString(R.string.error_logging_in_user)))
     }
 
@@ -44,21 +44,17 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getServiceListByUidFromFirestore(uid: String): List<ServiceModel>{ //throws exception
-        return firestoreService.getServiceListByUid(uid)
-    }
+    override suspend fun getServiceListByUidFromFirestore(uid: String): List<ServiceModel> =
+        firestoreService.getServiceListByUid(uid) //throws exception
 
-    override suspend fun getActiveServiceListFromFirestore(): List<ServiceModel>{ //throws exception
-        return firestoreService.getActiveServiceList()
-    }
+    override suspend fun getActiveServiceListFromFirestore(): List<ServiceModel> =
+        firestoreService.getActiveServiceList() //throws exception
 
-    override fun insertServiceInFirestore(service: ServiceModel){ //throws exception
-        firestoreService.insertService(service)
-    }
+    override fun insertServiceInFirestore(service: ServiceModel) =
+        firestoreService.insertService(service)//throws exception
 
-    override fun deleteService(sid: String){ //throws exception
-        firestoreService.deleteService(sid)
-    }
+    override fun deleteService(sid: String) =
+        firestoreService.deleteService(sid) //throws exception
 
     override suspend fun signUp(
         email: String,
@@ -87,13 +83,13 @@ class RepositoryImpl @Inject constructor(
                 } else {
                     throw Exception()
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 return Result.failure(Exception(context.getString(R.string.account_already_exists)))
             }
-            return try{
+            return try {
                 firestoreService.insertUser(user)
                 Result.success(user)
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Result.failure(Exception(context.getString(R.string.couldn_t_insert_user_in_database)))
             }
         }
@@ -103,27 +99,36 @@ class RepositoryImpl @Inject constructor(
 
     override fun isUserLogged() = authService.isUserLogged()
     override suspend fun modifyUserData(oldUser: ActorModel, newUser: ActorModel) {
-        try{
+        try {
             firestoreService.modifyUserData(oldUser = oldUser, newUser = newUser)
-        } catch (e: Exception){
-            if(e.message == Constants.NICKNAME_IN_USE) throw Exception(context.getString(R.string.nickname_already_in_use_couldn_t_modify_user))
+        } catch (e: Exception) {
+            if (e.message == Constants.NICKNAME_IN_USE) throw Exception(context.getString(R.string.nickname_already_in_use_couldn_t_modify_user))
             else throw Exception(context.getString(R.string.error_modifying_user_data_the_user_wasn_t_modified))
         }
     }
-    override fun changeProfState(uid: String, state: ProfState){ //throws exception
-        firestoreService.changeProfState(uid, state)
+
+    override fun changeProfState(uid: String, state: ProfState) =
+        firestoreService.changeProfState(uid, state) //throws exception
+
+    override fun modifyServiceActivity(sid: String, newValue: Boolean) =
+        firestoreService.modifyServiceActivity(sid, newValue) //throws exception
+
+    override fun changeFavouriteList(uidListOwner: String, uidToChange: String, add: Boolean) {
+        firestoreService.changeFavouritesList(
+            uidListOwner = uidListOwner,
+            uidToChange = uidToChange,
+            add = add
+        )
     }
 
-    override fun modifyServiceActivity(sid: String, newValue: Boolean){ //throws exception
-        firestoreService.modifyServiceActivity(sid, newValue)
+    override suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean {
+        return firestoreService.checkIsFavourite(
+            uidListOwner = uidListOwner,
+            uidToCheck = uidToCheck
+        )
     }
 
-    override fun changeFavouriteList(uidListOwner: String, uidToChange: String, add: Boolean){
-        firestoreService.changeFavouritesList(uidListOwner = uidListOwner, uidToChange = uidToChange, add = add)
-    }
-
-    override suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean{
-        return firestoreService.checkIsFavourite(uidListOwner = uidListOwner, uidToCheck = uidToCheck)
-    }
+    override suspend fun getFavouriteList(uid: String): List<ActorModel> =
+        firestoreService.getFavouritesList(uid) //throws exception
 
 }

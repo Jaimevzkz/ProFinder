@@ -2,25 +2,27 @@ package com.vzkz.profinder.ui.home
 
 import com.vzkz.profinder.core.boilerplate.Intent
 import com.vzkz.profinder.core.boilerplate.State
+import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.UiError
 
 
-data class tState(
+data class HomeState(
     val loading: Boolean,
-    val error: UiError
-//    val counter: Int,
+    val error: UiError,
+    val favList: List<ActorModel>
 ) : State {
     companion object {
-        val initial: tState = tState(
+        val initial: HomeState = HomeState(
             loading = false,
-            error = UiError(false, null)
-//            counter = 0,
+            error = UiError(false, null),
+            favList = emptyList()
         )
     }
 }
 
-sealed class tIntent: Intent {
-    data class Loading(val isLoading: Boolean): tIntent()
-    data class Error(val errorMsg: String): tIntent()
-    data object CloseError: tIntent()
+sealed class HomeIntent: Intent {
+    data class Loading(val isLoading: Boolean): HomeIntent()
+    data class Error(val errorMsg: String): HomeIntent()
+    data object CloseError: HomeIntent()
+    data class ChangeFavList(val favList: List<ActorModel>): HomeIntent()
 }
