@@ -2,11 +2,15 @@ package com.vzkz.profinder.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.EditOff
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +31,8 @@ fun HomeCard(
     cardPadding: PaddingValues,
     contentPadding: PaddingValues,
     title: String,
+    editFavList: Boolean = false,
+    onEditFavList: () -> Unit = {},
     placeRight: Boolean = false,
     content: @Composable () -> Unit
 ) {
@@ -34,7 +40,7 @@ fun HomeCard(
         if (placeRight) Spacer(modifier = Modifier.weight(1f))
         MyColumn(
             modifier = boxModifier
-                .weight(5f)
+                .weight(6f)
                 .fillMaxSize()
                 .padding(cardPadding)
                 .shadow(1.dp, shape = MaterialTheme.shapes.medium)
@@ -42,14 +48,23 @@ fun HomeCard(
                 .padding(contentPadding),
             verticalArrangement = Arrangement.Top
         ) {
-            Text(
-                text = title,
-                color = contentColor,
-                fontFamily = fontFamily,
-                modifier = if (placeRight) Modifier.align(
-                    Alignment.End
-                ) else Modifier.align(Alignment.Start)
-            )
+            MyRow( modifier = if (placeRight) Modifier.align(
+                Alignment.End
+            ) else Modifier.align(Alignment.Start)) {
+                if(placeRight){
+                    IconButton(onClick = { onEditFavList() }) {
+                        Icon(imageVector = if(editFavList) Icons.Filled.EditOff else Icons.Filled.Edit, contentDescription = "Edit fav list")
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+                Text(
+                    text = title,
+                    color = contentColor,
+                    fontFamily = fontFamily,
+                )
+
+            }
+            MySpacer(size = 2)
             content()
         }
         if (!placeRight) Spacer(modifier = Modifier.weight(1f))

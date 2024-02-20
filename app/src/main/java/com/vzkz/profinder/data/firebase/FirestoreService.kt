@@ -42,7 +42,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
 
     suspend fun nicknameExists(nickname: String): Boolean {
         val userInfo =
-            firestore.collection(USERS_COLLECTION).whereEqualTo(NICKNAME, nickname).get().await()
+            usersCollection.whereEqualTo(NICKNAME, nickname).get().await()
         return !userInfo.isEmpty
     }
 
@@ -113,7 +113,10 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         }
     }
 
-    suspend fun modifyUserData(oldUser: ActorModel, newUser: ActorModel) { //todo this functionality does not work
+    suspend fun modifyUserData(
+        oldUser: ActorModel,
+        newUser: ActorModel
+    ) { //todo this functionality does not work
         if ((oldUser.nickname != newUser.nickname) && (nicknameExists(newUser.nickname))) {
             throw Exception(NICKNAME_IN_USE)
         }
@@ -135,7 +138,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             }
     }
 
-    fun changeProfState(uid: String, state: ProfState){
+    fun changeProfState(uid: String, state: ProfState) {
         usersCollection.document(uid).update(STATE, state.name)
             .addOnSuccessListener {
                 Log.i("Jaime", "State updated successfully")
@@ -146,9 +149,9 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             }
     }
 
-    fun changeFavouritesList(uidListOwner: String, uidToChange: String, add: Boolean){
+    fun changeFavouritesList(uidListOwner: String, uidToChange: String, add: Boolean) {
         val docRef = usersCollection.document(uidListOwner)
-        if(add){
+        if (add) {
             docRef.update(FAVOURITES, FieldValue.arrayUnion(uidToChange))
                 .addOnSuccessListener {
                     Log.i("Jaime", "Favourite added successfully")
@@ -169,17 +172,17 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         }
     }
 
-    suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean{
+    suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean {
         val doc = usersCollection.document(uidListOwner).get().await()
         val favList = doc[FAVOURITES] as List<String>
         return favList.contains(uidToCheck)
     }
 
-    suspend fun getFavouritesList(uid: String): List<ActorModel>{
+    suspend fun getFavouritesList(uid: String): List<ActorModel> {
         val doc = usersCollection.document(uid).get().await()
         val favList = doc[FAVOURITES] as List<String>
         val favActorList = mutableListOf<ActorModel>()
-        for(fav in favList){
+        for (fav in favList) {
             favActorList.add(getUserData(fav))
         }
         return favActorList.toList()
@@ -188,27 +191,27 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
     //Services
     private val servicesCollection = firestore.collection(SERVICES_COLLECTION)
 
-    suspend fun getServiceListByUid(uid: String): List<ServiceModel>{
-        try{
+    suspend fun getServiceListByUid(uid: String): List<ServiceModel> {
+        try {
             val querySnapshot = servicesCollection
                 .whereEqualTo(UID, uid)
                 .get()
                 .await()
             return fillList(querySnapshot)
-        } catch(e: Exception){
+        } catch (e: Exception) {
             Log.e("Jaime", "error getting services doc. ${e.message}")
             throw Exception(UNKNOWN_EXCEPTION)
         }
     }
 
-    suspend fun getActiveServiceList(): List<ServiceModel>{
-        try{
+    suspend fun getActiveServiceList(): List<ServiceModel> {
+        try {
             val querySnapshot = servicesCollection
                 .whereEqualTo(IS_ACTIVE, true)
                 .get()
                 .await()
             return fillList(querySnapshot)
-        } catch(e: Exception){
+        } catch (e: Exception) {
             Log.e("Jaime", "error getting services doc. ${e.message}")
             throw Exception(UNKNOWN_EXCEPTION)
         }
@@ -216,8 +219,8 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
 
     private suspend fun fillList(querySnapshot: QuerySnapshot): List<ServiceModel> {
         val serviceList = mutableListOf<ServiceModel>()
-        for(document in querySnapshot.documents){
-            val category = when(document.getString(CATEGORY)){
+        for (document in querySnapshot.documents) {
+            val category = when (document.getString(CATEGORY)) {
                 Categories.Beauty.name -> Categories.Beauty
                 Categories.Household.name -> Categories.Household
                 else -> Categories.Beauty
@@ -256,23 +259,23 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             }
     }
 
-    fun deleteService(sid: String){
+    fun deleteService(sid: String) {
         servicesCollection.document(sid).delete()
-            .addOnSuccessListener{
+            .addOnSuccessListener {
                 Log.i("Jaime", "Service deleted correctly")
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 Log.e("Jaime", "Error deleting service: ${it.message}")
                 throw Exception()
             }
     }
 
-    fun modifyServiceActivity(sid: String, newValue: Boolean){
+    fun modifyServiceActivity(sid: String, newValue: Boolean) {
         servicesCollection.document(sid).update(IS_ACTIVE, newValue)
-            .addOnSuccessListener{
+            .addOnSuccessListener {
                 Log.i("Jaime", "Service activity modified correctly")
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 Log.e("Jaime", "Error modifying service activity: ${it.message}")
                 throw Exception()
             }
@@ -287,7 +290,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             val serviceData = servicesDoc.data
 
             if (serviceData != null) {
-                val servCat = when(serviceData[CATEGORY]){
+                val servCat = when (serviceData[CATEGORY]) {
                     Categories.Beauty.name -> Categories.Beauty
                     Categories.Household.name -> Categories.Household
                     else -> Categories.Beauty //<- Error

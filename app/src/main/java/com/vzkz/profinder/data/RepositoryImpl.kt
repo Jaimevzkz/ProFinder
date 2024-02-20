@@ -1,10 +1,12 @@
 package com.vzkz.profinder.data
 
 import android.content.Context
+import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
 import com.vzkz.profinder.R
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
+import com.vzkz.profinder.data.firebase.StorageService
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Constants
@@ -18,10 +20,11 @@ import javax.inject.Inject
 class RepositoryImpl @Inject constructor(
     private val authService: AuthService,
     private val firestoreService: FirestoreService,
+    private val storageService: StorageService,
     private val context: Context
 ) : Repository {
 
-    //Firestore
+    //Firebase
     override suspend fun login(email: String, password: String): Result<ActorModel> {
         val user: FirebaseUser?
         try {
@@ -29,8 +32,15 @@ class RepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             return Result.failure(Exception(context.getString(R.string.wrong_email_or_password)))
         }
-        return if (user != null) Result.success(getUserFromFirestore(user.uid))
-        else Result.failure(Exception(context.getString(R.string.error_logging_in_user)))
+        return if (user != null) {
+            Result.success(
+                getUserFromFirestore(user.uid).copy(
+                    profilePhoto = storageService.getProfilePhoto(
+                        user.uid
+                    )
+                )
+            )
+        } else Result.failure(Exception(context.getString(R.string.error_logging_in_user)))
     }
 
     override suspend fun getUserFromFirestore(uid: String): ActorModel {
@@ -131,4 +141,13 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getFavouriteList(uid: String): List<ActorModel> =
         firestoreService.getFavouritesList(uid) //throws exception
 
+    override suspend fun uploadAndDownloadProfilePhoto(
+        uri: Uri,
+        uid: String,
+        oldProfileUri: Uri?
+    ): Uri = storageService.uploadAndDownloadProgressPhoto(
+        uri = uri,
+        uid = uid,
+        oldProfileUri = oldProfileUri
+    ) //throws exception
 }

@@ -1,5 +1,6 @@
 package com.vzkz.profinder.domain
 
+import android.net.Uri
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.ProfState
@@ -45,5 +46,7 @@ interface Repository {
     suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean
 
     suspend fun getFavouriteList(uid: String): List<ActorModel>
+
+    suspend fun uploadAndDownloadProfilePhoto(uri: Uri, uid: String, oldProfileUri: Uri?): Uri
 
 }

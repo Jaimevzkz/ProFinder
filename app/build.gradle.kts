@@ -111,6 +111,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     //FireStore
     implementation("com.google.firebase:firebase-firestore-ktx")
+    //Storage
+    implementation("com.google.firebase:firebase-storage")
 
     //Animation
     implementation("androidx.compose.animation:animation:1.6.1")

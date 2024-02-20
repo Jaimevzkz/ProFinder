@@ -2,6 +2,7 @@ package com.vzkz.profinder.ui.home
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
+import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
@@ -43,6 +44,17 @@ class HomeViewModel @Inject constructor(
     fun onInit() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
+                dispatch(HomeIntent.ChangeFavList(favouriteListUseCase.getFavouriteList()))
+            }
+        } catch (e: Exception) {
+            dispatch(HomeIntent.Error(e.message.orEmpty()))
+        }
+    }
+
+    fun onDeleteFav(uid: String){
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                favouriteListUseCase.changeFavouriteList(uidToChange = uid, add = false)
                 dispatch(HomeIntent.ChangeFavList(favouriteListUseCase.getFavouriteList()))
             }
         } catch (e: Exception) {

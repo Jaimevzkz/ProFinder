@@ -21,6 +21,9 @@ object Constants {
     const val SERV_DESCRIPTION = "description"
     const val PRICE = "price"
 
+    //Storage
+    const val PROFILEPHOTO = "ProfilePhotos"
+
 
     //Errors
     const val ERRORSTR = "error"

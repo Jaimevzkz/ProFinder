@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,7 +39,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
-import com.vzkz.profinder.core.boilerplate.PROFESSIONALMODELFORTESTS
 import com.vzkz.profinder.core.boilerplate.PROFFESIONALLISTFORTEST
 import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
@@ -55,11 +57,12 @@ import com.vzkz.profinder.ui.theme.ProFinderTheme
 fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = hiltViewModel()) {
     homeViewModel.onInit()
     val error = homeViewModel.state.error
-    var favList: List<ActorModel> by remember{ mutableStateOf(emptyList()) }
+    var favList: List<ActorModel> by remember { mutableStateOf(emptyList()) }
     favList = homeViewModel.state.favList
     ScreenBody(
         favList = favList,
         error = error,
+        onDeleteFav = { homeViewModel.onDeleteFav(it) },
         onCloseDialog = {
             homeViewModel.onCloseDialog()
         },
@@ -73,6 +76,7 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
 private fun ScreenBody(
     favList: List<ActorModel>,
     error: UiError,
+    onDeleteFav: (String) -> Unit,
     onCloseDialog: () -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
 ) {
@@ -85,6 +89,7 @@ private fun ScreenBody(
         val fontFamily = FontFamily(Font(R.font.oswald))
         val cardPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         val contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp)
+        var editFavList by remember { mutableStateOf(false) }
         Box(
             modifier = Modifier
                 .padding(paddingValues)
@@ -103,7 +108,7 @@ private fun ScreenBody(
                     contentPadding = contentPadding,
                     title = "Hired Services",
                     placeRight = false
-                ){
+                ) {
 
                 }
 
@@ -114,17 +119,26 @@ private fun ScreenBody(
                     contentColor = contentColor,
                     fontFamily = fontFamily,
                     cardPadding = cardPadding,
-                    contentPadding = contentPadding,
+                    contentPadding = PaddingValues(horizontal = 14.dp),
+                    editFavList = editFavList,
+                    onEditFavList = { editFavList = !editFavList },
                     title = "Favorites",
                     placeRight = true
-                ){
-                    LazyColumn{
-                        items(favList){actor ->
-                            MyRow (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start){
+                ) {
+                    LazyColumn {
+                        items(favList) { actor ->
+                            MyRow(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start
+                            ) {
                                 ProfilePicture(profilePhoto = actor.profilePhoto, size = 50)
-                                Spacer(modifier = Modifier.weight(1f))
+                                MySpacer(size = 12)
                                 MyColumn {
-                                    Text(text = "${actor.firstname} ${actor.lastname}", fontWeight = FontWeight.SemiBold, color = contentColor)
+                                    Text(
+                                        text = "${actor.firstname} ${actor.lastname}",
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = contentColor
+                                    )
                                     MyRow {
                                         Text(text = actor.nickname, color = contentColor)
                                         MySpacer(size = 4)
@@ -138,7 +152,14 @@ private fun ScreenBody(
                                     }
                                 }
                                 Spacer(modifier = Modifier.weight(1f))
-
+                                if (editFavList) {
+                                    IconButton(onClick = { onDeleteFav(actor.uid) }) {
+                                        Icon(
+                                            imageVector = Icons.Filled.DeleteOutline,
+                                            contentDescription = "Delete"
+                                        )
+                                    }
+                                }
                             }
                             MySpacer(size = 12)
                         }
@@ -155,7 +176,7 @@ private fun ScreenBody(
                     contentPadding = contentPadding,
                     title = "Recent",
                     placeRight = false
-                ){
+                ) {
 
                 }
             }
@@ -179,6 +200,7 @@ private fun LightPreview() {
         ScreenBody(
             favList = PROFFESIONALLISTFORTEST,
             error = UiError(false, "Account wasn't created"),
+            onDeleteFav = {},
             onCloseDialog = {},
             onBottomBarClicked = {}
         )

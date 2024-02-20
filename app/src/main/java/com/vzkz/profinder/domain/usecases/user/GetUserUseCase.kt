@@ -13,7 +13,7 @@ interface GetUserUseCase {
 class GetUserUseCaseImpl @Inject constructor(
     repository: Repository,
     private val getUidDataStoreUseCase: GetUidDataStoreUseCase
-): GetUserUseCase { //TODO Throws Exception when firestore call fails
+): GetUserUseCase {
     private val instance = getUserInstance(repository)
     override suspend operator fun invoke(): ActorModel {
         return if (!instance.cachedUser()) {
