@@ -27,4 +27,5 @@ sealed class EditProfileIntent: Intent {
     data object CloseError: EditProfileIntent()
     data object  Success: EditProfileIntent()
     data object Loading: EditProfileIntent()
+    data class SetImg(val updatedUser: ActorModel): EditProfileIntent()
 }

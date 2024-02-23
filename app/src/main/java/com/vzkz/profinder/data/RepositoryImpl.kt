@@ -33,19 +33,15 @@ class RepositoryImpl @Inject constructor(
             return Result.failure(Exception(context.getString(R.string.wrong_email_or_password)))
         }
         return if (user != null) {
-            Result.success(
-                getUserFromFirestore(user.uid).copy(
-                    profilePhoto = storageService.getProfilePhoto(
-                        user.uid
-                    )
-                )
-            )
-        } else Result.failure(Exception(context.getString(R.string.error_logging_in_user)))
+            Result.success(getUserFromFirestore(user.uid))
+        } else Result.failure(Exception(context.getString(R.string.error_logging_user)))
     }
 
     override suspend fun getUserFromFirestore(uid: String): ActorModel {
         try {
-            return firestoreService.getUserData(uid)
+            return firestoreService.getUserData(uid).copy(
+                profilePhoto = storageService.getProfilePhoto(uid)
+            )
         } catch (e: Exception) {
             when (e.message) {
                 CONNECTION_ERROR -> throw Exception(context.getString(R.string.network_failure_while_checking_user_existence))
@@ -145,9 +141,13 @@ class RepositoryImpl @Inject constructor(
         uri: Uri,
         uid: String,
         oldProfileUri: Uri?
-    ): Uri = storageService.uploadAndDownloadProgressPhoto(
-        uri = uri,
-        uid = uid,
-        oldProfileUri = oldProfileUri
-    ) //throws exception
+    ): Uri { //throws exception
+        val storageUri = storageService.uploadAndDownloadProgressPhoto(
+            uri = uri,
+            uid = uid,
+            oldProfileUri = oldProfileUri
+        )
+        firestoreService.changeProfilePicture(uid, storageUri)
+        return storageUri
+    }
 }

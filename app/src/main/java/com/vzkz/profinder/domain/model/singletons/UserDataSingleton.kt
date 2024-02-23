@@ -1,5 +1,6 @@
 package com.vzkz.profinder.domain.model.singletons
 
+import android.net.Uri
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.model.ActorModel
 
@@ -26,6 +27,10 @@ class UserDataSingleton(private val repository: Repository) {
         } else {
             cachedUser!! //user cached locally
         }
+    }
+
+    fun setProfilePhoto(uri: Uri) {
+        cachedUser = cachedUser?.copy(profilePhoto = uri)
     }
 
     fun flushCache() {

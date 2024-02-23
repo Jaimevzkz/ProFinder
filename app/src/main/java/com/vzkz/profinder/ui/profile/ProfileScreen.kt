@@ -1,6 +1,7 @@
 package com.vzkz.profinder.ui.profile
 
 import android.content.res.Configuration
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -134,7 +135,8 @@ private fun ScreenBody(
     profession = user?.profession
     var state: ProfState? by remember { mutableStateOf(null) }
     state = user?.state
-    var profilePhoto by remember { mutableStateOf(user?.profilePhoto) }
+    var profilePhoto: Uri? by remember { mutableStateOf(null) }
+    profilePhoto = user?.profilePhoto
 
     MyBottomBarScaffold(
         currentDestination = ProfileScreenDestination,

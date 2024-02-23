@@ -18,8 +18,6 @@ class ActiveServiceListSingleton(private val repository: Repository) {
 
     private var cachedServiceList: List<ServiceModel>? = null // Stores the user locally
 
-    fun cachedServiceList(): Boolean = cachedServiceList != null
-
     suspend fun getData(): List<ServiceModel> { //gets cached user or calls firebase
         return if (cachedServiceList == null) {
             fetchServiceListFromFirestore() //get user from firestore

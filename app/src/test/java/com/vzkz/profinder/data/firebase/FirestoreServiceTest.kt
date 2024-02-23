@@ -119,7 +119,6 @@ class FirestoreServiceTest {
             assertThrows<Exception> { firestoreService.getUserData("any") }
             document = userDocument2_test.toMutableMap() //Restore the map
         }
-
     }
 }
 

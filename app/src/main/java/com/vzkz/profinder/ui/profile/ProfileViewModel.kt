@@ -2,14 +2,11 @@ package com.vzkz.profinder.ui.profile
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
-import com.vzkz.profinder.domain.usecases.LogoutUseCase
+import com.vzkz.profinder.domain.usecases.auth.LogoutUseCase
 import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCase
-import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCaseImpl
-import com.vzkz.profinder.ui.login.LoginIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

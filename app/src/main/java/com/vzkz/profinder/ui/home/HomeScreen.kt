@@ -119,49 +119,63 @@ private fun ScreenBody(
                     contentColor = contentColor,
                     fontFamily = fontFamily,
                     cardPadding = cardPadding,
-                    contentPadding = PaddingValues(horizontal = 14.dp),
+                    contentPadding = if (favList.isEmpty()) contentPadding
+                    else PaddingValues(start = 6.dp ,end = 12.dp),
+                    isEditFavListEmpty = favList.isEmpty(),
                     editFavList = editFavList,
                     onEditFavList = { editFavList = !editFavList },
                     title = "Favorites",
                     placeRight = true
                 ) {
-                    LazyColumn {
-                        items(favList) { actor ->
-                            MyRow(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                ProfilePicture(profilePhoto = actor.profilePhoto, size = 50)
+                    if (favList.isEmpty()) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = stringResource(R.string.you_don_t_have_any_favorites_yet),
+                            color = contentColor
+                        )
+                        Spacer(modifier = Modifier.weight(1.8f))
+                    } else {
+                        LazyColumn {
+                            items(favList) { actor ->
+                                MyRow(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Start
+                                ) {
+                                    ProfilePicture(profilePhoto = actor.profilePhoto, size = 50)
+                                    MySpacer(size = 12)
+                                    MyColumn {
+                                        Text(
+                                            text = "${actor.firstname} ${actor.lastname}",
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = contentColor
+                                        )
+                                        MyRow {
+                                            Text(text = actor.nickname, color = contentColor)
+                                            MySpacer(size = 4)
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.ic_dot),
+                                                contentDescription = null,
+                                                tint = actor.state?.tint ?: Color.Transparent,
+                                                modifier = Modifier
+                                                    .size(20.dp),
+                                            )
+                                        }
+                                    }
+                                    Spacer(modifier = Modifier.weight(1f))
+                                    if (editFavList) {
+                                        IconButton(onClick = {
+                                            onDeleteFav(actor.uid)
+                                            editFavList = false
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Filled.DeleteOutline,
+                                                contentDescription = "Delete"
+                                            )
+                                        }
+                                    }
+                                }
                                 MySpacer(size = 12)
-                                MyColumn {
-                                    Text(
-                                        text = "${actor.firstname} ${actor.lastname}",
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = contentColor
-                                    )
-                                    MyRow {
-                                        Text(text = actor.nickname, color = contentColor)
-                                        MySpacer(size = 4)
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.ic_dot),
-                                            contentDescription = null,
-                                            tint = actor.state?.tint ?: Color.Transparent,
-                                            modifier = Modifier
-                                                .size(20.dp),
-                                        )
-                                    }
-                                }
-                                Spacer(modifier = Modifier.weight(1f))
-                                if (editFavList) {
-                                    IconButton(onClick = { onDeleteFav(actor.uid) }) {
-                                        Icon(
-                                            imageVector = Icons.Filled.DeleteOutline,
-                                            contentDescription = "Delete"
-                                        )
-                                    }
-                                }
                             }
-                            MySpacer(size = 12)
                         }
                     }
                 }
@@ -198,6 +212,7 @@ private fun ScreenBody(
 private fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
+//            favList = emptyList(),
             favList = PROFFESIONALLISTFORTEST,
             error = UiError(false, "Account wasn't created"),
             onDeleteFav = {},

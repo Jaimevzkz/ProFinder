@@ -1,11 +1,14 @@
 package com.vzkz.profinder.ui.profile.editprofile
 
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import com.vzkz.profinder.domain.usecases.user.ModifyUserDataUseCase
+import com.vzkz.profinder.domain.usecases.user.UploadPhotoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
     private val modifyUserDataUseCase: ModifyUserDataUseCase,
-    private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase,
+    private val uploadPhotoUseCase: UploadPhotoUseCase
 ) :
     BaseViewModel<EditProfileState, EditProfileIntent>(EditProfileState.initial) {
 
@@ -51,6 +55,8 @@ class EditProfileViewModel @Inject constructor(
                 success = false,
                 loading = true
             )
+
+            is EditProfileIntent.SetImg -> state.copy(user = intent.updatedUser)
         }
     }
 
@@ -86,6 +92,23 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun onCloseDialog() = dispatch(EditProfileIntent.CloseError)
+
+    fun onUploadPhoto(uri: Uri, user: ActorModel) {
+        viewModelScope.launch {
+            try {
+                val result = withContext(Dispatchers.IO) {
+                    uploadPhotoUseCase(
+                        uri = uri,
+                        user = user
+                    )
+                }
+                dispatch(EditProfileIntent.SetImg(user.copy(profilePhoto = result)))
+            } catch (e: Exception) {
+                Log.e("Jaime", "Error calling storage. ${e.message}")
+                dispatch(EditProfileIntent.Error("Error calling storage. ${e.message}"))
+            }
+        }
+    }
 
 
 }

@@ -1,11 +1,13 @@
 package com.vzkz.profinder.domain.di
 
-import com.vzkz.profinder.domain.usecases.LoginUseCase
-import com.vzkz.profinder.domain.usecases.LoginUseCaseImpl
-import com.vzkz.profinder.domain.usecases.LogoutUseCase
-import com.vzkz.profinder.domain.usecases.LogoutUseCaseImpl
-import com.vzkz.profinder.domain.usecases.SignUpUseCase
-import com.vzkz.profinder.domain.usecases.SignUpUseCaseImpl
+import com.vzkz.profinder.domain.usecases.FlushSingletonsUseCase
+import com.vzkz.profinder.domain.usecases.FlushSingletonsUseCaseImpl
+import com.vzkz.profinder.domain.usecases.auth.LoginUseCase
+import com.vzkz.profinder.domain.usecases.auth.LoginUseCaseImpl
+import com.vzkz.profinder.domain.usecases.auth.LogoutUseCase
+import com.vzkz.profinder.domain.usecases.auth.LogoutUseCaseImpl
+import com.vzkz.profinder.domain.usecases.auth.SignUpUseCase
+import com.vzkz.profinder.domain.usecases.auth.SignUpUseCaseImpl
 import com.vzkz.profinder.domain.usecases.ThemeDSUseCase
 import com.vzkz.profinder.domain.usecases.ThemeDSUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
@@ -30,6 +32,8 @@ import com.vzkz.profinder.domain.usecases.user.ModifyUserDataUseCase
 import com.vzkz.profinder.domain.usecases.user.ModifyUserDataUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCaseImpl
+import com.vzkz.profinder.domain.usecases.user.UploadPhotoUseCase
+import com.vzkz.profinder.domain.usecases.user.UploadPhotoUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCase
 import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCaseImpl
 import dagger.Binds
@@ -73,5 +77,9 @@ abstract class UseCaseModule {
     abstract fun bindUserProfileToSeeUseCase(impl: UserProfileToSeeUseCaseImpl): UserProfileToSeeUseCase
     @Binds
     abstract fun bindFavouriteListUseCase(impl: FavouriteListUseCaseImpl): FavouriteListUseCase
+    @Binds
+    abstract fun bindUploadPhotoUseCase(impl: UploadPhotoUseCaseImpl): UploadPhotoUseCase
+    @Binds
+    abstract fun bindFlushSingletonsUseCase(impl: FlushSingletonsUseCaseImpl): FlushSingletonsUseCase
 
 }

@@ -3,7 +3,7 @@ package com.vzkz.profinder.fake.usecases
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Professions
-import com.vzkz.profinder.domain.usecases.SignUpUseCase
+import com.vzkz.profinder.domain.usecases.auth.SignUpUseCase
 
 
 class FakeSignUpUseCase: SignUpUseCase {

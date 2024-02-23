@@ -6,7 +6,7 @@ import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
-import com.vzkz.profinder.domain.usecases.SignUpUseCase
+import com.vzkz.profinder.domain.usecases.auth.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

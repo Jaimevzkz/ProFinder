@@ -1,6 +1,6 @@
 package com.vzkz.profinder.ui.login
 
-import com.vzkz.profinder.domain.usecases.LoginUseCaseImpl
+import com.vzkz.profinder.domain.usecases.auth.LoginUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
 import com.vzkz.profinder.fake.user1_test
 import com.vzkz.profinder.util.CoroutineRule
@@ -8,11 +8,8 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule

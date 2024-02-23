@@ -428,7 +428,7 @@ private fun ShowProfessionalServiceList(
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun LightPreview() {
+fun DarkPreview() {
     ProFinderTheme {
         ScreenBody(
             actor = Actors.User,

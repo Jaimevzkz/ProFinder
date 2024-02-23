@@ -1,5 +1,6 @@
 package com.vzkz.profinder.domain.model.singletons
 
+import android.net.Uri
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.model.ServiceModel
 
@@ -30,6 +31,12 @@ class ServiceListSingleton(private val repository: Repository) {
 
     fun flushCache() {
         cachedServiceList = null
+    }
+
+    fun changeServiceListOwnerProfilePic(uri: Uri) {
+        cachedServiceList = cachedServiceList?.map {
+            it.copy(owner = it.owner.copy(profilePhoto = uri))
+        }
     }
 
     private suspend fun fetchServiceListFromFirestore(uid: String): List<ServiceModel> {

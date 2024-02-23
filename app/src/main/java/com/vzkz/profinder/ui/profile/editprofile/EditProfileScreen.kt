@@ -1,5 +1,8 @@
 package com.vzkz.profinder.ui.profile.editprofile
 
+import android.content.res.Configuration
+import android.net.Uri
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,11 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowBackIosNew
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,11 +36,17 @@ import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.USERMODELFORTESTS
 import com.vzkz.profinder.destinations.ProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
-import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
-import com.vzkz.profinder.ui.components.dialogs.MyConfirmDialog
 import com.vzkz.profinder.ui.components.MyGenericTextField
+import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
+import com.vzkz.profinder.ui.components.ProfilePicture
+import com.vzkz.profinder.ui.components.UploadPhotoDialog
+import com.vzkz.profinder.ui.components.cameraIntent
+import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
+import com.vzkz.profinder.ui.components.dialogs.MyConfirmDialog
+import com.vzkz.profinder.ui.components.galleryIntent
+import com.vzkz.profinder.ui.components.generateUri
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
@@ -58,10 +69,19 @@ fun EditProfileScreen(
         isError = editProfileViewModel.state.error.isError
         var errorMsg: String? by remember { mutableStateOf(null) }
         errorMsg = editProfileViewModel.state.error.errorMsg
+        var profilePhoto: Uri? by remember { mutableStateOf(null) }
+        profilePhoto = user?.profilePhoto
         ScreenBody(
             isError = isError,
             user = user,
             errorMsg = errorMsg,
+            profilePhoto = profilePhoto,
+            onUploadImage = { uriToUpload ->
+                editProfileViewModel.onUploadPhoto(
+                    uri = uriToUpload,
+                    user = editProfileViewModel.state.user ?: ActorModel()
+                )
+            },
             onModifyUserData = { newUser, oldUser ->
                 editProfileViewModel.onModifyUserData(newUser = newUser, oldUser = oldUser)
             },
@@ -76,10 +96,22 @@ private fun ScreenBody(
     isError: Boolean,
     user: ActorModel?,
     errorMsg: String?,
+    profilePhoto: Uri?,
+    onUploadImage: (Uri) -> Unit,
     onModifyUserData: (ActorModel, ActorModel) -> Unit,
     onCloseDialog: () -> Unit,
     onBackClicked: () -> Unit
 ) {
+    //Camera
+    val context = LocalContext.current
+    var showPhotoDialog by remember { mutableStateOf(false) }
+    val userTitle: String by remember { mutableStateOf("") }
+    var uri: Uri? by remember { mutableStateOf(null) }
+
+    val intentCameraLauncher = cameraIntent(uri, onUploadImage)
+
+    val intentGalleryLauncher = galleryIntent(onUploadImage)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -98,22 +130,37 @@ private fun ScreenBody(
         showAlertDialog = isError
         var showConfirmDialog by remember { mutableStateOf(false) }
 
+        val spaceBetween = 8
+
         if (firstTime) {
             nickname = user?.nickname ?: ""
             actor = user?.actor?.name ?: ""
             firstTime = false
         }
+
         IconButton(modifier = Modifier.align(Alignment.TopStart), onClick = {
             onBackClicked()
         }) {
-            Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Cancel")
+            Icon(imageVector = Icons.Outlined.ArrowBackIosNew, tint = MaterialTheme.colorScheme.onBackground, contentDescription = "Cancel")
         }
 
         Column(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 48.dp)
-        ) {
+        ) { //Body
+            MyRow { //Profile Picture
+                ProfilePicture(profilePhoto = profilePhoto, size = 80)
+                MySpacer(size = 8)
+                OutlinedButton(
+                    onClick = { showPhotoDialog = true },
+                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(text = stringResource(R.string.change_profile_photo))
+                }
+            }
+
+            MySpacer(size = spaceBetween)
             MyGenericTextField(
                 modifier = Modifier,
                 hint = stringResource(R.string.nickname),
@@ -127,9 +174,8 @@ private fun ScreenBody(
                 }
             )
             MySpacer(size = 8)
-
-            
         }
+
         Button(
             modifier = Modifier
                 .fillMaxWidth()
@@ -174,20 +220,40 @@ private fun ScreenBody(
             },
             showDialog = showAlertDialog
         )
+
+        if (showPhotoDialog) {
+            UploadPhotoDialog(
+                onDismiss = {
+                    showPhotoDialog = false
+                },
+                onCameraClicked = {
+                    uri = generateUri(userTitle, context)
+                    intentCameraLauncher.launch(uri)
+                    showPhotoDialog = false
+                },
+                onGalleryClicked = {
+                    intentGalleryLauncher.launch("image/*")
+                    showPhotoDialog = false
+                }
+            )
+        }
     }
 }
 
-@Preview
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun LightPreview() {
+fun DarkPreview() {
     ProFinderTheme {
         ScreenBody(
             isError = false,
             user = USERMODELFORTESTS,
             errorMsg = null,
             onModifyUserData = { _, _ -> },
-            onCloseDialog = {}) {
-
-        }
+            onCloseDialog = {},
+            onBackClicked = {},
+            profilePhoto = null,
+            onUploadImage = {}
+        )
     }
 }

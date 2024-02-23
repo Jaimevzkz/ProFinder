@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.vzkz.profinder.domain.model.Constants.PROFILEPHOTO
+import com.vzkz.profinder.domain.model.Constants.PROFILEPHOTOS
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
@@ -19,7 +20,7 @@ class StorageService @Inject constructor(private val storage: FirebaseStorage) {
         if(oldProfileUri != null)
             deletePhoto(oldProfileUri)
         return suspendCancellableCoroutine { cancellableContinuation ->
-            val reference = storage.reference.child("$uid/$PROFILEPHOTO/${uri.lastPathSegment}")
+            val reference = storage.reference.child("$PROFILEPHOTOS/$uid/${uri.lastPathSegment}")
             reference.putFile(uri).addOnSuccessListener {
                 downloadImage(it, cancellableContinuation)
             }.addOnFailureListener {
@@ -28,7 +29,7 @@ class StorageService @Inject constructor(private val storage: FirebaseStorage) {
         }
     }
 
-    fun deletePhoto(uri: Uri){
+    private fun deletePhoto(uri: Uri){
         val reference = storage.reference.child("${uri.lastPathSegment}")
         reference.delete().addOnSuccessListener {
             Log.i("Jaime","Photo deleted correctly")
@@ -47,7 +48,7 @@ class StorageService @Inject constructor(private val storage: FirebaseStorage) {
     }
 
     suspend fun getProfilePhoto(uid: String): Uri?{
-        val reference = storage.reference.child("$uid/$PROFILEPHOTO")
+        val reference = storage.reference.child("$PROFILEPHOTOS/$uid")
         return reference.listAll().await().items.firstOrNull()?.downloadUrl?.await()
     }
 

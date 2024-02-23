@@ -22,7 +22,8 @@ object Constants {
     const val PRICE = "price"
 
     //Storage
-    const val PROFILEPHOTO = "ProfilePhotos"
+    const val PROFILEPHOTO = "profilePhoto"
+    const val PROFILEPHOTOS = "ProfilePhotos"
 
 
     //Errors

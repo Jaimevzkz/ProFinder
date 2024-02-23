@@ -50,10 +50,14 @@
     <string name="category">Category</string>
     <string name="set_as_inactive">Set as Inactive</string>
     <string name="set_as_active">Set as active</string>
-    <string name="error_logging_in_user">Error logging in user</string>
+    <string name="error_logging_user">Error logging user</string>
     <string name="error">ERROR</string>
     <string name="active">Active</string>
     <string name="inactive">Inactive</string>
     <string name="h">" $/h"</string>
     <string name="type_a_service_to_search">Type a service to search...</string>
+    <string name="change_profile_photo">Change profile photo</string>
+    <string name="camera">Camera</string>
+    <string name="from_gallery">From gallery</string>
+    <string name="you_don_t_have_any_favorites_yet">You don\'t have any favorites yet...</string>
 </resources>

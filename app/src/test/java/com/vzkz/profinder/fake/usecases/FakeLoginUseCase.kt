@@ -1,7 +1,7 @@
 package com.vzkz.profinder.fake.usecases
 
 import com.vzkz.profinder.domain.model.ActorModel
-import com.vzkz.profinder.domain.usecases.LoginUseCase
+import com.vzkz.profinder.domain.usecases.auth.LoginUseCase
 import com.vzkz.profinder.fake.user1_test
 import javax.inject.Inject
 

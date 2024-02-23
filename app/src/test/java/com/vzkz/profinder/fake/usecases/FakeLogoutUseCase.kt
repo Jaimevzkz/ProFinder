@@ -1,6 +1,6 @@
 package com.vzkz.profinder.fake.usecases
 
-import com.vzkz.profinder.domain.usecases.LogoutUseCase
+import com.vzkz.profinder.domain.usecases.auth.LogoutUseCase
 
 
 class FakeLogoutUseCase: LogoutUseCase {

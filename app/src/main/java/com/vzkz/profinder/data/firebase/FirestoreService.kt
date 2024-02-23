@@ -1,5 +1,6 @@
 package com.vzkz.profinder.data.firebase
 
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,6 +30,7 @@ import com.vzkz.profinder.domain.model.Constants.NAME
 import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_USERDATA
 import com.vzkz.profinder.domain.model.Constants.PRICE
 import com.vzkz.profinder.domain.model.Constants.PROFESSION
+import com.vzkz.profinder.domain.model.Constants.PROFILEPHOTO
 import com.vzkz.profinder.domain.model.Constants.SERVICES_COLLECTION
 import com.vzkz.profinder.domain.model.Constants.SERV_DESCRIPTION
 import com.vzkz.profinder.domain.model.Constants.UID
@@ -94,6 +96,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                         else -> throw Exception(NONEXISTENT_USERDATA)
                     }
                 }
+                val profilePicture = userData.getOrDefault(PROFILEPHOTO, null) as String?
                 val userModel = ActorModel(
                     uid = uid,
                     nickname = userData[NICKNAME] as String,
@@ -102,7 +105,8 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                     actor = if (isUser) Actors.User else Actors.Professional,
                     description = description,
                     profession = profession,
-                    state = state
+                    state = state,
+                    profilePhoto = profilePicture?.let { Uri.parse(it) },
                 )
                 userModel
             } else throw Exception(CONNECTION_ERROR)
@@ -183,12 +187,25 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
 
     suspend fun getFavouritesList(uid: String): List<ActorModel> {
         val doc = usersCollection.document(uid).get().await()
-        val favList = doc[FAVOURITES] as List<String>
+        val favList = doc[FAVOURITES] as List<String>?
         val favActorList = mutableListOf<ActorModel>()
-        for (fav in favList) {
-            favActorList.add(getUserData(fav))
+        if (favList != null) {
+            for (fav in favList) {
+                favActorList.add(getUserData(fav))
+            }
         }
         return favActorList.toList()
+    }
+
+    fun changeProfilePicture(uid: String, uri: Uri) {
+        usersCollection.document(uid).update(PROFILEPHOTO, uri)
+            .addOnSuccessListener {
+                Log.i("Jaime", "Profile picture updated successfully")
+            }
+            .addOnFailureListener {
+                Log.e("Jaime", "Error updating profile picture: ${it.message}")
+                throw Exception(MODIFICATION_ERROR)
+            }
     }
 
     //Services
@@ -281,62 +298,6 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             .addOnFailureListener {
                 Log.e("Jaime", "Error modifying service activity: ${it.message}")
                 throw Exception()
-            }
-    }
-
-    suspend fun getService(sid: String): ServiceModel {
-        return try {
-            val servicesDocumentRef = servicesCollection.document(sid)
-
-            val servicesDoc = servicesDocumentRef.get().await()
-
-            val serviceData = servicesDoc.data
-
-            if (serviceData != null) {
-                val servCat = when (serviceData[CATEGORY]) {
-                    Categories.Beauty.name -> Categories.Beauty
-                    Categories.Household.name -> Categories.Household
-                    else -> Categories.Beauty //<- Error
-                }
-                val uid = serviceData[UID] as String
-                val owner = getUserData(uid)
-                val serviceModel = ServiceModel(
-                    sid = sid,
-                    uid = serviceData[UID] as String,
-                    name = serviceData[NAME] as String,
-                    isActive = serviceData[IS_ACTIVE] as Boolean,
-                    category = servCat,
-                    servDescription = serviceData[SERV_DESCRIPTION] as String,
-                    owner = owner,
-                    price = serviceData[PRICE] as Double
-                )
-                serviceModel
-            } else throw Exception(CONNECTION_ERROR)
-
-        } catch (e: Exception) {
-            Log.e("Jaime", "error getting services doc. ${e.message}")
-            when (e.message) {
-                CONNECTION_ERROR -> throw Exception(CONNECTION_ERROR)
-                else -> throw Exception(UNKNOWN_EXCEPTION)
-            }
-        }
-    }
-
-    suspend fun modifyService(oldService: ServiceModel, newService: ServiceModel) {
-        // Gets the reference to the user document
-        val serviceDocumentReference = servicesCollection.document(oldService.sid)
-
-        // Casts the new UserModel to map in order to update only the needed fields
-        val newServiceMap = newService.toMap()
-
-        // Updates firestore data and wait for the update to complete
-        serviceDocumentReference.update(newServiceMap)
-            .addOnSuccessListener {
-                Log.i("Jaime", "Service data updated successfully")
-            }
-            .addOnFailureListener {
-                Log.e("Jaime", "Error updating service data")
-                throw Exception(MODIFICATION_ERROR)
             }
     }
 

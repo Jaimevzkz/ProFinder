@@ -31,6 +31,7 @@ fun HomeCard(
     cardPadding: PaddingValues,
     contentPadding: PaddingValues,
     title: String,
+    isEditFavListEmpty: Boolean = false,
     editFavList: Boolean = false,
     onEditFavList: () -> Unit = {},
     placeRight: Boolean = false,
@@ -48,12 +49,17 @@ fun HomeCard(
                 .padding(contentPadding),
             verticalArrangement = Arrangement.Top
         ) {
-            MyRow( modifier = if (placeRight) Modifier.align(
-                Alignment.End
-            ) else Modifier.align(Alignment.Start)) {
-                if(placeRight){
+            MyRow(
+                modifier = if (placeRight) Modifier.align(
+                    Alignment.End
+                ) else Modifier.align(Alignment.Start)
+            ) {
+                if (placeRight && !isEditFavListEmpty) {
                     IconButton(onClick = { onEditFavList() }) {
-                        Icon(imageVector = if(editFavList) Icons.Filled.EditOff else Icons.Filled.Edit, contentDescription = "Edit fav list")
+                        Icon(
+                            imageVector = if (editFavList) Icons.Filled.EditOff else Icons.Filled.Edit,
+                            contentDescription = "Edit fav list"
+                        )
                     }
                     Spacer(modifier = Modifier.weight(1f))
                 }
