@@ -20,12 +20,15 @@ import com.vzkz.profinder.domain.model.Constants.UNKNOWN_EXCEPTION
 import com.vzkz.profinder.domain.model.Constants.USERS_COLLECTION
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Categories
+import com.vzkz.profinder.domain.model.Constants
 import com.vzkz.profinder.domain.model.Constants.CATEGORY
 import com.vzkz.profinder.domain.model.Constants.ERRORSTR
 import com.vzkz.profinder.domain.model.Constants.FAVOURITES
 import com.vzkz.profinder.domain.model.Constants.IS_ACTIVE
 import com.vzkz.profinder.domain.model.Constants.NAME
+import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_USERDATA
 import com.vzkz.profinder.domain.model.Constants.PRICE
+import com.vzkz.profinder.domain.model.Constants.PROFESSION
 import com.vzkz.profinder.domain.model.Constants.SERVICES_COLLECTION
 import com.vzkz.profinder.domain.model.Constants.SERV_DESCRIPTION
 import com.vzkz.profinder.domain.model.Constants.UID
@@ -74,13 +77,13 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
 
             if (userData != null) {
                 val isUser = userData[IS_USER] as Boolean
-                val description = if (userData[DESCRIPTION] == "-") null else userData[DESCRIPTION]
+                val description: String? = if (userData[DESCRIPTION] == "-") null else userData[DESCRIPTION] as String
                 val profession = if (isUser) null else {
-                    when (userData[DESCRIPTION]) {
+                    when (userData[PROFESSION]) {
                         Professions.Plumber.name -> Professions.Plumber
                         Professions.Hairdresser.name -> Professions.Hairdresser
                         Professions.Electrician.name -> Professions.Electrician
-                        else -> Professions.Plumber //This should never happen
+                        else -> throw Exception(NONEXISTENT_USERDATA)
                     }
                 }
                 val state = if (isUser) null else {
@@ -88,7 +91,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                         ProfState.Active.name -> ProfState.Active
                         ProfState.Working.name -> ProfState.Working
                         ProfState.Inactive.name -> ProfState.Inactive
-                        else -> ProfState.Active //This should never happen
+                        else -> throw Exception(NONEXISTENT_USERDATA)
                     }
                 }
                 val userModel = ActorModel(
@@ -97,7 +100,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                     firstname = userData[FIRSTNAME] as String,
                     lastname = userData[LASTNAME] as String,
                     actor = if (isUser) Actors.User else Actors.Professional,
-                    description = description as String?,
+                    description = description,
                     profession = profession,
                     state = state
                 )

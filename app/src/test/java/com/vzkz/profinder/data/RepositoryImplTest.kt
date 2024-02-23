@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseUser
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
+import com.vzkz.profinder.data.firebase.StorageService
 import com.vzkz.profinder.fake.user1_test
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -33,6 +34,9 @@ class RepositoryImplTest{
     private lateinit var firestoreService: FirestoreService
 
     @RelaxedMockK
+    private lateinit var storageService: StorageService
+
+    @RelaxedMockK
     private lateinit var context: Context
 
     @RelaxedMockK
@@ -41,7 +45,7 @@ class RepositoryImplTest{
     @Before
     fun setUp(){
         MockKAnnotations.init(this)
-        repositoryImpl = RepositoryImpl(authService, firestoreService, context)
+        repositoryImpl = RepositoryImpl(authService, firestoreService, storageService, context)
     }
 
     @Test
@@ -78,6 +82,8 @@ class RepositoryImplTest{
         coEvery { authService.login(any(), any()) } returns firebaseUser
 
         coEvery { firestoreService.getUserData(any()) } returns user1_test
+
+        coEvery { storageService.getProfilePhoto(any()) } returns null
 
         //Act
         val result = repositoryImpl.login("", "")

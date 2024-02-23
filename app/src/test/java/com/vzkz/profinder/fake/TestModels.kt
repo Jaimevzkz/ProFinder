@@ -2,6 +2,13 @@ package com.vzkz.profinder.fake
 
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
+import com.vzkz.profinder.domain.model.Constants.DESCRIPTION
+import com.vzkz.profinder.domain.model.Constants.FIRSTNAME
+import com.vzkz.profinder.domain.model.Constants.IS_USER
+import com.vzkz.profinder.domain.model.Constants.LASTNAME
+import com.vzkz.profinder.domain.model.Constants.NICKNAME
+import com.vzkz.profinder.domain.model.Constants.PROFESSION
+import com.vzkz.profinder.domain.model.Constants.STATE
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 
@@ -22,4 +29,14 @@ val user2_test: ActorModel = ActorModel(
     actor = Actors.Professional,
     profession = Professions.Plumber,
     state = ProfState.Active
+)
+
+val userDocument2_test = mapOf(
+    Pair(DESCRIPTION, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "),
+    Pair(FIRSTNAME, "Jaime"),
+    Pair(IS_USER, false),
+    Pair(LASTNAME, "Vázquez Martín"),
+    Pair(NICKNAME, "vzkz_88"),
+    Pair(PROFESSION, "Plumber"),
+    Pair(STATE, "Active")
 )
