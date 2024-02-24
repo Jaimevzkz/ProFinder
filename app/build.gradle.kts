@@ -7,6 +7,8 @@ plugins {
     id("dagger.hilt.android.plugin")
     //FireBase
     id("com.google.gms.google-services")
+    //Secrets gradle plugin (for maps)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -101,7 +103,7 @@ dependencies {
     ksp("io.github.raamcosta.compose-destinations:ksp:$destinationsVersion")
 
     //Icons Extended
-    implementation("androidx.compose.material:material-icons-extended:1.6.1")
+    implementation("androidx.compose.material:material-icons-extended:1.6.2")
 
     //FireBase
     val bomVersion = "32.5.0"
@@ -116,12 +118,20 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
 
     //Animation
-    implementation("androidx.compose.animation:animation:1.6.1")
+    implementation("androidx.compose.animation:animation:1.6.2")
 
     //DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     //Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
+
+    //Maps
+    implementation("com.google.maps.android:maps-compose:4.3.3")
+    // Optionally, you can include the Compose utils library for Clustering,
+    // Street View metadata checks, etc.
+    implementation("com.google.maps.android:maps-compose-utils:4.3.3")
+    // Optionally, you can include the widgets library for ScaleBar, etc.
+    implementation ("com.google.maps.android:maps-compose-widgets:4.3.3")
 
 }

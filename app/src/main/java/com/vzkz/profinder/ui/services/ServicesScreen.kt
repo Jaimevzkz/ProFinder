@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.FormatListNumbered
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
@@ -37,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.maps.android.compose.GoogleMap
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
@@ -124,19 +126,22 @@ private fun ScreenBody(
     onSeeProfile: (ActorModel) -> Unit
 ) {
     var addDialogVisibility by remember { mutableStateOf(false) }
+    var showMap by remember { mutableStateOf(true) }
     MyBottomBarScaffold(
         currentDestination = ServicesScreenDestination,
         onBottomBarClicked = { onBottomBarClicked(it) },
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        "Services",
-                        style = MaterialTheme.typography.displaySmall,
-                    )
-                },
-                colors = centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
-            )
+            if(!showMap){
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            "Services",
+                            style = MaterialTheme.typography.displaySmall,
+                        )
+                    },
+                    colors = centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
+                )
+            }
         },
         floatingActionButton = {
             if (actor == Actors.Professional) {
@@ -152,11 +157,19 @@ private fun ScreenBody(
     ) { paddingValues ->
         when (actor) {
             Actors.User -> {
-                UserScreenBody(
-                    modifier = Modifier.padding(paddingValues),
-                    serviceList = activeServices,
-                    onSeeProfile = { onSeeProfile(it) }
-                )
+                if(showMap){
+                    MapScreenBody(
+                        modifier = Modifier.padding(paddingValues),
+                        onSeeList = { showMap = false }
+                    )
+                } else{
+                    UserScreenBody(
+                        modifier = Modifier.padding(paddingValues),
+                        serviceList = activeServices,
+                        onSeeProfile = { onSeeProfile(it) },
+                        onSeeMap = { showMap = true }
+                    )
+                }
             }
 
             Actors.Professional -> {
@@ -187,10 +200,40 @@ private fun ScreenBody(
 }
 
 @Composable
+private fun MapScreenBody(
+    modifier: Modifier = Modifier,
+    onSeeList: () -> Unit
+){
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
+        GoogleMap {
+
+        }
+        IconButton(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(10.dp)
+                .padding(bottom = 20.dp)
+                .shadow(1.dp, shape = CircleShape)
+                .background(MaterialTheme.colorScheme.primary),
+            onClick = { onSeeList() }
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.FormatListNumbered,
+                contentDescription = "Show list view",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+    }
+}
+
+@Composable
 private fun UserScreenBody(
     modifier: Modifier = Modifier,
+    serviceList: List<ServiceModel>,
     onSeeProfile: (ActorModel) -> Unit,
-    serviceList: List<ServiceModel>
+    onSeeMap: () -> Unit
 ) {
 
     var query by remember { mutableStateOf("") }
@@ -246,7 +289,7 @@ private fun UserScreenBody(
                 .padding(10.dp)
                 .shadow(1.dp, shape = CircleShape)
                 .background(MaterialTheme.colorScheme.primary),
-            onClick = { /*TODO*/ }
+            onClick = { onSeeMap() }
         ) {
             Icon(
                 imageVector = Icons.Outlined.Map,
