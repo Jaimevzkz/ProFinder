@@ -133,7 +133,7 @@ private fun ScreenBody(
                             text = stringResource(R.string.you_don_t_have_any_favorites_yet),
                             color = contentColor
                         )
-                        Spacer(modifier = Modifier.weight(1.8f))
+                        Spacer(modifier = Modifier.weight(1.5f))
                     } else {
                         LazyColumn {
                             items(favList) { actor ->
@@ -212,8 +212,8 @@ private fun ScreenBody(
 private fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
-//            favList = emptyList(),
-            favList = PROFFESIONALLISTFORTEST,
+            favList = emptyList(),
+//            favList = PROFFESIONALLISTFORTEST,
             error = UiError(false, "Account wasn't created"),
             onDeleteFav = {},
             onCloseDialog = {},

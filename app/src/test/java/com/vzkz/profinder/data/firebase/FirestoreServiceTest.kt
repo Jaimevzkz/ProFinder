@@ -4,18 +4,17 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
-import com.vzkz.profinder.domain.model.Constants.DESCRIPTION
-import com.vzkz.profinder.domain.model.Constants.FIRSTNAME
-import com.vzkz.profinder.domain.model.Constants.IS_USER
-import com.vzkz.profinder.domain.model.Constants.LASTNAME
-import com.vzkz.profinder.domain.model.Constants.NICKNAME
-import com.vzkz.profinder.domain.model.Constants.PROFESSION
-import com.vzkz.profinder.domain.model.Constants.STATE
+import com.vzkz.profinder.domain.model.Constants
+import com.vzkz.profinder.domain.model.Constants.CATEGORY
 import com.vzkz.profinder.domain.model.Constants.USERS_COLLECTION
-import com.vzkz.profinder.fake.user2_test
-import com.vzkz.profinder.fake.userDocument2_test
+import com.vzkz.profinder.serviceDocument_test
+import com.vzkz.profinder.prof2_test
+import com.vzkz.profinder.profDocument2_test
+import com.vzkz.profinder.userDocument1_test
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
@@ -51,24 +50,24 @@ class FirestoreServiceTest {
 
 
     @Test
-    fun `Insert user test`() {
+    fun `Insert user succeds`() {
         //Arrange
         val taskCompletionSource =
             TaskCompletionSource<Void>() //used for testing calls that dont return data
-        val userMap = user2_test.toMap()
+        val userMap = prof2_test.toMap()
 
         every {
-            mockDB.collection(USERS_COLLECTION).document(user2_test.uid)
+            mockDB.collection(USERS_COLLECTION).document(prof2_test.uid)
                 .set(userMap)
         } returns taskCompletionSource.task
 
 
-        firestoreService.insertUser(user2_test)
+        firestoreService.insertUser(prof2_test)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             mockDB
                 .collection(USERS_COLLECTION)
-                .document(user2_test.uid)
+                .document(prof2_test.uid)
                 .set(userMap, SetOptions.merge())
         }
     }
@@ -76,7 +75,7 @@ class FirestoreServiceTest {
     @Test
     fun `When getUser succeds, ActorModel is returned`() = runTest {
         //Arrange
-        val document = userDocument2_test
+        val document = profDocument2_test
 
         val documentSnapshot = mockk<DocumentSnapshot> {
             every { data } returns document
@@ -92,34 +91,86 @@ class FirestoreServiceTest {
         val result = firestoreService.getUserData("any")
 
         //Assert
-        assert(result.actor == user2_test.actor)
-        assert(result.description == user2_test.description)
-        assert(result.firstname == user2_test.firstname)
-        assert(result.lastname == user2_test.lastname)
-        assert(result.nickname == user2_test.nickname)
-        assert(result.profession == user2_test.profession)
-        assert(result.state == user2_test.state)
+        assert(result.actor == prof2_test.actor)
+        assert(result.description == prof2_test.description)
+        assert(result.firstname == prof2_test.firstname)
+        assert(result.lastname == prof2_test.lastname)
+        assert(result.nickname == prof2_test.nickname)
+        assert(result.profession == prof2_test.profession)
+        assert(result.state == prof2_test.state)
     }
-    @Test
-    fun `When getUser (when professional) doesnt find any of the fields in the map, exception thrown`() = runTest {
-        //Arrange
-        var document = userDocument2_test.toMutableMap()
 
+    @Test
+    fun `When getUser (when professional) doesnt find any of the fields in the map, exception thrown`() =
+        runTest {
+            //Arrange
+            var document = profDocument2_test.toMutableMap()
+
+            val documentSnapshot = mockk<DocumentSnapshot> {
+                every { data } returns document
+            }
+            every {
+                mockDB.collection(USERS_COLLECTION).document(any())
+                    .get()
+            } returns mockTask<DocumentSnapshot>(documentSnapshot)
+
+            for (field in profDocument2_test.keys) {
+                document.remove(field)
+                //Assert
+                assertThrows<Exception> { firestoreService.getUserData("any") }
+                document = profDocument2_test.toMutableMap() //Restore the map
+            }
+        }
+
+    @Test
+    fun `When getUser (when user) doesnt find any of the fields in the map, exception thrown`() =
+        runTest {
+            //Arrange
+            var document = userDocument1_test.toMutableMap()
+
+            val documentSnapshot = mockk<DocumentSnapshot> {
+                every { data } returns document
+            }
+            every {
+                mockDB.collection(USERS_COLLECTION).document(any())
+                    .get()
+            } returns mockTask<DocumentSnapshot>(documentSnapshot)
+
+            for (field in userDocument1_test.keys) {
+                document.remove(field)
+                //Assert
+                assertThrows<Exception> { firestoreService.getUserData("any") }
+                document = profDocument2_test.toMutableMap() //Restore the map
+            }
+        }
+
+    //todo test modifyUserData()
+
+    @Test
+    fun `Fill list test`() = runTest {
+        //Arrange
+        val document = serviceDocument_test.toMutableMap()
         val documentSnapshot = mockk<DocumentSnapshot> {
             every { data } returns document
         }
-        every {
-            mockDB.collection(USERS_COLLECTION).document(any())
-                .get()
-        } returns mockTask<DocumentSnapshot>(documentSnapshot)
 
-        for(field in userDocument2_test.keys){
-            document.remove(field)
-            //Assert
-            assertThrows<Exception> { firestoreService.getUserData("any") }
-            document = userDocument2_test.toMutableMap() //Restore the map
+        coEvery { firestoreService.getUserData(any()) } returns prof2_test
+
+        val querySnapshot = mockk<QuerySnapshot> {
+            every { documents } returns listOf(documentSnapshot)
         }
+
+        every {
+            mockDB.collection(Constants.SERVICES_COLLECTION).get()
+        } returns mockTask<QuerySnapshot>(querySnapshot)
+
+        //Act
+        document.remove(CATEGORY)
+
+        //Assert
+        assertThrows<Exception> { firestoreService.getActiveServiceList() }
     }
+
 }
 
 

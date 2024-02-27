@@ -8,7 +8,7 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) { //TO Test
+class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) {
 
     suspend fun login(email: String, password: String): FirebaseUser? {
         return suspendCancellableCoroutine { cancellableContinuation ->

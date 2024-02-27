@@ -126,7 +126,7 @@ private fun ScreenBody(
     onSeeProfile: (ActorModel) -> Unit
 ) {
     var addDialogVisibility by remember { mutableStateOf(false) }
-    var showMap by remember { mutableStateOf(true) }
+    var showMap by remember { mutableStateOf(false) }
     MyBottomBarScaffold(
         currentDestination = ServicesScreenDestination,
         onBottomBarClicked = { onBottomBarClicked(it) },
@@ -287,6 +287,7 @@ private fun UserScreenBody(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(10.dp)
+                .padding(bottom = 20.dp)
                 .shadow(1.dp, shape = CircleShape)
                 .background(MaterialTheme.colorScheme.primary),
             onClick = { onSeeMap() }

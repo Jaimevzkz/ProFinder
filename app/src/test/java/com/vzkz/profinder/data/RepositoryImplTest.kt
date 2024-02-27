@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.data.firebase.StorageService
-import com.vzkz.profinder.fake.user1_test
+import com.vzkz.profinder.user1_test
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery

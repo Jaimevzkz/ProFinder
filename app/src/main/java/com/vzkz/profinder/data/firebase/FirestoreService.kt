@@ -7,33 +7,34 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.Actors
+import com.vzkz.profinder.domain.model.Categories
+import com.vzkz.profinder.domain.model.Constants.CATEGORY
 import com.vzkz.profinder.domain.model.Constants.CONNECTION_ERROR
 import com.vzkz.profinder.domain.model.Constants.DESCRIPTION
+import com.vzkz.profinder.domain.model.Constants.ERRORSTR
+import com.vzkz.profinder.domain.model.Constants.FAVOURITES
 import com.vzkz.profinder.domain.model.Constants.FIRSTNAME
+import com.vzkz.profinder.domain.model.Constants.INSERTION_ERROR
+import com.vzkz.profinder.domain.model.Constants.IS_ACTIVE
 import com.vzkz.profinder.domain.model.Constants.IS_USER
 import com.vzkz.profinder.domain.model.Constants.LASTNAME
 import com.vzkz.profinder.domain.model.Constants.MODIFICATION_ERROR
+import com.vzkz.profinder.domain.model.Constants.NAME
 import com.vzkz.profinder.domain.model.Constants.NICKNAME
 import com.vzkz.profinder.domain.model.Constants.NICKNAME_IN_USE
-import com.vzkz.profinder.domain.model.Constants.NULL_USERDATA
-import com.vzkz.profinder.domain.model.Constants.STATE
-import com.vzkz.profinder.domain.model.Constants.UNKNOWN_EXCEPTION
-import com.vzkz.profinder.domain.model.Constants.USERS_COLLECTION
-import com.vzkz.profinder.domain.model.Actors
-import com.vzkz.profinder.domain.model.Categories
-import com.vzkz.profinder.domain.model.Constants
-import com.vzkz.profinder.domain.model.Constants.CATEGORY
-import com.vzkz.profinder.domain.model.Constants.ERRORSTR
-import com.vzkz.profinder.domain.model.Constants.FAVOURITES
-import com.vzkz.profinder.domain.model.Constants.IS_ACTIVE
-import com.vzkz.profinder.domain.model.Constants.NAME
+import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_SERVICECATEGORY
 import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_USERDATA
+import com.vzkz.profinder.domain.model.Constants.NULL_USERDATA
 import com.vzkz.profinder.domain.model.Constants.PRICE
 import com.vzkz.profinder.domain.model.Constants.PROFESSION
 import com.vzkz.profinder.domain.model.Constants.PROFILEPHOTO
 import com.vzkz.profinder.domain.model.Constants.SERVICES_COLLECTION
 import com.vzkz.profinder.domain.model.Constants.SERV_DESCRIPTION
+import com.vzkz.profinder.domain.model.Constants.STATE
 import com.vzkz.profinder.domain.model.Constants.UID
+import com.vzkz.profinder.domain.model.Constants.UNKNOWN_EXCEPTION
+import com.vzkz.profinder.domain.model.Constants.USERS_COLLECTION
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
@@ -65,6 +66,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             }
             .addOnFailureListener {
                 Log.e("Jaime", "Failure inserting user: ${it.message}")
+                throw Exception(INSERTION_ERROR)
             }
 
     }
@@ -181,7 +183,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
 
     suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean {
         val doc = usersCollection.document(uidListOwner).get().await()
-        val favList = doc[FAVOURITES] as List<String>
+        val favList = doc[FAVOURITES] as List<String>? ?: emptyList()
         return favList.contains(uidToCheck)
     }
 
@@ -243,7 +245,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             val category = when (document.getString(CATEGORY)) {
                 Categories.Beauty.name -> Categories.Beauty
                 Categories.Household.name -> Categories.Household
-                else -> Categories.Beauty
+                else -> throw Exception(NONEXISTENT_SERVICECATEGORY)
             }
             val ownerUid = document.getString(UID) ?: ERRORSTR
             val owner = getUserData(ownerUid)
