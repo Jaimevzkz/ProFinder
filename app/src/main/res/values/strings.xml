@@ -32,7 +32,7 @@
     <string name="nickname_already_in_use_couldn_t_modify_user">Nickname already in use. Couldn\'t modify user.</string>
     <string name="error_during_profile_modification">Error during profile modification</string>
     <string name="confirm">Confirm</string>
-    <string name="unknown_exception_occurred_during_login">Unknown exception occurred during login</string>
+    <string name="unknown_exception_occurred">Unknown exception occurred</string>
     <string name="user_type">User type</string>
     <string name="services">Services</string>
     <string name="user_professional">User/Professional</string>
@@ -60,4 +60,7 @@
     <string name="camera">Camera</string>
     <string name="from_gallery">From gallery</string>
     <string name="you_don_t_have_any_favorites_yet">You don\'t have any favorites yet...</string>
+    <string name="user_not_found_in_database">User not found in database</string>
+    <string name="needed_values_missing_in_database">Needed values missing in database</string>
+    <string name="the_category_of_a_service_was_corrupted_in_the_database">The category of a service was corrupted in the database.</string>
 </resources>

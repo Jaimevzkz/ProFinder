@@ -4,15 +4,19 @@ import android.content.Context
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
 import com.vzkz.profinder.R
-import com.vzkz.profinder.core.boilerplate.DBDATA_POBLATION_SERVICES.SERVICESTOINSERT
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.data.firebase.StorageService
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
-import com.vzkz.profinder.domain.model.Constants
 import com.vzkz.profinder.domain.model.Constants.CONNECTION_ERROR
+import com.vzkz.profinder.domain.model.Constants.INSERTION_ERROR
+import com.vzkz.profinder.domain.model.Constants.MODIFICATION_ERROR
+import com.vzkz.profinder.domain.model.Constants.NICKNAME_IN_USE
+import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_SERVICECATEGORY
+import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_USERFIELD
+import com.vzkz.profinder.domain.model.Constants.NULL_USERDATA
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
@@ -44,18 +48,26 @@ class RepositoryImpl @Inject constructor(
                 profilePhoto = storageService.getProfilePhoto(uid)
             )
         } catch (e: Exception) {
-            when (e.message) {
-                CONNECTION_ERROR -> throw Exception(context.getString(R.string.network_failure_while_checking_user_existence))
-                else -> throw Exception(context.getString(R.string.unknown_exception_occurred_during_login))
-            }
+            throw handleException(e)
         }
     }
 
-    override suspend fun getServiceListByUidFromFirestore(uid: String): List<ServiceModel> =
-        firestoreService.getServiceListByUid(uid) //throws exception
+    override suspend fun getServiceListByUidFromFirestore(uid: String): List<ServiceModel> {
+        return try {
+            firestoreService.getServiceListByUid(uid)
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
 
-    override suspend fun getActiveServiceListFromFirestore(): List<ServiceModel> =
-        firestoreService.getActiveServiceList() //throws exception
+    override suspend fun getActiveServiceListFromFirestore(): List<ServiceModel> {
+        return try {
+            firestoreService.getActiveServiceList()
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
+
 
     override fun insertServiceInFirestore(service: ServiceModel) =
         firestoreService.insertService(service)//throws exception
@@ -109,8 +121,7 @@ class RepositoryImpl @Inject constructor(
         try {
             firestoreService.modifyUserData(oldUser = oldUser, newUser = newUser)
         } catch (e: Exception) {
-            if (e.message == Constants.NICKNAME_IN_USE) throw Exception(context.getString(R.string.nickname_already_in_use_couldn_t_modify_user))
-            else throw Exception(context.getString(R.string.error_modifying_user_data_the_user_wasn_t_modified))
+            throw handleException(e)
         }
     }
 
@@ -151,4 +162,18 @@ class RepositoryImpl @Inject constructor(
         firestoreService.changeProfilePicture(uid, storageUri)
         return storageUri
     }
+
+    private fun handleException(e: Exception): Exception {
+        return when (e.message) {
+            CONNECTION_ERROR -> Exception(context.getString(R.string.network_failure_while_checking_user_existence))
+            NICKNAME_IN_USE -> Exception(context.getString(R.string.nickname_already_in_use_couldn_t_modify_user))
+            MODIFICATION_ERROR -> Exception(context.getString(R.string.error_modifying_user_data_the_user_wasn_t_modified))
+            NULL_USERDATA -> Exception(context.getString(R.string.user_not_found_in_database))
+            INSERTION_ERROR -> Exception(context.getString(R.string.couldn_t_insert_user_in_database))
+            NONEXISTENT_USERFIELD -> Exception(context.getString(R.string.needed_values_missing_in_database))
+            NONEXISTENT_SERVICECATEGORY -> Exception(context.getString(R.string.the_category_of_a_service_was_corrupted_in_the_database))
+            else -> Exception(context.getString(R.string.unknown_exception_occurred))
+        }
+    }
 }
+

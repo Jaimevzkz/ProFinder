@@ -24,7 +24,7 @@ import com.vzkz.profinder.domain.model.Constants.NAME
 import com.vzkz.profinder.domain.model.Constants.NICKNAME
 import com.vzkz.profinder.domain.model.Constants.NICKNAME_IN_USE
 import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_SERVICECATEGORY
-import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_USERDATA
+import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_USERFIELD
 import com.vzkz.profinder.domain.model.Constants.NULL_USERDATA
 import com.vzkz.profinder.domain.model.Constants.PRICE
 import com.vzkz.profinder.domain.model.Constants.PROFESSION
@@ -87,7 +87,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                         Professions.Plumber.name -> Professions.Plumber
                         Professions.Hairdresser.name -> Professions.Hairdresser
                         Professions.Electrician.name -> Professions.Electrician
-                        else -> throw Exception(NONEXISTENT_USERDATA)
+                        else -> throw Exception(NONEXISTENT_USERFIELD)
                     }
                 }
                 val state = if (isUser) null else {
@@ -95,7 +95,7 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                         ProfState.Active.name -> ProfState.Active
                         ProfState.Working.name -> ProfState.Working
                         ProfState.Inactive.name -> ProfState.Inactive
-                        else -> throw Exception(NONEXISTENT_USERDATA)
+                        else -> throw Exception(NONEXISTENT_USERFIELD)
                     }
                 }
                 val profilePicture = userData.getOrDefault(PROFILEPHOTO, null) as String?
@@ -214,29 +214,19 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
     private val servicesCollection = firestore.collection(SERVICES_COLLECTION)
 
     suspend fun getServiceListByUid(uid: String): List<ServiceModel> {
-        try {
-            val querySnapshot = servicesCollection
-                .whereEqualTo(UID, uid)
-                .get()
-                .await()
-            return fillList(querySnapshot)
-        } catch (e: Exception) {
-            Log.e("Jaime", "error getting services doc. ${e.message}")
-            throw Exception(UNKNOWN_EXCEPTION)
-        }
+        val querySnapshot = servicesCollection
+            .whereEqualTo(UID, uid)
+            .get()
+            .await()
+        return fillList(querySnapshot)
     }
 
     suspend fun getActiveServiceList(): List<ServiceModel> {
-        try {
-            val querySnapshot = servicesCollection
-                .whereEqualTo(IS_ACTIVE, true)
-                .get()
-                .await()
-            return fillList(querySnapshot)
-        } catch (e: Exception) {
-            Log.e("Jaime", "error getting services doc. ${e.message}")
-            throw Exception(UNKNOWN_EXCEPTION)
-        }
+        val querySnapshot = servicesCollection
+            .whereEqualTo(IS_ACTIVE, true)
+            .get()
+            .await()
+        return fillList(querySnapshot)
     }
 
     private suspend fun fillList(querySnapshot: QuerySnapshot): List<ServiceModel> {
