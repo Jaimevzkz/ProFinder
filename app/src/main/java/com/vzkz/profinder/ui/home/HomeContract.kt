@@ -21,7 +21,7 @@ data class HomeState(
 }
 
 sealed class HomeIntent: Intent {
-    data class Loading(val isLoading: Boolean): HomeIntent()
+    data object Loading: HomeIntent()
     data class Error(val errorMsg: String): HomeIntent()
     data object CloseError: HomeIntent()
     data class ChangeFavList(val favList: List<ActorModel>): HomeIntent()

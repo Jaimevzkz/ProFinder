@@ -20,7 +20,9 @@ class HomeViewModel @Inject constructor(
 
     override fun reduce(state: HomeState, intent: HomeIntent): HomeState {
         return when (intent) {
-            is HomeIntent.Loading -> TODO()
+            is HomeIntent.Loading -> state.copy(
+                loading = true
+            )
 
 
             is HomeIntent.Error -> state.copy(
@@ -42,6 +44,7 @@ class HomeViewModel @Inject constructor(
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
+        dispatch(HomeIntent.Loading)
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 dispatch(HomeIntent.ChangeFavList(favouriteListUseCase.getFavouriteList()))

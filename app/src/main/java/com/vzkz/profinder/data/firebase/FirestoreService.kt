@@ -23,7 +23,7 @@ import com.vzkz.profinder.domain.model.Constants.MODIFICATION_ERROR
 import com.vzkz.profinder.domain.model.Constants.NAME
 import com.vzkz.profinder.domain.model.Constants.NICKNAME
 import com.vzkz.profinder.domain.model.Constants.NICKNAME_IN_USE
-import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_SERVICECATEGORY
+import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_SERVICEATTRIBUTE
 import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_USERFIELD
 import com.vzkz.profinder.domain.model.Constants.NULL_USERDATA
 import com.vzkz.profinder.domain.model.Constants.PRICE
@@ -42,7 +42,7 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
-class FirestoreService @Inject constructor(private val firestore: FirebaseFirestore) {
+class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     //Users
     private val usersCollection = firestore.collection(USERS_COLLECTION)
 
@@ -81,7 +81,8 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
 
             if (userData != null) {
                 val isUser = userData[IS_USER] as Boolean
-                val description: String? = if (userData[DESCRIPTION] == "-") null else userData[DESCRIPTION] as String
+                val description: String? =
+                    if (userData[DESCRIPTION] == "-") null else userData[DESCRIPTION] as String
                 val profession = if (isUser) null else {
                     when (userData[PROFESSION]) {
                         Professions.Plumber.name -> Professions.Plumber
@@ -99,26 +100,29 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
                     }
                 }
                 val profilePicture = userData.getOrDefault(PROFILEPHOTO, null) as String?
-                val userModel = ActorModel(
-                    uid = uid,
-                    nickname = userData[NICKNAME] as String,
-                    firstname = userData[FIRSTNAME] as String,
-                    lastname = userData[LASTNAME] as String,
-                    actor = if (isUser) Actors.User else Actors.Professional,
-                    description = description,
-                    profession = profession,
-                    state = state,
-                    profilePhoto = profilePicture?.let { Uri.parse(it) },
-                )
-                userModel
+                try {
+                    val userModel = ActorModel(
+                        uid = uid,
+                        nickname = userData[NICKNAME] as String,
+                        firstname = userData[FIRSTNAME] as String,
+                        lastname = userData[LASTNAME] as String,
+                        actor = if (isUser) Actors.User else Actors.Professional,
+                        description = description,
+                        profession = profession,
+                        state = state,
+                        profilePhoto = profilePicture?.let { Uri.parse(it) },
+                    )
+
+                    userModel
+                } catch (e: Exception) {
+                    Log.e("Jaime", "error fetching user data from db. ${e.message}")
+                    throw Exception(NONEXISTENT_USERFIELD)
+                }
             } else throw Exception(CONNECTION_ERROR)
 
         } catch (e: Exception) {
             Log.e("Jaime", "error getting user doc. ${e.message}")
-            when (e.message) {
-                CONNECTION_ERROR -> throw Exception(CONNECTION_ERROR)
-                else -> throw Exception(UNKNOWN_EXCEPTION)
-            }
+            throw e
         }
     }
 
@@ -235,19 +239,21 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
             val category = when (document.getString(CATEGORY)) {
                 Categories.Beauty.name -> Categories.Beauty
                 Categories.Household.name -> Categories.Household
-                else -> throw Exception(NONEXISTENT_SERVICECATEGORY)
+                else -> throw Exception(NONEXISTENT_SERVICEATTRIBUTE)
             }
-            val ownerUid = document.getString(UID) ?: ERRORSTR
+            val ownerUid = document.getString(UID) ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE)
             val owner = getUserData(ownerUid)
+
             serviceList.add(
                 ServiceModel(
                     sid = document.id,
                     uid = ownerUid,
-                    name = document.getString(NAME) ?: ERRORSTR,
-                    isActive = document.getBoolean(IS_ACTIVE) ?: false,
+                    name = document.getString(NAME)
+                        ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE),
+                    isActive = document.getBoolean(IS_ACTIVE) ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE),
                     category = category,
-                    servDescription = document.getString(SERV_DESCRIPTION) ?: ERRORSTR,
-                    price = document.getLong(PRICE)?.toDouble() ?: 0.0,
+                    servDescription = document.getString(SERV_DESCRIPTION) ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE),
+                    price = document.getLong(PRICE)?.toDouble() ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE),
                     owner = owner
                 )
             )

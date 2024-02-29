@@ -62,5 +62,5 @@
     <string name="you_don_t_have_any_favorites_yet">You don\'t have any favorites yet...</string>
     <string name="user_not_found_in_database">User not found in database</string>
     <string name="needed_values_missing_in_database">Needed values missing in database</string>
-    <string name="the_category_of_a_service_was_corrupted_in_the_database">The category of a service was corrupted in the database.</string>
+    <string name="attribute_of_a_service_corrupted_in_the_database">An attribute of a service was corrupted in the database. No service retrieved.</string>
 </resources>

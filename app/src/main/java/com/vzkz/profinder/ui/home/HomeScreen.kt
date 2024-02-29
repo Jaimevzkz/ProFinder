@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
+import com.valentinilk.shimmer.shimmer
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.PROFFESIONALLISTFORTEST
 import com.vzkz.profinder.destinations.HomeScreenDestination
@@ -99,7 +100,8 @@ private fun ScreenBody(
         ) {
             MyColumn {
                 HomeCard( //Hired Services
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f),
                     boxModifier = Modifier.padding(top = 8.dp),
                     cardColor = cardColor,
                     contentColor = contentColor,
@@ -113,7 +115,8 @@ private fun ScreenBody(
                 }
 
                 HomeCard( //Favorites
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f),
                     boxModifier = Modifier,
                     cardColor = cardColor,
                     contentColor = contentColor,
@@ -212,8 +215,8 @@ private fun ScreenBody(
 private fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
-            favList = emptyList(),
-//            favList = PROFFESIONALLISTFORTEST,
+//            favList = emptyList(),
+            favList = PROFFESIONALLISTFORTEST,
             error = UiError(false, "Account wasn't created"),
             onDeleteFav = {},
             onCloseDialog = {},

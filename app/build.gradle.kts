@@ -134,4 +134,7 @@ dependencies {
     // Optionally, you can include the widgets library for ScaleBar, etc.
     implementation ("com.google.maps.android:maps-compose-widgets:4.3.3")
 
+    //shimmer
+    implementation("com.valentinilk.shimmer:compose-shimmer:1.2.0")
+
 }

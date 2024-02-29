@@ -14,7 +14,7 @@ import com.vzkz.profinder.domain.model.Constants.CONNECTION_ERROR
 import com.vzkz.profinder.domain.model.Constants.INSERTION_ERROR
 import com.vzkz.profinder.domain.model.Constants.MODIFICATION_ERROR
 import com.vzkz.profinder.domain.model.Constants.NICKNAME_IN_USE
-import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_SERVICECATEGORY
+import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_SERVICEATTRIBUTE
 import com.vzkz.profinder.domain.model.Constants.NONEXISTENT_USERFIELD
 import com.vzkz.profinder.domain.model.Constants.NULL_USERDATA
 import com.vzkz.profinder.domain.model.ProfState
@@ -171,7 +171,7 @@ class RepositoryImpl @Inject constructor(
             NULL_USERDATA -> Exception(context.getString(R.string.user_not_found_in_database))
             INSERTION_ERROR -> Exception(context.getString(R.string.couldn_t_insert_user_in_database))
             NONEXISTENT_USERFIELD -> Exception(context.getString(R.string.needed_values_missing_in_database))
-            NONEXISTENT_SERVICECATEGORY -> Exception(context.getString(R.string.the_category_of_a_service_was_corrupted_in_the_database))
+            NONEXISTENT_SERVICEATTRIBUTE -> Exception(context.getString(R.string.attribute_of_a_service_corrupted_in_the_database))
             else -> Exception(context.getString(R.string.unknown_exception_occurred))
         }
     }

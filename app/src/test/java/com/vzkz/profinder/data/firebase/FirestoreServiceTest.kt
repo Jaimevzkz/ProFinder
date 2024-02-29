@@ -8,6 +8,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.vzkz.profinder.domain.model.Constants
 import com.vzkz.profinder.domain.model.Constants.CATEGORY
+import com.vzkz.profinder.domain.model.Constants.IS_ACTIVE
+import com.vzkz.profinder.domain.model.Constants.SERVICES_COLLECTION
 import com.vzkz.profinder.domain.model.Constants.USERS_COLLECTION
 import com.vzkz.profinder.serviceDocument_test
 import com.vzkz.profinder.prof2_test
@@ -16,6 +18,7 @@ import com.vzkz.profinder.userDocument1_test
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import io.mockk.verify
@@ -29,6 +32,7 @@ class FirestoreServiceTest {
     @RelaxedMockK
     private lateinit var mockDB: FirebaseFirestore
 
+    @MockK
     private lateinit var firestoreService: FirestoreService
 
     @Before
@@ -147,22 +151,30 @@ class FirestoreServiceTest {
     //todo test modifyUserData()
 
     @Test
-    fun `Fill list test`() = runTest {
+    fun `When fill fiels category is not found, exception thrown`() = runTest {
         //Arrange
+
+        //getService
         val document = serviceDocument_test.toMutableMap()
         val documentSnapshot = mockk<DocumentSnapshot> {
             every { data } returns document
         }
-
-        coEvery { firestoreService.getUserData(any()) } returns prof2_test
-
         val querySnapshot = mockk<QuerySnapshot> {
             every { documents } returns listOf(documentSnapshot)
         }
-
         every {
-            mockDB.collection(Constants.SERVICES_COLLECTION).get()
+            mockDB.collection(SERVICES_COLLECTION).whereEqualTo(IS_ACTIVE, true).get()
         } returns mockTask<QuerySnapshot>(querySnapshot)
+
+        //getUser
+        val document2 = profDocument2_test
+        val document2Snapshot = mockk<DocumentSnapshot> {
+            every { data } returns document2
+        }
+        every {
+            mockDB.collection(USERS_COLLECTION).document(any())
+                .get()
+        } returns mockTask<DocumentSnapshot>(document2Snapshot)
 
         //Act
         document.remove(CATEGORY)
@@ -170,7 +182,6 @@ class FirestoreServiceTest {
         //Assert
         assertThrows<Exception> { firestoreService.getActiveServiceList() }
     }
-
 }
 
 
