@@ -274,9 +274,7 @@ private fun UserScreenBody(
                         onServiceInfo = {
                             serviceToShow = serviceModel
                             showServiceInfo = true
-                        },
-                        onDelete = {/*do nothing*/},
-                        onActiveChange = {/*do nothing*/}
+                        }
                     )
                     MySpacer(size = 16)
                 }
@@ -457,7 +455,6 @@ private fun ShowProfessionalServiceList(
                     service = serviceModel,
                     backgroundColor = cardColor,
                     fontColor = cardContentColor,
-                    onServiceInfo = {/*Do nothing*/},
                     onDelete = {
                         onChangeSidToDelete(serviceModel.sid)
                         onConfirmDialogVisibilityChange(true)

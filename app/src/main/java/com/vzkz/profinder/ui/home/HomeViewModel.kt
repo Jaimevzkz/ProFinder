@@ -2,11 +2,8 @@ package com.vzkz.profinder.ui.home
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.model.ActorModel
-import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
-import com.vzkz.profinder.ui.services.ServicesIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val favouriteListUseCase: FavouriteListUseCase
+    private val favouriteListUseCase: FavouriteListUseCase
 ) : BaseViewModel<HomeState, HomeIntent>(HomeState.initial) {
 
     override fun reduce(state: HomeState, intent: HomeIntent): HomeState {
@@ -23,7 +20,6 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.Loading -> state.copy(
                 loading = true
             )
-
 
             is HomeIntent.Error -> state.copy(
                 error = UiError(true, intent.errorMsg),
@@ -44,9 +40,9 @@ class HomeViewModel @Inject constructor(
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
-        dispatch(HomeIntent.Loading)
         try {
             viewModelScope.launch(Dispatchers.IO) {
+                dispatch(HomeIntent.Loading)
                 dispatch(HomeIntent.ChangeFavList(favouriteListUseCase.getFavouriteList()))
             }
         } catch (e: Exception) {
@@ -66,5 +62,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onCloseDialog() = dispatch(HomeIntent.CloseError)
+
 
 }

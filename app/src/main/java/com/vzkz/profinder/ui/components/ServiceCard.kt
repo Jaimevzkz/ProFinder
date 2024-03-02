@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.SERVICEMODEL1FORTEST
-import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
@@ -47,9 +46,9 @@ fun ServiceCard(
     service: ServiceModel,
     backgroundColor: Color,
     fontColor: Color,
-    onServiceInfo: () -> Unit,
-    onActiveChange: () -> Unit,
-    onDelete: () -> Unit
+    onServiceInfo: () -> Unit = {},
+    onActiveChange: () -> Unit ={},
+    onDelete: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
