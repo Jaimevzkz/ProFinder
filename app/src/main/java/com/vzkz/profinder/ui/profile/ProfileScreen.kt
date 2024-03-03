@@ -2,7 +2,6 @@ package com.vzkz.profinder.ui.profile
 
 import android.content.res.Configuration
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -33,17 +31,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -67,6 +62,7 @@ import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.ProfilePicture
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
+import com.vzkz.profinder.ui.profile.shimmer.ProfileScreenShimmer
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
@@ -143,13 +139,20 @@ private fun ScreenBody(
         onBottomBarClicked = { onBottomBarClicked(it) }
     ) { paddingValues ->
         if (loading) {
-            MyCircularProgressbar()
+            ProfileScreenShimmer(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(vertical = 16.dp)
+            )
         } else {
             Box(
                 modifier = Modifier
                     .padding(paddingValues)
                     .background(MaterialTheme.colorScheme.background)
-                    .fillMaxSize(), contentAlignment = Alignment.Center
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
                 var changeStateVisibility by remember { mutableStateOf(false) }
                 Column(
@@ -357,7 +360,7 @@ private fun StateDialog(
 
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun LightPreview() {
     ProFinderTheme {
@@ -368,7 +371,8 @@ fun LightPreview() {
             onCloseDialog = {},
             error = UiError(false, ""),
             onBottomBarClicked = {},
-            loading = false,
+            loading = true,
+//            loading = false,
             onChangeState = {},
             onSettingsClicked = { }
         ) {
