@@ -6,17 +6,15 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
-import com.vzkz.profinder.domain.model.Constants
 import com.vzkz.profinder.domain.model.Constants.CATEGORY
 import com.vzkz.profinder.domain.model.Constants.IS_ACTIVE
 import com.vzkz.profinder.domain.model.Constants.SERVICES_COLLECTION
 import com.vzkz.profinder.domain.model.Constants.USERS_COLLECTION
-import com.vzkz.profinder.serviceDocument_test
 import com.vzkz.profinder.prof2_test
 import com.vzkz.profinder.profDocument2_test
+import com.vzkz.profinder.serviceDocument_test
 import com.vzkz.profinder.userDocument1_test
 import io.mockk.MockKAnnotations
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
@@ -151,11 +149,10 @@ class FirestoreServiceTest {
     //todo test modifyUserData()
 
     @Test
-    fun `When fill fiels category is not found, exception thrown`() = runTest {
+    fun `When any service field is not found, exception thrown`() = runTest {
         //Arrange
-
         //getService
-        val document = serviceDocument_test.toMutableMap()
+        var document = serviceDocument_test.toMutableMap()
         val documentSnapshot = mockk<DocumentSnapshot> {
             every { data } returns document
         }
@@ -176,12 +173,18 @@ class FirestoreServiceTest {
                 .get()
         } returns mockTask<DocumentSnapshot>(document2Snapshot)
 
-        //Act
-        document.remove(CATEGORY)
 
-        //Assert
-        assertThrows<Exception> { firestoreService.getActiveServiceList() }
+        for (field in serviceDocument_test.keys) {
+            //Act
+            document.remove(field)
+            //Assert
+            assertThrows<Exception> { firestoreService.getActiveServiceList() }
+
+            document = profDocument2_test.toMutableMap() //Restore the map
+        }
     }
+
+
 }
 
 

@@ -12,7 +12,6 @@ import com.vzkz.profinder.domain.model.Categories
 import com.vzkz.profinder.domain.model.Constants.CATEGORY
 import com.vzkz.profinder.domain.model.Constants.CONNECTION_ERROR
 import com.vzkz.profinder.domain.model.Constants.DESCRIPTION
-import com.vzkz.profinder.domain.model.Constants.ERRORSTR
 import com.vzkz.profinder.domain.model.Constants.FAVOURITES
 import com.vzkz.profinder.domain.model.Constants.FIRSTNAME
 import com.vzkz.profinder.domain.model.Constants.INSERTION_ERROR
@@ -33,7 +32,6 @@ import com.vzkz.profinder.domain.model.Constants.SERVICES_COLLECTION
 import com.vzkz.profinder.domain.model.Constants.SERV_DESCRIPTION
 import com.vzkz.profinder.domain.model.Constants.STATE
 import com.vzkz.profinder.domain.model.Constants.UID
-import com.vzkz.profinder.domain.model.Constants.UNKNOWN_EXCEPTION
 import com.vzkz.profinder.domain.model.Constants.USERS_COLLECTION
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
@@ -273,7 +271,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             }
             .addOnFailureListener {
                 Log.e("Jaime", "Failure inserting service: ${it.message}")
-                throw Exception()
+                throw it
             }
     }
 
@@ -284,7 +282,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             }
             .addOnFailureListener {
                 Log.e("Jaime", "Error deleting service: ${it.message}")
-                throw Exception()
+                throw it
             }
     }
 
@@ -295,7 +293,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             }
             .addOnFailureListener {
                 Log.e("Jaime", "Error modifying service activity: ${it.message}")
-                throw Exception()
+                throw it
             }
     }
 

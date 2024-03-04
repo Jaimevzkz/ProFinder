@@ -95,8 +95,9 @@ class RepositoryImplTest{
     
     @Test
     fun `When firestoreService throws an exception, getUserFromFirestore throws an exception`() = runTest{
+        val exceptionMsg = "Network failure while checking user existence"
         //Arrange
-        every { context.getString(any()) } returns "Network failure while checking user existence"
+        every { context.getString(any()) } returns exceptionMsg
         coEvery { firestoreService.getUserData(any()) } throws Exception()
 
         //Act
@@ -104,7 +105,7 @@ class RepositoryImplTest{
 
         //Assert
         assert(result.isFailure)
-        assert(result.exceptionOrNull()?.message == "Network failure while checking user existence")
+        assert(result.exceptionOrNull()?.message == exceptionMsg)
     }
 
     @Test
