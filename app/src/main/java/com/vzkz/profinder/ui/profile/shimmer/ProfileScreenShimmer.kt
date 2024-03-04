@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import com.valentinilk.shimmer.shimmer
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MySpacer
+import com.vzkz.profinder.ui.components.ProfilePictureShimmer
+import com.vzkz.profinder.ui.components.shimmer.IconShimmer
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Composable
@@ -38,7 +39,6 @@ fun ProfileScreenShimmer(
             .padding(horizontal = 20.dp)
     ) {
         //Top screen
-        val iconShimmerSize = 24.dp
         Row(
             modifier = Modifier
                 .align(Alignment.End)
@@ -47,19 +47,9 @@ fun ProfileScreenShimmer(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box( //Icon edit
-                modifier = Modifier
-                    .shimmer()
-                    .size(iconShimmerSize)
-                    .background(Color.Gray)
-            )
+            IconShimmer()
             MySpacer(size = 16)
-            Box( //Icon edit
-                modifier = Modifier
-                    .shimmer()
-                    .size(iconShimmerSize)
-                    .background(Color.Gray)
-            )
+            IconShimmer()
         }
 
         //Header
@@ -69,13 +59,7 @@ fun ProfileScreenShimmer(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box( //Profile picture
-                modifier = Modifier
-                    .shimmer()
-                    .size(100.dp)
-                    .shadow(elevation = 1.dp, shape = CircleShape)
-                    .background(Color.Gray)
-            )
+            ProfilePictureShimmer(100)
             MySpacer(size = 4)
             val titleHeight = 35.dp
             Column(modifier = Modifier.padding(12.dp)) {

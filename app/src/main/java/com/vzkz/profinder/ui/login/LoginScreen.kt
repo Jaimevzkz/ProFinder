@@ -80,7 +80,7 @@ private fun ScreenBody(
         contentAlignment = Alignment.Center
     ) {
 
-        var email by remember { mutableStateOf("jaimevzkz1@gmail.com") } //todo delete
+        var email by remember { mutableStateOf("jaimevzkz1+1@gmail.com") } //todo delete
         var password by remember { mutableStateOf("1234Qwerty") }
         var isValid by remember { mutableStateOf(true) }
 

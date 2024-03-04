@@ -65,3 +65,14 @@ fun ProfilePicture(
         )
     }
 }
+
+@Composable
+fun ProfilePictureShimmer(size: Int, modifier: Modifier = Modifier){
+    Box( //Profile picture
+        modifier = modifier
+            .shimmer()
+            .size(size.dp)
+            .shadow(elevation = 1.dp, shape = CircleShape)
+            .background(Color.Gray)
+    )
+}

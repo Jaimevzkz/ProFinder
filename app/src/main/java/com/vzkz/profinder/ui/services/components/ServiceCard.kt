@@ -1,4 +1,4 @@
-package com.vzkz.profinder.ui.components
+package com.vzkz.profinder.ui.services.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -34,9 +35,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.valentinilk.shimmer.shimmer
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.domain.model.ServiceModel
+import com.vzkz.profinder.ui.components.MyColumn
+import com.vzkz.profinder.ui.components.ProfilePicture
+import com.vzkz.profinder.ui.components.ProfilePictureShimmer
+import com.vzkz.profinder.ui.components.shimmer.IconShimmer
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Composable
@@ -55,8 +61,7 @@ fun ServiceCard(
             .shadow(1.dp, shape = MaterialTheme.shapes.extraLarge)
             .fillMaxWidth()
             .height(170.dp)
-            .background(backgroundColor),
-        contentAlignment = Alignment.Center
+            .background(backgroundColor)
     ) {
         ProfilePicture(
             modifier = Modifier
@@ -137,7 +142,7 @@ fun ServiceCard(
             }
         }
 
-        MyColumn {//Main content
+        MyColumn(modifier = Modifier.align(Alignment.Center)) {//Main content
             val fontSize = 24
             Icon(
                 imageVector = service.owner.profession?.icon ?: Icons.Outlined.Error,
@@ -173,18 +178,79 @@ fun ServiceCard(
 }
 
 @Composable
+fun ServiceCardShimmer(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color
+) {
+    Box(
+        modifier = modifier
+            .shadow(1.dp, shape = MaterialTheme.shapes.extraLarge)
+            .fillMaxWidth()
+            .height(170.dp)
+            .background(backgroundColor),
+        contentAlignment = Alignment.Center
+    ) {
+        ProfilePictureShimmer(
+            size = 60,
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.TopStart)
+        )
+        IconShimmer( //Top right icon
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(20.dp)
+        )
+
+        MyColumn {
+            IconShimmer( //Center icon
+                modifier = Modifier
+                    .padding(8.dp),
+                iconShimmerSize = 30.dp
+            )
+            Box( //Center text
+                modifier = Modifier
+                    .shimmer()
+                    .width(124.dp)
+                    .height(32.dp)
+                    .background(Color.Gray)
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .shimmer()
+                .align(Alignment.BottomStart)
+                .padding(8.dp)
+                .width(92.dp)
+                .height(44.dp)
+                .shadow(1.dp, shape = CircleShape)
+                .background(Color.Gray)
+                .padding(12.dp)
+        )
+    }
+}
+
+@Composable
 @Preview(showSystemUi = true)
 private fun ServiceCardPreview() {
     ProFinderTheme {
-        ServiceCard(
-            userCalling = false,
-            service = SERVICEMODEL1FORTEST,
-            onActiveChange = {},
-            onDelete = {},
-            onServiceInfo = {},
-            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            fontColor = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        MyColumn {
+            ServiceCard(
+                userCalling = false,
+                service = SERVICEMODEL1FORTEST,
+                onActiveChange = {},
+                onDelete = {},
+                onServiceInfo = {},
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                fontColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            ServiceCardShimmer(
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+
+        }
     }
 }
 
