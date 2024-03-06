@@ -13,7 +13,7 @@ data class HomeState(
 ) : State {
     companion object {
         val initial: HomeState = HomeState(
-            loading = false,
+            loading = true,
             error = UiError(false, null),
             favList = emptyList()
         )

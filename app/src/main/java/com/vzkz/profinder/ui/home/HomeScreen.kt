@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,8 +31,8 @@ import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
-import com.vzkz.profinder.ui.home.components.HomeFavList
 import com.vzkz.profinder.ui.home.components.HomeCard
+import com.vzkz.profinder.ui.home.components.HomeFavList
 import com.vzkz.profinder.ui.home.components.shimmer.FavListShimmer
 import com.vzkz.profinder.ui.home.components.shimmer.HomeCardShimmer
 import com.vzkz.profinder.ui.theme.ProFinderTheme
@@ -45,7 +44,7 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
     val error = homeViewModel.state.error
     var favList: List<ActorModel> by remember { mutableStateOf(emptyList()) }
     favList = homeViewModel.state.favList
-    var loading by remember { mutableStateOf(false) }
+    var loading by remember { mutableStateOf(true) }
     loading = homeViewModel.state.loading
     ScreenBody(
         favList = favList,
@@ -57,8 +56,6 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
     )
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenBody(
     favList: List<ActorModel>,
