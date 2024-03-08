@@ -1,7 +1,7 @@
 
 package com.vzkz.profinder.ui.profile.viewprofile
 
-import com.vzkz.profinder.core.boilerplate.Intent
+import com.vzkz.profinder.core.boilerplate.IndividualChatntent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.UiError
@@ -23,7 +23,7 @@ data class ViewProfileState(
     }
 }
 
-sealed class ViewProfileIntent: Intent {
+sealed class ViewProfileIntent: IndividualChatntent {
     data object Loading: ViewProfileIntent()
     data class Error(val errorMsg: String): ViewProfileIntent()
     data object CloseError: ViewProfileIntent()

@@ -9,8 +9,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -26,17 +29,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 import com.vzkz.profinder.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyGenericTextField(
     modifier: Modifier,
     hint: String,
+    hintColor: Color = MaterialTheme.colorScheme.onBackground,
     text: String,
     readOnly: Boolean = false,
     onTextChanged: (String) -> Unit,
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
-    shape: Shape = TextFieldDefaults.outlinedShape,
+    shape: Shape = OutlinedTextFieldDefaults.shape,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
     outlined: Boolean = true
 ) {
     if (outlined){
@@ -47,7 +51,8 @@ fun MyGenericTextField(
             label = {
                 Text(
                     text = hint,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    color = hintColor
                 )
             },
             keyboardOptions = KeyboardOptions.Default,
@@ -56,10 +61,10 @@ fun MyGenericTextField(
             trailingIcon = trailingIcon,
             leadingIcon = leadingIcon,
             shape = shape,
-            colors = if (readOnly) TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.primary
-            ) else TextFieldDefaults.outlinedTextFieldColors()
+            colors = if (readOnly) colors.copy(
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary
+            ) else colors
         )
     } else{
         TextField(
@@ -69,7 +74,8 @@ fun MyGenericTextField(
             label = {
                 Text(
                     text = hint,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    color = hintColor
                 )
             },
             keyboardOptions = KeyboardOptions.Default,
@@ -78,10 +84,7 @@ fun MyGenericTextField(
             readOnly = readOnly,
             trailingIcon = trailingIcon,
             leadingIcon = leadingIcon,
-            colors = if (readOnly) TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.primary
-            ) else TextFieldDefaults.outlinedTextFieldColors()
+            colors = TextFieldDefaults.colors()
         )
     }
 }

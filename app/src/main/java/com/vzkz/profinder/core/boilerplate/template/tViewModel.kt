@@ -11,7 +11,7 @@ class tViewModel @Inject constructor(): BaseViewModel<tState, tIntent>(tState.in
 
     override fun reduce(state: tState, intent: tIntent): tState {
         return when(intent){
-            is tIntent.Loading -> TODO()
+            is tIntent.Loading -> state.copy(loading = true)
 
 
             is tIntent.Error -> state.copy(
@@ -28,7 +28,7 @@ class tViewModel @Inject constructor(): BaseViewModel<tState, tIntent>(tState.in
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onX(){ //Example fun
-        dispatch(tIntent.Loading(true))
+        dispatch(tIntent.Loading)
     }
 
     fun onCloseDialog() = dispatch(tIntent.CloseError)

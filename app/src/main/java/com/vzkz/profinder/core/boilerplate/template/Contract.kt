@@ -1,6 +1,6 @@
 package com.vzkz.profinder.core.boilerplate.template
 
-import com.vzkz.profinder.core.boilerplate.Intent
+import com.vzkz.profinder.core.boilerplate.IndividualChatntent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.UiError
 
@@ -19,8 +19,8 @@ data class tState(
     }
 }
 
-sealed class tIntent: Intent {
-    data class Loading(val isLoading: Boolean): tIntent()
+sealed class tIntent: IndividualChatntent {
+    data object Loading: tIntent()
     data class Error(val errorMsg: String): tIntent()
     data object CloseError: tIntent()
 }

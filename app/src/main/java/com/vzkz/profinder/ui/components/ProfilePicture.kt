@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -28,7 +30,8 @@ import com.vzkz.profinder.R
 fun ProfilePicture(
     modifier: Modifier = Modifier,
     profilePhoto: Uri?,
-    size: Int
+    size: Int,
+    shape: Shape = CircleShape
 ) {
     var loading by remember { mutableStateOf(true) }
     if (profilePhoto != null) {
@@ -36,7 +39,7 @@ fun ProfilePicture(
             AsyncImage(
                 modifier = modifier
                     .size(size.dp)
-                    .clip(shape = CircleShape),
+                    .clip(shape = shape),
                 model = profilePhoto,
                 onState = { state ->
                     if (state is Success) { loading = false }
@@ -49,20 +52,26 @@ fun ProfilePicture(
                     modifier = Modifier
                         .shimmer()
                         .size(size.dp)
-                        .shadow(1.dp, shape = CircleShape)
+                        .shadow(1.dp, shape = shape)
                         .background(Color.Gray)
                 )
             }
         }
     } else {
-        Image(
-            modifier = modifier
+        Box(
+            modifier = Modifier
                 .size(size.dp)
-                .clip(shape = CircleShape),
-            painter = painterResource(id = R.drawable.defaultprofile),
-            contentDescription = "Profile photo",
-            contentScale = ContentScale.Crop
-        )
+                .shadow(elevation = 1.dp, shape = shape)
+                .background(Color.Black)
+        ) {
+            Image(
+                modifier = modifier
+                    .size(size.dp)
+                    .clip(shape = shape),
+                painter = painterResource(id = R.drawable.defaultprofile),
+                contentDescription = "Profile photo"
+            )
+        }
     }
 }
 

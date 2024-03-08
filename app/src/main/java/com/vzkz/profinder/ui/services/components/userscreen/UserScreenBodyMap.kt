@@ -15,7 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun MapScreenBody(
@@ -25,7 +28,13 @@ fun MapScreenBody(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        GoogleMap {
+        val library = LatLng(40.523356, -3.891714)
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(library, 16f)
+        }
+        GoogleMap(
+            cameraPositionState = cameraPositionState
+        ){
 
         }
         IconButton(

@@ -1,6 +1,6 @@
 package com.vzkz.profinder.ui.profile.editprofile
 
-import com.vzkz.profinder.core.boilerplate.Intent
+import com.vzkz.profinder.core.boilerplate.IndividualChatntent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.UiError
@@ -21,7 +21,7 @@ data class EditProfileState(
         )
     }
 }
-sealed class EditProfileIntent: Intent {
+sealed class EditProfileIntent: IndividualChatntent {
     data class SetUser(val user: ActorModel?): EditProfileIntent()
     data class Error(val errorMsg: String): EditProfileIntent()
     data object CloseError: EditProfileIntent()

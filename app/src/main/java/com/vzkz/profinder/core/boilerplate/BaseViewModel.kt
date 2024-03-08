@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 private const val BUFFER_SIZE = 64
 
-abstract class BaseViewModel<S : State, I: Intent> (initialState: S): ViewModel(){
+abstract class BaseViewModel<S : State, I: IndividualChatntent> (initialState: S): ViewModel(){
 
     private val intents = MutableSharedFlow<I>(extraBufferCapacity = BUFFER_SIZE) // Intent pipeline
 

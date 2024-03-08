@@ -1,17 +1,17 @@
-package com.vzkz.profinder.ui.chat
+package com.vzkz.profinder.ui.chat.individualchat
 
 import com.vzkz.profinder.core.boilerplate.IndividualChatntent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.UiError
 
 
-data class tState(
+data class IndividualChatState(
     val loading: Boolean,
     val error: UiError
 //    val counter: Int,
 ) : State {
     companion object {
-        val initial: tState = tState(
+        val initial: IndividualChatState = IndividualChatState(
             loading = false,
             error = UiError(false, null)
 //            counter = 0,
@@ -19,8 +19,8 @@ data class tState(
     }
 }
 
-sealed class tIntent: IndividualChatntent {
-    data class Loading(val isLoading: Boolean): tIntent()
-    data class Error(val errorMsg: String): tIntent()
-    data object CloseError: tIntent()
+sealed class IndividualChatIntent: IndividualChatntent {
+    data object Loading: IndividualChatIntent()
+    data class Error(val errorMsg: String): IndividualChatIntent()
+    data object CloseError: IndividualChatIntent()
 }

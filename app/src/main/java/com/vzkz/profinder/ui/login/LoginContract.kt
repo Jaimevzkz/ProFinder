@@ -1,6 +1,6 @@
 package com.vzkz.profinder.ui.login
 
-import com.vzkz.profinder.core.boilerplate.Intent
+import com.vzkz.profinder.core.boilerplate.IndividualChatntent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.UiError
@@ -22,7 +22,7 @@ data class LoginState(
     }
 }
 
-sealed class LoginIntent: Intent {
+sealed class LoginIntent: IndividualChatntent {
     data class Loading(val isLoading: Boolean): LoginIntent()
     data class Login(val user: ActorModel): LoginIntent()
     data class Error(val errorMsg: String): LoginIntent()

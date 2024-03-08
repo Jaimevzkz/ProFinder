@@ -66,7 +66,7 @@ fun LoginScreen(
 }
 
 @Composable
-private fun ScreenBody(
+internal fun ScreenBody(
     onLogin: (String, String) -> Unit,
     onSignUpClicked: () -> Unit,
     onCloseDialog: () -> Unit,

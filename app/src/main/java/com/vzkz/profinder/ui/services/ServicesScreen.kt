@@ -17,11 +17,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
+import com.vzkz.profinder.R
 import com.vzkz.profinder.core.boilerplate.PROFESSIONALMODELFORTESTS
 import com.vzkz.profinder.core.boilerplate.SERVICELISTFORTEST
 import com.vzkz.profinder.destinations.ServicesScreenDestination
@@ -109,7 +111,7 @@ private fun ScreenBody(
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            "Services",
+                            stringResource(id = R.string.services),
                             style = MaterialTheme.typography.displaySmall,
                         )
                     },
@@ -186,11 +188,11 @@ private fun ScreenBody(
 fun DarkPreview() {
     ProFinderTheme {
         ScreenBody(
-            actor = null,
+//            actor = null,
 //            actor = Actors.Professional,
-//            actor = Actors.User,
-            loading = true,
-//            loading = false,
+            actor = Actors.User,
+//            loading = true,
+            loading = false,
             activeServices = SERVICELISTFORTEST,
             inactiveServices = SERVICELISTFORTEST,
             error = UiError(false, ""),

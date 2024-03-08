@@ -1,11 +1,10 @@
 package com.vzkz.profinder.ui.services
 
-import com.vzkz.profinder.core.boilerplate.Intent
+import com.vzkz.profinder.core.boilerplate.IndividualChatntent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.domain.model.UiError
-import com.vzkz.profinder.ui.profile.ProfileIntent
 
 
 data class ServicesState(
@@ -26,7 +25,7 @@ data class ServicesState(
     }
 }
 
-sealed class ServicesIntent : Intent {
+sealed class ServicesIntent : IndividualChatntent {
     data class SetServiceLists(val lists: Pair<List<ServiceModel>, List<ServiceModel>>) : ServicesIntent()
     data class SetActiveServiceLists(val list: List<ServiceModel>) : ServicesIntent()
     data class Error(val errorMsg: String) : ServicesIntent()
