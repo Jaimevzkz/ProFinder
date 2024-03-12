@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -84,8 +85,8 @@ private fun ScreenBody(
             ) {
                 MyRow(modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(16.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp)
                 ) {
                     Text(
                         stringResource(id = R.string.chat),
@@ -94,6 +95,9 @@ private fun ScreenBody(
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
                 }
+                MySpacer(size = 8)
+                HorizontalDivider()
+                MySpacer(size = 8)
                 MyColumn (
                     modifier = Modifier
                         .padding(horizontal = 16.dp)

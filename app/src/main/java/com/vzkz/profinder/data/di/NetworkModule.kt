@@ -2,6 +2,8 @@ package com.vzkz.profinder.data.di
 
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -32,9 +34,10 @@ object NetworkModule {
         authService: AuthService,
         firestoreService: FirestoreService,
         storageService: StorageService,
+        realtimeService: DatabaseReference,
         @ApplicationContext context: Context
     ): Repository {
-        return RepositoryImpl(authService, firestoreService, storageService, context)
+        return RepositoryImpl(authService, firestoreService, storageService, realtimeService, context)
     }
 
     @Singleton
@@ -55,6 +58,10 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideFirebaseStorage(): FirebaseStorage = Firebase.storage
+
+    @Singleton
+    @Provides
+    fun provideRealtimeDB(): DatabaseReference = Firebase.database.reference
 
     @Singleton
     @Provides

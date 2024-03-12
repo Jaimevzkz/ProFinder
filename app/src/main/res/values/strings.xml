@@ -63,4 +63,5 @@
     <string name="user_not_found_in_database">User not found in database</string>
     <string name="needed_values_missing_in_database">Needed values missing in database</string>
     <string name="attribute_of_a_service_corrupted_in_the_database">An attribute of a service was corrupted in the database. No service retrieved.</string>
+    <string name="default_notification_channel_id" translatable="false">default_not_channel</string>
 </resources>

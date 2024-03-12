@@ -13,7 +13,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.outlined.Send
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,7 +80,9 @@ private fun ScreenBody(
             MyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp), horizontalArrangement = Arrangement.Start
+                    .padding(horizontal = 12.dp)
+                    .padding(top = 12.dp),
+                horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBackIosNew,
@@ -94,21 +100,28 @@ private fun ScreenBody(
                 )
 
             }
-            MyColumn(modifier = Modifier.weight(1f)) {//todo make it lazy
-                    var actualRandom: Int
-                    var nextRandom: Int
-                    actualRandom = (0..1).random()
-                    for (i in 0..10) {
-                        nextRandom = (0..1).random()
+            MySpacer(size = 8)
+            HorizontalDivider()
+            MySpacer(size = 8)
 
-                        ChatMessage(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            isLast = nextRandom != actualRandom,
-                            ownMsg = actualRandom == 1
-                        )
-                        actualRandom = nextRandom
-                    }
+            MyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Bottom
+            ) {//todo make it lazy
+                var actualRandom: Int
+                var nextRandom: Int
+                actualRandom = (0..1).random()
+                for (i in 0..10) {
+                    nextRandom = (0..1).random()
+
+                    ChatMessage(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        isLast = nextRandom != actualRandom,
+                        ownMsg = actualRandom == 1
+                    )
+                    actualRandom = nextRandom
+                }
             }
             MyRow(
                 modifier = Modifier
@@ -161,34 +174,49 @@ private fun ChatMessage(
     ownMsg: Boolean = false,
     message: String = "Hello, how are you? I was wondering whether you could help me with something.",
     time: String = "03:34 PM",
-    read: Int = 0, //-1 for not sent, 0 for unread, 1 for read
+    read: Int = 1, //-1 for not sent, 0 for unread, 1 for read
 ) {
     val genPadding = 12.dp
     val columnPadding =
         if (ownMsg) PaddingValues(start = 64.dp, end = genPadding)
         else PaddingValues(end = 64.dp, start = genPadding)
 
-    MyColumn(
-        modifier = modifier
-            .padding(columnPadding)
-            .padding(if (isLast) PaddingValues(bottom = genPadding) else PaddingValues(bottom = 8.dp))
-    ) {
-        Text(
-            text = message,
-            modifier = Modifier
-                .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
-                .background(if (ownMsg) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
-                .padding(8.dp)
-        )
-        if (isLast)
-            Text(
-                text = time,
-                fontWeight = FontWeight.Light,
+    Box {
+        MyColumn(
+            modifier = modifier
+                .padding(columnPadding)
+                .padding(if (isLast) PaddingValues(bottom = genPadding) else PaddingValues(bottom = 8.dp))
+        ) {
+            Box(
                 modifier = Modifier
-                    .align(if (ownMsg) Alignment.End else Alignment.Start)
-                    .padding(horizontal = 12.dp),
-                color = MaterialTheme.colorScheme.onBackground
-            )
+                    .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
+                    .background(if (ownMsg) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = message,
+                )
+                if (ownMsg)
+                    Icon(
+                        imageVector = if (read == -1) Icons.Filled.Done else Icons.Filled.DoneAll,
+                        contentDescription = "read",
+                        tint = if (read == 1) Color.Blue else Color.Gray,
+                        modifier = Modifier.align(
+                            Alignment.BottomEnd
+                        )
+                    )
+            }
+            if (isLast)
+                Text(
+                    text = time,
+                    fontWeight = FontWeight.Light,
+                    modifier = Modifier
+                        .align(if (ownMsg) Alignment.End else Alignment.Start)
+                        .padding(horizontal = 12.dp),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+        }
 
     }
 }

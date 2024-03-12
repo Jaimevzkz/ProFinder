@@ -3,6 +3,7 @@ package com.vzkz.profinder.data
 import android.content.Context
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
 import com.vzkz.profinder.R
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
@@ -26,6 +27,7 @@ class RepositoryImpl @Inject constructor(
     private val authService: AuthService,
     private val firestoreService: FirestoreService,
     private val storageService: StorageService,
+    private val realtimeService: DatabaseReference,
     private val context: Context
 ) : Repository {
 

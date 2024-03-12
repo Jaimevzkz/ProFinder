@@ -1,5 +1,6 @@
 package com.vzkz.profinder.ui.splash
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -26,6 +29,10 @@ fun SplashScreen(
     navigator: DestinationsNavigator,
     splashViewModel: SplashViewModel = hiltViewModel()
 ) {
+    Firebase.messaging.token.addOnSuccessListener {
+        Log.i("FCM TOKEN:", it.orEmpty())
+    }
+
     ScreenBody()
     when(splashViewModel.getDestination()){
         SplashDestinations.HomeDest -> navigator.navigate(HomeScreenDestination)

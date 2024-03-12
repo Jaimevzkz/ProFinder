@@ -1,6 +1,9 @@
 package com.vzkz.profinder.ui.home
 
+import android.Manifest
 import android.content.res.Configuration
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +23,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
@@ -31,6 +38,8 @@ import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
+import com.vzkz.profinder.ui.components.permissions.PermissionDialog
+import com.vzkz.profinder.ui.components.permissions.RationaleDialog
 import com.vzkz.profinder.ui.home.components.HomeCard
 import com.vzkz.profinder.ui.home.components.HomeFavList
 import com.vzkz.profinder.ui.home.components.shimmer.FavListShimmer
@@ -46,6 +55,7 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
     favList = homeViewModel.state.favList
     var loading by remember { mutableStateOf(true) }
     loading = homeViewModel.state.loading
+
     ScreenBody(
         favList = favList,
         error = error,
@@ -173,6 +183,10 @@ private fun ScreenBody(
                 }
             }
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                RequestNotificationPermissionDialog()
+            }
+
             MyAlertDialog(
                 title = stringResource(R.string.error),
                 text = error.errorMsg.orEmpty(),
@@ -185,6 +199,17 @@ private fun ScreenBody(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun RequestNotificationPermissionDialog() {
+    val permissionState = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+
+    if (!permissionState.status.isGranted) {
+        if (permissionState.status.shouldShowRationale) RationaleDialog()
+        else PermissionDialog { permissionState.launchPermissionRequest() }
+    }
+}
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable

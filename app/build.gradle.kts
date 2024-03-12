@@ -116,6 +116,10 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
     //Storage
     implementation("com.google.firebase:firebase-storage")
+    //Cloud messaging
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    //Realtime database
+    implementation("com.google.firebase:firebase-database")
 
     //Animation
     implementation("androidx.compose.animation:animation:1.6.2")
@@ -137,8 +141,10 @@ dependencies {
     //shimmer
     implementation("com.valentinilk.shimmer:compose-shimmer:1.2.0")
 
-    //location
+    //Permissions
     implementation("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
+
+    //location
     implementation("com.google.android.gms:play-services-location:21.2.0")
 
 }
