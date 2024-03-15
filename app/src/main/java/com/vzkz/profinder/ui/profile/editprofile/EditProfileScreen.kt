@@ -33,7 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
-import com.vzkz.profinder.core.boilerplate.USERMODELFORTESTS
+import com.vzkz.profinder.core.USERMODELFORTESTS
 import com.vzkz.profinder.destinations.ProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.ui.components.MyCircularProgressbar

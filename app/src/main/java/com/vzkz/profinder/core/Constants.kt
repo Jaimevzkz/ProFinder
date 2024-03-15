@@ -1,4 +1,4 @@
-package com.vzkz.profinder.domain.model
+package com.vzkz.profinder.core
 
 object Constants {
     //User

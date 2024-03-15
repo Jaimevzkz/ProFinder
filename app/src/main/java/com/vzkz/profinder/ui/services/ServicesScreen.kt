@@ -24,15 +24,14 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
-import com.vzkz.profinder.core.boilerplate.PROFESSIONALMODELFORTESTS
-import com.vzkz.profinder.core.boilerplate.SERVICELISTFORTEST
+import com.vzkz.profinder.core.PROFESSIONALMODELFORTESTS
+import com.vzkz.profinder.core.SERVICELISTFORTEST
 import com.vzkz.profinder.destinations.ServicesScreenDestination
 import com.vzkz.profinder.destinations.ViewProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.domain.model.UiError
-import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.services.components.ServicesScreenShimmer
 import com.vzkz.profinder.ui.services.components.professionalscreen.ProfessionalScreenBody

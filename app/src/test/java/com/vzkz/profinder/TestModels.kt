@@ -2,19 +2,19 @@ package com.vzkz.profinder
 
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
-import com.vzkz.profinder.domain.model.Constants.CATEGORY
-import com.vzkz.profinder.domain.model.Constants.DESCRIPTION
-import com.vzkz.profinder.domain.model.Constants.FIRSTNAME
-import com.vzkz.profinder.domain.model.Constants.IS_ACTIVE
-import com.vzkz.profinder.domain.model.Constants.IS_USER
-import com.vzkz.profinder.domain.model.Constants.LASTNAME
-import com.vzkz.profinder.domain.model.Constants.NAME
-import com.vzkz.profinder.domain.model.Constants.NICKNAME
-import com.vzkz.profinder.domain.model.Constants.PRICE
-import com.vzkz.profinder.domain.model.Constants.PROFESSION
-import com.vzkz.profinder.domain.model.Constants.SERV_DESCRIPTION
-import com.vzkz.profinder.domain.model.Constants.STATE
-import com.vzkz.profinder.domain.model.Constants.UID
+import com.vzkz.profinder.core.Constants.CATEGORY
+import com.vzkz.profinder.core.Constants.DESCRIPTION
+import com.vzkz.profinder.core.Constants.FIRSTNAME
+import com.vzkz.profinder.core.Constants.IS_ACTIVE
+import com.vzkz.profinder.core.Constants.IS_USER
+import com.vzkz.profinder.core.Constants.LASTNAME
+import com.vzkz.profinder.core.Constants.NAME
+import com.vzkz.profinder.core.Constants.NICKNAME
+import com.vzkz.profinder.core.Constants.PRICE
+import com.vzkz.profinder.core.Constants.PROFESSION
+import com.vzkz.profinder.core.Constants.SERV_DESCRIPTION
+import com.vzkz.profinder.core.Constants.STATE
+import com.vzkz.profinder.core.Constants.UID
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 

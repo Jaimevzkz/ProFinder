@@ -1,10 +1,14 @@
-package com.vzkz.profinder.core.boilerplate
+package com.vzkz.profinder.core
 
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Categories
+import com.vzkz.profinder.domain.model.ChatListItemModel
+import com.vzkz.profinder.domain.model.ChatMsgModel
+import com.vzkz.profinder.domain.model.IndividualChatModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
+import com.vzkz.profinder.domain.model.ReadStatus
 import com.vzkz.profinder.domain.model.ServiceModel
 
 
@@ -26,7 +30,8 @@ val PROFESSIONALMODELFORTESTS: ActorModel = ActorModel(
     state = ProfState.Active
 )
 
-val PROFFESIONALLISTFORTEST = listOf(PROFESSIONALMODELFORTESTS, PROFESSIONALMODELFORTESTS, PROFESSIONALMODELFORTESTS)
+val PROFFESIONALLISTFORTEST =
+    listOf(PROFESSIONALMODELFORTESTS, PROFESSIONALMODELFORTESTS, PROFESSIONALMODELFORTESTS)
 
 val SERVICEMODELFORTEST = ServiceModel(
     sid = "-1",
@@ -34,7 +39,9 @@ val SERVICEMODELFORTEST = ServiceModel(
     name = "Plumbing",
     isActive = true,
     category = Categories.Household,
-    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
+        4
+    ),
     owner = PROFESSIONALMODELFORTESTS,
     price = 18.0
 )
@@ -44,7 +51,9 @@ val SERVICEMODEL1FORTEST = ServiceModel(
     name = "Tap check",
     isActive = true,
     category = Categories.Household,
-    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
+        4
+    ),
     owner = PROFESSIONALMODELFORTESTS,
     price = 12.0
 )
@@ -54,7 +63,9 @@ val SERVICEMODEL2FORTEST = ServiceModel(
     name = "Toilet fix",
     isActive = false,
     category = Categories.Household,
-    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
+        4
+    ),
     owner = PROFESSIONALMODELFORTESTS,
     price = 16.5
 )
@@ -64,16 +75,108 @@ val SERVICEMODEL3FORTEST = ServiceModel(
     name = "Boiler installation",
     isActive = false,
     category = Categories.Household,
-    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+    servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
+        4
+    ),
     owner = PROFESSIONALMODELFORTESTS,
     price = 9.99
 )
 
 val SERVICELISTFORTEST = listOf(SERVICEMODELFORTEST, SERVICEMODEL1FORTEST)
 
-//DB data
+
+val CHATLISTITEMFORTEST = ChatListItemModel(
+    nickname = "larbyysbarber",
+    profilePhoto = null,
+    timestamp = 1710498348086,
+    lastMsg = "Hello, how are you? I was wondering whether you could help me with something.",
+    unreadMsgNumber = 2,
+    isLastMessageMine = false
+)
+
+val INDIVIDUALCHATITEMFORTEST = IndividualChatModel(
+    profilePhoto = null,
+    nickname = "larbyysbarber",
+    msgList = listOf(
+        ChatMsgModel(
+            msg = "Hello, how are you? I was wondering whether you could help me with something.",
+            timestamp = 1710498348086,
+            read = ReadStatus.Read,
+            isMine = false,
+            chatId = "12344"
+        ),
+        ChatMsgModel(
+            msg = "Hello, how are you? I was wondering whether you could help me with something.",
+            timestamp = 1710498348086,
+            read = ReadStatus.Read,
+            isMine = false,
+            chatId = "12344"
+        ),
+        ChatMsgModel(
+            msg = "Hello, how are you? I was wondering whether you could help me with something.",
+            timestamp = 1710498348086,
+            read = ReadStatus.Read,
+            isMine = true,
+            chatId = "12344"
+        ),
+        ChatMsgModel(
+            msg = "Hello, how are you? I was wondering whether you could help me with something.",
+            timestamp = 1710498348086,
+            read = ReadStatus.Read,
+            isMine = true,
+            chatId = "12344"
+        ),
+        ChatMsgModel(
+            msg = "Hello, how are you? I was wondering whether you could help me with something.",
+            timestamp = 1710498348086,
+            read = ReadStatus.Read,
+            isMine = false,
+            chatId = "12344"
+        ),
+        ChatMsgModel(
+            msg = "Hello, how are you? I was wondering whether you could help me with something.",
+            timestamp = 1710498348086,
+            read = ReadStatus.Read,
+            isMine = true,
+            chatId = "12344"
+        ),
+        ChatMsgModel(
+            msg = "Hello, how are you? I was wondering whether you could help me with something.",
+            timestamp = 1710498348086,
+            read = ReadStatus.Read,
+            isMine = false,
+            chatId = "12344"
+        ),
+        ChatMsgModel(
+            msg = "Hello, how are you? I was wondering whether you could help me with something.",
+            timestamp = 1710498348086,
+            read = ReadStatus.Read,
+            isMine = false,
+            chatId = "12344"
+        ),
+        ChatMsgModel(
+            msg = "Hello, how are you? I was wondering whether you could help me with something.",
+            timestamp = 1710498348086,
+            read = ReadStatus.Read,
+            isMine = true,
+            chatId = "12344"
+        ),
+    )
+)
+
+//DB Fillling
 object DBDATA_POBLATION_ACTORS {
-    data class PROF_TO_INSERT(val email: String, val password: String = "1234Qwerty", val nickname: String, val firstname: String, val lastname: String, val description: String?, val profession: Professions?, val state: ProfState?)
+    data class PROF_TO_INSERT(
+        val email: String,
+        val password: String = "1234Qwerty",
+        val nickname: String,
+        val firstname: String,
+        val lastname: String,
+        val description: String?,
+        val profession: Professions?,
+        val state: ProfState?
+    )
+
     val DBDATA_PROF1: ActorModel = ActorModel(
         uid = "DU4rMbfJafPOVPpnkNP3o5MgrlX2",
         nickname = "fede_lopez1",
@@ -135,10 +238,18 @@ object DBDATA_POBLATION_ACTORS {
     )
 
     val DBDATA_LISTPROF = listOf(DBDATA_PROF1, DBDATA_PROF2, DBDATA_PROF3)
-    val DBDATA_LISTPROF_TOINSERT = listOf(DBDATA_PROF1_TOINSERT, DBDATA_PROF2_TOINSERT, DBDATA_PROF3_TOINSERT)
+    val DBDATA_LISTPROF_TOINSERT =
+        listOf(DBDATA_PROF1_TOINSERT, DBDATA_PROF2_TOINSERT, DBDATA_PROF3_TOINSERT)
 
 
-    data class USER_TO_INSERT(val email: String, val password: String = "1234Qwerty", val nickname: String, val firstname: String, val lastname: String, val description: String?)
+    data class USER_TO_INSERT(
+        val email: String,
+        val password: String = "1234Qwerty",
+        val nickname: String,
+        val firstname: String,
+        val lastname: String,
+        val description: String?
+    )
 
     val DBDATA_USER1: ActorModel = ActorModel(
         uid = "LIUWKzIM82eSfzldJYWvUjdoaTj1",
@@ -175,14 +286,16 @@ object DBDATA_POBLATION_ACTORS {
 
 }
 
-object DBDATA_POBLATION_SERVICES{
+object DBDATA_POBLATION_SERVICES {
     val DBDATA_SERVICE1: ServiceModel = ServiceModel(
         sid = "-1",
         uid = "DU4rMbfJafPOVPpnkNP3o5MgrlX2",
         name = "Cable installation",
         isActive = true,
         category = Categories.Household,
-        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
+            4
+        ),
         owner = DBDATA_POBLATION_ACTORS.DBDATA_PROF1,
         price = 18.0
     )
@@ -193,7 +306,9 @@ object DBDATA_POBLATION_SERVICES{
         name = "Wifi check",
         isActive = false,
         category = Categories.Household,
-        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
+            4
+        ),
         owner = DBDATA_POBLATION_ACTORS.DBDATA_PROF1,
         price = 12.0
     )
@@ -204,7 +319,9 @@ object DBDATA_POBLATION_SERVICES{
         name = "Coloured hair dyeing",
         isActive = false,
         category = Categories.Beauty,
-        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
+            4
+        ),
         owner = DBDATA_POBLATION_ACTORS.DBDATA_PROF2,
         price = 16.5
     )
@@ -214,7 +331,9 @@ object DBDATA_POBLATION_SERVICES{
         name = "Basic haircut",
         isActive = true,
         category = Categories.Beauty,
-        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
+            4
+        ),
         owner = DBDATA_POBLATION_ACTORS.DBDATA_PROF2,
         price = 12.0
     )
@@ -225,7 +344,9 @@ object DBDATA_POBLATION_SERVICES{
         name = "Facial shaving",
         isActive = true,
         category = Categories.Beauty,
-        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
+            4
+        ),
         owner = DBDATA_POBLATION_ACTORS.DBDATA_PROF3,
         price = 9.0
     )
@@ -236,10 +357,19 @@ object DBDATA_POBLATION_SERVICES{
         name = "head shaving",
         isActive = false,
         category = Categories.Beauty,
-        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(4),
+        servDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, consectetur adipiscing elit.".repeat(
+            4
+        ),
         owner = DBDATA_POBLATION_ACTORS.DBDATA_PROF3,
         price = 10.8
     )
 
-    val SERVICESTOINSERT = listOf(DBDATA_SERVICE1, DBDATA_SERVICE2, DBDATA_SERVICE3, DBDATA_SERVICE4, DBDATA_SERVICE5, DBDATA_SERVICE6)
+    val SERVICESTOINSERT = listOf(
+        DBDATA_SERVICE1,
+        DBDATA_SERVICE2,
+        DBDATA_SERVICE3,
+        DBDATA_SERVICE4,
+        DBDATA_SERVICE5,
+        DBDATA_SERVICE6
+    )
 }

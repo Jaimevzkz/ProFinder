@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.valentinilk.shimmer.shimmer
 import com.vzkz.profinder.R
-import com.vzkz.profinder.core.boilerplate.SERVICEMODEL1FORTEST
+import com.vzkz.profinder.core.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.ProfilePicture

@@ -1,13 +1,13 @@
 package com.vzkz.profinder.domain.model
 
 import android.net.Uri
-import com.vzkz.profinder.domain.model.Constants.DESCRIPTION
-import com.vzkz.profinder.domain.model.Constants.FIRSTNAME
-import com.vzkz.profinder.domain.model.Constants.IS_USER
-import com.vzkz.profinder.domain.model.Constants.LASTNAME
-import com.vzkz.profinder.domain.model.Constants.NICKNAME
-import com.vzkz.profinder.domain.model.Constants.PROFESSION
-import com.vzkz.profinder.domain.model.Constants.STATE
+import com.vzkz.profinder.core.Constants.DESCRIPTION
+import com.vzkz.profinder.core.Constants.FIRSTNAME
+import com.vzkz.profinder.core.Constants.IS_USER
+import com.vzkz.profinder.core.Constants.LASTNAME
+import com.vzkz.profinder.core.Constants.NICKNAME
+import com.vzkz.profinder.core.Constants.PROFESSION
+import com.vzkz.profinder.core.Constants.STATE
 
 data class ActorModel(
     val nickname: String,

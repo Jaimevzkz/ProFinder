@@ -16,7 +16,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vzkz.profinder.core.boilerplate.SERVICEMODEL1FORTEST
+import com.vzkz.profinder.core.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow

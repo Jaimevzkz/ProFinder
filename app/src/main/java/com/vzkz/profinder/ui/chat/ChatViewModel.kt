@@ -1,5 +1,6 @@
 package com.vzkz.profinder.ui.chat
 
+import com.vzkz.profinder.core.DateFormatter
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.UiError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -7,7 +8,9 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class ChatViewModel @Inject constructor(): BaseViewModel<tState, tIntent>(tState.initial) {
+class ChatViewModel @Inject constructor(
+    private val dateFormatter: DateFormatter
+): BaseViewModel<tState, tIntent>(tState.initial) {
 
     override fun reduce(state: tState, intent: tIntent): tState {
         return when(intent){
@@ -27,10 +30,10 @@ class ChatViewModel @Inject constructor(): BaseViewModel<tState, tIntent>(tState
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
-    fun onX(){ //Example fun
-        dispatch(tIntent.Loading(true))
-    }
 
     fun onCloseDialog() = dispatch(tIntent.CloseError)
 
+    fun getFormattedTime(timestamp: Long): String {
+        return dateFormatter.formatToTime(timestamp)
+    }
 }

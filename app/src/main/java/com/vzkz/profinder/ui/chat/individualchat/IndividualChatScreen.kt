@@ -5,16 +5,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -30,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +37,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
+import com.vzkz.profinder.core.INDIVIDUALCHATITEMFORTEST
+import com.vzkz.profinder.domain.model.ChatMsgModel
+import com.vzkz.profinder.domain.model.IndividualChatModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyGenericTextField
@@ -53,19 +53,23 @@ import com.vzkz.profinder.ui.theme.ProFinderTheme
 @Composable
 fun IndividualChatScreen(
     navigator: DestinationsNavigator,
-    tViewModel: IndividualChatViewModel = hiltViewModel()
+    individualChatViewModel: IndividualChatViewModel = hiltViewModel()
 ) {
-    val error = tViewModel.state.error
+    val error = individualChatViewModel.state.error
     ScreenBody(
+        individualChatModel = INDIVIDUALCHATITEMFORTEST,
+        onFormatTime = { individualChatViewModel.getFormattedTime(it) },
         error = error,
         onCloseDialog = {
-            tViewModel.onCloseDialog()
+            individualChatViewModel.onCloseDialog()
         }
     )
 }
 
 @Composable
 private fun ScreenBody(
+    individualChatModel: IndividualChatModel,
+    onFormatTime: (Long) -> String,
     error: UiError,
     onCloseDialog: () -> Unit,
 ) {
@@ -90,10 +94,14 @@ private fun ScreenBody(
                     tint = MaterialTheme.colorScheme.primary
                 )
                 MySpacer(size = 16)
-                ProfilePicture(profilePhoto = null, size = 50, shape = MaterialTheme.shapes.large)
+                ProfilePicture(
+                    profilePhoto = individualChatModel.profilePhoto,
+                    size = 50,
+                    shape = MaterialTheme.shapes.large
+                )
                 MySpacer(size = 8)
                 Text(
-                    "John Doe",
+                    text = individualChatModel.nickname,
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
@@ -104,25 +112,29 @@ private fun ScreenBody(
             HorizontalDivider()
             MySpacer(size = 8)
 
-            MyColumn(
+            LazyColumn(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Bottom
-            ) {//todo make it lazy
-                var actualRandom: Int
-                var nextRandom: Int
-                actualRandom = (0..1).random()
-                for (i in 0..10) {
-                    nextRandom = (0..1).random()
+            ) {
+                items(individualChatModel.msgList) { message ->
+                    val index = individualChatModel.msgList.indexOf(message)
+                    var isLast = false
+                    if (index < individualChatModel.msgList.size - 1
+                        && message.isMine == individualChatModel.msgList[index + 1].isMine
+                        || index == individualChatModel.msgList.size - 1)
+                        isLast = true //todo why doesnt it work??
 
                     ChatMessage(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        isLast = nextRandom != actualRandom,
-                        ownMsg = actualRandom == 1
+                        chatMsgModel = message,
+                        time = onFormatTime(message.timestamp),
+                        isLast = isLast,
+                        ownMsg = message.isMine
                     )
-                    actualRandom = nextRandom
                 }
             }
+
+
+
             MyRow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -172,9 +184,8 @@ private fun ChatMessage(
     modifier: Modifier = Modifier,
     isLast: Boolean = false,
     ownMsg: Boolean = false,
-    message: String = "Hello, how are you? I was wondering whether you could help me with something.",
-    time: String = "03:34 PM",
-    read: Int = 1, //-1 for not sent, 0 for unread, 1 for read
+    chatMsgModel: ChatMsgModel,
+    time: String
 ) {
     val genPadding = 12.dp
     val columnPadding =
@@ -194,13 +205,13 @@ private fun ChatMessage(
                     .padding(8.dp)
             ) {
                 Text(
-                    text = message,
+                    text = chatMsgModel.msg,
                 )
                 if (ownMsg)
                     Icon(
-                        imageVector = if (read == -1) Icons.Filled.Done else Icons.Filled.DoneAll,
+                        imageVector = chatMsgModel.read.icon,
                         contentDescription = "read",
-                        tint = if (read == 1) Color.Blue else Color.Gray,
+                        tint = chatMsgModel.read.tint,
                         modifier = Modifier.align(
                             Alignment.BottomEnd
                         )
@@ -226,8 +237,10 @@ private fun ChatMessage(
 private fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
+            individualChatModel = INDIVIDUALCHATITEMFORTEST,
+            onFormatTime = { _ -> "12:00 PM" },
             error = UiError(false, "Account wasn't created"),
-            onCloseDialog = {},
+            onCloseDialog = {}
         )
     }
 

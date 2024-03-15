@@ -1,33 +1,27 @@
 package com.vzkz.profinder.ui.chat
 
 import android.content.res.Configuration
-import android.net.Uri
-import android.widget.Space
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,7 +32,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
+import com.vzkz.profinder.core.CHATLISTITEMFORTEST
 import com.vzkz.profinder.destinations.ChatScreenDestination
+import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
@@ -54,6 +50,8 @@ fun ChatScreen(navigator: DestinationsNavigator, chatViewModel: ChatViewModel = 
     val error = chatViewModel.state.error
     ScreenBody(
         error = error,
+        chatList = emptyList(),
+        onFormatTime = { chatViewModel.getFormattedTime(it) },
         onCloseDialog = {
             chatViewModel.onCloseDialog()
         },
@@ -61,10 +59,11 @@ fun ChatScreen(navigator: DestinationsNavigator, chatViewModel: ChatViewModel = 
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenBody(
     error: UiError,
+    chatList: List<ChatListItemModel>,
+    onFormatTime: (Long) -> String,
     onCloseDialog: () -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
 ) {
@@ -83,10 +82,11 @@ private fun ScreenBody(
                 modifier = Modifier
                     .align(Alignment.TopCenter),
             ) {
-                MyRow(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 16.dp)
+                MyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 16.dp)
                 ) {
                     Text(
                         stringResource(id = R.string.chat),
@@ -98,13 +98,15 @@ private fun ScreenBody(
                 MySpacer(size = 8)
                 HorizontalDivider()
                 MySpacer(size = 8)
-                MyColumn (
+                LazyColumn(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
-                ){
-                    for (i in 0..8) {
-                        ChatItem()
-                        MySpacer(size = 8)
+                ) {
+                    items(chatList) { chatItem ->
+                        ChatItem(
+                            chatListItemModel = chatItem,
+                            timeSent = onFormatTime(chatItem.timestamp)
+                        )
                     }
                 }
             }
@@ -122,16 +124,14 @@ private fun ScreenBody(
 
 @Composable
 private fun ChatItem(
-    profilePicture: Uri? = null,
-    read: Boolean = false,
-    msgNumberUnread: Int = 2,
-    name: String = "Larby Mubharak",
-    lastMsg: String = "Hello, how are you? I was wondering whether you could help me with something.",
-    timeSent: String = "03:34 PM"
+    chatListItemModel: ChatListItemModel,
+    timeSent: String
 ) {
+    val nickname = chatListItemModel.nickname
+    val lastMsg = chatListItemModel.lastMsg
     MyRow(modifier = Modifier.padding(vertical = 8.dp)) {
         ProfilePicture(
-            profilePhoto = profilePicture,
+            profilePhoto = chatListItemModel.profilePhoto,
             size = 70,
             shape = MaterialTheme.shapes.large
         )
@@ -141,16 +141,18 @@ private fun ChatItem(
         Column {
             MyRow {
                 Text(
-                    if (name.length < maxNameLength) name else name.substring(
-                        0,
-                        maxNameLength
-                    ) + "...",
+                    text = if (nickname.length < maxNameLength) nickname
+                    else nickname.substring(0, maxNameLength) + "...",
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(timeSent, fontWeight = FontWeight.Light, color = MaterialTheme.colorScheme.onBackground)
+                Text(
+                    timeSent,
+                    fontWeight = FontWeight.Light,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
             MyRow {
                 Text(
@@ -158,18 +160,17 @@ private fun ChatItem(
                         0,
                         maxMsgLength
                     ) + "...",
-                    color = if (read) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.primary
+                    color = if (chatListItemModel.isLastMessageMine) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                if (msgNumberUnread > 0)
+                if (chatListItemModel.unreadMsgNumber > 0)
                     Text(
-                        msgNumberUnread.toString(),
+                        chatListItemModel.unreadMsgNumber.toString(),
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
                             .padding(4.dp)
                             .shadow(elevation = 1.dp, shape = CircleShape)
                             .background(MaterialTheme.colorScheme.primary)
-                            .padding(4.dp)
                             .padding(horizontal = 6.dp)
                     )
             }
@@ -181,7 +182,18 @@ private fun ChatItem(
 @Composable
 private fun LightPreview() {
     ProFinderTheme {
+        val chatList = mutableListOf(CHATLISTITEMFORTEST)
+        for (i in 0..10) {
+            chatList.add(
+                if (i % 2 == 0) CHATLISTITEMFORTEST else CHATLISTITEMFORTEST.copy(
+                    isLastMessageMine = true,
+                    unreadMsgNumber = 0
+                )
+            )
+        }
         ScreenBody(
+            chatList = chatList,
+            onFormatTime = { "12:00 P.M." },
             error = UiError(false, "Account wasn't created"),
             onCloseDialog = {},
             onBottomBarClicked = {}

@@ -6,10 +6,9 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
-import com.vzkz.profinder.domain.model.Constants.CATEGORY
-import com.vzkz.profinder.domain.model.Constants.IS_ACTIVE
-import com.vzkz.profinder.domain.model.Constants.SERVICES_COLLECTION
-import com.vzkz.profinder.domain.model.Constants.USERS_COLLECTION
+import com.vzkz.profinder.core.Constants.IS_ACTIVE
+import com.vzkz.profinder.core.Constants.SERVICES_COLLECTION
+import com.vzkz.profinder.core.Constants.USERS_COLLECTION
 import com.vzkz.profinder.prof2_test
 import com.vzkz.profinder.profDocument2_test
 import com.vzkz.profinder.serviceDocument_test

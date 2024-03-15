@@ -23,10 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.vzkz.profinder.R
-import com.vzkz.profinder.core.boilerplate.PROFESSIONALMODELFORTESTS
+import com.vzkz.profinder.core.PROFESSIONALMODELFORTESTS
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Categories
-import com.vzkz.profinder.domain.model.Constants.VALUENOTSET
+import com.vzkz.profinder.core.Constants.VALUENOTSET
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyGenericTextField

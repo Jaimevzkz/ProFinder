@@ -31,7 +31,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
-import com.vzkz.profinder.core.boilerplate.PROFFESIONALLISTFORTEST
+import com.vzkz.profinder.core.PROFFESIONALLISTFORTEST
 import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.UiError

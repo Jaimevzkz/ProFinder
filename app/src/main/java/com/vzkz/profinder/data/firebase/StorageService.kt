@@ -4,8 +4,7 @@ import android.net.Uri
 import android.util.Log
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
-import com.vzkz.profinder.domain.model.Constants.PROFILEPHOTO
-import com.vzkz.profinder.domain.model.Constants.PROFILEPHOTOS
+import com.vzkz.profinder.core.Constants.PROFILEPHOTOS
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
