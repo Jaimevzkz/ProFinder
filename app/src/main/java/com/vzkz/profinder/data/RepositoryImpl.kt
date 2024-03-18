@@ -3,14 +3,7 @@ package com.vzkz.profinder.data
 import android.content.Context
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
 import com.vzkz.profinder.R
-import com.vzkz.profinder.data.firebase.AuthService
-import com.vzkz.profinder.data.firebase.FirestoreService
-import com.vzkz.profinder.data.firebase.StorageService
-import com.vzkz.profinder.domain.Repository
-import com.vzkz.profinder.domain.model.ActorModel
-import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.core.Constants.CONNECTION_ERROR
 import com.vzkz.profinder.core.Constants.INSERTION_ERROR
 import com.vzkz.profinder.core.Constants.MODIFICATION_ERROR
@@ -18,6 +11,13 @@ import com.vzkz.profinder.core.Constants.NICKNAME_IN_USE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_SERVICEATTRIBUTE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_USERFIELD
 import com.vzkz.profinder.core.Constants.NULL_USERDATA
+import com.vzkz.profinder.data.firebase.AuthService
+import com.vzkz.profinder.data.firebase.FirestoreService
+import com.vzkz.profinder.data.firebase.RealtimeService
+import com.vzkz.profinder.data.firebase.StorageService
+import com.vzkz.profinder.domain.Repository
+import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
@@ -27,7 +27,7 @@ class RepositoryImpl @Inject constructor(
     private val authService: AuthService,
     private val firestoreService: FirestoreService,
     private val storageService: StorageService,
-    private val realtimeService: DatabaseReference,
+    private val realtimeService: RealtimeService,
     private val context: Context
 ) : Repository {
 
@@ -151,6 +151,7 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getFavouriteList(uid: String): List<ActorModel> =
         firestoreService.getFavouritesList(uid) //throws exception
 
+    //Storage
     override suspend fun uploadAndDownloadProfilePhoto(
         uri: Uri,
         uid: String,
@@ -165,6 +166,11 @@ class RepositoryImpl @Inject constructor(
         return storageUri
     }
 
+    //Realtime
+    override fun getRecentChats(uid: String) = realtimeService.getRecentChats(uid)
+
+
+    //Exception handling
     private fun handleException(e: Exception): Exception {
         return when (e.message) {
             CONNECTION_ERROR -> Exception(context.getString(R.string.network_failure_while_checking_user_existence))

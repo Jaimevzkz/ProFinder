@@ -10,6 +10,8 @@ import com.vzkz.profinder.domain.usecases.auth.SignUpUseCase
 import com.vzkz.profinder.domain.usecases.auth.SignUpUseCaseImpl
 import com.vzkz.profinder.domain.usecases.ThemeDSUseCase
 import com.vzkz.profinder.domain.usecases.ThemeDSUseCaseImpl
+import com.vzkz.profinder.domain.usecases.chat.GetRecentChatsUseCase
+import com.vzkz.profinder.domain.usecases.chat.GetRecentChatsUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
@@ -81,5 +83,7 @@ abstract class UseCaseModule {
     abstract fun bindUploadPhotoUseCase(impl: UploadPhotoUseCaseImpl): UploadPhotoUseCase
     @Binds
     abstract fun bindFlushSingletonsUseCase(impl: FlushSingletonsUseCaseImpl): FlushSingletonsUseCase
+    @Binds
+    abstract fun bindGetRecentChatsUseCase(impl: GetRecentChatsUseCaseImpl): GetRecentChatsUseCase
 
 }

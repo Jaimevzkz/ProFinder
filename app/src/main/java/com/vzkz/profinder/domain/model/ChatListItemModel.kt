@@ -1,13 +1,12 @@
 package com.vzkz.profinder.domain.model
 
 import android.net.Uri
-import java.sql.Timestamp
 
 data class ChatListItemModel(
-    val nickname: String,
     val profilePhoto : Uri?,
+    val nickname: String,
     val timestamp: Long,
     val lastMsg: String,
-    val isLastMessageMine: Boolean,
-    val unreadMsgNumber: Int
+    val unreadMsgNumber: Int,
+    val lastMsgUid: String
 )

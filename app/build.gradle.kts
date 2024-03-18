@@ -106,18 +106,18 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.6.2")
 
     //FireBase
-    val bomVersion = "32.7.3"
+    val bomVersion = "32.7.4"
     implementation(platform("com.google.firebase:firebase-bom:$bomVersion"))
     //Auth
     implementation("com.google.firebase:firebase-auth-ktx")
     //Analytics
     implementation("com.google.firebase:firebase-analytics")
     //FireStore
-    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-firestore")
     //Storage
     implementation("com.google.firebase:firebase-storage")
     //Cloud messaging
-    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-messaging")
     //Realtime database
     implementation("com.google.firebase:firebase-database")
 

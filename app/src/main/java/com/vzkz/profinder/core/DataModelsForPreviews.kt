@@ -1,5 +1,6 @@
 package com.vzkz.profinder.core
 
+import com.vzkz.profinder.data.dto.RecentChatDto
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Categories
@@ -91,7 +92,7 @@ val CHATLISTITEMFORTEST = ChatListItemModel(
     timestamp = 1710498348086,
     lastMsg = "Hello, how are you? I was wondering whether you could help me with something.",
     unreadMsgNumber = 2,
-    isLastMessageMine = false
+    lastMsgUid = "123"
 )
 
 val INDIVIDUALCHATITEMFORTEST = IndividualChatModel(
@@ -163,6 +164,15 @@ val INDIVIDUALCHATITEMFORTEST = IndividualChatModel(
         ),
     )
 )
+
+//val RECENTCHATSDTOFORTEST = RecentChatDto(
+//    profilePhoto = null,
+//    nickname = "luisito17",
+//    timestamp = 1710494349086,
+//    lastMsg = "This realtime thing working!",
+//    unreadMsgNumber = 1,
+//    isLastMessageMine = false
+//)
 
 //DB Fillling
 object DBDATA_POBLATION_ACTORS {

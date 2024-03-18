@@ -7,13 +7,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
+import com.valentinilk.shimmer.shimmer
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.CHATLISTITEMFORTEST
 import com.vzkz.profinder.destinations.ChatScreenDestination
@@ -40,6 +43,7 @@ import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.ProfilePicture
+import com.vzkz.profinder.ui.components.ProfilePictureShimmer
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.theme.ProFinderTheme
@@ -47,10 +51,16 @@ import com.vzkz.profinder.ui.theme.ProFinderTheme
 @Destination
 @Composable
 fun ChatScreen(navigator: DestinationsNavigator, chatViewModel: ChatViewModel = hiltViewModel()) {
+    chatViewModel.onInit()
     val error = chatViewModel.state.error
+    val chatList = chatViewModel.state.chatList
+    val loading = chatViewModel.state.loading
+    val uid = chatViewModel.state.uid
     ScreenBody(
+        chatList = chatList,
+        loading = loading,
+        uid = uid,
         error = error,
-        chatList = emptyList(),
         onFormatTime = { chatViewModel.getFormattedTime(it) },
         onCloseDialog = {
             chatViewModel.onCloseDialog()
@@ -61,8 +71,10 @@ fun ChatScreen(navigator: DestinationsNavigator, chatViewModel: ChatViewModel = 
 
 @Composable
 private fun ScreenBody(
-    error: UiError,
     chatList: List<ChatListItemModel>,
+    loading: Boolean,
+    uid: String,
+    error: UiError,
     onFormatTime: (Long) -> String,
     onCloseDialog: () -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
@@ -98,15 +110,22 @@ private fun ScreenBody(
                 MySpacer(size = 8)
                 HorizontalDivider()
                 MySpacer(size = 8)
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                ) {
-                    items(chatList) { chatItem ->
-                        ChatItem(
-                            chatListItemModel = chatItem,
-                            timeSent = onFormatTime(chatItem.timestamp)
-                        )
+
+                if (loading) {
+                    for (i in 0..8)
+                        ChatItemShimmer()
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        items(chatList) { chatItem ->
+                            ChatItem(
+                                uid = uid,
+                                chatListItemModel = chatItem,
+                                timeSent = onFormatTime(chatItem.timestamp)
+                            )
+                        }
                     }
                 }
             }
@@ -124,6 +143,7 @@ private fun ScreenBody(
 
 @Composable
 private fun ChatItem(
+    uid: String,
     chatListItemModel: ChatListItemModel,
     timeSent: String
 ) {
@@ -160,7 +180,7 @@ private fun ChatItem(
                         0,
                         maxMsgLength
                     ) + "...",
-                    color = if (chatListItemModel.isLastMessageMine) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.primary
+                    color = if (chatListItemModel.lastMsgUid == uid) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 if (chatListItemModel.unreadMsgNumber > 0)
@@ -178,6 +198,43 @@ private fun ChatItem(
     }
 }
 
+@Composable
+private fun ChatItemShimmer() {
+    MyRow(modifier = Modifier.padding(8.dp)) {
+        ProfilePictureShimmer(70)
+        MySpacer(size = 12)
+        Column {
+            MyRow {
+                Box(
+                    modifier = Modifier
+                        .shimmer()
+                        .width(140.dp)
+                        .height(20.dp)
+                        .background(Color.Gray)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Box(
+                    modifier = Modifier
+                        .shimmer()
+                        .width(60.dp)
+                        .height(20.dp)
+                        .background(Color.Gray)
+                )
+            }
+            MySpacer(size = 8)
+            MyRow {
+                Box(
+                    modifier = Modifier
+                        .shimmer()
+                        .width(220.dp)
+                        .height(16.dp)
+                        .background(Color.Gray)
+                )
+            }
+        }
+    }
+}
+
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LightPreview() {
@@ -186,13 +243,16 @@ private fun LightPreview() {
         for (i in 0..10) {
             chatList.add(
                 if (i % 2 == 0) CHATLISTITEMFORTEST else CHATLISTITEMFORTEST.copy(
-                    isLastMessageMine = true,
+                    lastMsgUid = "123",
                     unreadMsgNumber = 0
                 )
             )
         }
         ScreenBody(
             chatList = chatList,
+            uid = "",
+//            loading = true,
+            loading = false,
             onFormatTime = { "12:00 P.M." },
             error = UiError(false, "Account wasn't created"),
             onCloseDialog = {},
@@ -200,3 +260,4 @@ private fun LightPreview() {
         )
     }
 }
+

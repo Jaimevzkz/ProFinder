@@ -13,6 +13,7 @@ import com.vzkz.profinder.data.DataStoreRepositoryImpl
 import com.vzkz.profinder.data.RepositoryImpl
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
+import com.vzkz.profinder.data.firebase.RealtimeService
 import com.vzkz.profinder.data.firebase.StorageService
 import com.vzkz.profinder.domain.DataStoreRepository
 import com.vzkz.profinder.domain.Repository
@@ -34,7 +35,7 @@ object NetworkModule {
         authService: AuthService,
         firestoreService: FirestoreService,
         storageService: StorageService,
-        realtimeService: DatabaseReference,
+        realtimeService: RealtimeService,
         @ApplicationContext context: Context
     ): Repository {
         return RepositoryImpl(authService, firestoreService, storageService, realtimeService, context)
@@ -62,6 +63,10 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRealtimeDB(): DatabaseReference = Firebase.database.reference
+
+    @Singleton
+    @Provides
+    fun provideRealtimeService(reference: DatabaseReference) = RealtimeService(reference)
 
     @Singleton
     @Provides

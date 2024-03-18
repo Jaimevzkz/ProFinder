@@ -25,6 +25,9 @@ object Constants {
     const val PROFILEPHOTO = "profilePhoto"
     const val PROFILEPHOTOS = "ProfilePhotos"
 
+    //Realtime
+    const val RECENT_CHATS = "recentChats"
+    const val RECENT_CHATS_BODY = "recentChatsBody"
 
     //Errors
     const val ERRORSTR = "error"

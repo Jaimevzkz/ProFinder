@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "268154570339",
+    "firebase_url": "https://profinder-9545f-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "profinder-9545f",
     "storage_bucket": "profinder-9545f.appspot.com"
   },
@@ -16,9 +17,6 @@
       "api_key": [
         {
           "current_key": "AIzaSyCkuzCvBlOsT9An5BTQbW2G1d_b7v5JNas"
-        },
-        {
-          "current_key": "AIzaSyCMzAvmZXj99MQo0hHxgPKLCKMobM4orho"
         }
       ],
       "services": {
@@ -38,9 +36,6 @@
       "api_key": [
         {
           "current_key": "AIzaSyCkuzCvBlOsT9An5BTQbW2G1d_b7v5JNas"
-        },
-        {
-          "current_key": "AIzaSyCMzAvmZXj99MQo0hHxgPKLCKMobM4orho"
         }
       ],
       "services": {

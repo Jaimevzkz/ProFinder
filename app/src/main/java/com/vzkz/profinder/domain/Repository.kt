@@ -3,9 +3,11 @@ package com.vzkz.profinder.domain
 import android.net.Uri
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
+import kotlinx.coroutines.flow.Flow
 
 interface Repository {
 
@@ -49,4 +51,5 @@ interface Repository {
 
     suspend fun uploadAndDownloadProfilePhoto(uri: Uri, uid: String, oldProfileUri: Uri?): Uri
 
+    fun getRecentChats(uid: String): Flow<List<ChatListItemModel>>
 }
