@@ -2,6 +2,7 @@ package com.vzkz.profinder.ui.components.bottombar
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Chat
 import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.Handshake
 import androidx.compose.material.icons.outlined.Home
@@ -21,6 +22,6 @@ enum class BottomBarDestination(
 ) {
     HomeDest(HomeScreenDestination, Icons.Outlined.Home, R.string.home),
     ServicesDest(ServicesScreenDestination, Icons.Outlined.Handshake, R.string.services),
-    ChatDest(ChatScreenDestination, Icons.Outlined.Chat, R.string.chat),
+    ChatDest(ChatScreenDestination, Icons.AutoMirrored.Outlined.Chat, R.string.chat),
     ProfileDest(ProfileScreenDestination, Icons.Outlined.Person, R.string.profile)
 }

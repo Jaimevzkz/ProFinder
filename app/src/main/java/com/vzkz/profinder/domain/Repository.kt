@@ -1,8 +1,8 @@
 package com.vzkz.profinder.domain
 
 import android.net.Uri
-import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
@@ -52,4 +52,10 @@ interface Repository {
     suspend fun uploadAndDownloadProfilePhoto(uri: Uri, uid: String, oldProfileUri: Uri?): Uri
 
     fun getRecentChats(uid: String): Flow<List<ChatListItemModel>>
+    fun addRecentChat(
+        chatListItemModel: ChatListItemModel,
+        ownerUid: String,
+        ownerNickname: String,
+        ownerProfilePhoto: Uri?
+    )
 }

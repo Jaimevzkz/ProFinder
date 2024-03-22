@@ -25,25 +25,26 @@ fun ServicesScreenShimmer(
     cardBackgroundColor: Color
 ) {
     MyColumn (modifier = modifier.padding(12.dp)) {
-        MyRow {
-            Spacer(modifier = Modifier.weight(1f))
-            Box(
-                modifier = Modifier
-                    .shimmer()
-                    .height(24.dp)
-                    .width(100.dp)
-                    .background(Color.Gray)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Box(
-                modifier = Modifier
-                    .shimmer()
-                    .height(24.dp)
-                    .width(100.dp)
-                    .background(Color.Gray)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-        }
+//        MyRow {
+//            Spacer(modifier = Modifier.weight(1f))
+//            Box(
+//                modifier = Modifier
+//                    .shimmer()
+//                    .height(24.dp)
+//                    .width(100.dp)
+//                    .background(Color.Gray)
+//            )
+//            Spacer(modifier = Modifier.weight(1f))
+//            Box(
+//                modifier = Modifier
+//                    .shimmer()
+//                    .height(24.dp)
+//                    .width(100.dp)
+//                    .background(Color.Gray)
+//            )
+//            Spacer(modifier = Modifier.weight(1f))
+//        }
+        MySpacer(size = 40)
         MySpacer(size = 16)
         for (i in 0..2) {
             ServiceCardShimmer(backgroundColor = cardBackgroundColor)

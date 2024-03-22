@@ -1,12 +1,10 @@
 package com.vzkz.profinder.core
 
-import com.vzkz.profinder.data.dto.RecentChatDto
-import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Categories
 import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
-import com.vzkz.profinder.domain.model.IndividualChatModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ReadStatus
@@ -92,77 +90,75 @@ val CHATLISTITEMFORTEST = ChatListItemModel(
     timestamp = 1710498348086,
     lastMsg = "Hello, how are you? I was wondering whether you could help me with something.",
     unreadMsgNumber = 2,
-    lastMsgUid = "123"
+    lastMsgUid = "123",
+    chatId = "1234",
+    uid = "vo4008dpUlOulCuPQUDFpLEtjbR2"
 )
 
-val INDIVIDUALCHATITEMFORTEST = IndividualChatModel(
-    profilePhoto = null,
-    nickname = "larbyysbarber",
-    msgList = listOf(
-        ChatMsgModel(
-            msg = "Hello, how are you? I was wondering whether you could help me with something.",
-            timestamp = 1710498348086,
-            read = ReadStatus.Read,
-            isMine = false,
-            chatId = "12344"
-        ),
-        ChatMsgModel(
-            msg = "Hello, how are you? I was wondering whether you could help me with something.",
-            timestamp = 1710498348086,
-            read = ReadStatus.Read,
-            isMine = false,
-            chatId = "12344"
-        ),
-        ChatMsgModel(
-            msg = "Hello, how are you? I was wondering whether you could help me with something.",
-            timestamp = 1710498348086,
-            read = ReadStatus.Read,
-            isMine = true,
-            chatId = "12344"
-        ),
-        ChatMsgModel(
-            msg = "Hello, how are you? I was wondering whether you could help me with something.",
-            timestamp = 1710498348086,
-            read = ReadStatus.Read,
-            isMine = true,
-            chatId = "12344"
-        ),
-        ChatMsgModel(
-            msg = "Hello, how are you? I was wondering whether you could help me with something.",
-            timestamp = 1710498348086,
-            read = ReadStatus.Read,
-            isMine = false,
-            chatId = "12344"
-        ),
-        ChatMsgModel(
-            msg = "Hello, how are you? I was wondering whether you could help me with something.",
-            timestamp = 1710498348086,
-            read = ReadStatus.Read,
-            isMine = true,
-            chatId = "12344"
-        ),
-        ChatMsgModel(
-            msg = "Hello, how are you? I was wondering whether you could help me with something.",
-            timestamp = 1710498348086,
-            read = ReadStatus.Read,
-            isMine = false,
-            chatId = "12344"
-        ),
-        ChatMsgModel(
-            msg = "Hello, how are you? I was wondering whether you could help me with something.",
-            timestamp = 1710498348086,
-            read = ReadStatus.Read,
-            isMine = false,
-            chatId = "12344"
-        ),
-        ChatMsgModel(
-            msg = "Hello, how are you? I was wondering whether you could help me with something.",
-            timestamp = 1710498348086,
-            read = ReadStatus.Read,
-            isMine = true,
-            chatId = "12344"
-        ),
-    )
+val INDIVIDUALCHATITEMFORTEST = listOf(
+    ChatMsgModel(
+        msgId = "12",
+        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        timestamp = 1710498348086,
+        read = ReadStatus.Read,
+        isMine = false,
+    ),
+    ChatMsgModel(
+        msgId = "12",
+        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        timestamp = 1710498348086,
+        read = ReadStatus.Read,
+        isMine = false
+    ),
+    ChatMsgModel(
+        msgId = "12",
+        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        timestamp = 1710498348086,
+        read = ReadStatus.Read,
+        isMine = true,
+    ),
+    ChatMsgModel(
+        msgId = "12",
+        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        timestamp = 1710498348086,
+        read = ReadStatus.Read,
+        isMine = true,
+    ),
+    ChatMsgModel(
+        msgId = "12",
+        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        timestamp = 1710498348086,
+        read = ReadStatus.Read,
+        isMine = false,
+    ),
+    ChatMsgModel(
+        msgId = "12",
+        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        timestamp = 1710498348086,
+        read = ReadStatus.Read,
+        isMine = true,
+    ),
+    ChatMsgModel(
+        msgId = "12",
+        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        timestamp = 1710498348086,
+        read = ReadStatus.Read,
+        isMine = false,
+    ),
+    ChatMsgModel(
+        msgId = "12",
+        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        timestamp = 1710498348086,
+        read = ReadStatus.Read,
+        isMine = false,
+    ),
+    ChatMsgModel(
+        msgId = "12",
+        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        timestamp = 1710498348086,
+        read = ReadStatus.Read,
+        isMine = true,
+    ),
 )
 
 //val RECENTCHATSDTOFORTEST = RecentChatDto(

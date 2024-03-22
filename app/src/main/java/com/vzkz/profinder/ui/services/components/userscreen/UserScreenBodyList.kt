@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.SERVICELISTFORTEST
+import com.vzkz.profinder.core.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.components.MyColumn

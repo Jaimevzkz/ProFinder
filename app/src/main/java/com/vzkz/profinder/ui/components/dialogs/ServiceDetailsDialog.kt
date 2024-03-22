@@ -65,8 +65,7 @@ fun ServiceDetailsDialog(
                         Text(text = service.owner.nickname, fontSize = 16.sp)
                         OutlinedButton(
                             modifier = Modifier
-                                .size(92.dp, 34.dp)
-                                .padding(top = 4.dp),
+                                .size(92.dp, 34.dp),
                             onClick = { onSeeProfile() },
                             contentPadding = ButtonDefaults.TextButtonContentPadding,
                             border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)

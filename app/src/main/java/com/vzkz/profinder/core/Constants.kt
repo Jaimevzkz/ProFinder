@@ -27,7 +27,7 @@ object Constants {
 
     //Realtime
     const val RECENT_CHATS = "recentChats"
-    const val RECENT_CHATS_BODY = "recentChatBody"
+    const val CHATS = "chats"
 
     //Errors
     const val ERRORSTR = "error"

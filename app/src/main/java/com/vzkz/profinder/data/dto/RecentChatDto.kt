@@ -1,17 +1,16 @@
 package com.vzkz.profinder.data.dto
 
-import android.net.Uri
-
 data class RecentChatDto(
-    val profilePhoto : Uri?,
-    val nickname: String,
-    val chatId: Long,
+    val participants: Map<String, ParticipantDataDto>,
+    val timestamp: Long,
+    val lastMsg: String?,
+    val unreadMsgNumber: Int,
+    val lastMsgUid: String,
+    val chatId: String
 )
 
 
-data class DummyRecentChatDto(
-    val timestamp: Long,
-    val lastMsg: String,
-    val unreadMsgNumber: Int,
-    val lastMsgUid: String
+data class ParticipantDataDto(
+    val profilePhoto: String?,
+    val nickname: String
 )

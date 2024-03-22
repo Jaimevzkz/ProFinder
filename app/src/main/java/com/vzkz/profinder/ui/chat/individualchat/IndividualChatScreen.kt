@@ -1,6 +1,7 @@
 package com.vzkz.profinder.ui.chat.individualchat
 
 import android.content.res.Configuration
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,7 +40,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.INDIVIDUALCHATITEMFORTEST
 import com.vzkz.profinder.domain.model.ChatMsgModel
-import com.vzkz.profinder.domain.model.IndividualChatModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyGenericTextField
@@ -53,13 +53,21 @@ import com.vzkz.profinder.ui.theme.ProFinderTheme
 @Composable
 fun IndividualChatScreen(
     navigator: DestinationsNavigator,
+    otherNickname: String,
+    otherProfilePhoto: Uri?,
+    otherUid: String,
     individualChatViewModel: IndividualChatViewModel = hiltViewModel()
 ) {
     val error = individualChatViewModel.state.error
     ScreenBody(
-        individualChatModel = INDIVIDUALCHATITEMFORTEST,
+        messageList = emptyList(),
+        nickname = otherNickname,
+        profilePhoto = otherProfilePhoto,
         onFormatTime = { individualChatViewModel.getFormattedTime(it) },
         error = error,
+        onBackClicked = {
+            navigator.popBackStack()
+        },
         onCloseDialog = {
             individualChatViewModel.onCloseDialog()
         }
@@ -68,8 +76,11 @@ fun IndividualChatScreen(
 
 @Composable
 private fun ScreenBody(
-    individualChatModel: IndividualChatModel,
+    nickname: String,
+    profilePhoto: Uri?,
+    messageList: List<ChatMsgModel>,
     onFormatTime: (Long) -> String,
+    onBackClicked: () -> Unit,
     error: UiError,
     onCloseDialog: () -> Unit,
 ) {
@@ -88,20 +99,22 @@ private fun ScreenBody(
                     .padding(top = 12.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBackIosNew,
-                    contentDescription = "Nav Back",
-                    tint = MaterialTheme.colorScheme.primary
-                )
+                IconButton(onClick = onBackClicked) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBackIosNew,
+                        contentDescription = "Nav Back",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
                 MySpacer(size = 16)
                 ProfilePicture(
-                    profilePhoto = individualChatModel.profilePhoto,
+                    profilePhoto = profilePhoto,
                     size = 50,
                     shape = MaterialTheme.shapes.large
                 )
                 MySpacer(size = 8)
                 Text(
-                    text = individualChatModel.nickname,
+                    text = nickname,
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
@@ -116,12 +129,13 @@ private fun ScreenBody(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Bottom
             ) {
-                items(individualChatModel.msgList) { message ->
-                    val index = individualChatModel.msgList.indexOf(message)
+                items(messageList) { message ->
+                    val index = messageList.indexOf(message)
                     var isLast = false
-                    if (index < individualChatModel.msgList.size - 1
-                        && message.isMine == individualChatModel.msgList[index + 1].isMine
-                        || index == individualChatModel.msgList.size - 1)
+                    if (index < messageList.size - 1
+                        && message.isMine == messageList[index + 1].isMine
+                        || index == messageList.size - 1
+                    )
                         isLast = true //todo why doesnt it work??
 
                     ChatMessage(
@@ -131,6 +145,7 @@ private fun ScreenBody(
                         ownMsg = message.isMine
                     )
                 }
+
             }
 
 
@@ -237,9 +252,12 @@ private fun ChatMessage(
 private fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
-            individualChatModel = INDIVIDUALCHATITEMFORTEST,
+            messageList = INDIVIDUALCHATITEMFORTEST,
+            nickname = "larbyysbarber",
+            profilePhoto = null,
             onFormatTime = { _ -> "12:00 PM" },
             error = UiError(false, "Account wasn't created"),
+            onBackClicked = {},
             onCloseDialog = {}
         )
     }

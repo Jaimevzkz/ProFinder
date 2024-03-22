@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Chat
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -40,6 +41,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.PROFESSIONALMODELFORTESTS
+import com.vzkz.profinder.destinations.ChatScreenDestination
+import com.vzkz.profinder.destinations.IndividualChatScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.UiError
@@ -67,6 +70,15 @@ fun ViewProfileScreen(
         onChangeFavourite = {
             viewProfileViewModel.onFavouriteChanged(uidToChange = uidToSee, add = !isFavourite)
         },
+        onChatClicked = {
+            navigator.navigate(
+                IndividualChatScreenDestination(
+                    otherNickname = userToSee?.nickname ?: "Guess",
+                    otherProfilePhoto = userToSee?.profilePhoto,
+                    otherUid = uidToSee
+                )
+            )
+        },
         onCloseDialog = {
             viewProfileViewModel.onCloseDialog()
         },
@@ -82,6 +94,7 @@ private fun ScreenBody(
     error: UiError,
     isFavourite: Boolean,
     onChangeFavourite: () -> Unit,
+    onChatClicked: () -> Unit,
     onCloseDialog: () -> Unit,
     onNavBack: () -> Unit
 ) {
@@ -142,24 +155,24 @@ private fun ScreenBody(
                 }
             }
             //Status
-            if (userToSee.actor == Actors.Professional) {
-                //State
-                MySpacer(size = 8)
-                Row(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start
-                ) {
+            //State
+            MySpacer(size = 8)
+            Row(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
 
-                    IconButton(onClick = {
-                        onChangeFavourite()
-                    }, modifier = Modifier) {
-                        Icon(
-                            imageVector = if (!isFavourite) Icons.Outlined.FavoriteBorder else Icons.Filled.Favorite,
-                            contentDescription = "Navigate back",
-                            tint = if (!isFavourite) MaterialTheme.colorScheme.onBackground else Color.Red
-                        )
-                    }
+                IconButton(onClick = {
+                    onChangeFavourite()
+                }, modifier = Modifier) {
+                    Icon(
+                        imageVector = if (!isFavourite) Icons.Outlined.FavoriteBorder else Icons.Filled.Favorite,
+                        contentDescription = "Favourite",
+                        tint = if (!isFavourite) MaterialTheme.colorScheme.onBackground else Color.Red
+                    )
+                }
+                if (userToSee.actor == Actors.Professional) {
                     MySpacer(size = 8)
                     Row(
                         modifier = Modifier
@@ -184,6 +197,18 @@ private fun ScreenBody(
                             color = cardContentColor
                         )
                     }
+                }
+                MySpacer(size = 8)
+
+                IconButton(
+                    onClick = onChatClicked,
+                    modifier = Modifier
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.Chat,
+                        contentDescription = "Chat",
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
                 }
             }
             MySpacer(size = 16)
@@ -251,6 +276,7 @@ private fun LightPreview() {
             error = UiError(false, "Account wasn't created"),
             isFavourite = true,
             onChangeFavourite = {},
+            onChatClicked = {},
             onCloseDialog = {},
             onNavBack = {}
         )

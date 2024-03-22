@@ -11,6 +11,8 @@ import com.vzkz.profinder.core.Constants.NICKNAME_IN_USE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_SERVICEATTRIBUTE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_USERFIELD
 import com.vzkz.profinder.core.Constants.NULL_USERDATA
+import com.vzkz.profinder.data.dto.ParticipantDataDto
+import com.vzkz.profinder.data.dto.RecentChatDto
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.data.firebase.RealtimeService
@@ -18,6 +20,7 @@ import com.vzkz.profinder.data.firebase.StorageService
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
+import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
@@ -169,6 +172,43 @@ class RepositoryImpl @Inject constructor(
     //Realtime
     override fun getRecentChats(uid: String) = realtimeService.getRecentChats(uid)
 
+    override fun addRecentChat(
+        chatListItemModel: ChatListItemModel,
+        ownerUid: String,
+        ownerNickname: String,
+        ownerProfilePhoto: Uri?
+    ) {
+        val participants: Map<String, ParticipantDataDto> = mapOf(
+            Pair(
+                ownerUid,
+                ParticipantDataDto(
+                    profilePhoto = ownerProfilePhoto?.toString(),
+                    nickname = ownerNickname
+                )
+            ),
+            Pair(
+                chatListItemModel.uid,
+                ParticipantDataDto(
+                    profilePhoto = chatListItemModel.profilePhoto?.toString(),
+                    nickname = chatListItemModel.nickname
+                )
+            ),
+
+            )
+        val recentChatDto = RecentChatDto(
+            participants = participants,
+            timestamp = chatListItemModel.timestamp,
+            lastMsg = chatListItemModel.lastMsg,
+            unreadMsgNumber = chatListItemModel.unreadMsgNumber,
+            lastMsgUid = chatListItemModel.lastMsgUid,
+            chatId = chatListItemModel.chatId
+        )
+        realtimeService.addOrModifyRecentChat(
+            chatId = chatListItemModel.chatId,
+            chatDto = recentChatDto
+        )
+
+    }
 
     //Exception handling
     private fun handleException(e: Exception): Exception {
