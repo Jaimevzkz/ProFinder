@@ -18,3 +18,9 @@ enum class ReadStatus(val icon: ImageVector, val tint: Color = Color.Gray) {
     Unread(icon = Icons.Filled.DoneAll),
     Read(icon = Icons.Filled.DoneAll, tint = Color.Blue)
 }
+ fun ReadStatus.toData(): Int{
+    return when(this){
+        ReadStatus.Unread -> 0
+        ReadStatus.Read -> 1
+    }
+ }

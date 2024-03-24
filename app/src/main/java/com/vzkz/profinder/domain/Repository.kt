@@ -1,9 +1,11 @@
 package com.vzkz.profinder.domain
 
 import android.net.Uri
+import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ChatListItemModel
+import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
@@ -57,5 +59,16 @@ interface Repository {
         ownerUid: String,
         ownerNickname: String,
         ownerProfilePhoto: Uri?
+    )
+
+    fun getIndividualChat(ownerUid: String, otherUid: String): Flow<List<ChatMsgModel>>
+    fun addNewMessage(ownerUid: String, otherUid: String, chatMsgModel: ChatMsgModel)
+    fun openRecentChat(chatId: String)
+    fun updateRecentChat(
+        chatId: String?,
+        message: String,
+        timestamp: Long,
+        senderUid: String,
+        participants: Map<String, ParticipantDataDto>
     )
 }

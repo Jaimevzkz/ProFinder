@@ -1,6 +1,7 @@
 package com.vzkz.profinder.data.response
 
 import android.net.Uri
+import com.vzkz.profinder.core.Constants.NULL_REALTIME_USERDATA
 import com.vzkz.profinder.domain.model.ChatListItemModel
 
 data class RecentFinalChatResponse(
@@ -19,15 +20,15 @@ data class RecentFinalChatResponse(
                 participant?.uid = it.key
             }
         }
-        return ChatListItemModel( //todo handle errors
-            chatId = chatId ?: "error",
-            uid = participant?.uid ?: "error",
-            profilePhoto = participant.let { Uri.parse(it?.profilePhoto) },
-            nickname = participant?.nickname ?: "Guess",
+        return ChatListItemModel(
+            chatId = chatId ?: throw Exception(NULL_REALTIME_USERDATA),
+            uid = participant?.uid ?: throw Exception(NULL_REALTIME_USERDATA),
+            profilePhoto = participant.let { if(it?.profilePhoto != null) Uri.parse(it.profilePhoto) else null },
+            nickname = participant?.nickname ?: throw Exception(NULL_REALTIME_USERDATA),
             timestamp = timestamp ?: 0,
-            lastMsg = lastMsg ?: "No message",
-            unreadMsgNumber = unreadMsgNumber ?: 0,
-            lastMsgUid = lastMsgUid ?: "error"
+            lastMsg = lastMsg ?: throw Exception(NULL_REALTIME_USERDATA),
+            unreadMsgNumber = unreadMsgNumber ?: throw Exception(NULL_REALTIME_USERDATA),
+            lastMsgUid = lastMsgUid ?: throw Exception(NULL_REALTIME_USERDATA)
         )
     }
 }

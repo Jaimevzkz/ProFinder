@@ -44,7 +44,7 @@ fun ServicesScreenShimmer(
 //            )
 //            Spacer(modifier = Modifier.weight(1f))
 //        }
-        MySpacer(size = 40)
+//        MySpacer(size = 40)
         MySpacer(size = 16)
         for (i in 0..2) {
             ServiceCardShimmer(backgroundColor = cardBackgroundColor)

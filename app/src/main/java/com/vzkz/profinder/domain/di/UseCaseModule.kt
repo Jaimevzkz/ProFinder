@@ -2,16 +2,22 @@ package com.vzkz.profinder.domain.di
 
 import com.vzkz.profinder.domain.usecases.FlushSingletonsUseCase
 import com.vzkz.profinder.domain.usecases.FlushSingletonsUseCaseImpl
+import com.vzkz.profinder.domain.usecases.ThemeDSUseCase
+import com.vzkz.profinder.domain.usecases.ThemeDSUseCaseImpl
 import com.vzkz.profinder.domain.usecases.auth.LoginUseCase
 import com.vzkz.profinder.domain.usecases.auth.LoginUseCaseImpl
 import com.vzkz.profinder.domain.usecases.auth.LogoutUseCase
 import com.vzkz.profinder.domain.usecases.auth.LogoutUseCaseImpl
 import com.vzkz.profinder.domain.usecases.auth.SignUpUseCase
 import com.vzkz.profinder.domain.usecases.auth.SignUpUseCaseImpl
-import com.vzkz.profinder.domain.usecases.ThemeDSUseCase
-import com.vzkz.profinder.domain.usecases.ThemeDSUseCaseImpl
+import com.vzkz.profinder.domain.usecases.chat.AddNewMessageUseCase
+import com.vzkz.profinder.domain.usecases.chat.AddNewMessageUseCaseImpl
+import com.vzkz.profinder.domain.usecases.chat.GetIndChatsUseCase
+import com.vzkz.profinder.domain.usecases.chat.GetIndChatsUseCaseImpl
 import com.vzkz.profinder.domain.usecases.chat.GetRecentChatsUseCase
 import com.vzkz.profinder.domain.usecases.chat.GetRecentChatsUseCaseImpl
+import com.vzkz.profinder.domain.usecases.chat.OpenRecentChatsUseCase
+import com.vzkz.profinder.domain.usecases.chat.OpenRecentChatsUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
@@ -85,5 +91,11 @@ abstract class UseCaseModule {
     abstract fun bindFlushSingletonsUseCase(impl: FlushSingletonsUseCaseImpl): FlushSingletonsUseCase
     @Binds
     abstract fun bindGetRecentChatsUseCase(impl: GetRecentChatsUseCaseImpl): GetRecentChatsUseCase
+    @Binds
+    abstract fun bindGetIndChatsUseCase(impl: GetIndChatsUseCaseImpl): GetIndChatsUseCase
+    @Binds
+    abstract fun bindAddNewMessageUseCase(impl: AddNewMessageUseCaseImpl): AddNewMessageUseCase
+    @Binds
+    abstract fun bindOpenRecentChatsUseCase(impl: OpenRecentChatsUseCaseImpl): OpenRecentChatsUseCase
 
 }

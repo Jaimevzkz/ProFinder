@@ -1,7 +1,9 @@
 package com.vzkz.profinder.ui.chat
 
 import android.content.res.Configuration
+import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,6 +39,7 @@ import com.valentinilk.shimmer.shimmer
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.CHATLISTITEMFORTEST
 import com.vzkz.profinder.destinations.ChatScreenDestination
+import com.vzkz.profinder.destinations.IndividualChatScreenDestination
 import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyColumn
@@ -61,6 +64,17 @@ fun ChatScreen(navigator: DestinationsNavigator, chatViewModel: ChatViewModel = 
         loading = loading,
         uid = uid,
         error = error,
+        onChatClicked = { otherNickname, otherProfilePicture, otherUid, chatId, lastMsgUid ->
+            navigator.navigate(
+                IndividualChatScreenDestination(
+                    otherNickname = otherNickname,
+                    otherProfilePhoto = otherProfilePicture,
+                    otherUid = otherUid,
+                    chatId = chatId,
+                    lastMsgUid = lastMsgUid
+                )
+            )
+        },
         onFormatTime = { chatViewModel.getFormattedTime(it) },
         onCloseDialog = {
             chatViewModel.onCloseDialog()
@@ -75,6 +89,7 @@ private fun ScreenBody(
     loading: Boolean,
     uid: String,
     error: UiError,
+    onChatClicked: (String, Uri?, String, String, String) -> Unit,
     onFormatTime: (Long) -> String,
     onCloseDialog: () -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
@@ -121,6 +136,9 @@ private fun ScreenBody(
                     ) {
                         items(chatList) { chatItem ->
                             ChatItem(
+                                modifier = Modifier.clickable {
+                                    onChatClicked(chatItem.nickname, chatItem.profilePhoto, chatItem.uid, chatItem.chatId, chatItem.lastMsgUid)
+                                },
                                 uid = uid,
                                 chatListItemModel = chatItem,
                                 timeSent = onFormatTime(chatItem.timestamp)
@@ -143,13 +161,14 @@ private fun ScreenBody(
 
 @Composable
 private fun ChatItem(
+    modifier: Modifier = Modifier,
     uid: String,
     chatListItemModel: ChatListItemModel,
     timeSent: String
 ) {
     val nickname = chatListItemModel.nickname
     val lastMsg = chatListItemModel.lastMsg
-    MyRow(modifier = Modifier.padding(vertical = 8.dp)) {
+    MyRow(modifier = modifier.padding(vertical = 8.dp)) {
         ProfilePicture(
             profilePhoto = chatListItemModel.profilePhoto,
             size = 70,
@@ -183,7 +202,7 @@ private fun ChatItem(
                     color = if (chatListItemModel.lastMsgUid == uid) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                if (chatListItemModel.unreadMsgNumber > 0)
+                if (chatListItemModel.unreadMsgNumber > 0 && chatListItemModel.lastMsgUid != uid)
                     Text(
                         chatListItemModel.unreadMsgNumber.toString(),
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -201,7 +220,7 @@ private fun ChatItem(
 @Composable
 private fun ChatItemShimmer() {
     MyRow(modifier = Modifier.padding(8.dp)) {
-        ProfilePictureShimmer(70)
+        ProfilePictureShimmer(70, shape = MaterialTheme.shapes.large)
         MySpacer(size = 12)
         Column {
             MyRow {
@@ -256,7 +275,8 @@ private fun LightPreview() {
             onFormatTime = { "12:00 P.M." },
             error = UiError(false, "Account wasn't created"),
             onCloseDialog = {},
-            onBottomBarClicked = {}
+            onBottomBarClicked = {},
+            onChatClicked = {_,  _, _, _, _ -> }
         )
     }
 }

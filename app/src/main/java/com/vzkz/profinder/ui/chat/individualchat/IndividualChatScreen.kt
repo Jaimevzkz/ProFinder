@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,14 +56,28 @@ fun IndividualChatScreen(
     otherNickname: String,
     otherProfilePhoto: Uri?,
     otherUid: String,
+    chatId: String? = null,
+    lastMsgUid: String? = null,
     individualChatViewModel: IndividualChatViewModel = hiltViewModel()
 ) {
+    individualChatViewModel.onInit(otherUid = otherUid, chatId = chatId, lastSenderUid = lastMsgUid)
     val error = individualChatViewModel.state.error
+    val chatList = individualChatViewModel.state.chatList
     ScreenBody(
-        messageList = emptyList(),
+        messageList = chatList,
         nickname = otherNickname,
         profilePhoto = otherProfilePhoto,
+        onSendMessage = { message ->
+            individualChatViewModel.sendMessage(
+                chatId = chatId,
+                otherUid = otherUid,
+                otherNickname = otherNickname,
+                otherProfilePicture = otherProfilePhoto,
+                msg = message
+            )
+        },
         onFormatTime = { individualChatViewModel.getFormattedTime(it) },
+        onGetDate = { individualChatViewModel.getDate(it) },
         error = error,
         onBackClicked = {
             navigator.popBackStack()
@@ -79,7 +93,9 @@ private fun ScreenBody(
     nickname: String,
     profilePhoto: Uri?,
     messageList: List<ChatMsgModel>,
+    onSendMessage: (String) -> Unit,
     onFormatTime: (Long) -> String,
+    onGetDate: (Long) -> String,
     onBackClicked: () -> Unit,
     error: UiError,
     onCloseDialog: () -> Unit,
@@ -91,7 +107,7 @@ private fun ScreenBody(
             .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
-        MyColumn(verticalArrangement = Arrangement.Top) {
+        MyColumn(verticalArrangement = Arrangement.Top, modifier = Modifier.fillMaxWidth()) {
             MyRow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -129,31 +145,39 @@ private fun ScreenBody(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Bottom
             ) {
+                var prevDate = ""
                 items(messageList) { message ->
-                    val index = messageList.indexOf(message)
-                    var isLast = false
-                    if (index < messageList.size - 1
-                        && message.isMine == messageList[index + 1].isMine
-                        || index == messageList.size - 1
-                    )
-                        isLast = true //todo why doesnt it work??
-
+                    val actualDate = onGetDate(message.timestamp)
+                    if (actualDate != prevDate)
+                        MyRow {
+                            Spacer(modifier = Modifier.weight(1f))
+                            Box(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.small)
+                                    .background(MaterialTheme.colorScheme.secondary)
+                                    .padding(8.dp)
+                            ) {
+                                Text(text = actualDate, color = MaterialTheme.colorScheme.onSecondary, modifier = Modifier.align(Alignment.Center))
+                            } 
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    
                     ChatMessage(
                         chatMsgModel = message,
                         time = onFormatTime(message.timestamp),
-                        isLast = isLast,
                         ownMsg = message.isMine
                     )
+                    prevDate = onGetDate(message.timestamp)
                 }
 
             }
 
-
-
             MyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(bottom = 12.dp)
+                    .padding(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
                 MyGenericTextField(
@@ -166,12 +190,15 @@ private fun ScreenBody(
                         .copy(focusedIndicatorColor = MaterialTheme.colorScheme.primary)
                 )
                 IconButton(
-                    onClick = { /*TODO*/ }, modifier = Modifier
+                    onClick = {
+                        onSendMessage(message)
+                        message = ""
+                    }, modifier = Modifier
                         .padding(8.dp)
                         .size(44.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.Send,
+                        imageVector = Icons.AutoMirrored.Outlined.Send,
                         contentDescription = "Send message",
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
@@ -197,23 +224,19 @@ private fun ScreenBody(
 @Composable
 private fun ChatMessage(
     modifier: Modifier = Modifier,
-    isLast: Boolean = false,
     ownMsg: Boolean = false,
     chatMsgModel: ChatMsgModel,
     time: String
 ) {
     val genPadding = 12.dp
-    val columnPadding =
-        if (ownMsg) PaddingValues(start = 64.dp, end = genPadding)
-        else PaddingValues(end = 64.dp, start = genPadding)
-
-    Box {
-        MyColumn(
-            modifier = modifier
-                .padding(columnPadding)
-                .padding(if (isLast) PaddingValues(bottom = genPadding) else PaddingValues(bottom = 8.dp))
-        ) {
-            Box(
+    MyRow(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = genPadding, vertical = 2.dp),
+        horizontalArrangement = if (ownMsg) Arrangement.End else Arrangement.Start
+    ) {
+        Box(modifier = Modifier/*.weight(7f)*/) {
+            MyRow(
                 modifier = Modifier
                     .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
                     .background(if (ownMsg) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
@@ -221,29 +244,29 @@ private fun ChatMessage(
             ) {
                 Text(
                     text = chatMsgModel.msg,
+                    color = if (ownMsg) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
+                    modifier = Modifier.padding(end = 8.dp),
                 )
-                if (ownMsg)
-                    Icon(
-                        imageVector = chatMsgModel.read.icon,
-                        contentDescription = "read",
-                        tint = chatMsgModel.read.tint,
-                        modifier = Modifier.align(
-                            Alignment.BottomEnd
-                        )
-                    )
-            }
-            if (isLast)
                 Text(
                     text = time,
+                    style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Light,
-                    modifier = Modifier
-                        .align(if (ownMsg) Alignment.End else Alignment.Start)
-                        .padding(horizontal = 12.dp),
-                    color = MaterialTheme.colorScheme.onBackground
+                    modifier = Modifier.align(Alignment.Bottom),
+//                            .padding(horizontal = 12.dp),
+                    color = if (ownMsg) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
                 )
-
+                if (ownMsg)
+                    MySpacer(size = 2)
+                Icon(
+                    imageVector = chatMsgModel.read.icon,
+                    contentDescription = "read",
+                    tint = chatMsgModel.read.tint,
+                    modifier = Modifier
+                        .align(Alignment.Bottom)
+                        .size(16.dp)
+                )
+            }
         }
-
     }
 }
 
@@ -258,7 +281,9 @@ private fun LightPreview() {
             onFormatTime = { _ -> "12:00 PM" },
             error = UiError(false, "Account wasn't created"),
             onBackClicked = {},
-            onCloseDialog = {}
+            onCloseDialog = {},
+            onSendMessage = {},
+            onGetDate = { _ -> "Today" }
         )
     }
 

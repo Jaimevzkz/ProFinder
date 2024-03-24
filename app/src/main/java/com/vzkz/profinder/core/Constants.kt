@@ -28,6 +28,12 @@ object Constants {
     //Realtime
     const val RECENT_CHATS = "recentChats"
     const val CHATS = "chats"
+    const val TIMESTAMP = "timestamp"
+    const val UNREAD_MSG_NUMBER = "unreadMsgNumber"
+    const val PARTCIPANTS = "participants"
+    const val LAST_MSG = "lastMsg"
+    const val LAST_MSG_UID = "lastMsgUid"
+
 
     //Errors
     const val ERRORSTR = "error"
@@ -38,6 +44,7 @@ object Constants {
     const val CONNECTION_ERROR = "CONNECTION_FAILURE"
     const val UNKNOWN_EXCEPTION = "UNKNOWN_EXCEPTION"
     const val NULL_USERDATA = "NULL_USERDATA"
+    const val NULL_REALTIME_USERDATA = "NULL_REALTIME_USERDATA"
     const val NONEXISTENT_USERFIELD = "NONEXISTENT_USERDATA"
     const val NICKNAME_IN_USE = "NICKNAME_IN_USE"
     const val MODIFICATION_ERROR = "MODIFICATION_ERROR"

@@ -37,6 +37,7 @@ fun MyGenericTextField(
     text: String,
     readOnly: Boolean = false,
     onTextChanged: (String) -> Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     shape: Shape = OutlinedTextFieldDefaults.shape,
@@ -55,7 +56,7 @@ fun MyGenericTextField(
                     color = hintColor
                 )
             },
-            keyboardOptions = KeyboardOptions.Default,
+            keyboardOptions = keyboardOptions,
             singleLine = true,
             readOnly = readOnly,
             trailingIcon = trailingIcon,
@@ -78,7 +79,7 @@ fun MyGenericTextField(
                     color = hintColor
                 )
             },
-            keyboardOptions = KeyboardOptions.Default,
+            keyboardOptions = keyboardOptions,
             singleLine = true,
             shape = shape,
             readOnly = readOnly,

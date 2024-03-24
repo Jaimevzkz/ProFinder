@@ -10,7 +10,9 @@ import com.vzkz.profinder.core.Constants.MODIFICATION_ERROR
 import com.vzkz.profinder.core.Constants.NICKNAME_IN_USE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_SERVICEATTRIBUTE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_USERFIELD
+import com.vzkz.profinder.core.Constants.NULL_REALTIME_USERDATA
 import com.vzkz.profinder.core.Constants.NULL_USERDATA
+import com.vzkz.profinder.data.dto.IndiviualChatDto
 import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.data.dto.RecentChatDto
 import com.vzkz.profinder.data.firebase.AuthService
@@ -21,9 +23,12 @@ import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ChatListItemModel
+import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
+import com.vzkz.profinder.domain.model.toData
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
@@ -170,7 +175,13 @@ class RepositoryImpl @Inject constructor(
     }
 
     //Realtime
-    override fun getRecentChats(uid: String) = realtimeService.getRecentChats(uid)
+    override fun getRecentChats(uid: String): Flow<List<ChatListItemModel>> {
+        try {
+            return realtimeService.getRecentChats(uid)
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
 
     override fun addRecentChat(
         chatListItemModel: ChatListItemModel,
@@ -178,36 +189,105 @@ class RepositoryImpl @Inject constructor(
         ownerNickname: String,
         ownerProfilePhoto: Uri?
     ) {
-        val participants: Map<String, ParticipantDataDto> = mapOf(
-            Pair(
-                ownerUid,
-                ParticipantDataDto(
-                    profilePhoto = ownerProfilePhoto?.toString(),
-                    nickname = ownerNickname
-                )
-            ),
-            Pair(
-                chatListItemModel.uid,
-                ParticipantDataDto(
-                    profilePhoto = chatListItemModel.profilePhoto?.toString(),
-                    nickname = chatListItemModel.nickname
-                )
-            ),
+        try {
+            val participants: Map<String, ParticipantDataDto> = mapOf(
+                Pair(
+                    ownerUid,
+                    ParticipantDataDto(
+                        profilePhoto = ownerProfilePhoto?.toString(),
+                        nickname = ownerNickname
+                    )
+                ),
+                Pair(
+                    chatListItemModel.uid,
+                    ParticipantDataDto(
+                        profilePhoto = chatListItemModel.profilePhoto?.toString(),
+                        nickname = chatListItemModel.nickname
+                    )
+                ),
 
+                )
+            val recentChatDto = RecentChatDto(
+                participants = participants,
+                timestamp = chatListItemModel.timestamp,
+                lastMsg = chatListItemModel.lastMsg,
+                unreadMsgNumber = chatListItemModel.unreadMsgNumber,
+                lastMsgUid = chatListItemModel.lastMsgUid,
+                chatId = chatListItemModel.chatId
             )
-        val recentChatDto = RecentChatDto(
-            participants = participants,
-            timestamp = chatListItemModel.timestamp,
-            lastMsg = chatListItemModel.lastMsg,
-            unreadMsgNumber = chatListItemModel.unreadMsgNumber,
-            lastMsgUid = chatListItemModel.lastMsgUid,
-            chatId = chatListItemModel.chatId
-        )
-        realtimeService.addOrModifyRecentChat(
-            chatId = chatListItemModel.chatId,
-            chatDto = recentChatDto
-        )
+            realtimeService.addOrModifyRecentChat(
+                chatId = chatListItemModel.chatId,
+                chatDto = recentChatDto
+            )
 
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+
+    }
+
+    override fun updateRecentChat(
+        chatId: String?,
+        message: String,
+        timestamp: Long,
+        senderUid: String,
+        participants: Map<String, ParticipantDataDto>
+    ) {
+        try {
+            realtimeService.updateRecentChats(
+                chatId = chatId,
+                message = message,
+                timestamp = timestamp,
+                senderUid = senderUid,
+                participants = participants
+            )
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
+
+    override fun openRecentChat(chatId: String) {
+        try {
+            realtimeService.openRecentChat(chatId = chatId)
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
+
+    override fun getIndividualChat(ownerUid: String, otherUid: String): Flow<List<ChatMsgModel>> {
+        try {
+            return realtimeService.getChats(
+                combinedUid = combineUids(ownerUid, otherUid),
+                ownerUid = ownerUid
+            )
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
+
+    override fun addNewMessage(ownerUid: String, otherUid: String, chatMsgModel: ChatMsgModel) {
+        try {
+            realtimeService.addNewMessage(
+                combineUids(ownerUid, otherUid),
+                indiviualChatDto = IndiviualChatDto(
+                    message = chatMsgModel.msg,
+                    timestamp = chatMsgModel.timestamp,
+                    read = chatMsgModel.read.toData(),
+                    senderUid = if (chatMsgModel.isMine) ownerUid else otherUid
+                )
+            )
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
+
+
+    private fun combineUids(uid1: String, uid2: String): String {
+        return if (uid1 < uid2) {
+            uid1 + uid2
+        } else {
+            uid2 + uid1
+        }
     }
 
     //Exception handling
@@ -220,6 +300,7 @@ class RepositoryImpl @Inject constructor(
             INSERTION_ERROR -> Exception(context.getString(R.string.couldn_t_insert_user_in_database))
             NONEXISTENT_USERFIELD -> Exception(context.getString(R.string.needed_values_missing_in_database))
             NONEXISTENT_SERVICEATTRIBUTE -> Exception(context.getString(R.string.attribute_of_a_service_corrupted_in_the_database))
+            NULL_REALTIME_USERDATA -> Exception(context.getString(R.string.realtime_data_was_corrupted))
             else -> Exception(context.getString(R.string.unknown_exception_occurred))
         }
     }
