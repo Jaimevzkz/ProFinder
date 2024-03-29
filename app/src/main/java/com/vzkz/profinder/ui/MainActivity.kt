@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.vzkz.profinder.NavGraphs
 import com.vzkz.profinder.domain.usecases.ThemeDSUseCase
@@ -32,6 +33,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+
         var flow: Flow<Boolean> = MutableStateFlow(false)
         CoroutineScope(Dispatchers.IO).launch {
             flow = themeDSUseCase()

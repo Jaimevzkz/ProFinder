@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ButtonDefaults
@@ -21,10 +22,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vzkz.profinder.R
 import com.vzkz.profinder.core.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.components.MyColumn
@@ -44,7 +47,7 @@ fun ServiceDetailsDialog(
     onRequest: () -> Unit,
     onCloseDialog: () -> Unit
 ) {
-    if (isVisible){
+    if (isVisible) {
         Box(
             modifier = modifier
                 .shadow(4.dp, shape = MaterialTheme.shapes.large)
@@ -77,18 +80,34 @@ fun ServiceDetailsDialog(
                     Spacer(modifier = Modifier.weight(3f))
 
                 }
-                Text(
-                    text = service.name,
-                    style = MaterialTheme.typography.displaySmall,
-                    color = fontColor
-                )
-                Text(
-                    text = service.category.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = fontColor,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 18.sp
-                )
+                MyRow(modifier = Modifier.align(Alignment.End)) {
+                    MyColumn {
+                        Text(
+                            text = service.name,
+                            style = MaterialTheme.typography.displaySmall,
+                            color = fontColor
+                        )
+                        Text(
+                            text = service.category.name,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = fontColor,
+                            fontWeight = FontWeight.Light,
+                            fontSize = 18.sp
+                        )
+                    }
+                    Text(
+                        text = service.price.toString() + stringResource(id = R.string.h),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = fontColor,
+                        modifier = Modifier
+                            .padding(start = 12.dp)
+                            .padding(8.dp)
+                            .shadow(1.dp, shape = CircleShape)
+                            .background(MaterialTheme.colorScheme.tertiaryContainer)
+                            .padding(12.dp)
+                    )
+
+                }
                 MySpacer(size = 8)
                 Text(
                     text = service.servDescription,

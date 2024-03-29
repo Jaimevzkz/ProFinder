@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +50,9 @@ import com.vzkz.profinder.ui.theme.ProFinderTheme
 @Destination
 @Composable
 fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = hiltViewModel()) {
-    homeViewModel.onInit()
+    LaunchedEffect(key1 = true) {
+        homeViewModel.onInit()
+    }
     val error = homeViewModel.state.error
     var favList: List<ActorModel> by remember { mutableStateOf(emptyList()) }
     favList = homeViewModel.state.favList
@@ -219,8 +222,8 @@ private fun LightPreview() {
 //            favList = emptyList(),
             favList = PROFFESIONALLISTFORTEST,
             error = UiError(false, "Account wasn't created"),
-            loading = true,
-//            loading = false,
+//            loading = true,
+            loading = false,
             onDeleteFav = {},
             onCloseDialog = {},
             onBottomBarClicked = {},

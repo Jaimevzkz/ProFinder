@@ -37,7 +37,6 @@ import com.vzkz.profinder.ui.components.dialogs.ServiceDetailsDialog
 import com.vzkz.profinder.ui.services.components.ServiceCard
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun UserScreenBody(
     modifier: Modifier = Modifier,
@@ -47,44 +46,10 @@ fun UserScreenBody(
 ) {
 
     var query by remember { mutableStateOf("") }
-    var showServiceInfo by remember { mutableStateOf(false) }
+    var showServiceInfo by remember { mutableStateOf(true) }
     var serviceToShow: ServiceModel? by remember { mutableStateOf(null) }
+    serviceToShow = SERVICEMODEL1FORTEST
 
-    //
-//    //Location
-//    val context = LocalContext.current
-//    var location by remember { mutableStateOf<Location?>(null) }
-//    val fusedLocationClient: FusedLocationProviderClient =
-//        LocationServices.getFusedLocationProviderClient(context)
-//
-//    // Request location permission
-//    val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
-//
-//    // Retrieve the last known location
-//    LaunchedEffect(key1 = permissionState) {
-//        if (
-//            ActivityCompat.checkSelfPermission(
-//                context,
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                context,
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            ActivityCompat.requestPermissions(
-//                context as Activity,
-//                arrayOf(
-//                    Manifest.permission.ACCESS_FINE_LOCATION,
-//                    Manifest.permission.ACCESS_COARSE_LOCATION
-//                ),
-//                1
-//            )
-//        } else {
-//            location = fusedLocationClient.lastLocation.await()
-//        }
-//    }
-
-    //
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -136,11 +101,6 @@ fun UserScreenBody(
                 .background(MaterialTheme.colorScheme.primary),
             onClick = {
                 onSeeMap()
-
-//                permissionState.launchPermissionRequest()
-//
-//                Log.i("Jaime", "Location: $location")
-//                Log.i("Permission state", "Permission: ${permissionState.status.isGranted}")
             }
         ) {
             Icon(

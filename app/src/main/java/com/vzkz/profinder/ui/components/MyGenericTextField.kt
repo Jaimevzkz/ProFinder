@@ -1,5 +1,6 @@
 package com.vzkz.profinder.ui.components
 
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -38,6 +39,7 @@ fun MyGenericTextField(
     readOnly: Boolean = false,
     onTextChanged: (String) -> Unit,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     shape: Shape = OutlinedTextFieldDefaults.shape,
@@ -57,6 +59,7 @@ fun MyGenericTextField(
                 )
             },
             keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             singleLine = true,
             readOnly = readOnly,
             trailingIcon = trailingIcon,
@@ -80,6 +83,7 @@ fun MyGenericTextField(
                 )
             },
             keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             singleLine = true,
             shape = shape,
             readOnly = readOnly,

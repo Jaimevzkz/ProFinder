@@ -16,15 +16,26 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -54,7 +65,9 @@ import com.vzkz.profinder.ui.theme.ProFinderTheme
 @Destination
 @Composable
 fun ChatScreen(navigator: DestinationsNavigator, chatViewModel: ChatViewModel = hiltViewModel()) {
-    chatViewModel.onInit()
+    LaunchedEffect(key1 = true) {
+        chatViewModel.onInit()
+    }
     val error = chatViewModel.state.error
     val chatList = chatViewModel.state.chatList
     val loading = chatViewModel.state.loading
@@ -94,6 +107,10 @@ private fun ScreenBody(
     onCloseDialog: () -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
 ) {
+    var query by remember { mutableStateOf("") }
+    var isSearchVisible by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+
     MyBottomBarScaffold(
         currentDestination = ChatScreenDestination,
         onBottomBarClicked = { onBottomBarClicked(it) },
@@ -120,10 +137,37 @@ private fun ScreenBody(
                         style = MaterialTheme.typography.displaySmall,
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
+
+                    if (isSearchVisible){
+                        LaunchedEffect(Unit) {
+                            focusRequester.requestFocus()
+                        }
+                        TextField(
+                            value = query,
+                            modifier = Modifier
+                                .focusRequester(focusRequester)
+                                .width(220.dp),
+                            onValueChange = { query = it },
+                            colors = TextFieldDefaults.colors().copy(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                            ),
+                        )
+
+                    }
+
+                    IconButton(onClick = {
+                        isSearchVisible = !isSearchVisible
+                        query = ""
+                    }) {
+                        Icon(
+                            imageVector = if (!isSearchVisible) Icons.Filled.Search else Icons.Filled.Close,
+                            contentDescription = "Search",
+                        )
+                    }
                 }
                 MySpacer(size = 8)
-                HorizontalDivider()
+                HorizontalDivider(modifier = Modifier)
                 MySpacer(size = 8)
 
                 if (loading) {
@@ -134,10 +178,21 @@ private fun ScreenBody(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                     ) {
-                        items(chatList) { chatItem ->
+                        items(chatList.filter {
+                            it.nickname.contains(
+                                other = query,
+                                ignoreCase = true
+                            )
+                        }) { chatItem ->
                             ChatItem(
                                 modifier = Modifier.clickable {
-                                    onChatClicked(chatItem.nickname, chatItem.profilePhoto, chatItem.uid, chatItem.chatId, chatItem.lastMsgUid)
+                                    onChatClicked(
+                                        chatItem.nickname,
+                                        chatItem.profilePhoto,
+                                        chatItem.uid,
+                                        chatItem.chatId,
+                                        chatItem.lastMsgUid
+                                    )
                                 },
                                 uid = uid,
                                 chatListItemModel = chatItem,
@@ -276,7 +331,7 @@ private fun LightPreview() {
             error = UiError(false, "Account wasn't created"),
             onCloseDialog = {},
             onBottomBarClicked = {},
-            onChatClicked = {_,  _, _, _, _ -> }
+            onChatClicked = { _, _, _, _, _ -> }
         )
     }
 }

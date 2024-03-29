@@ -32,7 +32,6 @@ class IndividualChatViewModel @Inject constructor(
         return when (intent) {
             is IndividualChatIntent.Loading -> state.copy(loading = true)
 
-
             is IndividualChatIntent.Error -> state.copy(
                 error = UiError(true, intent.errorMsg),
                 loading = false
@@ -64,7 +63,7 @@ class IndividualChatViewModel @Inject constructor(
         }
     }
 
-    fun onOpen(chatId: String?, lastSenderUid: String?) {
+    private fun onOpen(chatId: String?, lastSenderUid: String?) {
         if (chatId != null && lastSenderUid != null)
             viewModelScope.launch(Dispatchers.IO) {
                 val ownerUid = getUidDataStoreUseCase()

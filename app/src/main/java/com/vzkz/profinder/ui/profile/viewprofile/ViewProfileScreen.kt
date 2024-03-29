@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,7 +58,9 @@ fun ViewProfileScreen(
     viewProfileViewModel: ViewProfileViewModel = hiltViewModel(),
     uidToSee: String
 ) {
-    viewProfileViewModel.onInit(uidToSee)
+    LaunchedEffect(key1 = true) {
+        viewProfileViewModel.onInit(uidToSee)
+    }
     val error = viewProfileViewModel.state.error
     var userToSee: ActorModel? by remember { mutableStateOf(null) }
     userToSee = viewProfileViewModel.state.userToSee

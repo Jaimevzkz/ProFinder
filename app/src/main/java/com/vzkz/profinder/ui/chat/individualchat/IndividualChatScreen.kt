@@ -2,6 +2,8 @@ package com.vzkz.profinder.ui.chat.individualchat
 
 import android.content.res.Configuration
 import android.net.Uri
+import androidx.activity.addCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -20,8 +25,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,8 +36,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,7 +72,13 @@ fun IndividualChatScreen(
     lastMsgUid: String? = null,
     individualChatViewModel: IndividualChatViewModel = hiltViewModel()
 ) {
-    individualChatViewModel.onInit(otherUid = otherUid, chatId = chatId, lastSenderUid = lastMsgUid)
+    LaunchedEffect(key1 = true) {
+        individualChatViewModel.onInit(
+            otherUid = otherUid,
+            chatId = chatId,
+            lastSenderUid = lastMsgUid
+        )
+    }
     val error = individualChatViewModel.state.error
     val chatList = individualChatViewModel.state.chatList
     ScreenBody(
@@ -101,124 +119,163 @@ private fun ScreenBody(
     onCloseDialog: () -> Unit,
 ) {
     var message by remember { mutableStateOf("") }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        contentAlignment = Alignment.Center
-    ) {
-        MyColumn(verticalArrangement = Arrangement.Top, modifier = Modifier.fillMaxWidth()) {
-            MyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp)
-                    .padding(top = 12.dp),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                IconButton(onClick = onBackClicked) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBackIosNew,
-                        contentDescription = "Nav Back",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-                MySpacer(size = 16)
-                ProfilePicture(
-                    profilePhoto = profilePhoto,
-                    size = 50,
-                    shape = MaterialTheme.shapes.large
-                )
-                MySpacer(size = 8)
-                Text(
-                    text = nickname,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
+    val scrollState = rememberLazyListState()
 
-            }
-            MySpacer(size = 8)
-            HorizontalDivider()
-            MySpacer(size = 8)
+    var isKeyboardVisible by remember { mutableStateOf(true) }
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                var prevDate = ""
-                items(messageList) { message ->
-                    val actualDate = onGetDate(message.timestamp)
-                    if (actualDate != prevDate)
-                        MyRow {
-                            Spacer(modifier = Modifier.weight(1f))
-                            Box(
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.small)
-                                    .background(MaterialTheme.colorScheme.secondary)
-                                    .padding(8.dp)
-                            ) {
-                                Text(text = actualDate, color = MaterialTheme.colorScheme.onSecondary, modifier = Modifier.align(Alignment.Center))
-                            } 
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
-                    
-                    ChatMessage(
-                        chatMsgModel = message,
-                        time = onFormatTime(message.timestamp),
-                        ownMsg = message.isMine
-                    )
-                    prevDate = onGetDate(message.timestamp)
-                }
-
-            }
-
-            MyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp)
-                    .padding(horizontal = 12.dp),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                MyGenericTextField(
-                    modifier = Modifier.weight(1f),
-                    hint = "Type your message...",
-                    text = message,
-                    onTextChanged = { message = it },
-                    shape = MaterialTheme.shapes.extraLarge,
-                    colors = OutlinedTextFieldDefaults.colors()
-                        .copy(focusedIndicatorColor = MaterialTheme.colorScheme.primary)
-                )
-                IconButton(
-                    onClick = {
-                        onSendMessage(message)
-                        message = ""
-                    }, modifier = Modifier
-                        .padding(8.dp)
-                        .size(44.dp)
+    Scaffold(
+        topBar = {
+            MyColumn {
+                MyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .padding(top = 12.dp),
+                    horizontalArrangement = Arrangement.Start
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Outlined.Send,
-                        contentDescription = "Send message",
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.primary)
-                            .padding(8.dp)
-                            .fillMaxSize()
+                    IconButton(onClick = onBackClicked) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBackIosNew,
+                            contentDescription = "Nav Back",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    MySpacer(size = 16)
+                    ProfilePicture(
+                        profilePhoto = profilePhoto,
+                        size = 50,
+                        shape = MaterialTheme.shapes.large
+                    )
+                    MySpacer(size = 8)
+                    Text(
+                        text = nickname,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
                     )
                 }
+                MySpacer(size = 8)
+                HorizontalDivider()
+                MySpacer(size = 8)
             }
         }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center
+        ) {
+            MyColumn(verticalArrangement = Arrangement.Top, modifier = Modifier.fillMaxWidth()) {
+                LazyColumn(
+                    modifier = Modifier.weight(1f),
+                    state = scrollState,
+                ) {
+                    var prevDate = ""
+                    items(messageList) { message ->
+                        val actualDate = onGetDate(message.timestamp)
+                        if (actualDate != prevDate)
+                            MyRow {
+                                Spacer(modifier = Modifier.weight(1f))
+                                Box(
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .shadow(
+                                            elevation = 1.dp,
+                                            shape = MaterialTheme.shapes.small
+                                        )
+                                        .background(MaterialTheme.colorScheme.secondary)
+                                        .padding(8.dp)
+                                ) {
+                                    Text(
+                                        text = actualDate,
+                                        color = MaterialTheme.colorScheme.onSecondary,
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.weight(1f))
+                            }
+
+                        ChatMessage(
+                            chatMsgModel = message,
+                            time = onFormatTime(message.timestamp),
+                            ownMsg = message.isMine
+                        )
+                        prevDate = onGetDate(message.timestamp)
+                    }
+
+                }
+
+                MyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = if (isKeyboardVisible) 312.dp else 0.dp)
+                        .padding(bottom = 12.dp)
+                        .padding(horizontal = 12.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    MyGenericTextField(
+                        modifier = Modifier
+                            .weight(1f)
+                            .focusRequester(focusRequester)
+                            .onFocusChanged {
+                                isKeyboardVisible = it.isFocused
+                            },
+                        hint = "Type your message...",
+                        text = message,
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                            },
+                        ),
+                        onTextChanged = { message = it },
+                        shape = MaterialTheme.shapes.extraLarge,
+                        colors = OutlinedTextFieldDefaults.colors()
+                            .copy(focusedIndicatorColor = MaterialTheme.colorScheme.primary),
+                    )
+                    IconButton(
+                        onClick = {
+                            if (message.isNotEmpty())
+                                onSendMessage(message)
+                            message = ""
+                        }, modifier = Modifier
+                            .padding(8.dp)
+                            .size(44.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.Send,
+                            contentDescription = "Send message",
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.primary)
+                                .padding(8.dp)
+                                .fillMaxSize()
+                        )
+                    }
+                }
+            }
 
 
-        MyAlertDialog(
-            title = stringResource(R.string.error),
-            text = error.errorMsg.orEmpty(),
-            onDismiss = { onCloseDialog() },
-            onConfirm = { onCloseDialog() },
-            showDialog = error.isError
-        )
+            LaunchedEffect(key1 = messageList, key2 = isKeyboardVisible) {
+                if (messageList.isNotEmpty())
+                    scrollState.scrollToItem(messageList.size - 1)
+            }
+
+            MyAlertDialog(
+                title = stringResource(R.string.error),
+                text = error.errorMsg.orEmpty(),
+                onDismiss = { onCloseDialog() },
+                onConfirm = { onCloseDialog() },
+                showDialog = error.isError
+            )
+        }
+
     }
+
 }
 
 @Composable
@@ -235,7 +292,7 @@ private fun ChatMessage(
             .padding(horizontal = genPadding, vertical = 2.dp),
         horizontalArrangement = if (ownMsg) Arrangement.End else Arrangement.Start
     ) {
-        Box(modifier = Modifier/*.weight(7f)*/) {
+        Box(modifier = Modifier) {
             MyRow(
                 modifier = Modifier
                     .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)

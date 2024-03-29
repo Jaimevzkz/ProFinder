@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults.centerAlignedTopAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,10 +46,9 @@ fun ServicesScreen(
     navigator: DestinationsNavigator,
     servicesViewModel: ServicesViewModel = hiltViewModel()
 ) {
-    //todo
-    // - develop lista de favoritos
-    // - develop fotos de perfil
-    servicesViewModel.onInit()
+    LaunchedEffect(key1 = true) {
+        servicesViewModel.onInit()
+    }
 
     val loading = servicesViewModel.state.loading
     var activeServices: List<ServiceModel> by remember { mutableStateOf(emptyList()) }
