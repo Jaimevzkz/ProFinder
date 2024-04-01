@@ -12,6 +12,7 @@ import com.vzkz.profinder.core.Constants.NONEXISTENT_SERVICEATTRIBUTE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_USERFIELD
 import com.vzkz.profinder.core.Constants.NULL_REALTIME_USERDATA
 import com.vzkz.profinder.core.Constants.NULL_USERDATA
+import com.vzkz.profinder.core.Constants.REALTIME_ACCESS_INTERRUPTED
 import com.vzkz.profinder.data.dto.IndiviualChatDto
 import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.data.dto.RecentChatDto
@@ -27,7 +28,6 @@ import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
-import com.vzkz.profinder.domain.model.toData
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -253,6 +253,14 @@ class RepositoryImpl @Inject constructor(
             throw handleException(e)
         }
     }
+    
+    override fun getUnreadMsgAndOwner(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>>  {
+        return try {
+            realtimeService.getUnreadMsgAndOwner(ownerUid, chatId)
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
 
     override fun getIndividualChat(ownerUid: String, otherUid: String): Flow<List<ChatMsgModel>> {
         try {
@@ -272,7 +280,6 @@ class RepositoryImpl @Inject constructor(
                 indiviualChatDto = IndiviualChatDto(
                     message = chatMsgModel.msg,
                     timestamp = chatMsgModel.timestamp,
-                    read = chatMsgModel.read.toData(),
                     senderUid = if (chatMsgModel.isMine) ownerUid else otherUid
                 )
             )
@@ -301,6 +308,7 @@ class RepositoryImpl @Inject constructor(
             NONEXISTENT_USERFIELD -> Exception(context.getString(R.string.needed_values_missing_in_database))
             NONEXISTENT_SERVICEATTRIBUTE -> Exception(context.getString(R.string.attribute_of_a_service_corrupted_in_the_database))
             NULL_REALTIME_USERDATA -> Exception(context.getString(R.string.realtime_data_was_corrupted))
+            REALTIME_ACCESS_INTERRUPTED -> Exception(context.getString(R.string.access_to_realtime_database_was_interrupted))
             else -> Exception(context.getString(R.string.unknown_exception_occurred))
         }
     }

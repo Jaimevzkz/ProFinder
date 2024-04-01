@@ -16,6 +16,8 @@ import com.vzkz.profinder.domain.usecases.chat.GetIndChatsUseCase
 import com.vzkz.profinder.domain.usecases.chat.GetIndChatsUseCaseImpl
 import com.vzkz.profinder.domain.usecases.chat.GetRecentChatsUseCase
 import com.vzkz.profinder.domain.usecases.chat.GetRecentChatsUseCaseImpl
+import com.vzkz.profinder.domain.usecases.chat.GetUnreadMessageAndOwnerUseCase
+import com.vzkz.profinder.domain.usecases.chat.GetUnreadMessageAndOwnerUseCaseImpl
 import com.vzkz.profinder.domain.usecases.chat.OpenRecentChatsUseCase
 import com.vzkz.profinder.domain.usecases.chat.OpenRecentChatsUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
@@ -97,5 +99,7 @@ abstract class UseCaseModule {
     abstract fun bindAddNewMessageUseCase(impl: AddNewMessageUseCaseImpl): AddNewMessageUseCase
     @Binds
     abstract fun bindOpenRecentChatsUseCase(impl: OpenRecentChatsUseCaseImpl): OpenRecentChatsUseCase
+    @Binds
+    abstract fun bindGetUnreadMessageAndOwnerUseCase(impl: GetUnreadMessageAndOwnerUseCaseImpl): GetUnreadMessageAndOwnerUseCase
 
 }

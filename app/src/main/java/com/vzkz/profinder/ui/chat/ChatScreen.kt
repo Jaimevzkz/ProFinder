@@ -222,7 +222,8 @@ private fun ChatItem(
     timeSent: String
 ) {
     val nickname = chatListItemModel.nickname
-    val lastMsg = chatListItemModel.lastMsg
+    val isLastMsgMine =chatListItemModel.lastMsgUid == uid
+    val lastMsg = if(isLastMsgMine) stringResource(R.string.you) + chatListItemModel.lastMsg else chatListItemModel.lastMsg
     MyRow(modifier = modifier.padding(vertical = 8.dp)) {
         ProfilePicture(
             profilePhoto = chatListItemModel.profilePhoto,
@@ -254,7 +255,7 @@ private fun ChatItem(
                         0,
                         maxMsgLength
                     ) + "...",
-                    color = if (chatListItemModel.lastMsgUid == uid) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.primary
+                    color = if (chatListItemModel.unreadMsgNumber == 0 || isLastMsgMine) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 if (chatListItemModel.unreadMsgNumber > 0 && chatListItemModel.lastMsgUid != uid)

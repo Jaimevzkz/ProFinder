@@ -45,7 +45,6 @@ class AddNewMessageUseCaseImpl @Inject constructor(
                 isMine = true,
                 msg = msg,
                 timestamp = timestamp,
-                read = ReadStatus.Unread
             )
         )
 

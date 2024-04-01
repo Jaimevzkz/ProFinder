@@ -65,4 +65,6 @@
     <string name="attribute_of_a_service_corrupted_in_the_database">An attribute of a service was corrupted in the database. No service retrieved.</string>
     <string name="default_notification_channel_id" translatable="false">default_not_channel</string>
     <string name="realtime_data_was_corrupted">Realtime data was corrupted</string>
+    <string name="access_to_realtime_database_was_interrupted">Access to realtime database was interrupted</string>
+    <string name="you">"You: "</string>
 </resources>

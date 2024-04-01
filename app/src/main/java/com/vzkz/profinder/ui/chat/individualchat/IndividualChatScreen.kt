@@ -2,6 +2,7 @@ package com.vzkz.profinder.ui.chat.individualchat
 
 import android.content.res.Configuration
 import android.net.Uri
+import android.util.Log
 import androidx.activity.addCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
@@ -52,6 +53,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.INDIVIDUALCHATITEMFORTEST
 import com.vzkz.profinder.domain.model.ChatMsgModel
+import com.vzkz.profinder.domain.model.ReadStatus
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyGenericTextField
@@ -81,8 +83,14 @@ fun IndividualChatScreen(
     }
     val error = individualChatViewModel.state.error
     val chatList = individualChatViewModel.state.chatList
+    val unreadMsgs = individualChatViewModel.state.unreadMsgNumber
+    LaunchedEffect(chatList) {
+        if(chatList.isNotEmpty() && !chatList.last().isMine)
+            individualChatViewModel.markAsRead(chatId = chatId.orEmpty(), lastSenderUid = lastMsgUid)
+    }
     ScreenBody(
         messageList = chatList,
+        unreadMagNumber = unreadMsgs,
         nickname = otherNickname,
         profilePhoto = otherProfilePhoto,
         onSendMessage = { message ->
@@ -111,6 +119,7 @@ private fun ScreenBody(
     nickname: String,
     profilePhoto: Uri?,
     messageList: List<ChatMsgModel>,
+    unreadMagNumber: Int,
     onSendMessage: (String) -> Unit,
     onFormatTime: (Long) -> String,
     onGetDate: (Long) -> String,
@@ -198,11 +207,13 @@ private fun ScreenBody(
                                 }
                                 Spacer(modifier = Modifier.weight(1f))
                             }
+                        val readState = if( messageList.indexOf(message) < (messageList.size) - unreadMagNumber) ReadStatus.Read else ReadStatus.Unread
 
                         ChatMessage(
                             chatMsgModel = message,
                             time = onFormatTime(message.timestamp),
-                            ownMsg = message.isMine
+                            ownMsg = message.isMine,
+                            readStatus = readState
                         )
                         prevDate = onGetDate(message.timestamp)
                     }
@@ -237,6 +248,7 @@ private fun ScreenBody(
                         colors = OutlinedTextFieldDefaults.colors()
                             .copy(focusedIndicatorColor = MaterialTheme.colorScheme.primary),
                     )
+
                     IconButton(
                         onClick = {
                             if (message.isNotEmpty())
@@ -283,7 +295,8 @@ private fun ChatMessage(
     modifier: Modifier = Modifier,
     ownMsg: Boolean = false,
     chatMsgModel: ChatMsgModel,
-    time: String
+    time: String,
+    readStatus: ReadStatus
 ) {
     val genPadding = 12.dp
     MyRow(
@@ -309,19 +322,20 @@ private fun ChatMessage(
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Light,
                     modifier = Modifier.align(Alignment.Bottom),
-//                            .padding(horizontal = 12.dp),
                     color = if (ownMsg) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
                 )
-                if (ownMsg)
+                if (ownMsg) {
                     MySpacer(size = 2)
-                Icon(
-                    imageVector = chatMsgModel.read.icon,
-                    contentDescription = "read",
-                    tint = chatMsgModel.read.tint,
-                    modifier = Modifier
-                        .align(Alignment.Bottom)
-                        .size(16.dp)
-                )
+
+                    Icon(
+                        imageVector = readStatus.icon,
+                        contentDescription = "read",
+                        tint = readStatus.tint,
+                        modifier = Modifier
+                            .align(Alignment.Bottom)
+                            .size(16.dp)
+                    )
+                }
             }
         }
     }
@@ -340,7 +354,8 @@ private fun LightPreview() {
             onBackClicked = {},
             onCloseDialog = {},
             onSendMessage = {},
-            onGetDate = { _ -> "Today" }
+            onGetDate = { _ -> "Today" },
+            unreadMagNumber = 3
         )
     }
 

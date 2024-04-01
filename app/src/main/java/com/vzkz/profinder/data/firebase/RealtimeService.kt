@@ -1,11 +1,16 @@
 package com.vzkz.profinder.data.firebase
 
+import android.util.Log
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.snapshots
 import com.vzkz.profinder.core.Constants.CHATS
 import com.vzkz.profinder.core.Constants.LAST_MSG
 import com.vzkz.profinder.core.Constants.LAST_MSG_UID
 import com.vzkz.profinder.core.Constants.PARTCIPANTS
+import com.vzkz.profinder.core.Constants.REALTIME_ACCESS_INTERRUPTED
 import com.vzkz.profinder.core.Constants.RECENT_CHATS
 import com.vzkz.profinder.core.Constants.TIMESTAMP
 import com.vzkz.profinder.core.Constants.UNREAD_MSG_NUMBER
@@ -16,7 +21,9 @@ import com.vzkz.profinder.data.response.IndividualChatResponse
 import com.vzkz.profinder.data.response.RecentFinalChatResponse
 import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -85,6 +92,33 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
     fun openRecentChat(chatId: String) {
         realtimeDB.child(RECENT_CHATS).child(chatId).child(UNREAD_MSG_NUMBER).setValue(0)
     }
+
+    fun getUnreadMsgAndOwner(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>> =
+        callbackFlow {
+            val recentChatsRef = realtimeDB.child(RECENT_CHATS).child(chatId)
+            val valueEventListener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val lastMsgUid = snapshot.child(LAST_MSG_UID).getValue(String::class.java)
+                    val unreadMsgNumber =
+                        snapshot.child(UNREAD_MSG_NUMBER).getValue(Int::class.java)
+                    val isMine = lastMsgUid == ownerUid
+                    if (unreadMsgNumber != null)
+                        trySend(Pair(isMine, unreadMsgNumber))
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Jaime", error.message)
+                    throw Exception(REALTIME_ACCESS_INTERRUPTED)
+                }
+
+            }
+
+            recentChatsRef.addValueEventListener(valueEventListener)
+
+            awaitClose {
+                recentChatsRef.removeEventListener(valueEventListener)
+            }
+        }
 
     //Individual chat
     fun getChats(combinedUid: String, ownerUid: String): Flow<List<ChatMsgModel>> {

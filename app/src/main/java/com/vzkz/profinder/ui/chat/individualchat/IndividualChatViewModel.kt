@@ -7,6 +7,7 @@ import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.chat.AddNewMessageUseCase
 import com.vzkz.profinder.domain.usecases.chat.GetIndChatsUseCase
+import com.vzkz.profinder.domain.usecases.chat.GetUnreadMessageAndOwnerUseCase
 import com.vzkz.profinder.domain.usecases.chat.OpenRecentChatsUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,8 @@ class IndividualChatViewModel @Inject constructor(
     private val getIndChatsUseCase: GetIndChatsUseCase,
     private val addNewMessageUseCase: AddNewMessageUseCase,
     private val getUidDataStoreUseCase: GetUidDataStoreUseCase,
-    private val openRecentChatsUseCase: OpenRecentChatsUseCase
+    private val openRecentChatsUseCase: OpenRecentChatsUseCase,
+    private val getUnreadMessageAndOwnerUseCase: GetUnreadMessageAndOwnerUseCase
 ) :
     BaseViewModel<IndividualChatState, IndividualChatIntent>(IndividualChatState.initial) {
 
@@ -46,31 +48,47 @@ class IndividualChatViewModel @Inject constructor(
                 loading = false,
                 chatList = intent.updatedList
             )
+
+            is IndividualChatIntent.UpdateUnreadMsgs -> state.copy(unreadMsgNumber = intent.unreadMsgs)
         }
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit(otherUid: String, chatId: String?, lastSenderUid: String?) {
-        onOpen(chatId = chatId, lastSenderUid = lastSenderUid)
+        getUnreadMessages(chatId)
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 getIndChatsUseCase(otherUid).collect { chatList ->
                     dispatch(IndividualChatIntent.UpdateList(chatList))
-                }
-            }
+                }            }
         } catch (e: Exception) {
             dispatch(IndividualChatIntent.Error(e.message.orEmpty()))
         }
     }
 
-    private fun onOpen(chatId: String?, lastSenderUid: String?) {
+    fun markAsRead(chatId: String?, lastSenderUid: String?) {
         if (chatId != null && lastSenderUid != null)
             viewModelScope.launch(Dispatchers.IO) {
-                val ownerUid = getUidDataStoreUseCase()
-                if (ownerUid != lastSenderUid) {
-                    openRecentChatsUseCase(chatId)
+                openRecentChatsUseCase(chatId)
+            }
+    }
+
+    private fun getUnreadMessages(chatId: String?){
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                getUnreadMessageAndOwnerUseCase(
+                    getUidDataStoreUseCase(),
+                    chatId.orEmpty()
+                ).collect { unreadMsgs ->
+                    if (unreadMsgs.first)
+                        dispatch(IndividualChatIntent.UpdateUnreadMsgs(unreadMsgs.second))
+                    else
+                        dispatch(IndividualChatIntent.UpdateUnreadMsgs(0))
                 }
             }
+        } catch (e: Exception){
+            dispatch(IndividualChatIntent.Error(e.message.orEmpty()))
+        }
     }
 
     fun getFormattedTime(timestamp: Long): String {

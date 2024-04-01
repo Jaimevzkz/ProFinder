@@ -71,4 +71,6 @@ interface Repository {
         senderUid: String,
         participants: Map<String, ParticipantDataDto>
     )
+
+    fun getUnreadMsgAndOwner(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>>
 }

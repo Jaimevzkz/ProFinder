@@ -9,13 +9,15 @@ import com.vzkz.profinder.domain.model.UiError
 data class IndividualChatState(
     val loading: Boolean,
     val error: UiError,
-    val chatList: List<ChatMsgModel>
+    val chatList: List<ChatMsgModel>,
+    val unreadMsgNumber: Int
 ) : State {
     companion object {
         val initial: IndividualChatState = IndividualChatState(
             loading = false,
             error = UiError(false, null),
             chatList = emptyList(),
+            unreadMsgNumber = 0
         )
     }
 }
@@ -25,4 +27,5 @@ sealed class IndividualChatIntent: IndividualChatntent {
     data class Error(val errorMsg: String): IndividualChatIntent()
     data object CloseError: IndividualChatIntent()
     data class UpdateList(val updatedList: List<ChatMsgModel>): IndividualChatIntent()
+    data class UpdateUnreadMsgs(val unreadMsgs: Int): IndividualChatIntent()
 }
