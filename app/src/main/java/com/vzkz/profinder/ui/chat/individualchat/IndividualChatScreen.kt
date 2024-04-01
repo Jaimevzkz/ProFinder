@@ -52,6 +52,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.INDIVIDUALCHATITEMFORTEST
+import com.vzkz.profinder.destinations.ChatScreenDestination
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.ReadStatus
 import com.vzkz.profinder.domain.model.UiError
@@ -106,7 +107,7 @@ fun IndividualChatScreen(
         onGetDate = { individualChatViewModel.getDate(it) },
         error = error,
         onBackClicked = {
-            navigator.popBackStack()
+            navigator.navigate(ChatScreenDestination)
         },
         onCloseDialog = {
             individualChatViewModel.onCloseDialog()

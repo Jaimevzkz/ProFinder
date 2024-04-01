@@ -16,7 +16,7 @@ class UserProfileToSeeUseCaseImpl @Inject constructor(
 ): UserProfileToSeeUseCase {
     private val instance = getUserProfileToSeeInstance(repository)
     override suspend fun getUser(uid: String): ActorModel {
-        return if (!instance.cachedUser()) {
+        return if (!instance.cachedUser(uid)) {
             instance.getData(uid)
         } else instance.getData()
     }

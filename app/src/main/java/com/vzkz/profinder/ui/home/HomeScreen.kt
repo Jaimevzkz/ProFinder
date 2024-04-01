@@ -34,6 +34,7 @@ import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.PROFFESIONALLISTFORTEST
 import com.vzkz.profinder.destinations.HomeScreenDestination
+import com.vzkz.profinder.destinations.ViewProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyColumn
@@ -65,7 +66,10 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
         loading = loading,
         onDeleteFav = { homeViewModel.onDeleteFav(it) },
         onCloseDialog = { homeViewModel.onCloseDialog() },
-        onBottomBarClicked = { navigator.navigate(it) }
+        onBottomBarClicked = { navigator.navigate(it) },
+        onProfileInfo = {
+            navigator.navigate(ViewProfileScreenDestination(uidToSee = it))
+        }
     )
 }
 
@@ -76,6 +80,7 @@ private fun ScreenBody(
     loading: Boolean,
     onDeleteFav: (String) -> Unit,
     onCloseDialog: () -> Unit,
+    onProfileInfo: (String) -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
 ) {
     MyBottomBarScaffold(
@@ -153,7 +158,8 @@ private fun ScreenBody(
                                 favList,
                                 contentColor,
                                 editFavList,
-                                onDeleteFav
+                                onDeleteFav = onDeleteFav,
+                                onProfileInfo = onProfileInfo
                             )
                         }
                     )
@@ -227,6 +233,7 @@ private fun LightPreview() {
             onDeleteFav = {},
             onCloseDialog = {},
             onBottomBarClicked = {},
+            onProfileInfo = {}
         )
     }
 

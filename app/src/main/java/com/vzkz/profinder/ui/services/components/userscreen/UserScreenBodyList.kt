@@ -46,9 +46,8 @@ fun UserScreenBody(
 ) {
 
     var query by remember { mutableStateOf("") }
-    var showServiceInfo by remember { mutableStateOf(true) }
+    var showServiceInfo by remember { mutableStateOf(false) }
     var serviceToShow: ServiceModel? by remember { mutableStateOf(null) }
-    serviceToShow = SERVICEMODEL1FORTEST
 
     Box(
         modifier = modifier

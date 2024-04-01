@@ -15,7 +15,7 @@ data class ViewProfileState(
 ) : State {
     companion object {
         val initial: ViewProfileState = ViewProfileState(
-            loading = false,
+            loading = true,
             error = UiError(false, null),
             userToSee = null,
             isFavourite = false

@@ -52,7 +52,7 @@ fun ServiceDetailsDialog(
             modifier = modifier
                 .shadow(4.dp, shape = MaterialTheme.shapes.large)
                 .fillMaxWidth()
-                .height(500.dp)
+                .height(524.dp)
                 .background(backgroundColor),
         ) {
             MyColumn(modifier = Modifier.padding(12.dp)) {
@@ -66,6 +66,7 @@ fun ServiceDetailsDialog(
                             fontWeight = FontWeight.SemiBold
                         )
                         Text(text = service.owner.nickname, fontSize = 16.sp)
+                        MySpacer(size = 4)
                         OutlinedButton(
                             modifier = Modifier
                                 .size(92.dp, 34.dp),
@@ -80,13 +81,13 @@ fun ServiceDetailsDialog(
                     Spacer(modifier = Modifier.weight(3f))
 
                 }
-                MyRow(modifier = Modifier.align(Alignment.End)) {
-                    MyColumn {
-                        Text(
-                            text = service.name,
-                            style = MaterialTheme.typography.displaySmall,
-                            color = fontColor
-                        )
+                MyColumn {
+                    Text(
+                        text = service.name,
+                        style = MaterialTheme.typography.displaySmall,
+                        color = fontColor
+                    )
+                    MyRow {
                         Text(
                             text = service.category.name,
                             style = MaterialTheme.typography.bodyLarge,
@@ -94,20 +95,21 @@ fun ServiceDetailsDialog(
                             fontWeight = FontWeight.Light,
                             fontSize = 18.sp
                         )
-                    }
-                    Text(
-                        text = service.price.toString() + stringResource(id = R.string.h),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = fontColor,
-                        modifier = Modifier
-                            .padding(start = 12.dp)
-                            .padding(8.dp)
-                            .shadow(1.dp, shape = CircleShape)
-                            .background(MaterialTheme.colorScheme.tertiaryContainer)
-                            .padding(12.dp)
-                    )
 
+                        Text(
+                            text = service.price.toString() + stringResource(id = R.string.h),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = fontColor,
+                            modifier = Modifier
+                                .padding(start = 12.dp)
+                                .shadow(1.dp, shape = CircleShape)
+                                .background(MaterialTheme.colorScheme.tertiaryContainer)
+                                .padding(12.dp)
+                        )
+                    }
                 }
+
+
                 MySpacer(size = 8)
                 Text(
                     text = service.servDescription,
