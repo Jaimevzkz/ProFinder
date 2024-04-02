@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.snapshots
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Categories
@@ -35,7 +36,10 @@ import com.vzkz.profinder.core.Constants.UID
 import com.vzkz.profinder.core.Constants.USERS_COLLECTION
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
+import com.vzkz.profinder.domain.model.RequestModel
 import com.vzkz.profinder.domain.model.ServiceModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -248,10 +252,16 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     uid = ownerUid,
                     name = document.getString(NAME)
                         ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE),
-                    isActive = document.getBoolean(IS_ACTIVE) ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE),
+                    isActive = document.getBoolean(IS_ACTIVE) ?: throw Exception(
+                        NONEXISTENT_SERVICEATTRIBUTE
+                    ),
                     category = category,
-                    servDescription = document.getString(SERV_DESCRIPTION) ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE),
-                    price = document.getLong(PRICE)?.toDouble() ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE),
+                    servDescription = document.getString(SERV_DESCRIPTION) ?: throw Exception(
+                        NONEXISTENT_SERVICEATTRIBUTE
+                    ),
+                    price = document.getLong(PRICE)?.toDouble() ?: throw Exception(
+                        NONEXISTENT_SERVICEATTRIBUTE
+                    ),
                     owner = owner
                 )
             )
@@ -295,6 +305,19 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                 Log.e("Jaime", "Error modifying service activity: ${it.message}")
                 throw it
             }
+    }
+
+    //Requests
+    fun getJobRequests(uid: String): Flow<List<RequestModel>> = callbackFlow {
+        val requestList = mutableListOf<RequestModel>()
+        usersCollection.document(uid).collection("requests").addSnapshotListener { value, error ->
+            requestList.clear()
+            value?.documents?.forEach { docSnapshot ->
+                requestList.add(RequestModel())
+            }
+            trySend(requestList)
+        }
+
     }
 
 
