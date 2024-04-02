@@ -86,8 +86,11 @@ fun IndividualChatScreen(
     val chatList = individualChatViewModel.state.chatList
     val unreadMsgs = individualChatViewModel.state.unreadMsgNumber
     LaunchedEffect(chatList) {
-        if(chatList.isNotEmpty() && !chatList.last().isMine)
-            individualChatViewModel.markAsRead(chatId = chatId.orEmpty(), lastSenderUid = lastMsgUid)
+        if (chatList.isNotEmpty() && !chatList.last().isMine)
+            individualChatViewModel.markAsRead(
+                chatId = chatId.orEmpty(),
+                lastSenderUid = lastMsgUid
+            )
     }
     ScreenBody(
         messageList = chatList,
@@ -184,10 +187,13 @@ private fun ScreenBody(
                     modifier = Modifier.weight(1f),
                     state = scrollState,
                 ) {
-                    var prevDate = ""
                     items(messageList) { message ->
-                        val actualDate = onGetDate(message.timestamp)
-                        if (actualDate != prevDate)
+                        var showDate = true
+                        val currentIndex = messageList.indexOf(message)
+                        if (currentIndex > 0) {
+                            showDate = onGetDate(messageList[currentIndex].timestamp) != onGetDate(messageList[currentIndex - 1].timestamp)
+                        }
+                        if (showDate)
                             MyRow {
                                 Spacer(modifier = Modifier.weight(1f))
                                 Box(
@@ -201,14 +207,15 @@ private fun ScreenBody(
                                         .padding(8.dp)
                                 ) {
                                     Text(
-                                        text = actualDate,
+                                        text = onGetDate(message.timestamp),
                                         color = MaterialTheme.colorScheme.onSecondary,
                                         modifier = Modifier.align(Alignment.Center)
                                     )
                                 }
                                 Spacer(modifier = Modifier.weight(1f))
                             }
-                        val readState = if( messageList.indexOf(message) < (messageList.size) - unreadMagNumber) ReadStatus.Read else ReadStatus.Unread
+                        val readState =
+                            if (messageList.indexOf(message) < (messageList.size) - unreadMagNumber) ReadStatus.Read else ReadStatus.Unread
 
                         ChatMessage(
                             chatMsgModel = message,
@@ -216,7 +223,6 @@ private fun ScreenBody(
                             ownMsg = message.isMine,
                             readStatus = readState
                         )
-                        prevDate = onGetDate(message.timestamp)
                     }
 
                 }
