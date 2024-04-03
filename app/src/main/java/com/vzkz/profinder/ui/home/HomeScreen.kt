@@ -7,9 +7,18 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -33,11 +43,14 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.PROFFESIONALLISTFORTEST
+import com.vzkz.profinder.core.REQUESTLISTFORTEST
 import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.ViewProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.domain.model.RequestModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyColumn
+import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.permissions.PermissionDialog
@@ -76,6 +89,7 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
 @Composable
 private fun ScreenBody(
     favList: List<ActorModel>,
+    requestList: List<RequestModel> = emptyList(),
     error: UiError,
     loading: Boolean,
     onDeleteFav: (String) -> Unit,
@@ -124,7 +138,7 @@ private fun ScreenBody(
                         title = "Hired Services",
                         placeRight = false
                     ) {
-
+                        HomeRequestList(requestList = requestList)
                     }
                 }
 
@@ -192,9 +206,9 @@ private fun ScreenBody(
                 }
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                RequestNotificationPermissionDialog()
-            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                RequestNotificationPermissionDialog()
+//            }
 
             MyAlertDialog(
                 title = stringResource(R.string.error),
@@ -208,27 +222,62 @@ private fun ScreenBody(
 
 }
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun RequestNotificationPermissionDialog() {
-    val permissionState = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+fun HomeRequestList(requestList: List<RequestModel>){
+    LazyColumn {
+        items(requestList){request ->
+            MyRow(modifier = Modifier
+                .padding(2.dp)
+                .shadow(1.dp, shape = MaterialTheme.shapes.medium)
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(6.dp)
+            ) {
+                MyColumn {
+                    Text(text = request.serviceName)
+                    MyRow {
+                        Text(text = request.clientNickname)
+                        Text(text = request.price.toString())
+                    }
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                MyRow {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Filled.Check, contentDescription = "accept request" )
+                    }
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Filled.Close, contentDescription = "reject request" )
+                    }
+                }
+            }
+        }
 
-    if (!permissionState.status.isGranted) {
-        if (permissionState.status.shouldShowRationale) RationaleDialog()
-        else PermissionDialog { permissionState.launchPermissionRequest() }
     }
+    
+
 }
+
+//@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+//@OptIn(ExperimentalPermissionsApi::class)
+//@Composable
+//fun RequestNotificationPermissionDialog() {
+//    val permissionState = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+//
+//    if (!permissionState.status.isGranted) {
+//        if (permissionState.status.shouldShowRationale) RationaleDialog()
+//        else PermissionDialog { permissionState.launchPermissionRequest() }
+//    }
+//}
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
-//            favList = emptyList(),
-            favList = PROFFESIONALLISTFORTEST,
+            favList = emptyList(),
+//            favList = PROFFESIONALLISTFORTEST,
             error = UiError(false, "Account wasn't created"),
 //            loading = true,
+            requestList = REQUESTLISTFORTEST,
             loading = false,
             onDeleteFav = {},
             onCloseDialog = {},

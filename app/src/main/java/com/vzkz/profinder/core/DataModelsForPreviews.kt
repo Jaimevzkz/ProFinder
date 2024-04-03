@@ -7,6 +7,7 @@ import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
+import com.vzkz.profinder.domain.model.RequestModel
 import com.vzkz.profinder.domain.model.ServiceModel
 
 
@@ -30,6 +31,16 @@ val PROFESSIONALMODELFORTESTS: ActorModel = ActorModel(
 
 val PROFFESIONALLISTFORTEST =
     listOf(PROFESSIONALMODELFORTESTS, PROFESSIONALMODELFORTESTS, PROFESSIONALMODELFORTESTS)
+
+val REQUESTMODELFORTESTS: RequestModel = RequestModel(
+    rid = "123",
+    clientNickname = "Pedro",
+    clientUid = "123",
+    serviceId = "123",
+    serviceName = "Plumbing",
+    price = 12.3
+)
+val REQUESTLISTFORTEST = listOf(REQUESTMODELFORTESTS, REQUESTMODELFORTESTS, REQUESTMODELFORTESTS, REQUESTMODELFORTESTS)
 
 val SERVICEMODELFORTEST = ServiceModel(
     sid = "-1",
