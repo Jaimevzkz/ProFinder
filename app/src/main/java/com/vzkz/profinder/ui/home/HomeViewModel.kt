@@ -3,6 +3,7 @@ package com.vzkz.profinder.ui.home
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.domain.usecases.requests.GetRequestsUseCase
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val favouriteListUseCase: FavouriteListUseCase
+    private val favouriteListUseCase: FavouriteListUseCase,
+    private val getRequestsUseCase: GetRequestsUseCase
 ) : BaseViewModel<HomeState, HomeIntent>(HomeState.initial) {
 
     override fun reduce(state: HomeState, intent: HomeIntent): HomeState {
@@ -35,17 +37,31 @@ class HomeViewModel @Inject constructor(
                 favList = intent.favList,
                 loading = false
             )
+
+            is HomeIntent.ChangeRequestList -> state.copy(requestList = intent.requestList)
         }
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
+        setRequests()
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                dispatch(HomeIntent.Loading)
                 dispatch(HomeIntent.ChangeFavList(favouriteListUseCase.getFavouriteList()))
             }
         } catch (e: Exception) {
+            dispatch(HomeIntent.Error(e.message.orEmpty()))
+        }
+    }
+
+    private fun setRequests(){
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                getRequestsUseCase().collect{
+                    dispatch(HomeIntent.ChangeRequestList(it))
+                }
+            }
+        } catch (e: Exception){
             dispatch(HomeIntent.Error(e.message.orEmpty()))
         }
     }

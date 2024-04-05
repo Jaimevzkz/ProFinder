@@ -34,7 +34,7 @@ val PROFFESIONALLISTFORTEST =
 
 val REQUESTMODELFORTESTS: RequestModel = RequestModel(
     rid = "123",
-    clientNickname = "Pedro",
+    clientNickname = "jaimee1",
     clientUid = "123",
     serviceId = "123",
     serviceName = "Plumbing",

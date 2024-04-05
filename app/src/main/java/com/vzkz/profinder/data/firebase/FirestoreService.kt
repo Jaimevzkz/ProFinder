@@ -7,10 +7,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.snapshots
+import com.vzkz.profinder.core.Constants
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Categories
 import com.vzkz.profinder.core.Constants.CATEGORY
+import com.vzkz.profinder.core.Constants.CLIENT_ID
+import com.vzkz.profinder.core.Constants.CLIENT_NICKNAME
 import com.vzkz.profinder.core.Constants.CONNECTION_ERROR
 import com.vzkz.profinder.core.Constants.DESCRIPTION
 import com.vzkz.profinder.core.Constants.FAVOURITES
@@ -23,6 +26,7 @@ import com.vzkz.profinder.core.Constants.MODIFICATION_ERROR
 import com.vzkz.profinder.core.Constants.NAME
 import com.vzkz.profinder.core.Constants.NICKNAME
 import com.vzkz.profinder.core.Constants.NICKNAME_IN_USE
+import com.vzkz.profinder.core.Constants.NONEXISTENT_REQUESTATTRIBUTE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_SERVICEATTRIBUTE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_USERFIELD
 import com.vzkz.profinder.core.Constants.NULL_USERDATA
@@ -30,6 +34,8 @@ import com.vzkz.profinder.core.Constants.PRICE
 import com.vzkz.profinder.core.Constants.PROFESSION
 import com.vzkz.profinder.core.Constants.PROFILEPHOTO
 import com.vzkz.profinder.core.Constants.SERVICES_COLLECTION
+import com.vzkz.profinder.core.Constants.SERVICE_ID
+import com.vzkz.profinder.core.Constants.SERVICE_NAME
 import com.vzkz.profinder.core.Constants.SERV_DESCRIPTION
 import com.vzkz.profinder.core.Constants.STATE
 import com.vzkz.profinder.core.Constants.UID
@@ -38,6 +44,7 @@ import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.RequestModel
 import com.vzkz.profinder.domain.model.ServiceModel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
@@ -310,12 +317,27 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     //Requests
     fun getJobRequests(uid: String): Flow<List<RequestModel>> = callbackFlow {
         val requestList = mutableListOf<RequestModel>()
-        usersCollection.document(uid).collection("requests").addSnapshotListener { value, error ->
+        val listener = usersCollection.document(uid).collection("requests").addSnapshotListener { value, error ->
             requestList.clear()
             value?.documents?.forEach { docSnapshot ->
-                requestList.add(RequestModel())
+                requestList.add(RequestModel(
+                    rid = docSnapshot.id,
+                    clientNickname = docSnapshot.getString(CLIENT_NICKNAME) ?: throw Exception(NONEXISTENT_REQUESTATTRIBUTE),
+                    clientUid = docSnapshot.getString(CLIENT_ID) ?: throw Exception(NONEXISTENT_REQUESTATTRIBUTE),
+                    serviceId = docSnapshot.getString(SERVICE_ID) ?: throw Exception(NONEXISTENT_REQUESTATTRIBUTE),
+                    serviceName = docSnapshot.getString(SERVICE_NAME) ?: throw Exception(NONEXISTENT_REQUESTATTRIBUTE),
+                    price = docSnapshot.getLong(PRICE)?.toDouble() ?: throw Exception(NONEXISTENT_REQUESTATTRIBUTE)
+                ))
+            }
+            if(error != null){
+                Log.e("Jaime", "error found getting job requests: ${error.message}")
+                throw Exception(error.message)
             }
             trySend(requestList)
+        }
+        awaitClose {
+            // Cancel the snapshot listener when the flow is closed
+            listener.remove()
         }
 
     }

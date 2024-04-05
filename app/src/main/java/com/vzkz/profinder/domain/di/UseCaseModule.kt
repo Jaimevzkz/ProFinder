@@ -20,6 +20,8 @@ import com.vzkz.profinder.domain.usecases.chat.GetUnreadMessageAndOwnerUseCase
 import com.vzkz.profinder.domain.usecases.chat.GetUnreadMessageAndOwnerUseCaseImpl
 import com.vzkz.profinder.domain.usecases.chat.OpenRecentChatsUseCase
 import com.vzkz.profinder.domain.usecases.chat.OpenRecentChatsUseCaseImpl
+import com.vzkz.profinder.domain.usecases.requests.GetRequestsUseCase
+import com.vzkz.profinder.domain.usecases.requests.GetRequestsUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
@@ -30,6 +32,7 @@ import com.vzkz.profinder.domain.usecases.services.GetServiceListUseCase
 import com.vzkz.profinder.domain.usecases.services.GetServiceListUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.InsertServiceUseCase
 import com.vzkz.profinder.domain.usecases.services.InsertServiceUseCaseImpl
+import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCase
 import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCase
 import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
@@ -44,7 +47,6 @@ import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.UploadPhotoUseCase
 import com.vzkz.profinder.domain.usecases.user.UploadPhotoUseCaseImpl
-import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCase
 import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCaseImpl
 import dagger.Binds
 import dagger.Module
@@ -101,5 +103,7 @@ abstract class UseCaseModule {
     abstract fun bindOpenRecentChatsUseCase(impl: OpenRecentChatsUseCaseImpl): OpenRecentChatsUseCase
     @Binds
     abstract fun bindGetUnreadMessageAndOwnerUseCase(impl: GetUnreadMessageAndOwnerUseCaseImpl): GetUnreadMessageAndOwnerUseCase
+    @Binds
+    abstract fun bindGetRequestsUseCase(impl: GetRequestsUseCaseImpl): GetRequestsUseCase
 
 }

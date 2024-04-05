@@ -1,10 +1,8 @@
 package com.vzkz.profinder.ui.home
 
-import android.Manifest
 import android.content.res.Configuration
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -31,13 +30,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
@@ -51,15 +49,16 @@ import com.vzkz.profinder.domain.model.RequestModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
+import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
-import com.vzkz.profinder.ui.components.permissions.PermissionDialog
-import com.vzkz.profinder.ui.components.permissions.RationaleDialog
 import com.vzkz.profinder.ui.home.components.HomeCard
 import com.vzkz.profinder.ui.home.components.HomeFavList
 import com.vzkz.profinder.ui.home.components.shimmer.FavListShimmer
 import com.vzkz.profinder.ui.home.components.shimmer.HomeCardShimmer
 import com.vzkz.profinder.ui.theme.ProFinderTheme
+import com.vzkz.profinder.ui.theme.acceptColor
+import com.vzkz.profinder.ui.theme.rejectColor
 
 @Destination
 @Composable
@@ -72,9 +71,12 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
     favList = homeViewModel.state.favList
     var loading by remember { mutableStateOf(true) }
     loading = homeViewModel.state.loading
+    var requestList: List<RequestModel> by remember { mutableStateOf(emptyList()) }
+    requestList = homeViewModel.state.requestList
 
     ScreenBody(
         favList = favList,
+        requestList = requestList,
         error = error,
         loading = loading,
         onDeleteFav = { homeViewModel.onDeleteFav(it) },
@@ -89,7 +91,7 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
 @Composable
 private fun ScreenBody(
     favList: List<ActorModel>,
-    requestList: List<RequestModel> = emptyList(),
+    requestList: List<RequestModel>,
     error: UiError,
     loading: Boolean,
     onDeleteFav: (String) -> Unit,
@@ -135,10 +137,15 @@ private fun ScreenBody(
                         fontFamily = fontFamily,
                         cardPadding = cardPadding,
                         contentPadding = contentPadding,
-                        title = "Hired Services",
+                        title = "Job requests",
                         placeRight = false
                     ) {
-                        HomeRequestList(requestList = requestList)
+                        HomeRequestList(
+                            requestList = requestList,
+                            onSeeProfile = {/*TODO*/ },
+                            onAcceptRequest = {/*TODO*/ },
+                            onRejectRequest = {/*TODO*/ }
+                        )
                     }
                 }
 
@@ -198,7 +205,7 @@ private fun ScreenBody(
                         fontFamily = fontFamily,
                         cardPadding = cardPadding,
                         contentPadding = contentPadding,
-                        title = "Recent",
+                        title = "Active jobs",
                         placeRight = false
                     ) {
 
@@ -223,36 +230,89 @@ private fun ScreenBody(
 }
 
 @Composable
-fun HomeRequestList(requestList: List<RequestModel>){
+fun HomeRequestList(
+    requestList: List<RequestModel>,
+    onSeeProfile: (String) -> Unit,
+    onAcceptRequest: (String) -> Unit,
+    onRejectRequest: (String) -> Unit
+) {
+    val fontColor = MaterialTheme.colorScheme.onPrimaryContainer
     LazyColumn {
-        items(requestList){request ->
-            MyRow(modifier = Modifier
-                .padding(2.dp)
-                .shadow(1.dp, shape = MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(6.dp)
+        items(requestList) { request ->
+            MyRow(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .shadow(1.dp, shape = MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .padding(6.dp)
             ) {
                 MyColumn {
-                    Text(text = request.serviceName)
+                    Text(
+                        text = request.serviceName,
+                        fontFamily = FontFamily(Font(R.font.oswald)),
+                        fontSize = 22.sp,
+                        color = fontColor
+                    )
                     MyRow {
-                        Text(text = request.clientNickname)
-                        Text(text = request.price.toString())
+                        Text(
+                            text = request.clientNickname,
+                            fontWeight = FontWeight.Light,
+                            fontSize = 16.sp,
+                            color = fontColor,
+                            textDecoration = TextDecoration.Underline,
+                            modifier = Modifier.clickable {
+                                onSeeProfile(request.clientUid)
+                            }
+                        )
+                        MySpacer(size = 4)
+                        Box(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .shadow(1.dp, shape = CircleShape)
+                                .background(MaterialTheme.colorScheme.tertiaryContainer)
+                                .padding(8.dp)
+                        ) {
+                            Text(
+                                text = request.price.toString() + stringResource(R.string.h),
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onTertiaryContainer
+                            )
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 MyRow {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Filled.Check, contentDescription = "accept request" )
+                    IconButton(
+                        onClick = { onAcceptRequest(request.rid) },
+                        modifier = Modifier
+                            .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
+                            .background(acceptColor)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = "accept request",
+                        )
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Filled.Close, contentDescription = "reject request" )
+                    MySpacer(size = 8)
+                    IconButton(
+                        onClick = { onRejectRequest(request.rid) },
+                        modifier = Modifier
+                            .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
+                            .background(rejectColor)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = "reject request",
+                        )
                     }
                 }
             }
+            MySpacer(size = 2)
         }
 
     }
-    
+
 
 }
 
@@ -273,8 +333,8 @@ fun HomeRequestList(requestList: List<RequestModel>){
 private fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
-            favList = emptyList(),
-//            favList = PROFFESIONALLISTFORTEST,
+//            favList = emptyList(),
+            favList = PROFFESIONALLISTFORTEST,
             error = UiError(false, "Account wasn't created"),
 //            loading = true,
             requestList = REQUESTLISTFORTEST,

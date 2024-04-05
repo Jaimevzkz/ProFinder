@@ -1,6 +1,7 @@
 package com.vzkz.profinder.ui.components.bottombar
 
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -20,8 +21,19 @@ fun MyBottomBar(
                 onClick = {
                     onClick(destination.direction)
                 },
-                icon = { Icon(destination.icon, contentDescription = stringResource(destination.label))},
-                label = { Text(stringResource(destination.label)) }
+                icon = {
+                    Icon(
+                        destination.icon,
+                        contentDescription = stringResource(destination.label),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                },
+                label = {
+                    Text(
+                        stringResource(destination.label),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
             )
         }
     }

@@ -112,9 +112,10 @@ private fun ScreenBody(
                         Text(
                             stringResource(id = R.string.services),
                             style = MaterialTheme.typography.displaySmall,
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     },
-                    colors = centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
+                    colors = centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background)
                 )
             }
         },

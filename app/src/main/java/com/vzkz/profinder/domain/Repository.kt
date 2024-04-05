@@ -8,6 +8,7 @@ import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
+import com.vzkz.profinder.domain.model.RequestModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import kotlinx.coroutines.flow.Flow
 
@@ -73,4 +74,5 @@ interface Repository {
     )
 
     fun getUnreadMsgAndOwner(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>>
+    fun getJobRequests(uid: String): Flow<List<RequestModel>>
 }

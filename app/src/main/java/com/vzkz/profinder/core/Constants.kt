@@ -21,6 +21,12 @@ object Constants {
     const val SERV_DESCRIPTION = "description"
     const val PRICE = "price"
 
+    //Requests
+    const val CLIENT_NICKNAME = "clientNickname"
+    const val CLIENT_ID = "clientUid"
+    const val SERVICE_ID = "serviceId"
+    const val SERVICE_NAME = "serviceName"
+
     //Storage
     const val PROFILEPHOTO = "profilePhoto"
     const val PROFILEPHOTOS = "ProfilePhotos"
@@ -50,5 +56,6 @@ object Constants {
     const val INSERTION_ERROR = "INSERTION_ERROR"
     const val NONEXISTENT_SERVICEATTRIBUTE = "NONEXISTENT_SERVICEATTRIBUTE"
     const val REALTIME_ACCESS_INTERRUPTED = "REALTIME_ACCESS_INTERRUPTED"
+    const val NONEXISTENT_REQUESTATTRIBUTE = "NONEXISTENT_REQUESTATTRIBUTE"
 
 }

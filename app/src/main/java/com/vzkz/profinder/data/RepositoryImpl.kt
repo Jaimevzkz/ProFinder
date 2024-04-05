@@ -8,6 +8,7 @@ import com.vzkz.profinder.core.Constants.CONNECTION_ERROR
 import com.vzkz.profinder.core.Constants.INSERTION_ERROR
 import com.vzkz.profinder.core.Constants.MODIFICATION_ERROR
 import com.vzkz.profinder.core.Constants.NICKNAME_IN_USE
+import com.vzkz.profinder.core.Constants.NONEXISTENT_REQUESTATTRIBUTE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_SERVICEATTRIBUTE
 import com.vzkz.profinder.core.Constants.NONEXISTENT_USERFIELD
 import com.vzkz.profinder.core.Constants.NULL_REALTIME_USERDATA
@@ -27,6 +28,7 @@ import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
+import com.vzkz.profinder.domain.model.RequestModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -135,29 +137,60 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun changeProfState(uid: String, state: ProfState) =
-        firestoreService.changeProfState(uid, state) //throws exception
+    override fun changeProfState(uid: String, state: ProfState) {
+        try {
+            firestoreService.changeProfState(uid, state)
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
 
-    override fun modifyServiceActivity(sid: String, newValue: Boolean) =
-        firestoreService.modifyServiceActivity(sid, newValue) //throws exception
+    override fun modifyServiceActivity(sid: String, newValue: Boolean) {
+        try {
+            firestoreService.modifyServiceActivity(sid, newValue)
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
 
     override fun changeFavouriteList(uidListOwner: String, uidToChange: String, add: Boolean) {
-        firestoreService.changeFavouritesList(
-            uidListOwner = uidListOwner,
-            uidToChange = uidToChange,
-            add = add
-        )
+        return try {
+            firestoreService.changeFavouritesList(
+                uidListOwner = uidListOwner,
+                uidToChange = uidToChange,
+                add = add
+            )
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
     }
 
     override suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean {
-        return firestoreService.checkIsFavourite(
-            uidListOwner = uidListOwner,
-            uidToCheck = uidToCheck
-        )
+        return try {
+            firestoreService.checkIsFavourite(
+                uidListOwner = uidListOwner,
+                uidToCheck = uidToCheck
+            )
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
     }
 
-    override suspend fun getFavouriteList(uid: String): List<ActorModel> =
-        firestoreService.getFavouritesList(uid) //throws exception
+    override suspend fun getFavouriteList(uid: String): List<ActorModel> {
+        return try {
+            firestoreService.getFavouritesList(uid)
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
+
+    override fun getJobRequests(uid: String): Flow<List<RequestModel>>{
+        return try {
+            firestoreService.getJobRequests(uid)
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
 
     //Storage
     override suspend fun uploadAndDownloadProfilePhoto(
@@ -309,6 +342,7 @@ class RepositoryImpl @Inject constructor(
             NONEXISTENT_SERVICEATTRIBUTE -> Exception(context.getString(R.string.attribute_of_a_service_corrupted_in_the_database))
             NULL_REALTIME_USERDATA -> Exception(context.getString(R.string.realtime_data_was_corrupted))
             REALTIME_ACCESS_INTERRUPTED -> Exception(context.getString(R.string.access_to_realtime_database_was_interrupted))
+            NONEXISTENT_REQUESTATTRIBUTE -> Exception(context.getString(R.string.an_attribute_of_a_request_was_corrupted_in_the_database))
             else -> Exception(context.getString(R.string.unknown_exception_occurred))
         }
     }

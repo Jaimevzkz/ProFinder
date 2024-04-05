@@ -3,7 +3,6 @@ package com.vzkz.profinder.ui.components.bottombar
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Chat
-import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.Handshake
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
