@@ -75,4 +75,12 @@ interface Repository {
 
     fun getUnreadMsgAndOwner(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>>
     fun getJobRequests(uid: String): Flow<List<RequestModel>>
+    fun addJobRequest(
+        profUid: String,
+        clientNickname: String,
+        clientId: String,
+        serviceName: String,
+        serviceId: String,
+        price: Double
+    )
 }

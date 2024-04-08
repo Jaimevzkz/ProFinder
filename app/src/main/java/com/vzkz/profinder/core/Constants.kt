@@ -22,6 +22,7 @@ object Constants {
     const val PRICE = "price"
 
     //Requests
+    const val REQUESTS = "requests"
     const val CLIENT_NICKNAME = "clientNickname"
     const val CLIENT_ID = "clientUid"
     const val SERVICE_ID = "serviceId"

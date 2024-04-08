@@ -68,6 +68,7 @@ fun ServicesScreen(
         activeServices = activeServices,
         inactiveServices = inActiveServices,
         error = error,
+        onRequestService = { servicesViewModel.onRequestService(it) },
         onCloseDialog = { servicesViewModel.onCloseDialog() },
         onActivityChange = { service ->
             servicesViewModel.onChangeActivity(service)
@@ -93,6 +94,7 @@ private fun ScreenBody(
     activeServices: List<ServiceModel>,
     inactiveServices: List<ServiceModel>,
     error: UiError,
+    onRequestService: (ServiceModel) -> Unit,
     onCloseDialog: () -> Unit,
     onActivityChange: (ServiceModel) -> Unit,
     onServiceAdded: (ServiceModel) -> Unit,
@@ -149,7 +151,8 @@ private fun ScreenBody(
                             modifier = Modifier.padding(paddingValues),
                             serviceList = activeServices,
                             onSeeProfile = { onSeeProfile(it) },
-                            onSeeMap = { showMap = true }
+                            onSeeMap = { showMap = true },
+                            onRequestService = { onRequestService(it) }
                         )
                     }
                 }
@@ -202,7 +205,8 @@ fun DarkPreview() {
             onBottomBarClicked = {},
             onCloseDialog = {},
             user = PROFESSIONALMODELFORTESTS,
-            onSeeProfile = {}
+            onSeeProfile = {},
+            onRequestService = {}
         )
     }
 }

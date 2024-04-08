@@ -6,6 +6,7 @@ import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.domain.usecases.requests.AddRequestsUseCase
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
 import com.vzkz.profinder.domain.usecases.services.GetActiveServiceListUseCase
@@ -28,7 +29,8 @@ class ServicesViewModel @Inject constructor(
     private val deleteServiceUseCase: DeleteServiceUseCase,
     private val changeServiceActivityUseCase: ChangeServiceActivityUseCase,
     private val getUserUseCase: GetUserUseCase,
-    private val userProfileToSeeUseCase: UserProfileToSeeUseCase
+    private val userProfileToSeeUseCase: UserProfileToSeeUseCase,
+    private val addRequestsUseCase: AddRequestsUseCase
 ) : BaseViewModel<ServicesState, ServicesIntent>(ServicesState.initial) {
 
     override fun reduce(state: ServicesState, intent: ServicesIntent): ServicesState {
@@ -123,4 +125,14 @@ class ServicesViewModel @Inject constructor(
     fun onSetProfileToSee(actor: ActorModel) = userProfileToSeeUseCase.setUser(actor)
 
     fun onCloseDialog() = dispatch(ServicesIntent.CloseError)
+
+    fun onRequestService(service: ServiceModel){
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                addRequestsUseCase(service)
+            }
+        } catch (e: Exception){
+            dispatch(ServicesIntent.Error(e.message.orEmpty()))
+        }
+    }
 }

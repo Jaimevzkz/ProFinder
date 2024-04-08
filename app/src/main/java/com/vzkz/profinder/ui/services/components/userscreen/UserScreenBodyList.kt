@@ -24,10 +24,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.SERVICELISTFORTEST
-import com.vzkz.profinder.core.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.components.MyColumn
@@ -42,6 +40,7 @@ fun UserScreenBody(
     modifier: Modifier = Modifier,
     serviceList: List<ServiceModel>,
     onSeeProfile: (ActorModel) -> Unit,
+    onRequestService: (ServiceModel) -> Unit,
     onSeeMap: () -> Unit
 ) {
 
@@ -125,7 +124,7 @@ fun UserScreenBody(
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                 fontColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 onSeeProfile = { if (serviceToShow != null) onSeeProfile(serviceToShow!!.owner) },
-                onRequest = { /*TODO*/ },
+                onRequest = { onRequestService(serviceToShow!!) },
                 onCloseDialog = {
                     serviceToShow = null
                     showServiceInfo = false
@@ -143,7 +142,8 @@ fun UserScreenBodyPreview() {
         UserScreenBody(
             serviceList = SERVICELISTFORTEST,
             onSeeProfile = {},
-            onSeeMap = {}
+            onSeeMap = {},
+            onRequestService = {}
         )
     }
 }

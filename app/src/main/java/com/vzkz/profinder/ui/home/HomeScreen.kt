@@ -106,8 +106,8 @@ private fun ScreenBody(
         val cardColor = MaterialTheme.colorScheme.surfaceVariant
         val contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         val fontFamily = FontFamily(Font(R.font.oswald))
-        val cardPadding = PaddingValues(8.dp)
-        val contentPadding = PaddingValues(8.dp)
+        val cardPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+        val contentPadding = PaddingValues(4.dp)
         var editFavList by remember { mutableStateOf(false) }
         Box(
             modifier = Modifier

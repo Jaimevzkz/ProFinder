@@ -44,7 +44,7 @@ fun HomeCard(
         if (placeRight) Spacer(modifier = Modifier.weight(1f))
         Box(
             modifier = boxModifier
-                .weight(6f)
+                .weight(8f)
                 .fillMaxSize()
                 .padding(cardPadding)
                 .shadow(1.dp, shape = MaterialTheme.shapes.medium)

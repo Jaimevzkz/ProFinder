@@ -17,6 +17,7 @@ import com.vzkz.profinder.core.Constants.REALTIME_ACCESS_INTERRUPTED
 import com.vzkz.profinder.data.dto.IndiviualChatDto
 import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.data.dto.RecentChatDto
+import com.vzkz.profinder.data.dto.RequestDto
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.data.firebase.RealtimeService
@@ -184,9 +185,33 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getJobRequests(uid: String): Flow<List<RequestModel>>{
+    override fun getJobRequests(uid: String): Flow<List<RequestModel>> {
         return try {
             firestoreService.getJobRequests(uid)
+        } catch (e: Exception) {
+            throw handleException(e)
+        }
+    }
+
+    override fun addJobRequest(
+        profUid: String,
+        clientNickname: String,
+        clientId: String,
+        serviceName: String,
+        serviceId: String,
+        price: Double
+    ) {
+        try {
+            firestoreService.addnewRequest(
+                profUid = profUid,
+                request = RequestDto(
+                    clientNickname = clientNickname,
+                    clientId = clientId,
+                    serviceName = serviceName,
+                    serviceId = serviceId,
+                    price = price
+                )
+            )
         } catch (e: Exception) {
             throw handleException(e)
         }
@@ -286,8 +311,8 @@ class RepositoryImpl @Inject constructor(
             throw handleException(e)
         }
     }
-    
-    override fun getUnreadMsgAndOwner(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>>  {
+
+    override fun getUnreadMsgAndOwner(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>> {
         return try {
             realtimeService.getUnreadMsgAndOwner(ownerUid, chatId)
         } catch (e: Exception) {
