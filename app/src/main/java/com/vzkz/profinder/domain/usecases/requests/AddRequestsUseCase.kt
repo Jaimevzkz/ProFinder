@@ -19,6 +19,7 @@ class AddRequestsUseCaseImpl @Inject constructor(
         val user = getUserUseCase()
         repository.addJobRequest(
             profUid = serviceModel.owner.uid,
+            profNickname = serviceModel.owner.nickname,
             clientNickname = user.nickname,
             clientId = user.uid,
             serviceName = serviceModel.name,

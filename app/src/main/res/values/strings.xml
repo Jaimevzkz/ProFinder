@@ -68,4 +68,6 @@
     <string name="access_to_realtime_database_was_interrupted">Access to realtime database was interrupted</string>
     <string name="you">"You: "</string>
     <string name="an_attribute_of_a_request_was_corrupted_in_the_database">An attribute of a request was corrupted in the database...</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="request">Request</string>
 </resources>

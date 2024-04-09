@@ -77,10 +77,13 @@ interface Repository {
     fun getJobRequests(uid: String): Flow<List<RequestModel>>
     fun addJobRequest(
         profUid: String,
+        profNickname: String,
         clientNickname: String,
         clientId: String,
         serviceName: String,
         serviceId: String,
         price: Double
     )
+
+    fun deleteRequest(uid: String, rid: String)
 }

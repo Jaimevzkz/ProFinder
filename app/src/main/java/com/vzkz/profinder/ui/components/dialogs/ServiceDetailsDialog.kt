@@ -42,9 +42,11 @@ fun ServiceDetailsDialog(
     isVisible: Boolean,
     service: ServiceModel,
     backgroundColor: Color,
+    requestExists: Boolean,
     fontColor: Color,
     onSeeProfile: () -> Unit,
     onRequest: () -> Unit,
+    onCancelRequest: (String) -> Unit,
     onCloseDialog: () -> Unit
 ) {
     if (isVisible) {
@@ -124,10 +126,12 @@ fun ServiceDetailsDialog(
                     .padding(bottom = 18.dp),
                 contentPadding = ButtonDefaults.TextButtonContentPadding,
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                onClick = { onRequest() }
+                onClick = { if(requestExists) onCancelRequest(service.sid) else onRequest() }
             ) {
                 Text(
-                    text = "Request",
+                    text = if(requestExists) stringResource(R.string.cancel_request) else stringResource(
+                        R.string.request
+                    ),
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
                     fontSize = 16.sp
                 )
@@ -153,7 +157,9 @@ private fun ServiceCardPreview() {
             fontColor = MaterialTheme.colorScheme.onSecondaryContainer,
             onSeeProfile = {},
             onRequest = {},
-            onCloseDialog = {}
+            requestExists = true,
+            onCloseDialog = {},
+            onCancelRequest = {}
         )
     }
 }

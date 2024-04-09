@@ -60,15 +60,20 @@ fun ServicesScreen(
     user = servicesViewModel.state.user
     var actor: Actors? by remember { mutableStateOf(null) }
     actor = user?.actor
+    var requestExists by remember { mutableStateOf(false) }
+    requestExists = servicesViewModel.state.requestExists
 
     ScreenBody(
         user = user ?: ActorModel(),
         actor = actor,
         loading = loading,
         activeServices = activeServices,
+        requestExists = requestExists,
         inactiveServices = inActiveServices,
         error = error,
+        onCheckRequestExists = { servicesViewModel.checkExistingRequests(it) },
         onRequestService = { servicesViewModel.onRequestService(it) },
+        onCancelRequest = { servicesViewModel.onDeleteRequest(it) },
         onCloseDialog = { servicesViewModel.onCloseDialog() },
         onActivityChange = { service ->
             servicesViewModel.onChangeActivity(service)
@@ -92,9 +97,12 @@ private fun ScreenBody(
     actor: Actors?,
     loading: Boolean,
     activeServices: List<ServiceModel>,
+    requestExists: Boolean,
     inactiveServices: List<ServiceModel>,
     error: UiError,
+    onCheckRequestExists: (String) -> Unit,
     onRequestService: (ServiceModel) -> Unit,
+    onCancelRequest: (String) -> Unit,
     onCloseDialog: () -> Unit,
     onActivityChange: (ServiceModel) -> Unit,
     onServiceAdded: (ServiceModel) -> Unit,
@@ -150,9 +158,12 @@ private fun ScreenBody(
                         UserScreenBody(
                             modifier = Modifier.padding(paddingValues),
                             serviceList = activeServices,
+                            requestExists = requestExists,
                             onSeeProfile = { onSeeProfile(it) },
                             onSeeMap = { showMap = true },
-                            onRequestService = { onRequestService(it) }
+                            onCheckRequestExists = onCheckRequestExists,
+                            onRequestService = { onRequestService(it) },
+                            onCancelRequest = onCancelRequest
                         )
                     }
                 }
@@ -198,7 +209,9 @@ fun DarkPreview() {
             loading = false,
             activeServices = SERVICELISTFORTEST,
             inactiveServices = SERVICELISTFORTEST,
+            requestExists = false,
             error = UiError(false, ""),
+            onCheckRequestExists = {},
             onActivityChange = {},
             onServiceAdded = {},
             onServiceDeleted = {},
@@ -206,7 +219,8 @@ fun DarkPreview() {
             onCloseDialog = {},
             user = PROFESSIONALMODELFORTESTS,
             onSeeProfile = {},
-            onRequestService = {}
+            onRequestService = {},
+            onCancelRequest = {}
         )
     }
 }

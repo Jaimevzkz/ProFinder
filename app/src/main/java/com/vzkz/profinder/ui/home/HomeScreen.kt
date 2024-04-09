@@ -1,13 +1,17 @@
 package com.vzkz.profinder.ui.home
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +21,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -71,17 +76,20 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
     favList = homeViewModel.state.favList
     var loading by remember { mutableStateOf(true) }
     loading = homeViewModel.state.loading
-    var requestList: List<RequestModel> by remember { mutableStateOf(emptyList()) }
-    requestList = homeViewModel.state.requestList
-
+    val requestList = homeViewModel.state.requestList
+    var isUser by remember { mutableStateOf(false) }
+    isUser = homeViewModel.state.isUser
     ScreenBody(
         favList = favList,
         requestList = requestList,
         error = error,
         loading = loading,
+        isUser = isUser,
         onDeleteFav = { homeViewModel.onDeleteFav(it) },
         onCloseDialog = { homeViewModel.onCloseDialog() },
         onBottomBarClicked = { navigator.navigate(it) },
+        onAcceptRequest = {},
+        onRejectRequest = { homeViewModel.onDeleteRequest(it) },
         onProfileInfo = {
             navigator.navigate(ViewProfileScreenDestination(uidToSee = it))
         }
@@ -92,9 +100,12 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
 private fun ScreenBody(
     favList: List<ActorModel>,
     requestList: List<RequestModel>,
+    isUser: Boolean,
     error: UiError,
     loading: Boolean,
     onDeleteFav: (String) -> Unit,
+    onAcceptRequest: (String) -> Unit,
+    onRejectRequest: (String) -> Unit,
     onCloseDialog: () -> Unit,
     onProfileInfo: (String) -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
@@ -137,14 +148,15 @@ private fun ScreenBody(
                         fontFamily = fontFamily,
                         cardPadding = cardPadding,
                         contentPadding = contentPadding,
-                        title = "Job requests",
+                        title = if (isUser) "Pending requests" else "Job requests",
                         placeRight = false
                     ) {
                         HomeRequestList(
                             requestList = requestList,
-                            onSeeProfile = {/*TODO*/ },
-                            onAcceptRequest = {/*TODO*/ },
-                            onRejectRequest = {/*TODO*/ }
+                            isUser = isUser,
+                            onSeeProfile = onProfileInfo,
+                            onAcceptRequest = onAcceptRequest,
+                            onRejectRequest = onRejectRequest
                         )
                     }
                 }
@@ -232,6 +244,7 @@ private fun ScreenBody(
 @Composable
 fun HomeRequestList(
     requestList: List<RequestModel>,
+    isUser: Boolean,
     onSeeProfile: (String) -> Unit,
     onAcceptRequest: (String) -> Unit,
     onRejectRequest: (String) -> Unit
@@ -241,6 +254,8 @@ fun HomeRequestList(
         items(requestList) { request ->
             MyRow(
                 modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 4.dp)
                     .padding(2.dp)
                     .shadow(1.dp, shape = MaterialTheme.shapes.medium)
                     .background(MaterialTheme.colorScheme.primaryContainer)
@@ -255,26 +270,26 @@ fun HomeRequestList(
                     )
                     MyRow {
                         Text(
-                            text = request.clientNickname,
+                            text = request.otherNickname,
                             fontWeight = FontWeight.Light,
                             fontSize = 16.sp,
                             color = fontColor,
                             textDecoration = TextDecoration.Underline,
                             modifier = Modifier.clickable {
-                                onSeeProfile(request.clientUid)
+                                onSeeProfile(request.otherUid)
                             }
                         )
                         MySpacer(size = 4)
                         Box(
                             modifier = Modifier
-                                .padding(4.dp)
+                                .padding(2.dp)
                                 .shadow(1.dp, shape = CircleShape)
                                 .background(MaterialTheme.colorScheme.tertiaryContainer)
-                                .padding(8.dp)
+                                .padding(2.dp)
                         ) {
                             Text(
                                 text = request.price.toString() + stringResource(R.string.h),
-                                fontSize = 14.sp,
+                                fontSize = 12.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = MaterialTheme.colorScheme.onTertiaryContainer
                             )
@@ -282,29 +297,43 @@ fun HomeRequestList(
                     }
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                MyRow {
-                    IconButton(
-                        onClick = { onAcceptRequest(request.rid) },
-                        modifier = Modifier
-                            .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
-                            .background(acceptColor)
+                if (isUser) {
+                    OutlinedButton(
+                        onClick = { },
+                        border = BorderStroke(1.dp, fontColor),
+                        modifier = Modifier.padding(end = 2.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.Check,
-                            contentDescription = "accept request",
-                        )
+                        Text(text = "Cancel", color = fontColor, fontSize = 12.sp)
                     }
-                    MySpacer(size = 8)
-                    IconButton(
-                        onClick = { onRejectRequest(request.rid) },
-                        modifier = Modifier
-                            .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
-                            .background(rejectColor)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Close,
-                            contentDescription = "reject request",
-                        )
+                } else {
+                    MyRow {
+                        IconButton(
+                            onClick = { onAcceptRequest(request.rid) },
+                            modifier = Modifier
+                                .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
+                                .height(36.dp)
+                                .width(52.dp)
+                                .background(acceptColor)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = "accept request",
+                            )
+                        }
+                        MySpacer(size = 8)
+                        IconButton(
+                            onClick = { onRejectRequest(request.rid) },
+                            modifier = Modifier
+                                .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
+                                .height(36.dp)
+                                .width(52.dp)
+                                .background(rejectColor)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Close,
+                                contentDescription = "reject request",
+                            )
+                        }
                     }
                 }
             }
@@ -335,6 +364,7 @@ private fun LightPreview() {
         ScreenBody(
 //            favList = emptyList(),
             favList = PROFFESIONALLISTFORTEST,
+            isUser = false,
             error = UiError(false, "Account wasn't created"),
 //            loading = true,
             requestList = REQUESTLISTFORTEST,
@@ -342,8 +372,11 @@ private fun LightPreview() {
             onDeleteFav = {},
             onCloseDialog = {},
             onBottomBarClicked = {},
-            onProfileInfo = {}
+            onProfileInfo = {},
+            onAcceptRequest = {},
+            onRejectRequest = {}
         )
     }
 
 }
+

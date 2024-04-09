@@ -195,6 +195,7 @@ class RepositoryImpl @Inject constructor(
 
     override fun addJobRequest(
         profUid: String,
+        profNickname: String,
         clientNickname: String,
         clientId: String,
         serviceName: String,
@@ -205,8 +206,9 @@ class RepositoryImpl @Inject constructor(
             firestoreService.addnewRequest(
                 profUid = profUid,
                 request = RequestDto(
-                    clientNickname = clientNickname,
-                    clientId = clientId,
+                    profNickname = profNickname,
+                    otherNickname = clientNickname,
+                    otherId = clientId,
                     serviceName = serviceName,
                     serviceId = serviceId,
                     price = price
@@ -215,6 +217,10 @@ class RepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             throw handleException(e)
         }
+    }
+
+    override fun deleteRequest(uid: String, rid: String) {
+        firestoreService.deleteRequest(uid = uid, rid = rid)
     }
 
     //Storage

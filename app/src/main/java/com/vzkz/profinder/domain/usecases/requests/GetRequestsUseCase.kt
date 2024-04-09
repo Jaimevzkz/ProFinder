@@ -12,10 +12,10 @@ interface GetRequestsUseCase {
 }
 
 
-class  GetRequestsUseCaseImpl @Inject constructor(
+class GetRequestsUseCaseImpl @Inject constructor(
     private val repository: Repository,
     private val getUidDataStoreUseCase: GetUidDataStoreUseCase
-): GetRequestsUseCase {
+) : GetRequestsUseCase {
     override suspend operator fun invoke(): Flow<List<RequestModel>> {
         return repository.getJobRequests(getUidDataStoreUseCase())
     }

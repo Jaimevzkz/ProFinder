@@ -7,6 +7,8 @@ import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.requests.AddRequestsUseCase
+import com.vzkz.profinder.domain.usecases.requests.CheckExistingRequestUseCase
+import com.vzkz.profinder.domain.usecases.requests.DeleteRequestUseCase
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
 import com.vzkz.profinder.domain.usecases.services.GetActiveServiceListUseCase
@@ -30,7 +32,9 @@ class ServicesViewModel @Inject constructor(
     private val changeServiceActivityUseCase: ChangeServiceActivityUseCase,
     private val getUserUseCase: GetUserUseCase,
     private val userProfileToSeeUseCase: UserProfileToSeeUseCase,
-    private val addRequestsUseCase: AddRequestsUseCase
+    private val addRequestsUseCase: AddRequestsUseCase,
+    private val checkExistingRequestUseCase: CheckExistingRequestUseCase,
+    private val deleteRequestUseCase: DeleteRequestUseCase
 ) : BaseViewModel<ServicesState, ServicesIntent>(ServicesState.initial) {
 
     override fun reduce(state: ServicesState, intent: ServicesIntent): ServicesState {
@@ -63,6 +67,8 @@ class ServicesViewModel @Inject constructor(
                 loading = false,
                 activeServiceList = intent.list
             )
+
+            is ServicesIntent.SetRequestExists -> state.copy(requestExists = intent.requestExists)
         }
     }
 
@@ -130,9 +136,26 @@ class ServicesViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 addRequestsUseCase(service)
+                dispatch(ServicesIntent.SetRequestExists(true))
             }
         } catch (e: Exception){
             dispatch(ServicesIntent.Error(e.message.orEmpty()))
         }
     }
+
+    fun checkExistingRequests(sid: String){
+       viewModelScope.launch(Dispatchers.IO) {
+           dispatch(ServicesIntent.SetRequestExists(checkExistingRequestUseCase(sid)))
+       }
+    }
+
+    fun onDeleteRequest(sid: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteRequestUseCase(sid = sid)
+            dispatch(ServicesIntent.SetRequestExists(false))
+        }
+    }
+
+
+
 }

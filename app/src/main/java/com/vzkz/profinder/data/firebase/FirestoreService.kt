@@ -7,8 +7,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.vzkz.profinder.core.Constants.CATEGORY
-import com.vzkz.profinder.core.Constants.CLIENT_ID
-import com.vzkz.profinder.core.Constants.CLIENT_NICKNAME
+import com.vzkz.profinder.core.Constants.OTHER_ID
+import com.vzkz.profinder.core.Constants.OTHER_NICKNAME
 import com.vzkz.profinder.core.Constants.CONNECTION_ERROR
 import com.vzkz.profinder.core.Constants.DESCRIPTION
 import com.vzkz.profinder.core.Constants.FAVOURITES
@@ -324,9 +324,9 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     requestList.add(
                         RequestModel(
                             rid = docSnapshot.id,
-                            clientNickname = docSnapshot.getString(CLIENT_NICKNAME)
+                            otherNickname = docSnapshot.getString(OTHER_NICKNAME)
                                 ?: throw Exception(NONEXISTENT_REQUESTATTRIBUTE),
-                            clientUid = docSnapshot.getString(CLIENT_ID) ?: throw Exception(
+                            otherUid = docSnapshot.getString(OTHER_ID) ?: throw Exception(
                                 NONEXISTENT_REQUESTATTRIBUTE
                             ),
                             serviceId = docSnapshot.getString(SERVICE_ID) ?: throw Exception(
@@ -355,12 +355,33 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     }
 
     fun addnewRequest(profUid: String, request: RequestDto) {
-        usersCollection.document(profUid).collection(REQUESTS).document().set(request.toMap())
+        val docRef = usersCollection.document(profUid).collection(REQUESTS).document()
+
+        docRef.set(request.toMapProf())
             .addOnSuccessListener {
                 Log.i("Jaime", "Request added correctly")
             }
             .addOnFailureListener {
                 Log.e("Jaime", "Error adding request to firestore: ${it.message}")
+            }
+        docRef.id
+        usersCollection.document(request.otherId).collection(REQUESTS).document(docRef.id)
+            .set(request.toMapUser(profUid))
+            .addOnSuccessListener {
+                Log.i("Jaime", "Request added correctly")
+            }
+            .addOnFailureListener {
+                Log.e("Jaime", "Error adding request to firestore: ${it.message}")
+            }
+    }
+
+    fun deleteRequest(uid: String, rid: String) {
+        usersCollection.document(uid).collection(REQUESTS).document(rid).delete()
+            .addOnSuccessListener {
+                Log.i("Jaime", "Request deleted correctly")
+            }
+            .addOnFailureListener {
+                Log.e("Jaime", "Error deleting request to firestore: ${it.message}")
             }
     }
 

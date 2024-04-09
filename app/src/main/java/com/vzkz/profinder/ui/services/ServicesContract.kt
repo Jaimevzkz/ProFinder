@@ -12,12 +12,14 @@ data class ServicesState(
     val activeServiceList: List<ServiceModel>,
     val inActiveServiceList: List<ServiceModel>,
     val user: ActorModel?,
+    val requestExists: Boolean,
     val error: UiError,
 ) : State {
     companion object {
         val initial: ServicesState = ServicesState(
             loading = true,
             user = null,
+            requestExists = false,
             activeServiceList = emptyList(),
             inActiveServiceList = emptyList(),
             error = UiError(isError = false, errorMsg = null)
@@ -31,4 +33,5 @@ sealed class ServicesIntent : IndividualChatntent {
     data class Error(val errorMsg: String) : ServicesIntent()
     data object CloseError: ServicesIntent()
     data class SetUser(val user: ActorModel?) : ServicesIntent()
+    data class SetRequestExists(val requestExists: Boolean) : ServicesIntent()
 }

@@ -9,6 +9,7 @@ import com.vzkz.profinder.domain.model.UiError
 
 data class HomeState(
     val loading: Boolean,
+    val isUser: Boolean,
     val error: UiError,
     val favList: List<ActorModel>,
     val requestList: List<RequestModel>
@@ -16,6 +17,7 @@ data class HomeState(
     companion object {
         val initial: HomeState = HomeState(
             loading = true,
+            isUser = false,
             error = UiError(false, null),
             favList = emptyList(),
             requestList = emptyList()
@@ -29,4 +31,5 @@ sealed class HomeIntent: IndividualChatntent {
     data object CloseError: HomeIntent()
     data class ChangeFavList(val favList: List<ActorModel>): HomeIntent()
     data class ChangeRequestList(val requestList: List<RequestModel>): HomeIntent()
+    data class setIsUser(val isUser: Boolean): HomeIntent()
 }

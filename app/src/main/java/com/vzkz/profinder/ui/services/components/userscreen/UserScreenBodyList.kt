@@ -38,7 +38,10 @@ import com.vzkz.profinder.ui.theme.ProFinderTheme
 @Composable
 fun UserScreenBody(
     modifier: Modifier = Modifier,
+    requestExists: Boolean,
     serviceList: List<ServiceModel>,
+    onCheckRequestExists: (String) -> Unit,
+    onCancelRequest: (String) -> Unit,
     onSeeProfile: (ActorModel) -> Unit,
     onRequestService: (ServiceModel) -> Unit,
     onSeeMap: () -> Unit
@@ -81,6 +84,7 @@ fun UserScreenBody(
                         backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
                         fontColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         onServiceInfo = {
+                            onCheckRequestExists(serviceModel.sid)
                             serviceToShow = serviceModel
                             showServiceInfo = true
                         }
@@ -121,10 +125,12 @@ fun UserScreenBody(
                     .padding(horizontal = 12.dp),
                 isVisible = showServiceInfo,
                 service = serviceToShow!!,
+                requestExists = requestExists,
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                 fontColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 onSeeProfile = { if (serviceToShow != null) onSeeProfile(serviceToShow!!.owner) },
                 onRequest = { onRequestService(serviceToShow!!) },
+                onCancelRequest = onCancelRequest,
                 onCloseDialog = {
                     serviceToShow = null
                     showServiceInfo = false
@@ -141,9 +147,12 @@ fun UserScreenBodyPreview() {
     ProFinderTheme {
         UserScreenBody(
             serviceList = SERVICELISTFORTEST,
+            requestExists = false,
             onSeeProfile = {},
             onSeeMap = {},
-            onRequestService = {}
+            onRequestService = {},
+            onCheckRequestExists = {},
+            onCancelRequest = {}
         )
     }
 }
