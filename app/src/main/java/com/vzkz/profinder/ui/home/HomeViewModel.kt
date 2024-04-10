@@ -43,9 +43,11 @@ class HomeViewModel @Inject constructor(
                 loading = false
             )
 
-            is HomeIntent.ChangeRequestList -> state.copy(requestList = intent.requestList)
+            is HomeIntent.ChangeRequestList -> state.copy(
+                requestList = intent.requestList,
+            )
 
-            is HomeIntent.setIsUser -> state.copy(isUser = intent.isUser)
+            is HomeIntent.SetIsUser -> state.copy(isUser = intent.isUser)
         }
     }
 
@@ -54,7 +56,7 @@ class HomeViewModel @Inject constructor(
         setRequests()
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                dispatch(HomeIntent.setIsUser(getUserUseCase().actor == Actors.User))
+                dispatch(HomeIntent.SetIsUser(getUserUseCase().actor == Actors.User))
                 dispatch(HomeIntent.ChangeFavList(favouriteListUseCase.getFavouriteList()))
             }
         } catch (e: Exception) {
@@ -65,8 +67,8 @@ class HomeViewModel @Inject constructor(
     private fun setRequests(){
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                getRequestsUseCase().collect{
-                    dispatch(HomeIntent.ChangeRequestList(it))
+                getRequestsUseCase().collect{requestList ->
+                    dispatch(HomeIntent.ChangeRequestList(requestList))
                 }
             }
         } catch (e: Exception){
@@ -87,9 +89,9 @@ class HomeViewModel @Inject constructor(
 
     fun onCloseDialog() = dispatch(HomeIntent.CloseError)
 
-    fun onDeleteRequest(rid: String){
+    fun onDeleteRequest(rid: String, otherUid: String){
         viewModelScope.launch(Dispatchers.IO) {
-            deleteRequestUseCase.deleteWithRid(rid = rid)
+            deleteRequestUseCase.deleteWithRid(rid = rid, otherUid = otherUid)
         }
     }
 

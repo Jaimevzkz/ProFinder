@@ -266,7 +266,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     servDescription = document.getString(SERV_DESCRIPTION) ?: throw Exception(
                         NONEXISTENT_SERVICEATTRIBUTE
                     ),
-                    price = document.getLong(PRICE)?.toDouble() ?: throw Exception(
+                    price = document.getDouble(PRICE) ?: throw Exception(
                         NONEXISTENT_SERVICEATTRIBUTE
                     ),
                     owner = owner
@@ -335,7 +335,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                             serviceName = docSnapshot.getString(SERVICE_NAME) ?: throw Exception(
                                 NONEXISTENT_REQUESTATTRIBUTE
                             ),
-                            price = docSnapshot.getLong(PRICE)?.toDouble() ?: throw Exception(
+                            price = docSnapshot.getDouble(PRICE) ?: throw Exception(
                                 NONEXISTENT_REQUESTATTRIBUTE
                             )
                         )
@@ -375,13 +375,22 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             }
     }
 
-    fun deleteRequest(uid: String, rid: String) {
+    fun deleteRequest(uid: String, otherUid: String, rid: String) {
         usersCollection.document(uid).collection(REQUESTS).document(rid).delete()
             .addOnSuccessListener {
                 Log.i("Jaime", "Request deleted correctly")
+                usersCollection.document(otherUid).collection(REQUESTS).document(rid).delete()
+                    .addOnSuccessListener {
+                        Log.i("Jaime", "Request 2 deleted correctly")
+
+                    }
+                    .addOnFailureListener {
+                        Log.e("Jaime", "Error deleting request 2 from firestore: ${it.message}")
+                    }
+
             }
             .addOnFailureListener {
-                Log.e("Jaime", "Error deleting request to firestore: ${it.message}")
+                Log.e("Jaime", "Error deleting request from firestore: ${it.message}")
             }
     }
 

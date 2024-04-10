@@ -3,6 +3,7 @@ package com.vzkz.profinder.ui.components.dialogs
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.AlertDialog
@@ -21,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.PROFESSIONALMODELFORTESTS
@@ -36,31 +38,33 @@ import com.vzkz.profinder.ui.theme.ProFinderTheme
 @Composable
 fun AddServiceDialog(
     modifier: Modifier = Modifier,
-    owner : ActorModel,
+    owner: ActorModel,
     onDismiss: () -> Unit,
     onConfirm: (ServiceModel) -> Unit,
 ) {
     var name by remember { mutableStateOf("") }
     var category: Categories by remember { mutableStateOf(Categories.Household) }
     var description by remember { mutableStateOf("") }
+    var price by remember { mutableStateOf("") }
     AlertDialog(
         modifier = modifier,
         onDismissRequest = {},
         confirmButton = {
             TextButton(onClick = {
-                if(name.isNotEmpty() && description.isNotEmpty()){
-                    onConfirm(
-                        ServiceModel(
-                            sid = VALUENOTSET,
-                            uid = VALUENOTSET,
-                            name = name,
-                            isActive = true,
-                            category = category,
-                            servDescription = description,
-                            owner = owner,
-                            price = 0.0 //todo develop functionality
+                if (name.isNotEmpty() && description.isNotEmpty()) {
+                    if (isValidDecimal(price))
+                        onConfirm(
+                            ServiceModel(
+                                sid = VALUENOTSET,
+                                uid = VALUENOTSET,
+                                name = name,
+                                isActive = true,
+                                category = category,
+                                servDescription = description,
+                                owner = owner,
+                                price = price.toDouble()
+                            )
                         )
-                    )
                 }
             }) {
                 Text(text = stringResource(R.string.add))
@@ -99,7 +103,10 @@ fun AddServiceDialog(
                                 IconButton(
                                     onClick = { expandedCategoryDropdownMenu = true }
                                 ) {
-                                    Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
+                                    Icon(
+                                        imageVector = Icons.Filled.ArrowDropDown,
+                                        contentDescription = null
+                                    )
                                 }
                             },
                             hint = stringResource(R.string.category),
@@ -135,10 +142,27 @@ fun AddServiceDialog(
                         description = it
                     }
                 )
+
+                MySpacer(size = spacing)
+                MyGenericTextField(
+                    modifier = Modifier,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    outlined = true,
+                    hint = "Price",
+                    text = price,
+                    onTextChanged = {
+                        price = it
+                    }
+                )
             }
         }
     )
 
+}
+
+fun isValidDecimal(input: String): Boolean {
+    val decimalPattern = Regex("^-?\\d*\\.?\\d+\$")
+    return decimalPattern.matches(input)
 }
 
 @Composable

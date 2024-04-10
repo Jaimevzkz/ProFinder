@@ -31,5 +31,5 @@ sealed class HomeIntent: IndividualChatntent {
     data object CloseError: HomeIntent()
     data class ChangeFavList(val favList: List<ActorModel>): HomeIntent()
     data class ChangeRequestList(val requestList: List<RequestModel>): HomeIntent()
-    data class setIsUser(val isUser: Boolean): HomeIntent()
+    data class SetIsUser(val isUser: Boolean): HomeIntent()
 }

@@ -54,9 +54,9 @@ fun HomeCardShimmer(
                 }
                 Box(modifier = Modifier
                     .shimmer()
-                    .padding(12.dp)
+                    .padding(8.dp)
                     .height(20.dp)
-                    .width(80.dp)
+                    .width(100.dp)
                     .background(Color.Gray)
                 )
             }

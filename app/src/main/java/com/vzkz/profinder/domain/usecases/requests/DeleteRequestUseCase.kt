@@ -8,8 +8,7 @@ import javax.inject.Inject
 
 interface DeleteRequestUseCase {
     suspend operator fun invoke(sid: String)
-    suspend fun deleteWithRid(rid: String)
-}
+    suspend fun deleteWithRid(rid: String, otherUid: String)}
 
 
 class DeleteRequestUseCaseImpl @Inject constructor(
@@ -20,12 +19,14 @@ class DeleteRequestUseCaseImpl @Inject constructor(
     override suspend operator fun invoke(sid: String) {
         val requestList = getRequestsUseCase().first()
         for (request in requestList) {
-            if (request.serviceId == sid)
-                repository.deleteRequest(uid = getUidDataStoreUseCase(), rid = request.rid)
+            if (request.serviceId == sid){
+
+                repository.deleteRequest(uid = getUidDataStoreUseCase(), otherUid = request.otherUid, rid = request.rid)
+            }
         }
     }
 
-    override suspend fun deleteWithRid(rid: String){
-        repository.deleteRequest(uid = getUidDataStoreUseCase(), rid = rid)
+    override suspend fun deleteWithRid(rid: String, otherUid: String){
+        repository.deleteRequest(uid = getUidDataStoreUseCase(), otherUid = otherUid, rid = rid)
     }
 }

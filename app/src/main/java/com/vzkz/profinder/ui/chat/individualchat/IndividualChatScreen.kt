@@ -78,8 +78,7 @@ fun IndividualChatScreen(
     LaunchedEffect(key1 = true) {
         individualChatViewModel.onInit(
             otherUid = otherUid,
-            chatId = chatId,
-            lastSenderUid = lastMsgUid
+            chatId = chatId
         )
     }
     val error = individualChatViewModel.state.error

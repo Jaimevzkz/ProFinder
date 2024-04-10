@@ -54,13 +54,14 @@ class IndividualChatViewModel @Inject constructor(
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
-    fun onInit(otherUid: String, chatId: String?, lastSenderUid: String?) {
+    fun onInit(otherUid: String, chatId: String?) {
         getUnreadMessages(chatId)
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 getIndChatsUseCase(otherUid).collect { chatList ->
                     dispatch(IndividualChatIntent.UpdateList(chatList))
-                }            }
+                }
+            }
         } catch (e: Exception) {
             dispatch(IndividualChatIntent.Error(e.message.orEmpty()))
         }
@@ -73,7 +74,7 @@ class IndividualChatViewModel @Inject constructor(
             }
     }
 
-    private fun getUnreadMessages(chatId: String?){
+    private fun getUnreadMessages(chatId: String?) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 getUnreadMessageAndOwnerUseCase(
@@ -86,7 +87,7 @@ class IndividualChatViewModel @Inject constructor(
                         dispatch(IndividualChatIntent.UpdateUnreadMsgs(0))
                 }
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             dispatch(IndividualChatIntent.Error(e.message.orEmpty()))
         }
     }

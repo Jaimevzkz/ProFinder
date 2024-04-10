@@ -219,8 +219,8 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun deleteRequest(uid: String, rid: String) {
-        firestoreService.deleteRequest(uid = uid, rid = rid)
+    override fun deleteRequest(uid: String, otherUid: String,  rid: String) {
+        firestoreService.deleteRequest(uid = uid, otherUid = otherUid, rid = rid)
     }
 
     //Storage

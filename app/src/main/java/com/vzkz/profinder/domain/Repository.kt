@@ -85,5 +85,5 @@ interface Repository {
         price: Double
     )
 
-    fun deleteRequest(uid: String, rid: String)
+    fun deleteRequest(uid: String, otherUid: String, rid: String)
 }

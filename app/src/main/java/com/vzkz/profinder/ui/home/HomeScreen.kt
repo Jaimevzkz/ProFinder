@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -44,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
+import com.valentinilk.shimmer.shimmer
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.PROFFESIONALLISTFORTEST
 import com.vzkz.profinder.core.REQUESTLISTFORTEST
@@ -59,6 +61,7 @@ import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.home.components.HomeCard
 import com.vzkz.profinder.ui.home.components.HomeFavList
+import com.vzkz.profinder.ui.home.components.HomeRequestList
 import com.vzkz.profinder.ui.home.components.shimmer.FavListShimmer
 import com.vzkz.profinder.ui.home.components.shimmer.HomeCardShimmer
 import com.vzkz.profinder.ui.theme.ProFinderTheme
@@ -76,9 +79,10 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
     favList = homeViewModel.state.favList
     var loading by remember { mutableStateOf(true) }
     loading = homeViewModel.state.loading
-    val requestList = homeViewModel.state.requestList
     var isUser by remember { mutableStateOf(false) }
     isUser = homeViewModel.state.isUser
+    val requestList = homeViewModel.state.requestList
+
     ScreenBody(
         favList = favList,
         requestList = requestList,
@@ -89,7 +93,9 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
         onCloseDialog = { homeViewModel.onCloseDialog() },
         onBottomBarClicked = { navigator.navigate(it) },
         onAcceptRequest = {},
-        onRejectRequest = { homeViewModel.onDeleteRequest(it) },
+        onRejectRequest = { rid, otherUid ->
+            homeViewModel.onDeleteRequest(rid = rid, otherUid = otherUid)
+        },
         onProfileInfo = {
             navigator.navigate(ViewProfileScreenDestination(uidToSee = it))
         }
@@ -105,7 +111,7 @@ private fun ScreenBody(
     loading: Boolean,
     onDeleteFav: (String) -> Unit,
     onAcceptRequest: (String) -> Unit,
-    onRejectRequest: (String) -> Unit,
+    onRejectRequest: (String, String) -> Unit,
     onCloseDialog: () -> Unit,
     onProfileInfo: (String) -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
@@ -134,9 +140,21 @@ private fun ScreenBody(
                             .weight(1f),
                         cardColor = cardColor,
                         cardPadding = cardPadding,
-                        contentPadding = PaddingValues(12.dp),
+                        contentPadding = contentPadding,
                         placeRight = false,
-                        content = { }
+                        content = {
+                            MySpacer(size = 8)
+                            for(i in 0..2){
+                                Box(
+                                    modifier = Modifier
+                                        .shimmer()
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                                        .height(80.dp)
+                                        .background(Color.Gray)
+                                )
+                            }
+                        }
                     )
                 } else {
                     HomeCard( //Hired Services
@@ -241,110 +259,6 @@ private fun ScreenBody(
 
 }
 
-@Composable
-fun HomeRequestList(
-    requestList: List<RequestModel>,
-    isUser: Boolean,
-    onSeeProfile: (String) -> Unit,
-    onAcceptRequest: (String) -> Unit,
-    onRejectRequest: (String) -> Unit
-) {
-    val fontColor = MaterialTheme.colorScheme.onPrimaryContainer
-    LazyColumn {
-        items(requestList) { request ->
-            MyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 4.dp)
-                    .padding(2.dp)
-                    .shadow(1.dp, shape = MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(6.dp)
-            ) {
-                MyColumn {
-                    Text(
-                        text = request.serviceName,
-                        fontFamily = FontFamily(Font(R.font.oswald)),
-                        fontSize = 22.sp,
-                        color = fontColor
-                    )
-                    MyRow {
-                        Text(
-                            text = request.otherNickname,
-                            fontWeight = FontWeight.Light,
-                            fontSize = 16.sp,
-                            color = fontColor,
-                            textDecoration = TextDecoration.Underline,
-                            modifier = Modifier.clickable {
-                                onSeeProfile(request.otherUid)
-                            }
-                        )
-                        MySpacer(size = 4)
-                        Box(
-                            modifier = Modifier
-                                .padding(2.dp)
-                                .shadow(1.dp, shape = CircleShape)
-                                .background(MaterialTheme.colorScheme.tertiaryContainer)
-                                .padding(2.dp)
-                        ) {
-                            Text(
-                                text = request.price.toString() + stringResource(R.string.h),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onTertiaryContainer
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                if (isUser) {
-                    OutlinedButton(
-                        onClick = { },
-                        border = BorderStroke(1.dp, fontColor),
-                        modifier = Modifier.padding(end = 2.dp)
-                    ) {
-                        Text(text = "Cancel", color = fontColor, fontSize = 12.sp)
-                    }
-                } else {
-                    MyRow {
-                        IconButton(
-                            onClick = { onAcceptRequest(request.rid) },
-                            modifier = Modifier
-                                .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
-                                .height(36.dp)
-                                .width(52.dp)
-                                .background(acceptColor)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = "accept request",
-                            )
-                        }
-                        MySpacer(size = 8)
-                        IconButton(
-                            onClick = { onRejectRequest(request.rid) },
-                            modifier = Modifier
-                                .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
-                                .height(36.dp)
-                                .width(52.dp)
-                                .background(rejectColor)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Close,
-                                contentDescription = "reject request",
-                            )
-                        }
-                    }
-                }
-            }
-            MySpacer(size = 2)
-        }
-
-    }
-
-
-}
-
 //@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 //@OptIn(ExperimentalPermissionsApi::class)
 //@Composable
@@ -366,15 +280,15 @@ private fun LightPreview() {
             favList = PROFFESIONALLISTFORTEST,
             isUser = false,
             error = UiError(false, "Account wasn't created"),
-//            loading = true,
             requestList = REQUESTLISTFORTEST,
-            loading = false,
+            loading = true,
+//            loading = false,
             onDeleteFav = {},
             onCloseDialog = {},
             onBottomBarClicked = {},
             onProfileInfo = {},
             onAcceptRequest = {},
-            onRejectRequest = {}
+            onRejectRequest = { _, _ -> }
         )
     }
 

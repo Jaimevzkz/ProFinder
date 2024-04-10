@@ -94,7 +94,6 @@ fun MyGenericTextField(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyEmailTextField(
     modifier: Modifier,
