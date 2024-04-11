@@ -25,7 +25,7 @@ class HomeViewModel @Inject constructor(
     override fun reduce(state: HomeState, intent: HomeIntent): HomeState {
         return when (intent) {
             is HomeIntent.Loading -> state.copy(
-                loading = true
+                loading = !state.loading
             )
 
             is HomeIntent.Error -> state.copy(
@@ -45,6 +45,7 @@ class HomeViewModel @Inject constructor(
 
             is HomeIntent.ChangeRequestList -> state.copy(
                 requestList = intent.requestList,
+                loading = !state.loading
             )
 
             is HomeIntent.SetIsUser -> state.copy(isUser = intent.isUser)
@@ -53,8 +54,8 @@ class HomeViewModel @Inject constructor(
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
-        setRequests()
         try {
+            setRequests()
             viewModelScope.launch(Dispatchers.IO) {
                 dispatch(HomeIntent.SetIsUser(getUserUseCase().actor == Actors.User))
                 dispatch(HomeIntent.ChangeFavList(favouriteListUseCase.getFavouriteList()))
@@ -64,19 +65,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setRequests(){
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                getRequestsUseCase().collect{requestList ->
-                    dispatch(HomeIntent.ChangeRequestList(requestList))
-                }
+    private fun setRequests() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getRequestsUseCase().collect{requestList ->
+                dispatch(HomeIntent.ChangeRequestList(requestList))
+                dispatch(HomeIntent.Loading)
             }
-        } catch (e: Exception){
-            dispatch(HomeIntent.Error(e.message.orEmpty()))
         }
     }
 
-    fun onDeleteFav(uid: String){
+    fun onDeleteFav(uid: String) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 favouriteListUseCase.changeFavouriteList(uidToChange = uid, add = false)
@@ -89,7 +87,7 @@ class HomeViewModel @Inject constructor(
 
     fun onCloseDialog() = dispatch(HomeIntent.CloseError)
 
-    fun onDeleteRequest(rid: String, otherUid: String){
+    fun onDeleteRequest(rid: String, otherUid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteRequestUseCase.deleteWithRid(rid = rid, otherUid = otherUid)
         }

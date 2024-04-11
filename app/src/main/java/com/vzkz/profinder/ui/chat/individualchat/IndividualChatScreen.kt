@@ -2,9 +2,6 @@ package com.vzkz.profinder.ui.chat.individualchat
 
 import android.content.res.Configuration
 import android.net.Uri
-import android.util.Log
-import androidx.activity.addCallback
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
@@ -37,10 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -133,9 +125,6 @@ private fun ScreenBody(
     var message by remember { mutableStateOf("") }
     val scrollState = rememberLazyListState()
 
-    var isKeyboardVisible by remember { mutableStateOf(true) }
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
 
     Scaffold(
         topBar = {
@@ -190,7 +179,9 @@ private fun ScreenBody(
                         var showDate = true
                         val currentIndex = messageList.indexOf(message)
                         if (currentIndex > 0) {
-                            showDate = onGetDate(messageList[currentIndex].timestamp) != onGetDate(messageList[currentIndex - 1].timestamp)
+                            showDate = onGetDate(messageList[currentIndex].timestamp) != onGetDate(
+                                messageList[currentIndex - 1].timestamp
+                            )
                         }
                         if (showDate)
                             MyRow {
@@ -223,32 +214,21 @@ private fun ScreenBody(
                             readStatus = readState
                         )
                     }
-
                 }
 
                 MyRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = if (isKeyboardVisible) 312.dp else 0.dp)
                         .padding(bottom = 12.dp)
                         .padding(horizontal = 12.dp),
                     horizontalArrangement = Arrangement.Start
                 ) {
                     MyGenericTextField(
                         modifier = Modifier
-                            .weight(1f)
-                            .focusRequester(focusRequester)
-                            .onFocusChanged {
-                                isKeyboardVisible = it.isFocused
-                            },
+                            .weight(1f),
                         hint = "Type your message...",
                         text = message,
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                focusManager.clearFocus()
-                            },
-                        ),
                         onTextChanged = { message = it },
                         shape = MaterialTheme.shapes.extraLarge,
                         colors = OutlinedTextFieldDefaults.colors()
@@ -278,7 +258,7 @@ private fun ScreenBody(
             }
 
 
-            LaunchedEffect(key1 = messageList, key2 = isKeyboardVisible) {
+            LaunchedEffect(key1 = messageList, key2 = message) {
                 if (messageList.isNotEmpty())
                     scrollState.scrollToItem(messageList.size - 1)
             }
