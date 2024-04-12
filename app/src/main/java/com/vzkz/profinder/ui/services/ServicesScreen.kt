@@ -37,6 +37,7 @@ import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.services.components.ServicesScreenShimmer
 import com.vzkz.profinder.ui.services.components.professionalscreen.ProfessionalScreenBody
 import com.vzkz.profinder.ui.services.components.userscreen.MapScreenBody
+import com.vzkz.profinder.ui.services.components.userscreen.ServiceState
 import com.vzkz.profinder.ui.services.components.userscreen.UserScreenBody
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
@@ -60,7 +61,7 @@ fun ServicesScreen(
     user = servicesViewModel.state.user
     var actor: Actors? by remember { mutableStateOf(null) }
     actor = user?.actor
-    var requestExists by remember { mutableStateOf(false) }
+    var requestExists by remember { mutableStateOf(ServiceState.FREE) }
     requestExists = servicesViewModel.state.requestExists
 
     ScreenBody(
@@ -97,7 +98,7 @@ private fun ScreenBody(
     actor: Actors?,
     loading: Boolean,
     activeServices: List<ServiceModel>,
-    requestExists: Boolean,
+    requestExists: ServiceState,
     inactiveServices: List<ServiceModel>,
     error: UiError,
     onCheckRequestExists: (String) -> Unit,
@@ -209,7 +210,7 @@ fun DarkPreview() {
             loading = false,
             activeServices = SERVICELISTFORTEST,
             inactiveServices = SERVICELISTFORTEST,
-            requestExists = false,
+            requestExists = ServiceState.FREE,
             error = UiError(false, ""),
             onCheckRequestExists = {},
             onActivityChange = {},

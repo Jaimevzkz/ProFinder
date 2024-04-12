@@ -61,7 +61,7 @@ fun HomeCardShimmer(
                 )
             }
             MyColumn (modifier = Modifier.align(Alignment.TopCenter)){
-                MySpacer(size = 32)
+                MySpacer(size = 28)
                 content()
             }
         }

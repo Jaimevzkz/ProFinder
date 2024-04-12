@@ -31,14 +31,12 @@ import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyGenericTextField
 import com.vzkz.profinder.ui.components.MySpacer
-import com.vzkz.profinder.ui.components.dialogs.ServiceDetailsDialog
-import com.vzkz.profinder.ui.services.components.ServiceCard
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Composable
 fun UserScreenBody(
     modifier: Modifier = Modifier,
-    requestExists: Boolean,
+    requestExists: ServiceState,
     serviceList: List<ServiceModel>,
     onCheckRequestExists: (String) -> Unit,
     onCancelRequest: (String) -> Unit,
@@ -65,6 +63,7 @@ fun UserScreenBody(
                     .fillMaxWidth(),
                 hint = stringResource(R.string.type_a_service_to_search),
                 shape = CircleShape,
+                readOnly = showServiceInfo,
                 text = query,
                 onTextChanged = {
                     query = it
@@ -147,7 +146,7 @@ fun UserScreenBodyPreview() {
     ProFinderTheme {
         UserScreenBody(
             serviceList = SERVICELISTFORTEST,
-            requestExists = false,
+            requestExists = ServiceState.FREE,
             onSeeProfile = {},
             onSeeMap = {},
             onRequestService = {},

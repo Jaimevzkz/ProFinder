@@ -62,13 +62,11 @@ fun MyGenericTextField(
             keyboardActions = keyboardActions,
             singleLine = true,
             readOnly = readOnly,
+            enabled = !readOnly,
             trailingIcon = trailingIcon,
             leadingIcon = leadingIcon,
             shape = shape,
-            colors = if (readOnly) colors.copy(
-                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary
-            ) else colors
+            colors = colors
         )
     } else{
         TextField(
@@ -87,6 +85,7 @@ fun MyGenericTextField(
             singleLine = true,
             shape = shape,
             readOnly = readOnly,
+            enabled = !readOnly,
             trailingIcon = trailingIcon,
             leadingIcon = leadingIcon,
             colors = TextFieldDefaults.colors()

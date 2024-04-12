@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vzkz.profinder.R
-import com.vzkz.profinder.domain.model.RequestModel
+import com.vzkz.profinder.domain.model.JobModel
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
@@ -41,10 +41,10 @@ import com.vzkz.profinder.ui.theme.rejectColor
 
 @Composable
 fun HomeRequestList(
-    requestList: List<RequestModel>,
+    requestList: List<JobModel>,
     isUser: Boolean,
     onSeeProfile: (String) -> Unit,
-    onAcceptRequest: (String) -> Unit,
+    onAcceptRequest: (JobModel) -> Unit,
     onRejectRequest: (String, String) -> Unit
 ) {
     val fontColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -107,7 +107,7 @@ fun HomeRequestList(
                     Spacer(modifier = Modifier.weight(1f))
                     if (isUser) {
                         OutlinedButton(
-                            onClick = { onRejectRequest(request.rid, request.otherUid) },
+                            onClick = { onRejectRequest(request.id, request.otherUid) },
                             border = BorderStroke(1.dp, fontColor),
                             modifier = Modifier.padding(end = 2.dp)
                         ) {
@@ -116,7 +116,7 @@ fun HomeRequestList(
                     } else {
                         MyRow {
                             IconButton(
-                                onClick = { onAcceptRequest(request.rid) },
+                                onClick = { onAcceptRequest(request) },
                                 modifier = Modifier
                                     .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
                                     .height(36.dp)
@@ -130,7 +130,7 @@ fun HomeRequestList(
                             }
                             MySpacer(size = 8)
                             IconButton(
-                                onClick = { onRejectRequest(request.rid, request.otherUid) },
+                                onClick = { onRejectRequest(request.id, request.otherUid) },
                                 modifier = Modifier
                                     .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
                                     .height(36.dp)

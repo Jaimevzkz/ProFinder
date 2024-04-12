@@ -17,7 +17,7 @@ import com.vzkz.profinder.core.Constants.REALTIME_ACCESS_INTERRUPTED
 import com.vzkz.profinder.data.dto.IndiviualChatDto
 import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.data.dto.RecentChatDto
-import com.vzkz.profinder.data.dto.RequestDto
+import com.vzkz.profinder.data.dto.JobDto
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.data.firebase.RealtimeService
@@ -29,7 +29,7 @@ import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
-import com.vzkz.profinder.domain.model.RequestModel
+import com.vzkz.profinder.domain.model.JobModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -185,15 +185,16 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getJobRequests(uid: String): Flow<List<RequestModel>> {
+    override fun getJobsOrRequests(isRequest: Boolean, uid: String): Flow<List<JobModel>> {
         return try {
-            firestoreService.getJobRequests(uid)
+            firestoreService.getJobsOrRequests(isRequest = isRequest, uid = uid)
         } catch (e: Exception) {
             throw handleException(e)
         }
     }
 
-    override fun addJobRequest(
+    override fun addJobOrRequest(
+        isRequest: Boolean,
         profUid: String,
         profNickname: String,
         clientNickname: String,
@@ -203,9 +204,10 @@ class RepositoryImpl @Inject constructor(
         price: Double
     ) {
         try {
-            firestoreService.addnewRequest(
+            firestoreService.addNewJobOrRequest(
+                isRequest = isRequest,
                 profUid = profUid,
-                request = RequestDto(
+                request = JobDto(
                     profNickname = profNickname,
                     otherNickname = clientNickname,
                     otherId = clientId,
@@ -219,8 +221,33 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun deleteRequest(uid: String, otherUid: String,  rid: String) {
-        firestoreService.deleteRequest(uid = uid, otherUid = otherUid, rid = rid)
+    override fun deleteJobOrRequest(
+        isRequest: Boolean,
+        uid: String,
+        otherUid: String,
+        id: String
+    ) {
+        firestoreService.deleteJobOrRequest(
+            isRequest = isRequest,
+            uid = uid,
+            otherUid = otherUid,
+            id = id
+        )
+    }
+
+    override fun turnRequestIntoJob(ownerNickname: String, uid: String, request: JobModel) {
+        firestoreService.turnRequestIntoJob(
+            request.id,
+            uid = uid,
+            request = JobDto(
+                profNickname = ownerNickname,
+                otherNickname = request.otherNickname,
+                otherId = request.otherUid,
+                serviceName = request.serviceName,
+                serviceId = request.serviceId,
+                price = request.price
+            )
+        )
     }
 
     //Storage

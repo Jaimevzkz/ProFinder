@@ -16,6 +16,7 @@ import com.vzkz.profinder.core.Constants.FIRSTNAME
 import com.vzkz.profinder.core.Constants.INSERTION_ERROR
 import com.vzkz.profinder.core.Constants.IS_ACTIVE
 import com.vzkz.profinder.core.Constants.IS_USER
+import com.vzkz.profinder.core.Constants.JOBS
 import com.vzkz.profinder.core.Constants.LASTNAME
 import com.vzkz.profinder.core.Constants.MODIFICATION_ERROR
 import com.vzkz.profinder.core.Constants.NAME
@@ -36,13 +37,13 @@ import com.vzkz.profinder.core.Constants.SERV_DESCRIPTION
 import com.vzkz.profinder.core.Constants.STATE
 import com.vzkz.profinder.core.Constants.UID
 import com.vzkz.profinder.core.Constants.USERS_COLLECTION
-import com.vzkz.profinder.data.dto.RequestDto
+import com.vzkz.profinder.data.dto.JobDto
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Categories
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
-import com.vzkz.profinder.domain.model.RequestModel
+import com.vzkz.profinder.domain.model.JobModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -314,16 +315,17 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             }
     }
 
-    //Requests
-    fun getJobRequests(uid: String): Flow<List<RequestModel>> = callbackFlow {
-        val requestList = mutableListOf<RequestModel>()
+    //Requests/jobs
+    fun getJobsOrRequests(isRequest: Boolean, uid: String): Flow<List<JobModel>> = callbackFlow {
+        val requestList = mutableListOf<JobModel>()
+        val collectionName = if(isRequest) REQUESTS else JOBS
         val listener =
-            usersCollection.document(uid).collection(REQUESTS).addSnapshotListener { value, error ->
+            usersCollection.document(uid).collection(collectionName).addSnapshotListener { value, error ->
                 requestList.clear()
                 value?.documents?.forEach { docSnapshot ->
                     requestList.add(
-                        RequestModel(
-                            rid = docSnapshot.id,
+                        JobModel(
+                            id = docSnapshot.id,
                             otherNickname = docSnapshot.getString(OTHER_NICKNAME)
                                 ?: throw Exception(NONEXISTENT_REQUESTATTRIBUTE),
                             otherUid = docSnapshot.getString(OTHER_ID) ?: throw Exception(
@@ -342,7 +344,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     )
                 }
                 if (error != null) {
-                    Log.e("Jaime", "error found getting job requests: ${error.message}")
+                    Log.e("Jaime", "error found getting jobs/requests: ${error.message}")
                     throw Exception(error.message)
                 }
                 trySend(requestList)
@@ -354,44 +356,54 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
 
     }
 
-    fun addnewRequest(profUid: String, request: RequestDto) {
-        val docRef = usersCollection.document(profUid).collection(REQUESTS).document()
+    fun addNewJobOrRequest(isRequest: Boolean, profUid: String, request: JobDto) {
+        val collectionName = if(isRequest) REQUESTS else JOBS
+        val docRef = usersCollection.document(profUid).collection(collectionName).document()
 
         docRef.set(request.toMapProf())
             .addOnSuccessListener {
-                Log.i("Jaime", "Request added correctly")
+                Log.i("Jaime", "Job/Request added correctly")
             }
             .addOnFailureListener {
-                Log.e("Jaime", "Error adding request to firestore: ${it.message}")
+                Log.e("Jaime", "Error adding job/request to firestore: ${it.message}")
             }
-        docRef.id
-        usersCollection.document(request.otherId).collection(REQUESTS).document(docRef.id)
+
+        usersCollection.document(request.otherId).collection(collectionName).document(docRef.id)
             .set(request.toMapUser(profUid))
             .addOnSuccessListener {
-                Log.i("Jaime", "Request added correctly")
+                Log.i("Jaime", "Job/Request added correctly")
             }
             .addOnFailureListener {
-                Log.e("Jaime", "Error adding request to firestore: ${it.message}")
+                Log.e("Jaime", "Error adding job/request to firestore: ${it.message}")
             }
     }
 
-    fun deleteRequest(uid: String, otherUid: String, rid: String) {
-        usersCollection.document(uid).collection(REQUESTS).document(rid).delete()
+    fun deleteJobOrRequest(isRequest: Boolean, uid: String, otherUid: String, id: String) {
+        val collectionName = if(isRequest) REQUESTS else JOBS
+        usersCollection.document(uid).collection(collectionName).document(id).delete()
             .addOnSuccessListener {
-                Log.i("Jaime", "Request deleted correctly")
-                usersCollection.document(otherUid).collection(REQUESTS).document(rid).delete()
+                Log.i("Jaime", "Job/Request deleted correctly")
+                usersCollection.document(otherUid).collection(collectionName).document(id).delete()
                     .addOnSuccessListener {
-                        Log.i("Jaime", "Request 2 deleted correctly")
+                        Log.i("Jaime", "Job/Request 2 deleted correctly")
 
                     }
                     .addOnFailureListener {
-                        Log.e("Jaime", "Error deleting request 2 from firestore: ${it.message}")
+                        Log.e("Jaime", "Error deleting job/request 2 from firestore: ${it.message}")
                     }
 
             }
             .addOnFailureListener {
-                Log.e("Jaime", "Error deleting request from firestore: ${it.message}")
+                Log.e("Jaime", "Error deleting job/request from firestore: ${it.message}")
             }
+    }
+
+    fun turnRequestIntoJob(rid: String, uid: String, request: JobDto){
+        //delete request
+        deleteJobOrRequest(isRequest = true, uid = uid, otherUid = request.otherId, id = rid)
+        //Add job
+        addNewJobOrRequest(isRequest = false, profUid = uid, request = request)
+
     }
 
 }

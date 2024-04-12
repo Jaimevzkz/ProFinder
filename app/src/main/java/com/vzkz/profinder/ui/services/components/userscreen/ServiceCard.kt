@@ -1,4 +1,4 @@
-package com.vzkz.profinder.ui.services.components
+package com.vzkz.profinder.ui.services.components.userscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -108,7 +108,7 @@ fun ServiceCard(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = if (service.isActive) "Set as inactive" else "Set as active",
+                                text = if (service.isActive) stringResource(id = R.string.set_as_inactive)else stringResource(id = R.string.set_as_active),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         },
@@ -125,7 +125,7 @@ fun ServiceCard(
                     )
                     DropdownMenuItem(
                         text = {
-                            Text(text = "Delete", style = MaterialTheme.typography.bodyMedium)
+                            Text(text = stringResource(R.string.delete), style = MaterialTheme.typography.bodyMedium)
                         },
                         onClick = {
                             expandedActorDropdownMenu = false

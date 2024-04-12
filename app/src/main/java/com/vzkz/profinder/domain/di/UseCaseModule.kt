@@ -20,14 +20,16 @@ import com.vzkz.profinder.domain.usecases.chat.GetUnreadMessageAndOwnerUseCase
 import com.vzkz.profinder.domain.usecases.chat.GetUnreadMessageAndOwnerUseCaseImpl
 import com.vzkz.profinder.domain.usecases.chat.OpenRecentChatsUseCase
 import com.vzkz.profinder.domain.usecases.chat.OpenRecentChatsUseCaseImpl
-import com.vzkz.profinder.domain.usecases.requests.AddRequestsUseCase
-import com.vzkz.profinder.domain.usecases.requests.AddRequestsUseCaseImpl
-import com.vzkz.profinder.domain.usecases.requests.CheckExistingRequestUseCase
-import com.vzkz.profinder.domain.usecases.requests.CheckExistingRequestUseCaseImpl
-import com.vzkz.profinder.domain.usecases.requests.DeleteRequestUseCase
-import com.vzkz.profinder.domain.usecases.requests.DeleteRequestUseCaseImpl
-import com.vzkz.profinder.domain.usecases.requests.GetRequestsUseCase
-import com.vzkz.profinder.domain.usecases.requests.GetRequestsUseCaseImpl
+import com.vzkz.profinder.domain.usecases.jobs.AddJobOrRequestsUseCase
+import com.vzkz.profinder.domain.usecases.jobs.AddJobOrJobOrRequestsUseCaseImpl
+import com.vzkz.profinder.domain.usecases.jobs.CheckExistingRequestUseCase
+import com.vzkz.profinder.domain.usecases.jobs.CheckExistingRequestUseCaseImpl
+import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCase
+import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCaseImpl
+import com.vzkz.profinder.domain.usecases.jobs.GetRequestsUseCase
+import com.vzkz.profinder.domain.usecases.jobs.GetRequestsUseCaseImpl
+import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCase
+import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
@@ -112,9 +114,11 @@ abstract class UseCaseModule {
     @Binds
     abstract fun bindGetRequestsUseCase(impl: GetRequestsUseCaseImpl): GetRequestsUseCase
     @Binds
-    abstract fun bindAddRequestsUseCase(impl: AddRequestsUseCaseImpl): AddRequestsUseCase
+    abstract fun bindAddRequestsUseCase(impl: AddJobOrJobOrRequestsUseCaseImpl): AddJobOrRequestsUseCase
     @Binds
     abstract fun bindCheckExistingRequestUseCase(impl: CheckExistingRequestUseCaseImpl): CheckExistingRequestUseCase
     @Binds
-    abstract fun bindDeleteRequestUseCase(impl: DeleteRequestUseCaseImpl): DeleteRequestUseCase
+    abstract fun bindDeleteRequestUseCase(impl: DeleteJobOrRequestUseCaseImpl): DeleteJobOrRequestUseCase
+    @Binds
+    abstract fun bindTurnJobIntoRequestUseCase(impl: TurnJobIntoRequestUseCaseImpl): TurnJobIntoRequestUseCase
 }

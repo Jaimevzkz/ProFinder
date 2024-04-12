@@ -1,7 +1,8 @@
-package com.vzkz.profinder.ui.components.dialogs
+package com.vzkz.profinder.ui.services.components.userscreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +44,7 @@ fun ServiceDetailsDialog(
     isVisible: Boolean,
     service: ServiceModel,
     backgroundColor: Color,
-    requestExists: Boolean,
+    requestExists: ServiceState,
     fontColor: Color,
     onSeeProfile: () -> Unit,
     onRequest: () -> Unit,
@@ -64,21 +66,19 @@ fun ServiceDetailsDialog(
                     MyColumn(modifier = Modifier) {
                         Text(
                             text = service.owner.firstname,
-                            fontSize = 26.sp,
+                            fontSize = 28.sp,
                             fontWeight = FontWeight.SemiBold
                         )
-                        Text(text = service.owner.nickname, fontSize = 16.sp)
-                        MySpacer(size = 4)
-                        OutlinedButton(
-                            modifier = Modifier
-                                .size(92.dp, 34.dp),
-                            onClick = { onSeeProfile() },
-                            contentPadding = ButtonDefaults.TextButtonContentPadding,
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
-
-                        ) {
-                            Text(text = "See profile", fontSize = 12.sp)
-                        }
+                        Text(
+                            text = service.owner.nickname,
+                            fontWeight = FontWeight.Light,
+                            fontSize = 18.sp,
+                            color = fontColor,
+                            textDecoration = TextDecoration.Underline,
+                            modifier = Modifier.clickable {
+                                onSeeProfile()
+                            }
+                        )
                     }
                     Spacer(modifier = Modifier.weight(3f))
 
@@ -126,12 +126,10 @@ fun ServiceDetailsDialog(
                     .padding(bottom = 18.dp),
                 contentPadding = ButtonDefaults.TextButtonContentPadding,
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                onClick = { if(requestExists) onCancelRequest(service.sid) else onRequest() }
+                onClick = { if (requestExists == ServiceState.REQUESTED) onCancelRequest(service.sid) else if (requestExists == ServiceState.FREE) onRequest() }
             ) {
                 Text(
-                    text = if(requestExists) stringResource(R.string.cancel_request) else stringResource(
-                        R.string.request
-                    ),
+                    text = stringResource(requestExists.id),
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
                     fontSize = 16.sp
                 )
@@ -157,7 +155,7 @@ private fun ServiceCardPreview() {
             fontColor = MaterialTheme.colorScheme.onSecondaryContainer,
             onSeeProfile = {},
             onRequest = {},
-            requestExists = true,
+            requestExists = ServiceState.JOB,
             onCloseDialog = {},
             onCancelRequest = {}
         )

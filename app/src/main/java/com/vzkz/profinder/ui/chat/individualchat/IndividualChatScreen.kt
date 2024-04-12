@@ -2,10 +2,14 @@ package com.vzkz.profinder.ui.chat.individualchat
 
 import android.content.res.Configuration
 import android.net.Uri
+import android.view.Window
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -73,6 +77,7 @@ fun IndividualChatScreen(
             chatId = chatId
         )
     }
+
     val error = individualChatViewModel.state.error
     val chatList = individualChatViewModel.state.chatList
     val unreadMsgs = individualChatViewModel.state.unreadMsgNumber

@@ -1,7 +1,7 @@
 package com.vzkz.profinder.domain.model
 
-data class RequestModel(
-    val rid: String,
+data class JobModel(
+    val id: String,
     val otherNickname: String,
     val otherUid: String,
     val serviceId: String,

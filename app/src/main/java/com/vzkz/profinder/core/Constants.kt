@@ -23,6 +23,7 @@ object Constants {
 
     //Requests
     const val REQUESTS = "requests"
+    const val JOBS = "jobs"
     const val OTHER_NICKNAME = "otherNickname"
     const val OTHER_ID = "otherUid"
     const val SERVICE_ID = "serviceId"

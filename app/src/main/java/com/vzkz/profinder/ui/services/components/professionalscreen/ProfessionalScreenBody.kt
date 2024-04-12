@@ -26,14 +26,13 @@ import com.vzkz.profinder.R
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.domain.model.UiError
-import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.dialogs.AddServiceDialog
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.dialogs.MyConfirmDialog
-import com.vzkz.profinder.ui.services.components.ServiceCard
+import com.vzkz.profinder.ui.services.components.userscreen.ServiceCard
 
 @Composable
 fun ProfessionalScreenBody(

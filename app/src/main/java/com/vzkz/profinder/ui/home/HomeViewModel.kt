@@ -3,9 +3,11 @@ package com.vzkz.profinder.ui.home
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.Actors
+import com.vzkz.profinder.domain.model.JobModel
 import com.vzkz.profinder.domain.model.UiError
-import com.vzkz.profinder.domain.usecases.requests.DeleteRequestUseCase
-import com.vzkz.profinder.domain.usecases.requests.GetRequestsUseCase
+import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCase
+import com.vzkz.profinder.domain.usecases.jobs.GetRequestsUseCase
+import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCase
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +21,8 @@ class HomeViewModel @Inject constructor(
     private val favouriteListUseCase: FavouriteListUseCase,
     private val getRequestsUseCase: GetRequestsUseCase,
     private val getUserUseCase: GetUserUseCase,
-    private val deleteRequestUseCase: DeleteRequestUseCase
+    private val deleteRequestUseCase: DeleteJobOrRequestUseCase,
+    private val turnJobIntoRequestUseCase: TurnJobIntoRequestUseCase
 ) : BaseViewModel<HomeState, HomeIntent>(HomeState.initial) {
 
     override fun reduce(state: HomeState, intent: HomeIntent): HomeState {
@@ -49,12 +52,15 @@ class HomeViewModel @Inject constructor(
             )
 
             is HomeIntent.SetIsUser -> state.copy(isUser = intent.isUser)
+
+            is HomeIntent.ChangeJobList -> state.copy(jobList = intent.jobList)
         }
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
         try {
+            setJobs()
             setRequests()
             viewModelScope.launch(Dispatchers.IO) {
                 dispatch(HomeIntent.SetIsUser(getUserUseCase().actor == Actors.User))
@@ -67,9 +73,17 @@ class HomeViewModel @Inject constructor(
 
     private fun setRequests() {
         viewModelScope.launch(Dispatchers.IO) {
-            getRequestsUseCase().collect{requestList ->
+            getRequestsUseCase(isRequest = true).collect { requestList ->
                 dispatch(HomeIntent.ChangeRequestList(requestList))
                 dispatch(HomeIntent.Loading)
+            }
+        }
+    }
+    private fun setJobs() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getRequestsUseCase(isRequest = false).collect { jobList ->
+                dispatch(HomeIntent.ChangeJobList(jobList))
+//                dispatch(HomeIntent.Loading)
             }
         }
     }
@@ -89,9 +103,13 @@ class HomeViewModel @Inject constructor(
 
     fun onDeleteRequest(rid: String, otherUid: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            deleteRequestUseCase.deleteWithRid(rid = rid, otherUid = otherUid)
+            deleteRequestUseCase.deleteWithRid(isRequest = true, id = rid, otherUid = otherUid)
         }
     }
 
-
+    fun onAcceptRequest(request: JobModel){
+        viewModelScope.launch(Dispatchers.IO) {
+            turnJobIntoRequestUseCase(request)
+        }
+    }
 }

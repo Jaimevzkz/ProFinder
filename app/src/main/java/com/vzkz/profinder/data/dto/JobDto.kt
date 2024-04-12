@@ -6,7 +6,7 @@ import com.vzkz.profinder.core.Constants.PRICE
 import com.vzkz.profinder.core.Constants.SERVICE_ID
 import com.vzkz.profinder.core.Constants.SERVICE_NAME
 
-data class RequestDto(
+data class JobDto(
     val profNickname: String,
     val otherNickname: String,
     val otherId: String,

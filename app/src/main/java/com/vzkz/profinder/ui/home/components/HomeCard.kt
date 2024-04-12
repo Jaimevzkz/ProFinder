@@ -53,17 +53,21 @@ fun HomeCard(
         ) {
             val alignment = if (placeRight) Alignment.TopEnd else Alignment.TopStart
             Text(
-                modifier = Modifier.padding(12.dp).align(alignment),
+                modifier = Modifier
+                    .padding(12.dp)
+                    .align(alignment),
                 text = title,
                 color = contentColor,
                 fontFamily = fontFamily,
             )
-            MyColumn (modifier = Modifier.align(Alignment.TopCenter)){
-                MySpacer(size = 48)
+            MyColumn(modifier = Modifier.align(Alignment.TopCenter)) {
+                MySpacer(size = 40)
                 content()
             }
             if (placeRight && !isEditFavListEmpty) {
-                IconButton(modifier = Modifier.align(Alignment.TopStart), onClick = { onEditFavList() }) {
+                IconButton(
+                    modifier = Modifier.align(Alignment.TopStart),
+                    onClick = { onEditFavList() }) {
                     Icon(
                         imageVector = if (editFavList) Icons.Filled.EditOff else Icons.Filled.Edit,
                         contentDescription = "Edit fav list"

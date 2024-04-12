@@ -5,6 +5,7 @@ import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.services.components.userscreen.ServiceState
 
 
 data class ServicesState(
@@ -12,14 +13,14 @@ data class ServicesState(
     val activeServiceList: List<ServiceModel>,
     val inActiveServiceList: List<ServiceModel>,
     val user: ActorModel?,
-    val requestExists: Boolean,
+    val requestExists: ServiceState,
     val error: UiError,
 ) : State {
     companion object {
         val initial: ServicesState = ServicesState(
             loading = true,
             user = null,
-            requestExists = false,
+            requestExists = ServiceState.FREE,
             activeServiceList = emptyList(),
             inActiveServiceList = emptyList(),
             error = UiError(isError = false, errorMsg = null)
@@ -33,5 +34,5 @@ sealed class ServicesIntent : IndividualChatntent {
     data class Error(val errorMsg: String) : ServicesIntent()
     data object CloseError: ServicesIntent()
     data class SetUser(val user: ActorModel?) : ServicesIntent()
-    data class SetRequestExists(val requestExists: Boolean) : ServicesIntent()
+    data class SetRequestExists(val requestExists: ServiceState) : ServicesIntent()
 }
