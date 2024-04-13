@@ -10,7 +10,6 @@ data class RecentFinalChatResponse(
     val lastMsg: String? = null,
     val unreadMsgNumber: Int? = null,
     val lastMsgUid: String? = null,
-    val chatId: String? = null
 ) {
     fun toDomain(ownerId: String): ChatListItemModel {
         var participant: ParticipantDataResponse? = null
@@ -21,7 +20,6 @@ data class RecentFinalChatResponse(
             }
         }
         return ChatListItemModel(
-            chatId = chatId ?: throw Exception(NULL_REALTIME_USERDATA),
             uid = participant?.uid ?: throw Exception(NULL_REALTIME_USERDATA),
             profilePhoto = participant.let { if(it?.profilePhoto != null) Uri.parse(it.profilePhoto) else null },
             nickname = participant?.nickname ?: throw Exception(NULL_REALTIME_USERDATA),

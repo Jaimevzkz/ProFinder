@@ -77,14 +77,13 @@ fun ChatScreen(navigator: DestinationsNavigator, chatViewModel: ChatViewModel = 
         loading = loading,
         uid = uid,
         error = error,
-        onChatClicked = { otherNickname, otherProfilePicture, otherUid, chatId, lastMsgUid ->
+        onChatClicked = { otherNickname, otherProfilePicture, otherUid->
             navigator.navigate(
                 IndividualChatScreenDestination(
                     otherNickname = otherNickname,
                     otherProfilePhoto = otherProfilePicture,
                     otherUid = otherUid,
-                    chatId = chatId,
-                    lastMsgUid = lastMsgUid
+                    combinedUid = chatViewModel.combineUids(uid, otherUid)
                 )
             )
         },
@@ -102,7 +101,7 @@ private fun ScreenBody(
     loading: Boolean,
     uid: String,
     error: UiError,
-    onChatClicked: (String, Uri?, String, String, String) -> Unit,
+    onChatClicked: (String, Uri?, String) -> Unit,
     onFormatTime: (Long) -> String,
     onCloseDialog: () -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit
@@ -190,8 +189,6 @@ private fun ScreenBody(
                                         chatItem.nickname,
                                         chatItem.profilePhoto,
                                         chatItem.uid,
-                                        chatItem.chatId,
-                                        chatItem.lastMsgUid
                                     )
                                 },
                                 uid = uid,
@@ -332,7 +329,7 @@ private fun LightPreview() {
             error = UiError(false, "Account wasn't created"),
             onCloseDialog = {},
             onBottomBarClicked = {},
-            onChatClicked = { _, _, _, _, _ -> }
+            onChatClicked = { _, _, _ -> }
         )
     }
 }

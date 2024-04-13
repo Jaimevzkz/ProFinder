@@ -19,7 +19,9 @@ data class ActorModel(
     val profession: Professions? = null, //Only for professionals
     val state: ProfState? = null, //Only for professionals
     val profilePhoto: Uri? = null,
-    val favourites: List<String> = emptyList()
+    val favourites: List<String> = emptyList(),
+    val rating: Double? = null,
+    val reviewNumber: Int? = null
 ){
     constructor(): this(
         nickname = "",

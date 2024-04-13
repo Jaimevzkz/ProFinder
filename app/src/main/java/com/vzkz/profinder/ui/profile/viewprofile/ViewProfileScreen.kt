@@ -51,12 +51,16 @@ import com.vzkz.profinder.destinations.IndividualChatScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.ProfilePicture
+import com.vzkz.profinder.ui.components.RatingBar
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.shimmer.IconShimmer
+import com.vzkz.profinder.ui.components.starColor
 import com.vzkz.profinder.ui.theme.ProFinderTheme
+import com.vzkz.profinder.ui.theme.orange
 
 @Destination
 @Composable
@@ -73,6 +77,7 @@ fun ViewProfileScreen(
     userToSee = viewProfileViewModel.state.userToSee
     val isFavourite = viewProfileViewModel.state.isFavourite
     val loading = viewProfileViewModel.state.loading
+    val uid = viewProfileViewModel.state.uid
     ScreenBody(
         userToSee = userToSee ?: ActorModel(),
         loading = loading,
@@ -82,13 +87,16 @@ fun ViewProfileScreen(
             viewProfileViewModel.onFavouriteChanged(uidToChange = uidToSee, add = !isFavourite)
         },
         onChatClicked = {
-            navigator.navigate(
-                IndividualChatScreenDestination(
-                    otherNickname = userToSee?.nickname ?: "Guess",
-                    otherProfilePhoto = userToSee?.profilePhoto,
-                    otherUid = uidToSee
+            if(uid != null){
+                navigator.navigate(
+                    IndividualChatScreenDestination(
+                        otherNickname = userToSee?.nickname ?: "Guess",
+                        otherProfilePhoto = userToSee?.profilePhoto,
+                        otherUid = uidToSee,
+                        viewProfileViewModel.combineUids(uid, uidToSee)
+                    )
                 )
-            )
+            }
         },
         onCloseDialog = {
             viewProfileViewModel.onCloseDialog()
@@ -139,7 +147,7 @@ private fun ScreenBody(
                     .padding(horizontal = 20.dp),
                 cardColor = cardColor
             )
-        } else{
+        } else {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -176,6 +184,23 @@ private fun ScreenBody(
                     }
                 }
                 //Status
+                MySpacer(size = 8)
+                val rating = userToSee.rating ?: 0.0
+                MyColumn(Modifier.align(Alignment.CenterHorizontally)) {
+                    RatingBar(
+                        modifier = Modifier,
+                        rating = rating,
+                        starSize = 32,
+                        starsColor = starColor(rating = rating),
+                    )
+                    Text(
+                        text = if (userToSee.rating != null) "${userToSee.rating} (${userToSee.reviewNumber} reviews)" else stringResource(
+                            R.string.no_reviews_yet
+                        ),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontWeight = FontWeight.Light
+                    )
+                }
                 MySpacer(size = 8)
                 Row(
                     modifier = Modifier.align(Alignment.CenterHorizontally),

@@ -11,14 +11,16 @@ data class ViewProfileState(
     val loading: Boolean,
     val error: UiError,
     val userToSee: ActorModel?,
-    val isFavourite: Boolean
+    val isFavourite: Boolean,
+    val uid: String?
 ) : State {
     companion object {
         val initial: ViewProfileState = ViewProfileState(
             loading = true,
             error = UiError(false, null),
             userToSee = null,
-            isFavourite = false
+            isFavourite = false,
+            uid = null
         )
     }
 }
@@ -29,4 +31,5 @@ sealed class ViewProfileIntent: IndividualChatntent {
     data object CloseError: ViewProfileIntent()
     data class Setuser(val user: ActorModel): ViewProfileIntent()
     data class ChangeFavourite(val newValue: Boolean): ViewProfileIntent()
+    data class SetUid(val uid: String): ViewProfileIntent()
 }

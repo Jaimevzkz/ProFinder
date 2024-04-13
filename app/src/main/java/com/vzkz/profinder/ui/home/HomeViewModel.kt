@@ -7,6 +7,7 @@ import com.vzkz.profinder.domain.model.JobModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCase
 import com.vzkz.profinder.domain.usecases.jobs.GetRequestsUseCase
+import com.vzkz.profinder.domain.usecases.jobs.RateJobUseCase
 import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCase
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
@@ -22,7 +23,8 @@ class HomeViewModel @Inject constructor(
     private val getRequestsUseCase: GetRequestsUseCase,
     private val getUserUseCase: GetUserUseCase,
     private val deleteRequestUseCase: DeleteJobOrRequestUseCase,
-    private val turnJobIntoRequestUseCase: TurnJobIntoRequestUseCase
+    private val turnJobIntoRequestUseCase: TurnJobIntoRequestUseCase,
+    private val rateJobUseCase: RateJobUseCase
 ) : BaseViewModel<HomeState, HomeIntent>(HomeState.initial) {
 
     override fun reduce(state: HomeState, intent: HomeIntent): HomeState {
@@ -53,7 +55,10 @@ class HomeViewModel @Inject constructor(
 
             is HomeIntent.SetIsUser -> state.copy(isUser = intent.isUser)
 
-            is HomeIntent.ChangeJobList -> state.copy(jobList = intent.jobList)
+            is HomeIntent.ChangeJobList -> state.copy(
+                jobList = intent.jobList,
+                loading = !state.loading
+            )
         }
     }
 
@@ -79,11 +84,12 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
     private fun setJobs() {
         viewModelScope.launch(Dispatchers.IO) {
             getRequestsUseCase(isRequest = false).collect { jobList ->
                 dispatch(HomeIntent.ChangeJobList(jobList))
-//                dispatch(HomeIntent.Loading)
+                dispatch(HomeIntent.Loading)
             }
         }
     }
@@ -107,9 +113,15 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onAcceptRequest(request: JobModel){
+    fun onAcceptRequest(request: JobModel) {
         viewModelScope.launch(Dispatchers.IO) {
             turnJobIntoRequestUseCase(request)
+        }
+    }
+
+    fun onRateJob(job: JobModel, rating: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            rateJobUseCase(job = job, rating = rating)
         }
     }
 }

@@ -32,12 +32,13 @@ import com.vzkz.profinder.ui.components.MySpacer
 
 @Composable
 fun HomeJobList(
-    requestList: List<JobModel>,
+    jobList: List<JobModel>,
     isUser: Boolean,
+    onFinishJob: (JobModel) -> Unit,
     onSeeProfile: (String) -> Unit,
 ) {
     val fontColor = MaterialTheme.colorScheme.onPrimaryContainer
-    if (requestList.isEmpty()) {
+    if (jobList.isEmpty()) {
         MyColumn(modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.weight(1f))
             Text(
@@ -48,7 +49,7 @@ fun HomeJobList(
         }
     } else {
         LazyColumn {
-            items(requestList) { request ->
+            items(jobList) { job ->
                 MyRow(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -63,20 +64,20 @@ fun HomeJobList(
                     if (!isUser) {
                         MyColumn {
                             Text(
-                                text = request.serviceName,
+                                text = job.serviceName,
                                 fontFamily = FontFamily(Font(R.font.oswald)),
                                 fontSize = 22.sp,
                                 color = fontColor
                             )
                             MyRow {
                                 Text(
-                                    text = request.otherNickname,
+                                    text = job.otherNickname,
                                     fontWeight = FontWeight.Light,
                                     fontSize = 16.sp,
                                     color = fontColor,
                                     textDecoration = TextDecoration.Underline,
                                     modifier = Modifier.clickable {
-                                        onSeeProfile(request.otherUid)
+                                        onSeeProfile(job.otherUid)
                                     }
                                 )
                                 MySpacer(size = 4)
@@ -88,7 +89,7 @@ fun HomeJobList(
                                         .padding(2.dp)
                                 ) {
                                     Text(
-                                        text = request.price.toString() + stringResource(R.string.h),
+                                        text = job.price.toString() + stringResource(R.string.h),
                                         fontSize = 12.sp,
                                         fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colorScheme.onTertiaryContainer
@@ -100,19 +101,19 @@ fun HomeJobList(
                         MyRow {
                             MyColumn {
                                 Text(
-                                    text = request.serviceName,
+                                    text = job.serviceName,
                                     fontFamily = FontFamily(Font(R.font.oswald)),
                                     fontSize = 22.sp,
                                     color = fontColor
                                 )
                                 Text(
-                                    text = request.otherNickname,
+                                    text = job.otherNickname,
                                     fontWeight = FontWeight.Light,
                                     fontSize = 16.sp,
                                     color = fontColor,
                                     textDecoration = TextDecoration.Underline,
                                     modifier = Modifier.clickable {
-                                        onSeeProfile(request.otherUid)
+                                        onSeeProfile(job.otherUid)
                                     }
                                 )
                             }
@@ -125,7 +126,7 @@ fun HomeJobList(
                                     .padding(6.dp)
                             ) {
                                 Text(
-                                    text = request.price.toString() + stringResource(R.string.h),
+                                    text = job.price.toString() + stringResource(R.string.h),
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.SemiBold,
                                     color = MaterialTheme.colorScheme.onTertiaryContainer
@@ -137,11 +138,11 @@ fun HomeJobList(
                     if (!isUser) {
                         Spacer(modifier = Modifier.weight(1f))
                         OutlinedButton(
-                            onClick = { },
+                            onClick = { onFinishJob(job) },
                             border = BorderStroke(1.dp, fontColor),
                             modifier = Modifier.padding(end = 2.dp)
                         ) {
-                            Text(text = "Finish job", color = fontColor, fontSize = 12.sp)
+                            Text(text = stringResource(R.string.finish_job), color = fontColor, fontSize = 12.sp)
                         }
                     }
                 }

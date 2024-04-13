@@ -51,6 +51,7 @@ import com.vzkz.profinder.destinations.SettingsScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.core.Constants.ERRORSTR
+import com.vzkz.profinder.core.USERMODELFORTESTS
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.UiError
@@ -58,8 +59,10 @@ import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.ProfilePicture
+import com.vzkz.profinder.ui.components.RatingBar
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
+import com.vzkz.profinder.ui.components.starColor
 import com.vzkz.profinder.ui.profile.shimmer.ProfileScreenShimmer
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
@@ -86,7 +89,7 @@ fun ProfileScreen(
             user = user,
             loading = loading,
             error = error,
-            onCloseDialog = {profileViewModel.onCloseDialog()},
+            onCloseDialog = { profileViewModel.onCloseDialog() },
             onChangeState = {
                 profileViewModel.onChangeState(user?.uid ?: ERRORSTR, it)
             },
@@ -211,6 +214,23 @@ private fun ScreenBody(
                             )
                         }
                     }
+                    val rating = user?.rating ?: 0.0
+                    MyColumn(Modifier.align(Alignment.CenterHorizontally)) {
+                        RatingBar(
+                            modifier = Modifier,
+                            rating = rating,
+                            starSize = 32,
+                            starsColor = starColor(rating = rating),
+                        )
+                        Text(
+                            text = if (user?.rating != null) "${user.rating} (${user.reviewNumber} reviews)" else stringResource(
+                                R.string.no_reviews_yet
+                            ),
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontWeight = FontWeight.Light
+                        )
+                    }
+                    MySpacer(size = 8)
                     if (actor == Actors.Professional) {
                         //State
                         MySpacer(size = 8)
@@ -349,7 +369,11 @@ private fun StateDialog(
                         .size(20.dp),
                 )
                 MySpacer(size = 12)
-                Text(text = it.name, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                Text(
+                    text = it.name,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                )
             }
             MySpacer(size = 16)
         }
@@ -362,14 +386,14 @@ private fun StateDialog(
 fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
-//            user = USERMODELFORTESTS,
-            user = PROFESSIONALMODELFORTESTS,
+            user = USERMODELFORTESTS,
+//            user = PROFESSIONALMODELFORTESTS,
             onLogout = { },
             onCloseDialog = {},
             error = UiError(false, ""),
             onBottomBarClicked = {},
-            loading = true,
-//            loading = false,
+//            loading = true,
+            loading = false,
             onChangeState = {},
             onSettingsClicked = { }
         ) {

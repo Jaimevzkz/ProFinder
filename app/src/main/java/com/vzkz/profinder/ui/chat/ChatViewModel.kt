@@ -2,6 +2,7 @@ package com.vzkz.profinder.ui.chat
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.DateFormatter
+import com.vzkz.profinder.core.UidCombiner
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.chat.GetRecentChatsUseCase
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(
     private val dateFormatter: DateFormatter,
     private val getRecentChatsUseCase: GetRecentChatsUseCase,
-    private val getUidDataStoreUseCase: GetUidDataStoreUseCase
+    private val getUidDataStoreUseCase: GetUidDataStoreUseCase,
+    private val uidCombiner: UidCombiner
 ) : BaseViewModel<ChatState, ChatIntent>(ChatState.initial) {
 
     override fun reduce(state: ChatState, intent: ChatIntent): ChatState {
@@ -66,4 +68,6 @@ class ChatViewModel @Inject constructor(
     fun getFormattedTime(timestamp: Long): String {
         return dateFormatter.formatToTime(timestamp)
     }
+
+    fun combineUids(uid1: String, uid2: String) = uidCombiner.combineUids(uid1 = uid1, uid2 = uid2)
 }

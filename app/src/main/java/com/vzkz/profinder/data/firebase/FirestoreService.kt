@@ -29,7 +29,9 @@ import com.vzkz.profinder.core.Constants.NULL_USERDATA
 import com.vzkz.profinder.core.Constants.PRICE
 import com.vzkz.profinder.core.Constants.PROFESSION
 import com.vzkz.profinder.core.Constants.PROFILEPHOTO
+import com.vzkz.profinder.core.Constants.RATING
 import com.vzkz.profinder.core.Constants.REQUESTS
+import com.vzkz.profinder.core.Constants.REVIEW_NUMBER
 import com.vzkz.profinder.core.Constants.SERVICES_COLLECTION
 import com.vzkz.profinder.core.Constants.SERVICE_ID
 import com.vzkz.profinder.core.Constants.SERVICE_NAME
@@ -49,7 +51,9 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.text.DecimalFormat
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 
 class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
@@ -110,6 +114,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     }
                 }
                 val profilePicture = userData.getOrDefault(PROFILEPHOTO, null) as String?
+                val reviewNumber = userData.getOrDefault(REVIEW_NUMBER, null) as Double?
+                var rating = userData.getOrDefault(RATING, null) as Double?
+                if(rating != null)
+                    rating = (rating * 100.0).roundToInt() / 100.0
                 try {
                     val userModel = ActorModel(
                         uid = uid,
@@ -121,6 +129,8 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                         profession = profession,
                         state = state,
                         profilePhoto = profilePicture?.let { Uri.parse(it) },
+                        rating = rating,
+                        reviewNumber = reviewNumber?.toInt()
                     )
 
                     userModel
@@ -224,6 +234,41 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             }
     }
 
+    fun updateRating(uid: String, newRating: Int) {
+        usersCollection.document(uid).get()
+            .addOnSuccessListener { docSnapshot ->
+                val rating: Double = docSnapshot.data?.get(RATING) as Double? ?: 0.0
+                val reviewNumber: Double = docSnapshot.data?.get(REVIEW_NUMBER) as Double? ?: 0.0
+
+                val finalRating = (rating * reviewNumber + newRating) / (reviewNumber + 1)
+                val finalReviewNumber = reviewNumber + 1
+
+                usersCollection.document(uid).update(RATING, finalRating)
+                    .addOnSuccessListener {
+                        Log.i("Jaime", "$RATING updated successfully")
+                        usersCollection.document(uid).update(REVIEW_NUMBER, finalReviewNumber)
+                            .addOnSuccessListener {
+                                Log.i("Jaime", "$REVIEW_NUMBER updated successfully")
+                            }
+                            .addOnFailureListener {
+                                Log.e("Jaime", "Error updating $REVIEW_NUMBER: ${it.message}")
+                                throw Exception(MODIFICATION_ERROR)
+                            }
+
+                    }
+                    .addOnFailureListener {
+                        Log.e("Jaime", "Error updating $RATING: ${it.message}")
+                        throw Exception(MODIFICATION_ERROR)
+                    }
+
+            }
+            .addOnFailureListener {
+                Log.e("Jaime", "Error getting user for rating update: ${it.message}")
+                throw Exception(MODIFICATION_ERROR)
+            }
+
+    }
+
     //Services
     private val servicesCollection = firestore.collection(SERVICES_COLLECTION)
 
@@ -318,37 +363,39 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     //Requests/jobs
     fun getJobsOrRequests(isRequest: Boolean, uid: String): Flow<List<JobModel>> = callbackFlow {
         val requestList = mutableListOf<JobModel>()
-        val collectionName = if(isRequest) REQUESTS else JOBS
+        val collectionName = if (isRequest) REQUESTS else JOBS
         val listener =
-            usersCollection.document(uid).collection(collectionName).addSnapshotListener { value, error ->
-                requestList.clear()
-                value?.documents?.forEach { docSnapshot ->
-                    requestList.add(
-                        JobModel(
-                            id = docSnapshot.id,
-                            otherNickname = docSnapshot.getString(OTHER_NICKNAME)
-                                ?: throw Exception(NONEXISTENT_REQUESTATTRIBUTE),
-                            otherUid = docSnapshot.getString(OTHER_ID) ?: throw Exception(
-                                NONEXISTENT_REQUESTATTRIBUTE
-                            ),
-                            serviceId = docSnapshot.getString(SERVICE_ID) ?: throw Exception(
-                                NONEXISTENT_REQUESTATTRIBUTE
-                            ),
-                            serviceName = docSnapshot.getString(SERVICE_NAME) ?: throw Exception(
-                                NONEXISTENT_REQUESTATTRIBUTE
-                            ),
-                            price = docSnapshot.getDouble(PRICE) ?: throw Exception(
-                                NONEXISTENT_REQUESTATTRIBUTE
+            usersCollection.document(uid).collection(collectionName)
+                .addSnapshotListener { value, error ->
+                    requestList.clear()
+                    value?.documents?.forEach { docSnapshot ->
+                        requestList.add(
+                            JobModel(
+                                id = docSnapshot.id,
+                                otherNickname = docSnapshot.getString(OTHER_NICKNAME)
+                                    ?: throw Exception(NONEXISTENT_REQUESTATTRIBUTE),
+                                otherUid = docSnapshot.getString(OTHER_ID) ?: throw Exception(
+                                    NONEXISTENT_REQUESTATTRIBUTE
+                                ),
+                                serviceId = docSnapshot.getString(SERVICE_ID) ?: throw Exception(
+                                    NONEXISTENT_REQUESTATTRIBUTE
+                                ),
+                                serviceName = docSnapshot.getString(SERVICE_NAME)
+                                    ?: throw Exception(
+                                        NONEXISTENT_REQUESTATTRIBUTE
+                                    ),
+                                price = docSnapshot.getDouble(PRICE) ?: throw Exception(
+                                    NONEXISTENT_REQUESTATTRIBUTE
+                                )
                             )
                         )
-                    )
+                    }
+                    if (error != null) {
+                        Log.e("Jaime", "error found getting jobs/requests: ${error.message}")
+                        throw Exception(error.message)
+                    }
+                    trySend(requestList)
                 }
-                if (error != null) {
-                    Log.e("Jaime", "error found getting jobs/requests: ${error.message}")
-                    throw Exception(error.message)
-                }
-                trySend(requestList)
-            }
         awaitClose {
             // Cancel the snapshot listener when the flow is closed
             listener.remove()
@@ -357,7 +404,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     }
 
     fun addNewJobOrRequest(isRequest: Boolean, profUid: String, request: JobDto) {
-        val collectionName = if(isRequest) REQUESTS else JOBS
+        val collectionName = if (isRequest) REQUESTS else JOBS
         val docRef = usersCollection.document(profUid).collection(collectionName).document()
 
         docRef.set(request.toMapProf())
@@ -379,7 +426,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     }
 
     fun deleteJobOrRequest(isRequest: Boolean, uid: String, otherUid: String, id: String) {
-        val collectionName = if(isRequest) REQUESTS else JOBS
+        val collectionName = if (isRequest) REQUESTS else JOBS
         usersCollection.document(uid).collection(collectionName).document(id).delete()
             .addOnSuccessListener {
                 Log.i("Jaime", "Job/Request deleted correctly")
@@ -398,7 +445,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             }
     }
 
-    fun turnRequestIntoJob(rid: String, uid: String, request: JobDto){
+    fun turnRequestIntoJob(rid: String, uid: String, request: JobDto) {
         //delete request
         deleteJobOrRequest(isRequest = true, uid = uid, otherUid = request.otherId, id = rid)
         //Add job

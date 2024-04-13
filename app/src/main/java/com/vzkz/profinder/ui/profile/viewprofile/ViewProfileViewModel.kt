@@ -1,9 +1,11 @@
 package com.vzkz.profinder.ui.profile.viewprofile
 
 import androidx.lifecycle.viewModelScope
+import com.vzkz.profinder.core.UidCombiner
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
+import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +16,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewProfileViewModel @Inject constructor(
     private val userProfileToSeeUseCase: UserProfileToSeeUseCase,
-    private val favouriteListUseCase: FavouriteListUseCase
+    private val favouriteListUseCase: FavouriteListUseCase,
+    private val getUidDataStoreUseCase: GetUidDataStoreUseCase,
+    private val uidCombiner: UidCombiner
 ): BaseViewModel<ViewProfileState, ViewProfileIntent>(ViewProfileState.initial) {
 
     override fun reduce(state: ViewProfileState, intent: ViewProfileIntent): ViewProfileState {
@@ -40,6 +44,8 @@ class ViewProfileViewModel @Inject constructor(
             is ViewProfileIntent.ChangeFavourite -> state.copy(
                 isFavourite = intent.newValue
             )
+
+            is ViewProfileIntent.SetUid -> state.copy(uid = intent.uid)
         }
     }
 
@@ -49,6 +55,7 @@ class ViewProfileViewModel @Inject constructor(
             val userToSee = userProfileToSeeUseCase.getUser(uidToSee)
             val isFavourite = favouriteListUseCase.checkIsFavourite(uidToSee)
             dispatch(ViewProfileIntent.ChangeFavourite(isFavourite))
+            dispatch(ViewProfileIntent.SetUid(getUidDataStoreUseCase()))
             dispatch(ViewProfileIntent.Setuser(userToSee))
         }
     }
@@ -61,5 +68,8 @@ class ViewProfileViewModel @Inject constructor(
             dispatch(ViewProfileIntent.ChangeFavourite(add))
         }
     }
+
+    fun combineUids(uid1: String, uid2: String) = uidCombiner.combineUids(uid1 = uid1, uid2 = uid2)
+
 
 }

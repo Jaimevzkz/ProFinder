@@ -26,7 +26,9 @@ val PROFESSIONALMODELFORTESTS: ActorModel = ActorModel(
     description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
     actor = Actors.Professional,
     profession = Professions.Plumber,
-    state = ProfState.Active
+    state = ProfState.Active,
+    rating = 2.56,
+    reviewNumber = 5
 )
 
 val PROFFESIONALLISTFORTEST =
@@ -101,7 +103,6 @@ val CHATLISTITEMFORTEST = ChatListItemModel(
     lastMsg = "Hello, how are you? I was wondering whether you could help me with something.",
     unreadMsgNumber = 2,
     lastMsgUid = "123",
-    chatId = "1234",
     uid = "vo4008dpUlOulCuPQUDFpLEtjbR2"
 )
 

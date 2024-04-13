@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 
 interface GetUnreadMessageAndOwnerUseCase {
-    operator fun invoke(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>>
+    operator fun invoke(ownerUid: String, combinedUid: String): Flow<Pair<Boolean, Int>>
 }
 
 
@@ -15,6 +15,6 @@ class GetUnreadMessageAndOwnerUseCaseImpl @Inject constructor(
 ) : GetUnreadMessageAndOwnerUseCase {
     override operator fun invoke(
         ownerUid: String,
-        chatId: String
-    ): Flow<Pair<Boolean, Int>> = repository.getUnreadMsgAndOwner(ownerUid = ownerUid, chatId = chatId)
+        combinedUid: String
+    ): Flow<Pair<Boolean, Int>> = repository.getUnreadMsgAndOwner(ownerUid = ownerUid, combinedUid = combinedUid)
 }

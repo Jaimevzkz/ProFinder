@@ -29,14 +29,9 @@ import javax.inject.Inject
 
 class RealtimeService @Inject constructor(private val realtimeDB: DatabaseReference) {
     //Recent chats
-    fun addOrModifyRecentChat(chatId: String, chatDto: RecentChatDto) {
-        if (chatId == "-1") {
-            val ref = realtimeDB.child(RECENT_CHATS).push()
-            ref.setValue(ref.key?.let { chatDto.copy(chatId = it) })
-        } else {
-            val ref = realtimeDB.child(RECENT_CHATS).child(chatId)
-            ref.setValue(chatDto)
-        }
+    fun addOrModifyRecentChat(combinedUid: String, chatDto: RecentChatDto) {
+        val ref = realtimeDB.child(RECENT_CHATS).child(combinedUid)
+        ref.setValue(chatDto)
     }
 
     fun getRecentChats(ownerUid: String): Flow<List<ChatListItemModel>> {
@@ -55,30 +50,30 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
     }
 
     fun updateRecentChats(
-        chatId: String?,
+        combinedUids: String,
         message: String,
         timestamp: Long,
         senderUid: String,
         participants: Map<String, ParticipantDataDto>
     ) {
-        val finalChatId: String = chatId ?: realtimeDB.child(RECENT_CHATS).push().key.toString()
+//        val finalChatId: String = chatId ?: realtimeDB.child(RECENT_CHATS).push().key.toString()
 
-        realtimeDB.child(RECENT_CHATS).child(finalChatId).child(PARTCIPANTS).setValue(participants)
-        realtimeDB.child(RECENT_CHATS).child(finalChatId).child(LAST_MSG).setValue(message)
-        realtimeDB.child(RECENT_CHATS).child(finalChatId).child(TIMESTAMP).setValue(timestamp)
-        realtimeDB.child(RECENT_CHATS).child(finalChatId).child(LAST_MSG_UID).get()
+        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(PARTCIPANTS).setValue(participants)
+        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG).setValue(message)
+        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(TIMESTAMP).setValue(timestamp)
+        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID).get()
             .addOnSuccessListener { dataSnapshot ->
                 dataSnapshot.getValue(String::class.java)?.let { lastMsgUid ->
                     if (lastMsgUid != senderUid) {
-                        realtimeDB.child(RECENT_CHATS).child(finalChatId).child(UNREAD_MSG_NUMBER)
+                        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
                             .setValue(1)
-                        realtimeDB.child(RECENT_CHATS).child(finalChatId).child(LAST_MSG_UID)
+                        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID)
                             .setValue(senderUid)
                     } else {
-                        realtimeDB.child(RECENT_CHATS).child(finalChatId).child(UNREAD_MSG_NUMBER)
+                        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
                             .get().addOnSuccessListener { dataSnapshot2 ->
                                 dataSnapshot2.getValue(Int::class.java)?.let { unreadMsgNum ->
-                                    realtimeDB.child(RECENT_CHATS).child(finalChatId)
+                                    realtimeDB.child(RECENT_CHATS).child(combinedUids)
                                         .child(UNREAD_MSG_NUMBER).setValue(unreadMsgNum + 1)
                                 }
                             }
@@ -89,13 +84,13 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
 
     }
 
-    fun openRecentChat(chatId: String) {
-        realtimeDB.child(RECENT_CHATS).child(chatId).child(UNREAD_MSG_NUMBER).setValue(0)
+    fun openRecentChat(combinedUid: String) {
+        realtimeDB.child(RECENT_CHATS).child(combinedUid).child(UNREAD_MSG_NUMBER).setValue(0)
     }
 
-    fun getUnreadMsgAndOwner(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>> =
+    fun getUnreadMsgAndOwner(ownerUid: String, combinedUid: String): Flow<Pair<Boolean, Int>> =
         callbackFlow {
-            val recentChatsRef = realtimeDB.child(RECENT_CHATS).child(chatId)
+            val recentChatsRef = realtimeDB.child(RECENT_CHATS).child(combinedUid)
             val valueEventListener = object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val lastMsgUid = snapshot.child(LAST_MSG_UID).getValue(String::class.java)

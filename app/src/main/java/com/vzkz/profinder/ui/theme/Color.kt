@@ -65,6 +65,9 @@ val active = Color(0xFF44C022)
 val working = Color(0xFFD38B1F)
 val inactive = Color(0xFFDF1318)
 
+
+val orange = Color(0xFFD38B1F)
+
 val acceptColor = Color(0xFF44C022)
 val rejectColor = Color(0xFFDF1318)
 

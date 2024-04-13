@@ -4,7 +4,6 @@ import android.net.Uri
 import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.model.ChatMsgModel
-import com.vzkz.profinder.domain.model.ReadStatus
 import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import javax.inject.Inject
@@ -13,7 +12,7 @@ import javax.inject.Inject
 interface AddNewMessageUseCase {
 
     suspend operator fun invoke(
-        chatId: String?,
+        combinedUid: String,
         otherUid: String,
         otherNickname: String,
         otherProfilePicture: Uri?,
@@ -28,7 +27,7 @@ class AddNewMessageUseCaseImpl @Inject constructor(
     private val getUserUseCase: GetUserUseCase
 ) : AddNewMessageUseCase {
     override suspend operator fun invoke(
-        chatId: String?,
+        combinedUid: String,
         otherUid: String,
         otherNickname: String,
         otherProfilePicture: Uri?,
@@ -49,7 +48,7 @@ class AddNewMessageUseCaseImpl @Inject constructor(
         )
 
         repository.updateRecentChat(
-            chatId = chatId,
+            combinedUid = combinedUid,
             message = msg,
             timestamp = timestamp,
             senderUid = actor.uid,

@@ -8,14 +8,14 @@ import javax.inject.Inject
 
 
 interface OpenRecentChatsUseCase {
-    suspend operator fun invoke(chatId: String)
+    suspend operator fun invoke(combinedUid: String)
 }
 
 
 class OpenRecentChatsUseCaseImpl @Inject constructor(
     private val repository: Repository,
 ): OpenRecentChatsUseCase {
-    override suspend operator fun invoke(chatId: String){
-        repository.openRecentChat(chatId)
+    override suspend operator fun invoke(combinedUid: String){
+        repository.openRecentChat(combinedUid)
     }
 }

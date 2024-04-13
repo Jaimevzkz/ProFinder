@@ -9,6 +9,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.vzkz.profinder.core.UidCombiner
 import com.vzkz.profinder.data.DataStoreRepositoryImpl
 import com.vzkz.profinder.data.RepositoryImpl
 import com.vzkz.profinder.data.firebase.AuthService
@@ -36,9 +37,10 @@ object NetworkModule {
         firestoreService: FirestoreService,
         storageService: StorageService,
         realtimeService: RealtimeService,
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        uidCombiner: UidCombiner
     ): Repository {
-        return RepositoryImpl(authService, firestoreService, storageService, realtimeService, context)
+        return RepositoryImpl(authService, firestoreService, storageService, realtimeService, context, uidCombiner)
     }
 
     @Singleton

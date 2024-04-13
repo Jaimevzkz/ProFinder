@@ -11,6 +11,8 @@ object Constants {
     const val PROFESSION = "profession"
     const val STATE = "state"
     const val FAVOURITES = "favourites"
+    const val RATING = "rating"
+    const val REVIEW_NUMBER = "reviewNumber"
 
     //Services
     const val SERVICES_COLLECTION = "services"

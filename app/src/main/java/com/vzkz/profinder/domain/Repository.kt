@@ -64,16 +64,16 @@ interface Repository {
 
     fun getIndividualChat(ownerUid: String, otherUid: String): Flow<List<ChatMsgModel>>
     fun addNewMessage(ownerUid: String, otherUid: String, chatMsgModel: ChatMsgModel)
-    fun openRecentChat(chatId: String)
+    fun openRecentChat(combinedUid: String)
     fun updateRecentChat(
-        chatId: String?,
+        combinedUid: String,
         message: String,
         timestamp: Long,
         senderUid: String,
         participants: Map<String, ParticipantDataDto>
     )
 
-    fun getUnreadMsgAndOwner(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>>
+    fun getUnreadMsgAndOwner(ownerUid: String, combinedUid: String): Flow<Pair<Boolean, Int>>
     fun getJobsOrRequests(isRequest: Boolean, uid: String): Flow<List<JobModel>>
     fun addJobOrRequest(
         isRequest: Boolean,
@@ -94,4 +94,5 @@ interface Repository {
     )
 
     fun turnRequestIntoJob(ownerNickname: String, uid: String, request: JobModel)
+    fun updateRating(uid: String, newRating: Int)
 }

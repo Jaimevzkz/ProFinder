@@ -54,8 +54,8 @@ class IndividualChatViewModel @Inject constructor(
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
-    fun onInit(otherUid: String, chatId: String?) {
-        getUnreadMessages(chatId)
+    fun onInit(otherUid: String, combinedUid: String) {
+        getUnreadMessages(combinedUid = combinedUid)
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 getIndChatsUseCase(otherUid).collect { chatList ->
@@ -67,19 +67,18 @@ class IndividualChatViewModel @Inject constructor(
         }
     }
 
-    fun markAsRead(chatId: String?, lastSenderUid: String?) {
-        if (chatId != null && lastSenderUid != null)
-            viewModelScope.launch(Dispatchers.IO) {
-                openRecentChatsUseCase(chatId)
-            }
+    fun markAsRead(combinedUid: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            openRecentChatsUseCase(combinedUid)
+        }
     }
 
-    private fun getUnreadMessages(chatId: String?) {
+    private fun getUnreadMessages(combinedUid: String) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 getUnreadMessageAndOwnerUseCase(
-                    getUidDataStoreUseCase(),
-                    chatId.orEmpty()
+                    ownerUid = getUidDataStoreUseCase(),
+                    combinedUid = combinedUid
                 ).collect { unreadMsgs ->
                     if (unreadMsgs.first)
                         dispatch(IndividualChatIntent.UpdateUnreadMsgs(unreadMsgs.second))
@@ -103,7 +102,7 @@ class IndividualChatViewModel @Inject constructor(
     fun onCloseDialog() = dispatch(IndividualChatIntent.CloseError)
 
     fun sendMessage(
-        chatId: String?,
+        combinedUid: String,
         otherUid: String,
         otherNickname: String,
         otherProfilePicture: Uri?,
@@ -112,7 +111,7 @@ class IndividualChatViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             addNewMessageUseCase(
                 msg = msg,
-                chatId = chatId,
+                combinedUid = combinedUid,
                 otherUid = otherUid,
                 otherNickname = otherNickname,
                 otherProfilePicture = otherProfilePicture

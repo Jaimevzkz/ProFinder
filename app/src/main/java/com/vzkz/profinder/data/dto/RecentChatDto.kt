@@ -6,7 +6,6 @@ data class RecentChatDto(
     val lastMsg: String?,
     val unreadMsgNumber: Int,
     val lastMsgUid: String,
-    val chatId: String
 )
 
 

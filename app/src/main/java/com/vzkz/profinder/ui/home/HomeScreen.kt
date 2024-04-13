@@ -4,25 +4,33 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -36,7 +44,9 @@ import com.vzkz.profinder.destinations.ViewProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.JobModel
 import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.components.ClickableRatingBar
 import com.vzkz.profinder.ui.components.MyColumn
+import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
@@ -61,7 +71,6 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
     loading = homeViewModel.state.loading
     var isUser by remember { mutableStateOf(false) }
     isUser = homeViewModel.state.isUser
-
     val requestList = homeViewModel.state.requestList
     val jobList = homeViewModel.state.jobList
 
@@ -81,6 +90,9 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
         },
         onProfileInfo = {
             navigator.navigate(ViewProfileScreenDestination(uidToSee = it))
+        },
+        onSubmitRating = { jobModel, rating ->
+            homeViewModel.onRateJob(job = jobModel, rating = rating)
         }
     )
 }
@@ -98,7 +110,8 @@ private fun ScreenBody(
     onRejectRequest: (String, String) -> Unit,
     onCloseDialog: () -> Unit,
     onProfileInfo: (String) -> Unit,
-    onBottomBarClicked: (DirectionDestinationSpec) -> Unit
+    onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
+    onSubmitRating: (JobModel, Int) -> Unit
 ) {
     MyBottomBarScaffold(
         currentDestination = HomeScreenDestination,
@@ -110,6 +123,9 @@ private fun ScreenBody(
         val cardPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
         val contentPadding = PaddingValues(4.dp)
         var editFavList by remember { mutableStateOf(false) }
+        var isRatingVisible by remember { mutableStateOf(false) }
+        var jobToRate: JobModel? by remember { mutableStateOf(null) }
+
         Box(
             modifier = Modifier
                 .padding(paddingValues)
@@ -150,7 +166,9 @@ private fun ScreenBody(
                         fontFamily = fontFamily,
                         cardPadding = cardPadding,
                         contentPadding = contentPadding,
-                        title = if (isUser) "Pending requests" else "Job requests",
+                        title = if (isUser) stringResource(R.string.pending_requests) else stringResource(
+                            R.string.job_requests
+                        ),
                         placeRight = false
                     ) {
                         HomeRequestList(
@@ -189,6 +207,7 @@ private fun ScreenBody(
                         title = "Favorites",
                         placeRight = true,
                         content = {
+                            MySpacer(size = 4)
                             HomeFavList(
                                 favList,
                                 contentColor,
@@ -223,7 +242,7 @@ private fun ScreenBody(
                         }
                     )
                 } else {
-                    HomeCard( //Recent
+                    HomeCard( //Active jobs
                         modifier = Modifier.weight(1f),
                         boxModifier = Modifier.padding(bottom = 8.dp),
                         cardColor = cardColor,
@@ -235,8 +254,12 @@ private fun ScreenBody(
                         placeRight = false
                     ) {
                         HomeJobList(
-                            requestList = jobList,
+                            jobList = jobList,
                             isUser = isUser,
+                            onFinishJob = {
+                                jobToRate = it
+                                isRatingVisible = true
+                            },
                             onSeeProfile = onProfileInfo
                         )
                     }
@@ -254,11 +277,92 @@ private fun ScreenBody(
                 onConfirm = { onCloseDialog() },
                 showDialog = error.isError
             )
+
+
+            if (isRatingVisible && jobToRate != null) {
+                var rating by remember { mutableIntStateOf(0) }
+                val updateError = stringResource(id = R.string.something_went_wrong_while_finishing_the_job)
+                RatingDialog(
+                    rating,
+                    otherNickname = jobToRate?.otherNickname
+                        ?: if (isUser) stringResource(R.string.the_professional) else stringResource(
+                            R.string.the_client
+                        ),
+                    onRatingSet = { rating = it },
+                    onHideDialog = { isRatingVisible = false },
+                    onSubmitRating = {
+                        isRatingVisible = false
+                        onSubmitRating(jobToRate!!, rating)
+                    }
+                )
+            }
         }
     }
 
 }
 
+@Composable
+private fun RatingDialog(
+    rating: Int,
+    otherNickname: String,
+    onRatingSet: (Int) -> Unit,
+    onHideDialog: () -> Unit,
+    onSubmitRating: () -> Unit
+) {
+    Dialog(
+        properties = DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false
+        ), onDismissRequest = onHideDialog
+    ) {
+        Box(
+            modifier = Modifier
+                .shadow(elevation = 3.dp, shape = MaterialTheme.shapes.small)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .padding(24.dp)
+        ) {
+            MyColumn {
+                Text(text = stringResource(R.string.rate_you_experience_with) + otherNickname)
+                MySpacer(size = 4)
+                ClickableRatingBar(
+                    rating = rating,
+                    onRatingSet = onRatingSet
+                )
+            }
+            MyRow(
+                modifier = Modifier
+                    .padding(top = 92.dp)
+                    .align(Alignment.BottomEnd)
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    colors = ButtonDefaults.buttonColors().copy(
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
+                    onClick = onHideDialog
+                ) {
+                    Text(text = stringResource(R.string.cancel))
+                }
+                MySpacer(size = 8)
+                Button(
+                    colors = ButtonDefaults.buttonColors().copy(
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
+                    onClick = {
+                        if (rating > 0)
+                            onSubmitRating()
+                    }
+                ) {
+                    Text(text = stringResource(R.string.ok))
+                }
+
+            }
+
+        }
+    }
+}
 
 //@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 //@OptIn(ExperimentalPermissionsApi::class)
@@ -290,7 +394,8 @@ private fun LightPreview() {
             onBottomBarClicked = {},
             onProfileInfo = {},
             onAcceptRequest = {},
-            onRejectRequest = { _, _ -> }
+            onRejectRequest = { _, _ -> },
+            onSubmitRating = { _, _ -> }
         )
     }
 

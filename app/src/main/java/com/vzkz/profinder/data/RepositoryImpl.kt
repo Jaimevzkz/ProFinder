@@ -14,6 +14,7 @@ import com.vzkz.profinder.core.Constants.NONEXISTENT_USERFIELD
 import com.vzkz.profinder.core.Constants.NULL_REALTIME_USERDATA
 import com.vzkz.profinder.core.Constants.NULL_USERDATA
 import com.vzkz.profinder.core.Constants.REALTIME_ACCESS_INTERRUPTED
+import com.vzkz.profinder.core.UidCombiner
 import com.vzkz.profinder.data.dto.IndiviualChatDto
 import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.data.dto.RecentChatDto
@@ -39,7 +40,8 @@ class RepositoryImpl @Inject constructor(
     private val firestoreService: FirestoreService,
     private val storageService: StorageService,
     private val realtimeService: RealtimeService,
-    private val context: Context
+    private val context: Context,
+    private val uidCombiner: UidCombiner
 ) : Repository {
 
     //Firebase
@@ -185,6 +187,10 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override fun updateRating(uid: String, newRating: Int){
+        firestoreService.updateRating(uid = uid, newRating = newRating)
+    }
+
     override fun getJobsOrRequests(isRequest: Boolean, uid: String): Flow<List<JobModel>> {
         return try {
             firestoreService.getJobsOrRequests(isRequest = isRequest, uid = uid)
@@ -304,10 +310,9 @@ class RepositoryImpl @Inject constructor(
                 lastMsg = chatListItemModel.lastMsg,
                 unreadMsgNumber = chatListItemModel.unreadMsgNumber,
                 lastMsgUid = chatListItemModel.lastMsgUid,
-                chatId = chatListItemModel.chatId
             )
             realtimeService.addOrModifyRecentChat(
-                chatId = chatListItemModel.chatId,
+                combinedUid = uidCombiner.combineUids(ownerUid, chatListItemModel.uid),
                 chatDto = recentChatDto
             )
 
@@ -318,7 +323,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun updateRecentChat(
-        chatId: String?,
+        combinedUid: String,
         message: String,
         timestamp: Long,
         senderUid: String,
@@ -326,7 +331,7 @@ class RepositoryImpl @Inject constructor(
     ) {
         try {
             realtimeService.updateRecentChats(
-                chatId = chatId,
+                combinedUids = combinedUid,
                 message = message,
                 timestamp = timestamp,
                 senderUid = senderUid,
@@ -337,17 +342,17 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun openRecentChat(chatId: String) {
+    override fun openRecentChat(combinedUid: String) {
         try {
-            realtimeService.openRecentChat(chatId = chatId)
+            realtimeService.openRecentChat(combinedUid = combinedUid)
         } catch (e: Exception) {
             throw handleException(e)
         }
     }
 
-    override fun getUnreadMsgAndOwner(ownerUid: String, chatId: String): Flow<Pair<Boolean, Int>> {
+    override fun getUnreadMsgAndOwner(ownerUid: String, combinedUid: String): Flow<Pair<Boolean, Int>> {
         return try {
-            realtimeService.getUnreadMsgAndOwner(ownerUid, chatId)
+            realtimeService.getUnreadMsgAndOwner(ownerUid = ownerUid, combinedUid = combinedUid)
         } catch (e: Exception) {
             throw handleException(e)
         }
@@ -356,7 +361,7 @@ class RepositoryImpl @Inject constructor(
     override fun getIndividualChat(ownerUid: String, otherUid: String): Flow<List<ChatMsgModel>> {
         try {
             return realtimeService.getChats(
-                combinedUid = combineUids(ownerUid, otherUid),
+                combinedUid = uidCombiner.combineUids(ownerUid, otherUid),
                 ownerUid = ownerUid
             )
         } catch (e: Exception) {
@@ -367,7 +372,7 @@ class RepositoryImpl @Inject constructor(
     override fun addNewMessage(ownerUid: String, otherUid: String, chatMsgModel: ChatMsgModel) {
         try {
             realtimeService.addNewMessage(
-                combineUids(ownerUid, otherUid),
+                uidCombiner.combineUids(ownerUid, otherUid),
                 indiviualChatDto = IndiviualChatDto(
                     message = chatMsgModel.msg,
                     timestamp = chatMsgModel.timestamp,
@@ -376,15 +381,6 @@ class RepositoryImpl @Inject constructor(
             )
         } catch (e: Exception) {
             throw handleException(e)
-        }
-    }
-
-
-    private fun combineUids(uid1: String, uid2: String): String {
-        return if (uid1 < uid2) {
-            uid1 + uid2
-        } else {
-            uid2 + uid1
         }
     }
 

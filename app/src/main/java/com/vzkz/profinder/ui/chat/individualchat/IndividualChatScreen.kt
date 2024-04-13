@@ -2,14 +2,10 @@ package com.vzkz.profinder.ui.chat.individualchat
 
 import android.content.res.Configuration
 import android.net.Uri
-import android.view.Window
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -67,14 +63,13 @@ fun IndividualChatScreen(
     otherNickname: String,
     otherProfilePhoto: Uri?,
     otherUid: String,
-    chatId: String? = null,
-    lastMsgUid: String? = null,
+    combinedUid: String,
     individualChatViewModel: IndividualChatViewModel = hiltViewModel()
 ) {
     LaunchedEffect(key1 = true) {
         individualChatViewModel.onInit(
             otherUid = otherUid,
-            chatId = chatId
+            combinedUid = combinedUid
         )
     }
 
@@ -84,8 +79,7 @@ fun IndividualChatScreen(
     LaunchedEffect(chatList) {
         if (chatList.isNotEmpty() && !chatList.last().isMine)
             individualChatViewModel.markAsRead(
-                chatId = chatId.orEmpty(),
-                lastSenderUid = lastMsgUid
+                combinedUid = combinedUid
             )
     }
     ScreenBody(
@@ -95,7 +89,7 @@ fun IndividualChatScreen(
         profilePhoto = otherProfilePhoto,
         onSendMessage = { message ->
             individualChatViewModel.sendMessage(
-                chatId = chatId,
+                combinedUid = combinedUid,
                 otherUid = otherUid,
                 otherNickname = otherNickname,
                 otherProfilePicture = otherProfilePhoto,
