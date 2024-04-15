@@ -61,24 +61,36 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
         realtimeDB.child(RECENT_CHATS).child(combinedUids).child(PARTCIPANTS).setValue(participants)
         realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG).setValue(message)
         realtimeDB.child(RECENT_CHATS).child(combinedUids).child(TIMESTAMP).setValue(timestamp)
+
         realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID).get()
             .addOnSuccessListener { dataSnapshot ->
-                dataSnapshot.getValue(String::class.java)?.let { lastMsgUid ->
-                    if (lastMsgUid != senderUid) {
-                        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
-                            .setValue(1)
-                        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID)
-                            .setValue(senderUid)
-                    } else {
-                        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
-                            .get().addOnSuccessListener { dataSnapshot2 ->
-                                dataSnapshot2.getValue(Int::class.java)?.let { unreadMsgNum ->
-                                    realtimeDB.child(RECENT_CHATS).child(combinedUids)
-                                        .child(UNREAD_MSG_NUMBER).setValue(unreadMsgNum + 1)
+                if(dataSnapshot.exists()){
+                    dataSnapshot.getValue(String::class.java)?.let { lastMsgUid ->
+                        if (lastMsgUid != senderUid) {
+                            realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
+                                .setValue(1)
+                            realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID)
+                                .setValue(senderUid)
+                        } else {
+                            realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
+                                .get().addOnSuccessListener { dataSnapshot2 ->
+                                    dataSnapshot2.getValue(Int::class.java)?.let { unreadMsgNum ->
+                                        realtimeDB.child(RECENT_CHATS).child(combinedUids)
+                                            .child(UNREAD_MSG_NUMBER).setValue(unreadMsgNum + 1)
+                                    }
                                 }
-                            }
+                        }
                     }
+                } else {
+                    realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
+                        .setValue(1)
+                    realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID)
+                        .setValue(senderUid)
                 }
+
+            }
+            .addOnFailureListener{ //if it get here it means its a new chat
+               Log.e("Jaime", "Something went wrong while updating recent chats")
             }
 
 

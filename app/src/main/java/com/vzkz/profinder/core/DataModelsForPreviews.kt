@@ -133,7 +133,7 @@ val INDIVIDUALCHATITEMFORTEST = listOf(
     ),
     ChatMsgModel(
         msgId = "12",
-        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        msg = "Hello, how are you? I was wondering whether.",
         timestamp = 1710498348086,
         isMine = false,
     ),
@@ -145,19 +145,25 @@ val INDIVIDUALCHATITEMFORTEST = listOf(
     ),
     ChatMsgModel(
         msgId = "12",
-        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        msg = "Hello",
         timestamp = 1710498348086,
         isMine = false,
     ),
     ChatMsgModel(
         msgId = "12",
-        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        msg = "Hello, how are you?",
         timestamp = 1710498348086,
         isMine = false,
     ),
     ChatMsgModel(
         msgId = "12",
-        msg = "Hello, how are you? I was wondering whether you could help me with something.",
+        msg = "great!",
+        timestamp = 1710498348086,
+        isMine = true,
+    ),
+    ChatMsgModel(
+        msgId = "12",
+        msg = "Hello, how are you????????",
         timestamp = 1710498348086,
         isMine = true,
     ),

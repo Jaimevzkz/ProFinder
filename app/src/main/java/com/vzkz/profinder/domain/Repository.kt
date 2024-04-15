@@ -1,6 +1,7 @@
 package com.vzkz.profinder.domain
 
 import android.net.Uri
+import com.google.android.gms.maps.model.LatLng
 import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
@@ -95,4 +96,4 @@ interface Repository {
 
     fun turnRequestIntoJob(ownerNickname: String, uid: String, request: JobModel)
     fun updateRating(uid: String, newRating: Int)
-}
+    suspend fun getLocation(uid: String): Flow<LatLng?>}

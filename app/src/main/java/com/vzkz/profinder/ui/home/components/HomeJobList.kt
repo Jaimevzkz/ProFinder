@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -53,12 +54,11 @@ fun HomeJobList(
                 MyRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 4.dp)
                         .padding(2.dp)
                         .shadow(1.dp, shape = MaterialTheme.shapes.medium)
                         .background(MaterialTheme.colorScheme.primaryContainer)
                         .padding(6.dp)
-                        .padding(horizontal = 16.dp)
+//                        .padding(horizontal = 8.dp)
                 ) {
 
                     if (!isUser) {
@@ -123,11 +123,11 @@ fun HomeJobList(
                                     .padding(4.dp)
                                     .shadow(1.dp, shape = CircleShape)
                                     .background(MaterialTheme.colorScheme.tertiaryContainer)
-                                    .padding(6.dp)
+                                    .padding(4.dp)
                             ) {
                                 Text(
                                     text = job.price.toString() + stringResource(R.string.h),
-                                    fontSize = 14.sp,
+                                    fontSize = 12.sp,
                                     fontWeight = FontWeight.SemiBold,
                                     color = MaterialTheme.colorScheme.onTertiaryContainer
                                 )
@@ -142,7 +142,7 @@ fun HomeJobList(
                             border = BorderStroke(1.dp, fontColor),
                             modifier = Modifier.padding(end = 2.dp)
                         ) {
-                            Text(text = stringResource(R.string.finish_job), color = fontColor, fontSize = 12.sp)
+                            Text(text = stringResource(R.string.finish_job), color = fontColor/*, fontSize = 10.sp*/)
                         }
                     }
                 }

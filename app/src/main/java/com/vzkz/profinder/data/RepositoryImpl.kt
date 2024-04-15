@@ -2,6 +2,7 @@ package com.vzkz.profinder.data
 
 import android.content.Context
 import android.net.Uri
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseUser
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.Constants.CONNECTION_ERROR
@@ -41,7 +42,8 @@ class RepositoryImpl @Inject constructor(
     private val storageService: StorageService,
     private val realtimeService: RealtimeService,
     private val context: Context,
-    private val uidCombiner: UidCombiner
+    private val uidCombiner: UidCombiner,
+    private val locationService: ILocationService
 ) : Repository {
 
     //Firebase
@@ -187,7 +189,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun updateRating(uid: String, newRating: Int){
+    override fun updateRating(uid: String, newRating: Int) {
         firestoreService.updateRating(uid = uid, newRating = newRating)
     }
 
@@ -350,7 +352,10 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUnreadMsgAndOwner(ownerUid: String, combinedUid: String): Flow<Pair<Boolean, Int>> {
+    override fun getUnreadMsgAndOwner(
+        ownerUid: String,
+        combinedUid: String
+    ): Flow<Pair<Boolean, Int>> {
         return try {
             realtimeService.getUnreadMsgAndOwner(ownerUid = ownerUid, combinedUid = combinedUid)
         } catch (e: Exception) {
@@ -381,6 +386,16 @@ class RepositoryImpl @Inject constructor(
             )
         } catch (e: Exception) {
             throw handleException(e)
+        }
+    }
+
+    //location
+    override suspend fun getLocation(uid: String): Flow<LatLng?> {
+        return locationService.requestLocationUpdates().also { locationFlow ->
+            locationFlow.collect {location ->
+                if (location != null)
+                    firestoreService.updateUserLocation(uid = uid, location = location)
+            }
         }
     }
 

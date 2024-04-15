@@ -281,7 +281,6 @@ private fun ScreenBody(
 
             if (isRatingVisible && jobToRate != null) {
                 var rating by remember { mutableIntStateOf(0) }
-                val updateError = stringResource(id = R.string.something_went_wrong_while_finishing_the_job)
                 RatingDialog(
                     rating,
                     otherNickname = jobToRate?.otherNickname

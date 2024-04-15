@@ -5,11 +5,13 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -169,7 +171,10 @@ private fun ScreenBody(
                 .background(MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.Center
         ) {
-            MyColumn(verticalArrangement = Arrangement.Top, modifier = Modifier.fillMaxWidth()) {
+            MyColumn(
+                verticalArrangement = Arrangement.Top,
+                modifier = Modifier
+            ) {
                 LazyColumn(
                     modifier = Modifier.weight(1f),
                     state = scrollState,
@@ -187,7 +192,7 @@ private fun ScreenBody(
                                 Spacer(modifier = Modifier.weight(1f))
                                 Box(
                                     modifier = Modifier
-                                        .padding(8.dp)
+                                        .padding(vertical = 8.dp)
                                         .shadow(
                                             elevation = 1.dp,
                                             shape = MaterialTheme.shapes.small
@@ -256,7 +261,6 @@ private fun ScreenBody(
                 }
             }
 
-
             LaunchedEffect(key1 = messageList, key2 = message) {
                 if (messageList.isNotEmpty())
                     scrollState.scrollToItem(messageList.size - 1)
@@ -278,51 +282,62 @@ private fun ScreenBody(
 @Composable
 private fun ChatMessage(
     modifier: Modifier = Modifier,
-    ownMsg: Boolean = false,
+    ownMsg: Boolean,
     chatMsgModel: ChatMsgModel,
     time: String,
     readStatus: ReadStatus
 ) {
     val genPadding = 12.dp
+    val genPaddingMsgs = 56.dp
+    val paddingMessages = if(ownMsg) PaddingValues(start = genPaddingMsgs) else PaddingValues(end = genPaddingMsgs)
     MyRow(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = genPadding, vertical = 2.dp),
+            .padding(horizontal = genPadding, vertical = 4.dp)
+            .padding(paddingMessages),
         horizontalArrangement = if (ownMsg) Arrangement.End else Arrangement.Start
     ) {
-        Box(modifier = Modifier) {
-            MyRow(
-                modifier = Modifier
-                    .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
-                    .background(if (ownMsg) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
-                    .padding(8.dp)
-            ) {
+        if(ownMsg)
+            Spacer(modifier = Modifier.weight(1f))
+        Box(
+            modifier = Modifier
+                .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.large)
+                .background(if (ownMsg) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
+                .padding(8.dp)
+        ) {
+            MyRow(modifier = if(ownMsg) Modifier.padding(end = 68.dp) else  Modifier.padding(end = 52.dp)) {
                 Text(
                     text = chatMsgModel.msg,
                     color = if (ownMsg) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
-                    modifier = Modifier.padding(end = 8.dp),
+                    modifier = Modifier
+                        .padding(end = 8.dp)
                 )
-                Text(
-                    text = time,
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Light,
-                    modifier = Modifier.align(Alignment.Bottom),
-                    color = if (ownMsg) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
-                )
-                if (ownMsg) {
-                    MySpacer(size = 2)
-
-                    Icon(
-                        imageVector = readStatus.icon,
-                        contentDescription = "read",
-                        tint = readStatus.tint,
-                        modifier = Modifier
-                            .align(Alignment.Bottom)
-                            .size(16.dp)
+            }
+            MyRow(modifier = Modifier.align(Alignment.BottomEnd)) {
+                MyRow {
+                    Text(
+                        text = time,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Light,
+                        modifier = Modifier.align(Alignment.Bottom),/*.weight(2f)*/
+                        color = if (ownMsg) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
                     )
+                    if (ownMsg) {
+                        MySpacer(size = 2)
+
+                        Icon(
+                            imageVector = readStatus.icon,
+                            contentDescription = "read",
+                            tint = readStatus.tint,
+                            modifier = Modifier
+                                .align(Alignment.Bottom)
+                                .size(16.dp)/*.weight(0.8f)*/
+                        )
+                    }
                 }
             }
         }
+        if(!ownMsg)
+            Spacer(modifier = Modifier.weight(1f))
     }
 }
 
@@ -341,6 +356,26 @@ private fun LightPreview() {
             onSendMessage = {},
             onGetDate = { _ -> "Today" },
             unreadMagNumber = 3
+        )
+    }
+
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun LightPreview2() {
+    ProFinderTheme {
+        ChatMessage(
+            ownMsg = true,
+            chatMsgModel = ChatMsgModel(
+                msgId = "",
+//                msg = "Why are long messages not working???",
+                msg = "hello!",
+                timestamp = 3241341234,
+                isMine = true
+            ),
+            time = "12:00 PM",
+            readStatus = ReadStatus.Read
         )
     }
 

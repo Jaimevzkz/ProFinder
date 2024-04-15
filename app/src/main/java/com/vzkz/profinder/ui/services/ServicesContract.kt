@@ -1,5 +1,6 @@
 package com.vzkz.profinder.ui.services
 
+import com.google.android.gms.maps.model.LatLng
 import com.vzkz.profinder.core.boilerplate.IndividualChatntent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
@@ -15,6 +16,7 @@ data class ServicesState(
     val user: ActorModel?,
     val requestExists: ServiceState,
     val error: UiError,
+    val location: LatLng?
 ) : State {
     companion object {
         val initial: ServicesState = ServicesState(
@@ -23,7 +25,8 @@ data class ServicesState(
             requestExists = ServiceState.FREE,
             activeServiceList = emptyList(),
             inActiveServiceList = emptyList(),
-            error = UiError(isError = false, errorMsg = null)
+            error = UiError(isError = false, errorMsg = null),
+            location = null
         )
     }
 }
@@ -35,4 +38,5 @@ sealed class ServicesIntent : IndividualChatntent {
     data object CloseError: ServicesIntent()
     data class SetUser(val user: ActorModel?) : ServicesIntent()
     data class SetRequestExists(val requestExists: ServiceState) : ServicesIntent()
+    data class SetLocation(val location: LatLng?) : ServicesIntent()
 }

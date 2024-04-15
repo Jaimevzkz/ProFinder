@@ -101,6 +101,7 @@ fun UserScreenBody(
                 .shadow(1.dp, shape = CircleShape)
                 .background(MaterialTheme.colorScheme.primary),
             onClick = {
+
                 onSeeMap()
             }
         ) {
@@ -110,6 +111,7 @@ fun UserScreenBody(
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }
+
     }
 
     if (serviceToShow != null) {

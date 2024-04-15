@@ -122,7 +122,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
 
     //Animation
-    implementation("androidx.compose.animation:animation:1.6.2")
+    implementation("androidx.compose.animation:animation:1.6.5")
 
     //DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -146,5 +146,7 @@ dependencies {
 
     //location
     implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
 }

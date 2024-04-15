@@ -63,7 +63,6 @@ fun HomeRequestList(
                 MyRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 4.dp)
                         .padding(2.dp)
                         .shadow(1.dp, shape = MaterialTheme.shapes.medium)
                         .background(MaterialTheme.colorScheme.primaryContainer)

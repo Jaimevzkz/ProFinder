@@ -1,6 +1,7 @@
 package com.vzkz.profinder.ui.services
 
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
@@ -9,6 +10,7 @@ import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.jobs.AddJobOrRequestsUseCase
 import com.vzkz.profinder.domain.usecases.jobs.CheckExistingRequestUseCase
 import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCase
+import com.vzkz.profinder.domain.usecases.location.GetLocationUseCase
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
 import com.vzkz.profinder.domain.usecases.services.GetActiveServiceListUseCase
@@ -34,7 +36,8 @@ class ServicesViewModel @Inject constructor(
     private val userProfileToSeeUseCase: UserProfileToSeeUseCase,
     private val addRequestsUseCase: AddJobOrRequestsUseCase,
     private val checkExistingRequestUseCase: CheckExistingRequestUseCase,
-    private val deleteRequestUseCase: DeleteJobOrRequestUseCase
+    private val deleteRequestUseCase: DeleteJobOrRequestUseCase,
+    private val getLocationUseCase: GetLocationUseCase
 ) : BaseViewModel<ServicesState, ServicesIntent>(ServicesState.initial) {
 
     override fun reduce(state: ServicesState, intent: ServicesIntent): ServicesState {
@@ -69,6 +72,7 @@ class ServicesViewModel @Inject constructor(
             )
 
             is ServicesIntent.SetRequestExists -> state.copy(requestExists = intent.requestExists)
+            is ServicesIntent.SetLocation -> state.copy(location = intent.location)
         }
     }
 
@@ -154,4 +158,14 @@ class ServicesViewModel @Inject constructor(
             dispatch(ServicesIntent.SetRequestExists(ServiceState.FREE))
         }
     }
+
+    fun onGetLocation(){
+        viewModelScope.launch(Dispatchers.IO) {
+            getLocationUseCase().collect { location ->
+                dispatch(ServicesIntent.SetLocation(location))
+            }
+        }
+    }
+
+
 }

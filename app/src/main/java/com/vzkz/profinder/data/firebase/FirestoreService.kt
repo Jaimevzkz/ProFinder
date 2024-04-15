@@ -2,6 +2,7 @@ package com.vzkz.profinder.data.firebase
 
 import android.net.Uri
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -18,6 +19,7 @@ import com.vzkz.profinder.core.Constants.IS_ACTIVE
 import com.vzkz.profinder.core.Constants.IS_USER
 import com.vzkz.profinder.core.Constants.JOBS
 import com.vzkz.profinder.core.Constants.LASTNAME
+import com.vzkz.profinder.core.Constants.LOCATION
 import com.vzkz.profinder.core.Constants.MODIFICATION_ERROR
 import com.vzkz.profinder.core.Constants.NAME
 import com.vzkz.profinder.core.Constants.NICKNAME
@@ -451,6 +453,17 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         //Add job
         addNewJobOrRequest(isRequest = false, profUid = uid, request = request)
 
+    }
+
+    //Location
+    fun updateUserLocation(uid: String, location: LatLng){
+        usersCollection.document(uid).update(LOCATION, location)
+            .addOnSuccessListener {
+                Log.i("Jaime", "Location updated succesfully")
+            }
+            .addOnFailureListener {
+                Log.e("Jaime", "Error updating user location: ${it.message}")
+            }
     }
 
 }

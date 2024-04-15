@@ -13,6 +13,7 @@ object Constants {
     const val FAVOURITES = "favourites"
     const val RATING = "rating"
     const val REVIEW_NUMBER = "reviewNumber"
+    const val LOCATION = "location"
 
     //Services
     const val SERVICES_COLLECTION = "services"
@@ -44,7 +45,6 @@ object Constants {
     const val LAST_MSG = "lastMsg"
     const val LAST_MSG_UID = "lastMsgUid"
 
-
     //Errors
     const val ERRORSTR = "error"
     const val VALUENOTSET = "value not set"
@@ -61,5 +61,8 @@ object Constants {
     const val NONEXISTENT_SERVICEATTRIBUTE = "NONEXISTENT_SERVICEATTRIBUTE"
     const val REALTIME_ACCESS_INTERRUPTED = "REALTIME_ACCESS_INTERRUPTED"
     const val NONEXISTENT_REQUESTATTRIBUTE = "NONEXISTENT_REQUESTATTRIBUTE"
+
+
+
 
 }

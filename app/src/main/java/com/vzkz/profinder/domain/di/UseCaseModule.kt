@@ -32,6 +32,8 @@ import com.vzkz.profinder.domain.usecases.jobs.RateJobUseCase
 import com.vzkz.profinder.domain.usecases.jobs.RateJobUseCaseUseCaseImpl
 import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCase
 import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCaseImpl
+import com.vzkz.profinder.domain.usecases.location.GetLocationUseCase
+import com.vzkz.profinder.domain.usecases.location.GetLocationUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
@@ -125,4 +127,6 @@ abstract class UseCaseModule {
     abstract fun bindTurnJobIntoRequestUseCase(impl: TurnJobIntoRequestUseCaseImpl): TurnJobIntoRequestUseCase
     @Binds
     abstract fun bindRateJobUseCase(impl: RateJobUseCaseUseCaseImpl): RateJobUseCase
+    @Binds
+    abstract fun bindGetLocationUseCase(impl: GetLocationUseCaseImpl): GetLocationUseCase
 }
