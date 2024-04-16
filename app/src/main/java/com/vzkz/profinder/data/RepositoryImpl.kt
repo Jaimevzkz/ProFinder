@@ -4,34 +4,25 @@ import android.content.Context
 import android.net.Uri
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseUser
-import com.vzkz.profinder.R
-import com.vzkz.profinder.core.Constants.CONNECTION_ERROR
-import com.vzkz.profinder.core.Constants.INSERTION_ERROR
-import com.vzkz.profinder.core.Constants.MODIFICATION_ERROR
-import com.vzkz.profinder.core.Constants.NICKNAME_IN_USE
-import com.vzkz.profinder.core.Constants.NONEXISTENT_REQUESTATTRIBUTE
-import com.vzkz.profinder.core.Constants.NONEXISTENT_SERVICEATTRIBUTE
-import com.vzkz.profinder.core.Constants.NONEXISTENT_USERFIELD
-import com.vzkz.profinder.core.Constants.NULL_REALTIME_USERDATA
-import com.vzkz.profinder.core.Constants.NULL_USERDATA
-import com.vzkz.profinder.core.Constants.REALTIME_ACCESS_INTERRUPTED
 import com.vzkz.profinder.core.UidCombiner
 import com.vzkz.profinder.data.dto.IndiviualChatDto
+import com.vzkz.profinder.data.dto.JobDto
 import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.data.dto.RecentChatDto
-import com.vzkz.profinder.data.dto.JobDto
 import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.data.firebase.RealtimeService
 import com.vzkz.profinder.data.firebase.StorageService
 import com.vzkz.profinder.domain.Repository
+import com.vzkz.profinder.domain.error.DataError
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
+import com.vzkz.profinder.domain.model.JobModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
-import com.vzkz.profinder.domain.model.JobModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -47,50 +38,67 @@ class RepositoryImpl @Inject constructor(
 ) : Repository {
 
     //Firebase
-    override suspend fun login(email: String, password: String): Result<ActorModel> {
+    override suspend fun login(email: String, password: String): Result<ActorModel, DataError> {
         val user: FirebaseUser?
         try {
             user = authService.login(email, password)
         } catch (e: Exception) {
-            return Result.failure(Exception(context.getString(R.string.wrong_email_or_password)))
+            return Result.Error(DataError.Authentication.WRONG_EMAIL_OR_PASSWORD)
         }
         return if (user != null) {
-            Result.success(getUserFromFirestore(user.uid))
-        } else Result.failure(Exception(context.getString(R.string.error_logging_user)))
+            when (val userFromFirestore = getUserFromFirestore(user.uid)) {
+                is Result.Error -> return Result.Error(userFromFirestore.error)
+                is Result.Success -> {
+                    Result.Success(userFromFirestore.data)
+                }
+            }
+        } else Result.Error(DataError.Firestore.USER_NOT_FOUND_IN_DATABASE)
     }
 
-    override suspend fun getUserFromFirestore(uid: String): ActorModel {
-        try {
-            return firestoreService.getUserData(uid).copy(
-                profilePhoto = storageService.getProfilePhoto(uid)
-            )
-        } catch (e: Exception) {
-            throw handleException(e)
+    override suspend fun getUserFromFirestore(uid: String): Result<ActorModel, DataError.Firestore> {
+        return when (val userData = firestoreService.getUserData(uid)) {
+            is Result.Success -> {
+                val profilePhoto = storageService.getProfilePhoto(uid)
+                Result.Success(userData.data.copy(profilePhoto = profilePhoto))
+            }
+
+            is Result.Error -> Result.Error(userData.error)
+        }
+
+    }
+
+    override suspend fun getServiceListByUidFromFirestore(uid: String): Result<List<ServiceModel>, DataError.Firestore> {
+        return when (val serviceList = firestoreService.getServiceListByUid(uid)) {
+            is Result.Success -> Result.Success(serviceList.data)
+
+            is Result.Error -> Result.Error(serviceList.error)
         }
     }
 
-    override suspend fun getServiceListByUidFromFirestore(uid: String): List<ServiceModel> {
-        return try {
-            firestoreService.getServiceListByUid(uid)
-        } catch (e: Exception) {
-            throw handleException(e)
-        }
-    }
+    override suspend fun getActiveServiceListFromFirestore(): Result<List<ServiceModel>, DataError.Firestore> {
+        return when (val activeServices = firestoreService.getActiveServiceList()) {
+            is Result.Success -> Result.Success(activeServices.data)
 
-    override suspend fun getActiveServiceListFromFirestore(): List<ServiceModel> {
-        return try {
-            firestoreService.getActiveServiceList()
-        } catch (e: Exception) {
-            throw handleException(e)
+            is Result.Error -> Result.Error(activeServices.error)
         }
     }
 
 
-    override fun insertServiceInFirestore(service: ServiceModel) =
-        firestoreService.insertService(service)//throws exception
+    override fun insertServiceInFirestore(service: ServiceModel): Result<Unit, DataError.Firestore> {
+        return when (val serviceFromFirestore = firestoreService.insertService(service)) {
+            is Result.Success -> Result.Success(serviceFromFirestore.data)
 
-    override fun deleteService(sid: String) =
-        firestoreService.deleteService(sid) //throws exception
+            is Result.Error -> Result.Error(serviceFromFirestore.error)
+        }
+    }
+
+    override fun deleteService(sid: String): Result<Unit, DataError.Firestore> {
+        return when (val deletion = firestoreService.deleteService(sid)) {
+            is Result.Success -> Result.Success(deletion.data)
+
+            is Result.Error -> Result.Error(deletion.error)
+        }
+    }
 
     override suspend fun signUp(
         email: String,
@@ -100,9 +108,9 @@ class RepositoryImpl @Inject constructor(
         lastname: String,
         actor: Actors,
         profession: Professions?
-    ): Result<ActorModel> {
+    ): Result<ActorModel, DataError> {
         if (firestoreService.nicknameExists(nickname)) {
-            return Result.failure(Exception(context.getString(R.string.username_already_in_use)))
+            return Result.Error(DataError.Authentication.USERNAME_ALREADY_IN_USE)
         } else {
             val user: ActorModel
             try {
@@ -120,13 +128,11 @@ class RepositoryImpl @Inject constructor(
                     throw Exception()
                 }
             } catch (e: Exception) {
-                return Result.failure(Exception(context.getString(R.string.account_already_exists)))
+                return Result.Error(DataError.Authentication.ACCOUNT_WITH_THAT_EMAIL_ALREADY_EXISTS)
             }
-            return try {
-                firestoreService.insertUser(user)
-                Result.success(user)
-            } catch (e: Exception) {
-                Result.failure(Exception(context.getString(R.string.couldn_t_insert_user_in_database)))
+            return when (val userFromFirestore = firestoreService.insertUser(user)) {
+                is Result.Success -> Result.Success(user)
+                is Result.Error -> Result.Error(userFromFirestore.error)
             }
         }
     }
@@ -134,70 +140,81 @@ class RepositoryImpl @Inject constructor(
     override suspend fun logout() = authService.logout()
 
     override fun isUserLogged() = authService.isUserLogged()
-    override suspend fun modifyUserData(oldUser: ActorModel, newUser: ActorModel) {
-        try {
-            firestoreService.modifyUserData(oldUser = oldUser, newUser = newUser)
-        } catch (e: Exception) {
-            throw handleException(e)
+
+    override suspend fun modifyUserData(
+        oldUser: ActorModel,
+        newUser: ActorModel
+    ): Result<Unit, DataError.Firestore> {
+        return when (val modification =
+            firestoreService.modifyUserData(oldUser = oldUser, newUser = newUser)) {
+            is Result.Success -> Result.Success(modification.data)
+            is Result.Error -> Result.Error(modification.error)
         }
     }
 
-    override fun changeProfState(uid: String, state: ProfState) {
-        try {
-            firestoreService.changeProfState(uid, state)
-        } catch (e: Exception) {
-            throw handleException(e)
+    override fun changeProfState(uid: String, state: ProfState): Result<Unit, DataError.Firestore> {
+        return when (val modification = firestoreService.changeProfState(uid, state)) {
+            is Result.Success -> Result.Success(modification.data)
+            is Result.Error -> Result.Error(modification.error)
         }
     }
 
-    override fun modifyServiceActivity(sid: String, newValue: Boolean) {
-        try {
-            firestoreService.modifyServiceActivity(sid, newValue)
-        } catch (e: Exception) {
-            throw handleException(e)
+    override fun modifyServiceActivity(
+        sid: String,
+        newValue: Boolean
+    ): Result<Unit, DataError.Firestore> {
+        return when (val modification = firestoreService.modifyServiceActivity(sid, newValue)) {
+            is Result.Success -> Result.Success(modification.data)
+            is Result.Error -> Result.Error(modification.error)
         }
     }
 
-    override fun changeFavouriteList(uidListOwner: String, uidToChange: String, add: Boolean) {
+    override fun changeFavouriteList(
+        uidListOwner: String,
+        uidToChange: String,
+        add: Boolean
+    ): Result<Unit, DataError.Firestore> {
+        return when (val modification = firestoreService.changeFavouritesList(
+            uidListOwner = uidListOwner,
+            uidToChange = uidToChange,
+            add = add
+        )) {
+            is Result.Success -> Result.Success(modification.data)
+            is Result.Error -> Result.Error(modification.error)
+        }
+    }
+
+    override suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean =
+        firestoreService.checkIsFavourite(
+            uidListOwner = uidListOwner,
+            uidToCheck = uidToCheck
+        )
+
+
+    override suspend fun getFavouriteList(uid: String): Result<List<ActorModel>, DataError.Firestore> {
+        return when (val favList = firestoreService.getFavouritesList(uid)) {
+            is Result.Success -> Result.Success(favList.data)
+            is Result.Error -> Result.Error(favList.error)
+        }
+    }
+
+    override fun updateRating(uid: String, newRating: Int): Result<Unit, DataError.Firestore> {
+        return when (val modification =
+            firestoreService.updateRating(uid = uid, newRating = newRating)) {
+            is Result.Success -> Result.Success(modification.data)
+            is Result.Error -> Result.Error(modification.error)
+        }
+    }
+
+    override fun getJobsOrRequests(
+        isRequest: Boolean,
+        uid: String
+    ): Result<Flow<List<JobModel>>, DataError.Firestore> {
         return try {
-            firestoreService.changeFavouritesList(
-                uidListOwner = uidListOwner,
-                uidToChange = uidToChange,
-                add = add
-            )
+            val flow = firestoreService.getJobsOrRequests(isRequest = isRequest, uid = uid)
+            Result.Success(flow)
         } catch (e: Exception) {
-            throw handleException(e)
-        }
-    }
-
-    override suspend fun checkIsFavourite(uidListOwner: String, uidToCheck: String): Boolean {
-        return try {
-            firestoreService.checkIsFavourite(
-                uidListOwner = uidListOwner,
-                uidToCheck = uidToCheck
-            )
-        } catch (e: Exception) {
-            throw handleException(e)
-        }
-    }
-
-    override suspend fun getFavouriteList(uid: String): List<ActorModel> {
-        return try {
-            firestoreService.getFavouritesList(uid)
-        } catch (e: Exception) {
-            throw handleException(e)
-        }
-    }
-
-    override fun updateRating(uid: String, newRating: Int) {
-        firestoreService.updateRating(uid = uid, newRating = newRating)
-    }
-
-    override fun getJobsOrRequests(isRequest: Boolean, uid: String): Flow<List<JobModel>> {
-        return try {
-            firestoreService.getJobsOrRequests(isRequest = isRequest, uid = uid)
-        } catch (e: Exception) {
-            throw handleException(e)
+            Result.Error(DataError.Firestore.NONEXISTENT_REQUEST_ATTRIBUTE)
         }
     }
 
@@ -210,8 +227,8 @@ class RepositoryImpl @Inject constructor(
         serviceName: String,
         serviceId: String,
         price: Double
-    ) {
-        try {
+    ): Result<Unit, DataError.Firestore> {
+        return when (val addition =
             firestoreService.addNewJobOrRequest(
                 isRequest = isRequest,
                 profUid = profUid,
@@ -223,9 +240,9 @@ class RepositoryImpl @Inject constructor(
                     serviceId = serviceId,
                     price = price
                 )
-            )
-        } catch (e: Exception) {
-            throw handleException(e)
+            )) {
+            is Result.Success -> Result.Success(addition.data)
+            is Result.Error -> Result.Error(addition.error)
         }
     }
 
@@ -234,28 +251,40 @@ class RepositoryImpl @Inject constructor(
         uid: String,
         otherUid: String,
         id: String
-    ) {
-        firestoreService.deleteJobOrRequest(
-            isRequest = isRequest,
-            uid = uid,
-            otherUid = otherUid,
-            id = id
-        )
+    ): Result<Unit, DataError.Firestore> {
+        return when (val deletion =
+            firestoreService.deleteJobOrRequest(
+                isRequest = isRequest,
+                uid = uid,
+                otherUid = otherUid,
+                id = id
+            )) {
+            is Result.Success -> Result.Success(deletion.data)
+            is Result.Error -> Result.Error(deletion.error)
+        }
     }
 
-    override fun turnRequestIntoJob(ownerNickname: String, uid: String, request: JobModel) {
-        firestoreService.turnRequestIntoJob(
-            request.id,
-            uid = uid,
-            request = JobDto(
-                profNickname = ownerNickname,
-                otherNickname = request.otherNickname,
-                otherId = request.otherUid,
-                serviceName = request.serviceName,
-                serviceId = request.serviceId,
-                price = request.price
-            )
-        )
+    override fun turnRequestIntoJob(
+        ownerNickname: String,
+        uid: String,
+        request: JobModel
+    ): Result<Unit, DataError.Firestore> {
+        return when (val modification =
+            firestoreService.turnRequestIntoJob(
+                request.id,
+                uid = uid,
+                request = JobDto(
+                    profNickname = ownerNickname,
+                    otherNickname = request.otherNickname,
+                    otherId = request.otherUid,
+                    serviceName = request.serviceName,
+                    serviceId = request.serviceId,
+                    price = request.price
+                )
+            )) {
+            is Result.Success -> Result.Success(modification.data)
+            is Result.Error -> Result.Error(modification.error)
+        }
     }
 
     //Storage
@@ -274,11 +303,11 @@ class RepositoryImpl @Inject constructor(
     }
 
     //Realtime
-    override fun getRecentChats(uid: String): Flow<List<ChatListItemModel>> {
-        try {
-            return realtimeService.getRecentChats(uid)
+    override fun getRecentChats(uid: String): Result<Flow<List<ChatListItemModel>>, DataError.Realtime> {
+        return try {
+            Result.Success(realtimeService.getRecentChats(uid))
         } catch (e: Exception) {
-            throw handleException(e)
+            Result.Error(DataError.Realtime.ERROR_GETTING_RECENT_CHATS)
         }
     }
 
@@ -288,40 +317,34 @@ class RepositoryImpl @Inject constructor(
         ownerNickname: String,
         ownerProfilePhoto: Uri?
     ) {
-        try {
-            val participants: Map<String, ParticipantDataDto> = mapOf(
-                Pair(
-                    ownerUid,
-                    ParticipantDataDto(
-                        profilePhoto = ownerProfilePhoto?.toString(),
-                        nickname = ownerNickname
-                    )
-                ),
-                Pair(
-                    chatListItemModel.uid,
-                    ParticipantDataDto(
-                        profilePhoto = chatListItemModel.profilePhoto?.toString(),
-                        nickname = chatListItemModel.nickname
-                    )
-                ),
-
+        val participants: Map<String, ParticipantDataDto> = mapOf(
+            Pair(
+                ownerUid,
+                ParticipantDataDto(
+                    profilePhoto = ownerProfilePhoto?.toString(),
+                    nickname = ownerNickname
                 )
-            val recentChatDto = RecentChatDto(
-                participants = participants,
-                timestamp = chatListItemModel.timestamp,
-                lastMsg = chatListItemModel.lastMsg,
-                unreadMsgNumber = chatListItemModel.unreadMsgNumber,
-                lastMsgUid = chatListItemModel.lastMsgUid,
-            )
-            realtimeService.addOrModifyRecentChat(
-                combinedUid = uidCombiner.combineUids(ownerUid, chatListItemModel.uid),
-                chatDto = recentChatDto
-            )
+            ),
+            Pair(
+                chatListItemModel.uid,
+                ParticipantDataDto(
+                    profilePhoto = chatListItemModel.profilePhoto?.toString(),
+                    nickname = chatListItemModel.nickname
+                )
+            ),
 
-        } catch (e: Exception) {
-            throw handleException(e)
-        }
-
+            )
+        val recentChatDto = RecentChatDto(
+            participants = participants,
+            timestamp = chatListItemModel.timestamp,
+            lastMsg = chatListItemModel.lastMsg,
+            unreadMsgNumber = chatListItemModel.unreadMsgNumber,
+            lastMsgUid = chatListItemModel.lastMsgUid,
+        )
+        realtimeService.addOrModifyRecentChat(
+            combinedUid = uidCombiner.combineUids(ownerUid, chatListItemModel.uid),
+            chatDto = recentChatDto
+        )
     }
 
     override fun updateRecentChat(
@@ -330,89 +353,69 @@ class RepositoryImpl @Inject constructor(
         timestamp: Long,
         senderUid: String,
         participants: Map<String, ParticipantDataDto>
-    ) {
-        try {
-            realtimeService.updateRecentChats(
-                combinedUids = combinedUid,
-                message = message,
-                timestamp = timestamp,
-                senderUid = senderUid,
-                participants = participants
-            )
-        } catch (e: Exception) {
-            throw handleException(e)
+    ): Result<Unit, DataError.Realtime> {
+        return when (val update = realtimeService.updateRecentChats(
+            combinedUids = combinedUid,
+            message = message,
+            timestamp = timestamp,
+            senderUid = senderUid,
+            participants = participants
+        )) {
+            is Result.Success -> Result.Success(Unit)
+            is Result.Error -> Result.Error(update.error)
         }
     }
 
-    override fun openRecentChat(combinedUid: String) {
-        try {
-            realtimeService.openRecentChat(combinedUid = combinedUid)
-        } catch (e: Exception) {
-            throw handleException(e)
-        }
-    }
+    override fun openRecentChat(combinedUid: String) =
+        realtimeService.openRecentChat(combinedUid = combinedUid)
+
 
     override fun getUnreadMsgAndOwner(
         ownerUid: String,
         combinedUid: String
-    ): Flow<Pair<Boolean, Int>> {
+    ): Result<Flow<Pair<Boolean, Int>>, DataError.Realtime> {
         return try {
-            realtimeService.getUnreadMsgAndOwner(ownerUid = ownerUid, combinedUid = combinedUid)
+            val flow =
+                realtimeService.getUnreadMsgAndOwner(ownerUid = ownerUid, combinedUid = combinedUid)
+            Result.Success(flow)
         } catch (e: Exception) {
-            throw handleException(e)
+            Result.Error(DataError.Realtime.ERROR_GETTING_RECENT_CHATS)
         }
     }
 
-    override fun getIndividualChat(ownerUid: String, otherUid: String): Flow<List<ChatMsgModel>> {
-        try {
-            return realtimeService.getChats(
-                combinedUid = uidCombiner.combineUids(ownerUid, otherUid),
-                ownerUid = ownerUid
-            )
-        } catch (e: Exception) {
-            throw handleException(e)
-        }
-    }
-
-    override fun addNewMessage(ownerUid: String, otherUid: String, chatMsgModel: ChatMsgModel) {
-        try {
-            realtimeService.addNewMessage(
-                uidCombiner.combineUids(ownerUid, otherUid),
-                indiviualChatDto = IndiviualChatDto(
-                    message = chatMsgModel.msg,
-                    timestamp = chatMsgModel.timestamp,
-                    senderUid = if (chatMsgModel.isMine) ownerUid else otherUid
+    override fun getIndividualChat(
+        ownerUid: String,
+        otherUid: String
+    ): Result<Flow<List<ChatMsgModel>>, DataError.Realtime> {
+        return try {
+            val flow =
+                realtimeService.getChats(
+                    combinedUid = uidCombiner.combineUids(ownerUid, otherUid),
+                    ownerUid = ownerUid
                 )
-            )
+            Result.Success(flow)
         } catch (e: Exception) {
-            throw handleException(e)
+            Result.Error(DataError.Realtime.ERROR_GETTING_RECENT_CHATS)
         }
     }
+
+    override fun addNewMessage(ownerUid: String, otherUid: String, chatMsgModel: ChatMsgModel) =
+        realtimeService.addNewMessage(
+            uidCombiner.combineUids(ownerUid, otherUid),
+            indiviualChatDto = IndiviualChatDto(
+                message = chatMsgModel.msg,
+                timestamp = chatMsgModel.timestamp,
+                senderUid = if (chatMsgModel.isMine) ownerUid else otherUid
+            )
+        )
 
     //location
     override suspend fun getLocation(uid: String): Flow<LatLng?> {
         return locationService.requestLocationUpdates().also { locationFlow ->
-            locationFlow.collect {location ->
+            locationFlow.collect { location ->
                 if (location != null)
                     firestoreService.updateUserLocation(uid = uid, location = location)
             }
-        }
-    }
-
-    //Exception handling
-    private fun handleException(e: Exception): Exception {
-        return when (e.message) {
-            CONNECTION_ERROR -> Exception(context.getString(R.string.network_failure_while_checking_user_existence))
-            NICKNAME_IN_USE -> Exception(context.getString(R.string.nickname_already_in_use_couldn_t_modify_user))
-            MODIFICATION_ERROR -> Exception(context.getString(R.string.error_modifying_user_data_the_user_wasn_t_modified))
-            NULL_USERDATA -> Exception(context.getString(R.string.user_not_found_in_database))
-            INSERTION_ERROR -> Exception(context.getString(R.string.couldn_t_insert_user_in_database))
-            NONEXISTENT_USERFIELD -> Exception(context.getString(R.string.needed_values_missing_in_database))
-            NONEXISTENT_SERVICEATTRIBUTE -> Exception(context.getString(R.string.attribute_of_a_service_corrupted_in_the_database))
-            NULL_REALTIME_USERDATA -> Exception(context.getString(R.string.realtime_data_was_corrupted))
-            REALTIME_ACCESS_INTERRUPTED -> Exception(context.getString(R.string.access_to_realtime_database_was_interrupted))
-            NONEXISTENT_REQUESTATTRIBUTE -> Exception(context.getString(R.string.an_attribute_of_a_request_was_corrupted_in_the_database))
-            else -> Exception(context.getString(R.string.unknown_exception_occurred))
         }
     }
 }

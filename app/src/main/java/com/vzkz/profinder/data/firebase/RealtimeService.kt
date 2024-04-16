@@ -19,6 +19,7 @@ import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.data.dto.RecentChatDto
 import com.vzkz.profinder.data.response.IndividualChatResponse
 import com.vzkz.profinder.data.response.RecentFinalChatResponse
+import com.vzkz.profinder.domain.error.DataError
 import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import kotlinx.coroutines.channels.awaitClose
@@ -26,6 +27,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import com.vzkz.profinder.domain.error.Result
 
 class RealtimeService @Inject constructor(private val realtimeDB: DatabaseReference) {
     //Recent chats
@@ -33,7 +35,6 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
         val ref = realtimeDB.child(RECENT_CHATS).child(combinedUid)
         ref.setValue(chatDto)
     }
-
     fun getRecentChats(ownerUid: String): Flow<List<ChatListItemModel>> {
         return realtimeDB.child(RECENT_CHATS)
             .orderByChild(TIMESTAMP).snapshots.map { dataSnapshot ->
@@ -55,45 +56,47 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
         timestamp: Long,
         senderUid: String,
         participants: Map<String, ParticipantDataDto>
-    ) {
-//        val finalChatId: String = chatId ?: realtimeDB.child(RECENT_CHATS).push().key.toString()
+    ): Result<Unit, DataError.Realtime> {
+        try {
+            realtimeDB.child(RECENT_CHATS).child(combinedUids).child(PARTCIPANTS).setValue(participants)
+            realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG).setValue(message)
+            realtimeDB.child(RECENT_CHATS).child(combinedUids).child(TIMESTAMP).setValue(timestamp)
 
-        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(PARTCIPANTS).setValue(participants)
-        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG).setValue(message)
-        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(TIMESTAMP).setValue(timestamp)
-
-        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID).get()
-            .addOnSuccessListener { dataSnapshot ->
-                if(dataSnapshot.exists()){
-                    dataSnapshot.getValue(String::class.java)?.let { lastMsgUid ->
-                        if (lastMsgUid != senderUid) {
-                            realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
-                                .setValue(1)
-                            realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID)
-                                .setValue(senderUid)
-                        } else {
-                            realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
-                                .get().addOnSuccessListener { dataSnapshot2 ->
-                                    dataSnapshot2.getValue(Int::class.java)?.let { unreadMsgNum ->
-                                        realtimeDB.child(RECENT_CHATS).child(combinedUids)
-                                            .child(UNREAD_MSG_NUMBER).setValue(unreadMsgNum + 1)
+            realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID).get()
+                .addOnSuccessListener { dataSnapshot ->
+                    if(dataSnapshot.exists()){
+                        dataSnapshot.getValue(String::class.java)?.let { lastMsgUid ->
+                            if (lastMsgUid != senderUid) {
+                                realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
+                                    .setValue(1)
+                                realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID)
+                                    .setValue(senderUid)
+                            } else {
+                                realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
+                                    .get().addOnSuccessListener { dataSnapshot2 ->
+                                        dataSnapshot2.getValue(Int::class.java)?.let { unreadMsgNum ->
+                                            realtimeDB.child(RECENT_CHATS).child(combinedUids)
+                                                .child(UNREAD_MSG_NUMBER).setValue(unreadMsgNum + 1)
+                                        }
                                     }
-                                }
+                            }
                         }
+                    } else {
+                        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
+                            .setValue(1)
+                        realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID)
+                            .setValue(senderUid)
                     }
-                } else {
-                    realtimeDB.child(RECENT_CHATS).child(combinedUids).child(UNREAD_MSG_NUMBER)
-                        .setValue(1)
-                    realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG_UID)
-                        .setValue(senderUid)
+
                 }
-
-            }
-            .addOnFailureListener{ //if it get here it means its a new chat
-               Log.e("Jaime", "Something went wrong while updating recent chats")
-            }
-
-
+                .addOnFailureListener{ //if it get here it means its a new chat
+                    Log.e("Jaime", "Something went wrong while updating recent chats")
+                    throw Exception()
+                }
+        } catch (e: Exception){
+            return Result.Error(DataError.Realtime.RECENT_CHAT_UPDATE_ERROR)
+        }
+        return Result.Success(Unit)
     }
 
     fun openRecentChat(combinedUid: String) {

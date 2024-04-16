@@ -5,6 +5,8 @@ import android.util.Log
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.vzkz.profinder.core.Constants.PROFILEPHOTOS
+import com.vzkz.profinder.domain.error.DataError
+import com.vzkz.profinder.domain.error.Result
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
@@ -28,13 +30,19 @@ class StorageService @Inject constructor(private val storage: FirebaseStorage) {
         }
     }
 
-    private fun deletePhoto(uri: Uri){
-        val reference = storage.reference.child("${uri.lastPathSegment}")
-        reference.delete().addOnSuccessListener {
-            Log.i("Jaime","Photo deleted correctly")
-        }.addOnFailureListener {
-            Log.e("Jaime","Error deleting photo")
+    private fun deletePhoto(uri: Uri): Result<Unit, DataError.Storage>{
+        try {
+            val reference = storage.reference.child("${uri.lastPathSegment}")
+            reference.delete().addOnSuccessListener {
+                Log.i("Jaime","Photo deleted correctly")
+            }.addOnFailureListener {
+                Log.e("Jaime","Error deleting photo")
+                throw Exception()
+            }
+        } catch (e: Exception){
+            return Result.Error(DataError.Storage.PHOTO_DELETION_ERROR)
         }
+        return Result.Success(Unit)
     }
 
 
