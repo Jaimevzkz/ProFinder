@@ -3,19 +3,19 @@ package com.vzkz.profinder.ui.profile.editprofile
 import com.vzkz.profinder.core.boilerplate.IndividualChatntent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.UiText
 
 
 data class EditProfileState(
     val user: ActorModel?,
-    val error: UiError,
+    val error: UiText?,
     val success: Boolean,
     val loading: Boolean
 ) : State {
     companion object {
         val initial: EditProfileState = EditProfileState(
             user = null,
-            error = UiError(false, null),
+            error = null,
             success = false,
             loading = true
         )
@@ -23,7 +23,7 @@ data class EditProfileState(
 }
 sealed class EditProfileIntent: IndividualChatntent {
     data class SetUser(val user: ActorModel?): EditProfileIntent()
-    data class Error(val errorMsg: String): EditProfileIntent()
+    data class Error(val error: UiText): EditProfileIntent()
     data object CloseError: EditProfileIntent()
     data object  Success: EditProfileIntent()
     data object Loading: EditProfileIntent()

@@ -3,6 +3,8 @@ package com.vzkz.profinder.domain.usecases.chat
 import android.net.Uri
 import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.domain.Repository
+import com.vzkz.profinder.domain.error.FirebaseError
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
@@ -17,7 +19,7 @@ interface AddNewMessageUseCase {
         otherNickname: String,
         otherProfilePicture: Uri?,
         msg: String
-    )
+    ): Result<Unit, FirebaseError>
 }
 
 
@@ -32,7 +34,7 @@ class AddNewMessageUseCaseImpl @Inject constructor(
         otherNickname: String,
         otherProfilePicture: Uri?,
         msg: String
-    ) {
+    ): Result<Unit, FirebaseError> {
         val timestamp = System.currentTimeMillis()
         val actor = getUserUseCase()
 
@@ -47,7 +49,7 @@ class AddNewMessageUseCaseImpl @Inject constructor(
             )
         )
 
-        repository.updateRecentChat(
+        return repository.updateRecentChat(
             combinedUid = combinedUid,
             message = msg,
             timestamp = timestamp,

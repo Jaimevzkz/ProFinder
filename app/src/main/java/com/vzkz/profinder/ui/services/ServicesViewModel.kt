@@ -1,12 +1,11 @@
 package com.vzkz.profinder.ui.services
 
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.maps.model.LatLng
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ServiceModel
-import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.jobs.AddJobOrRequestsUseCase
 import com.vzkz.profinder.domain.usecases.jobs.CheckExistingRequestUseCase
 import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCase
@@ -18,6 +17,7 @@ import com.vzkz.profinder.domain.usecases.services.GetServiceListUseCase
 import com.vzkz.profinder.domain.usecases.services.InsertServiceUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCase
+import com.vzkz.profinder.ui.asUiText
 import com.vzkz.profinder.ui.services.components.userscreen.ServiceState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -43,30 +43,27 @@ class ServicesViewModel @Inject constructor(
     override fun reduce(state: ServicesState, intent: ServicesIntent): ServicesState {
         return when (intent) {
             is ServicesIntent.Error -> state.copy(
-                error = UiError(true, intent.errorMsg),
+                error = intent.error,
                 loading = true
             )
 
             is ServicesIntent.SetServiceLists -> state.copy(
-                error = UiError(false, null),
                 loading = false,
                 activeServiceList = intent.lists.first,
                 inActiveServiceList = intent.lists.second
             )
 
             is ServicesIntent.CloseError -> state.copy(
-                error = UiError(false, null),
+                error = null,
                 loading = false
             )
 
             is ServicesIntent.SetUser -> state.copy(
                 user = intent.user,
-                error = UiError(false, null),
                 loading = false
             )
 
             is ServicesIntent.SetActiveServiceLists -> state.copy(
-                error = UiError(false, null),
                 loading = false,
                 activeServiceList = intent.list
             )
@@ -78,56 +75,45 @@ class ServicesViewModel @Inject constructor(
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                val user = getUserUseCase()
-                dispatch(ServicesIntent.SetUser(user))
-                when (user.actor) {
-                    Actors.User -> dispatch(
-                        ServicesIntent.SetActiveServiceLists(
-                            getActiveServiceListUseCase()
-                        )
-                    )
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = getUserUseCase()
+            dispatch(ServicesIntent.SetUser(user))
+            when (user.actor) {
+                Actors.User -> {
+                    val activeServiceList = getActiveServiceListUseCase()
+                    dispatch(ServicesIntent.SetActiveServiceLists(activeServiceList))
+                }
 
-                    Actors.Professional -> {
-                        val serviceLists = getServiceListUseCase()
-                        dispatch(ServicesIntent.SetServiceLists(serviceLists))
-                    }
+                Actors.Professional -> {
+                    val serviceLists = getServiceListUseCase()
+                    dispatch(ServicesIntent.SetServiceLists(serviceLists))
                 }
             }
-        } catch (e: Exception) {
-            dispatch(ServicesIntent.Error(e.message.orEmpty()))
         }
     }
 
     fun onAddService(service: ServiceModel) {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                insertServiceUseCase(service)
-                onInit()
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val insertion = insertServiceUseCase(service)) {
+                is Result.Success -> onInit()
+                is Result.Error -> dispatch(ServicesIntent.Error(insertion.error.asUiText()))
             }
-        } catch (e: Exception) {
-            dispatch(ServicesIntent.Error(e.message.orEmpty()))
         }
     }
 
     fun onDeleteService(sid: String) {
-        try {
-            deleteServiceUseCase(sid)
-            onInit()
-        } catch (e: Exception) {
-            dispatch(ServicesIntent.Error(e.message.orEmpty()))
+        when (val deletion = deleteServiceUseCase(sid)) {
+            is Result.Success -> onInit()
+            is Result.Error -> dispatch(ServicesIntent.Error(deletion.error.asUiText()))
         }
     }
 
     fun onChangeActivity(service: ServiceModel) {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                changeServiceActivityUseCase(service.sid, service.isActive)
-                onInit()
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val change = changeServiceActivityUseCase(service.sid, service.isActive)) {
+                is Result.Success -> onInit()
+                is Result.Error -> dispatch(ServicesIntent.Error(change.error.asUiText()))
             }
-        } catch (e: Exception) {
-            dispatch(ServicesIntent.Error(e.message.orEmpty()))
         }
     }
 
@@ -136,30 +122,33 @@ class ServicesViewModel @Inject constructor(
     fun onCloseDialog() = dispatch(ServicesIntent.CloseError)
 
     fun onRequestService(service: ServiceModel) {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                addRequestsUseCase(isRequest = true, serviceModel = service)
-                dispatch(ServicesIntent.SetRequestExists(ServiceState.REQUESTED))
+        viewModelScope.launch(Dispatchers.IO) {
+            when(val request = addRequestsUseCase(isRequest = true, serviceModel = service)){
+                is Result.Success -> dispatch(ServicesIntent.SetRequestExists(ServiceState.REQUESTED))
+                is Result.Error -> dispatch(ServicesIntent.Error(request.error.asUiText()))
             }
-        } catch (e: Exception) {
-            dispatch(ServicesIntent.Error(e.message.orEmpty()))
         }
     }
 
     fun checkExistingRequests(sid: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            dispatch(ServicesIntent.SetRequestExists(checkExistingRequestUseCase(sid = sid)))
+            when(val check = checkExistingRequestUseCase(sid = sid)){
+                is Result.Success -> dispatch(ServicesIntent.SetRequestExists(check.data))
+                is Result.Error -> dispatch(ServicesIntent.Error(check.error.asUiText()))
+            }
         }
     }
 
     fun onDeleteRequest(sid: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            deleteRequestUseCase(isRequest = true, sid = sid)
-            dispatch(ServicesIntent.SetRequestExists(ServiceState.FREE))
+            when(val deletion = deleteRequestUseCase(isRequest = true, sid = sid)){
+                is Result.Success -> dispatch(ServicesIntent.SetRequestExists(ServiceState.FREE))
+                is Result.Error -> dispatch(ServicesIntent.Error(deletion.error.asUiText()))
+            }
         }
     }
 
-    fun onGetLocation(){
+    fun onGetLocation() {
         viewModelScope.launch(Dispatchers.IO) {
             getLocationUseCase().collect { location ->
                 dispatch(ServicesIntent.SetLocation(location))

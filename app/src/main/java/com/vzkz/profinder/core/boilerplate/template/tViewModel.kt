@@ -1,7 +1,6 @@
 package com.vzkz.profinder.core.boilerplate.template
 
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.model.UiError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

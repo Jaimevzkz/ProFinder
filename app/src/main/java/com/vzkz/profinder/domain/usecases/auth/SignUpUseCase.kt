@@ -1,10 +1,13 @@
 package com.vzkz.profinder.domain.usecases.auth
 
 import com.vzkz.profinder.domain.Repository
+import com.vzkz.profinder.domain.error.FirebaseError
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Professions
 import javax.inject.Inject
+import com.vzkz.profinder.domain.error.Result
+
 
 interface SignUpUseCase {
     suspend operator fun invoke(
@@ -15,7 +18,7 @@ interface SignUpUseCase {
         lastname: String,
         actor: Actors,
         profession: Professions?
-    ): Result<ActorModel>
+    ): Result<ActorModel, FirebaseError>
 }
 
 class SignUpUseCaseImpl @Inject constructor(private val repository: Repository) : SignUpUseCase {
@@ -27,15 +30,13 @@ class SignUpUseCaseImpl @Inject constructor(private val repository: Repository) 
         lastname: String,
         actor: Actors,
         profession: Professions?
-    ): Result<ActorModel> {
-        return repository.signUp(
-            email = email,
-            password = password,
-            nickname = nickname,
-            firstname = firstname,
-            lastname = lastname,
-            actor = actor,
-            profession = profession
-        )
-    }
+    ): Result<ActorModel, FirebaseError> = repository.signUp(
+        email = email,
+        password = password,
+        nickname = nickname,
+        firstname = firstname,
+        lastname = lastname,
+        actor = actor,
+        profession = profession
+    )
 }

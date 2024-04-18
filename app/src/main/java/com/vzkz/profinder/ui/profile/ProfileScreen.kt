@@ -43,7 +43,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
-import com.vzkz.profinder.core.PROFESSIONALMODELFORTESTS
 import com.vzkz.profinder.destinations.EditProfileScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.destinations.ProfileScreenDestination
@@ -54,7 +53,7 @@ import com.vzkz.profinder.core.Constants.ERRORSTR
 import com.vzkz.profinder.core.USERMODELFORTESTS
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
@@ -106,7 +105,7 @@ fun ProfileScreen(
 private fun ScreenBody(
     user: ActorModel?,
     onLogout: () -> Unit,
-    error: UiError,
+    error: UiText?,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
     loading: Boolean,
     onCloseDialog: () -> Unit,
@@ -327,13 +326,14 @@ private fun ScreenBody(
                         }
                     )
                 }
-                MyAlertDialog(
-                    title = stringResource(R.string.error),
-                    text = error.errorMsg.orEmpty(),
-                    onDismiss = { onCloseDialog() },
-                    onConfirm = { onCloseDialog() },
-                    showDialog = error.isError
-                )
+                if(error != null){
+                    MyAlertDialog(
+                        title = stringResource(R.string.error),
+                        text = error.asString(),
+                        onDismiss = { onCloseDialog() },
+                        onConfirm = { onCloseDialog() },
+                    )
+                }
             }
         }
     }
@@ -390,7 +390,7 @@ fun LightPreview() {
 //            user = PROFESSIONALMODELFORTESTS,
             onLogout = { },
             onCloseDialog = {},
-            error = UiError(false, ""),
+            error = null,
             onBottomBarClicked = {},
 //            loading = true,
             loading = false,

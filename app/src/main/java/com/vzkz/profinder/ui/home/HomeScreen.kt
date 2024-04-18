@@ -43,7 +43,7 @@ import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.ViewProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.JobModel
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.ClickableRatingBar
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
@@ -103,7 +103,7 @@ private fun ScreenBody(
     requestList: List<JobModel>,
     jobList: List<JobModel>,
     isUser: Boolean,
-    error: UiError,
+    error: UiText?,
     loading: Boolean,
     onDeleteFav: (String) -> Unit,
     onAcceptRequest: (JobModel) -> Unit,
@@ -270,13 +270,14 @@ private fun ScreenBody(
 //                RequestNotificationPermissionDialog()
 //            }
 
-            MyAlertDialog(
-                title = stringResource(R.string.error),
-                text = error.errorMsg.orEmpty(),
-                onDismiss = { onCloseDialog() },
-                onConfirm = { onCloseDialog() },
-                showDialog = error.isError
-            )
+            if(error != null){
+                MyAlertDialog(
+                    title = stringResource(R.string.error),
+                    text = error.asString(),
+                    onDismiss = { onCloseDialog() },
+                    onConfirm = { onCloseDialog() },
+                )
+            }
 
 
             if (isRatingVisible && jobToRate != null) {
@@ -383,7 +384,7 @@ private fun LightPreview() {
 //            favList = emptyList(),
             favList = PROFFESIONALLISTFORTEST,
             isUser = false,
-            error = UiError(false, "Account wasn't created"),
+            error = null,
             requestList = JOBLISTFORTEST,
             jobList = JOBLISTFORTEST,
 //            loading = true,

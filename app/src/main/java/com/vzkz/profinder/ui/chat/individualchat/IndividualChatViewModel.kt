@@ -4,12 +4,13 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.DateFormatter
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.usecases.chat.AddNewMessageUseCase
 import com.vzkz.profinder.domain.usecases.chat.GetIndChatsUseCase
 import com.vzkz.profinder.domain.usecases.chat.GetUnreadMessageAndOwnerUseCase
 import com.vzkz.profinder.domain.usecases.chat.OpenRecentChatsUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
+import com.vzkz.profinder.ui.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,12 +36,12 @@ class IndividualChatViewModel @Inject constructor(
             is IndividualChatIntent.Loading -> state.copy(loading = true)
 
             is IndividualChatIntent.Error -> state.copy(
-                error = UiError(true, intent.errorMsg),
+                error = intent.error,
                 loading = false
             )
 
             IndividualChatIntent.CloseError -> state.copy(
-                error = UiError(false, null),
+                error = null,
                 loading = false
             )
 
@@ -56,14 +57,16 @@ class IndividualChatViewModel @Inject constructor(
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit(otherUid: String, combinedUid: String) {
         getUnreadMessages(combinedUid = combinedUid)
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                getIndChatsUseCase(otherUid).collect { chatList ->
-                    dispatch(IndividualChatIntent.UpdateList(chatList))
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val flow = getIndChatsUseCase(otherUid)) {
+                is Result.Success -> {
+                    flow.data.collect { chatList ->
+                        dispatch(IndividualChatIntent.UpdateList(chatList))
+                    }
                 }
+
+                is Result.Error -> dispatch(IndividualChatIntent.Error(flow.error.asUiText()))
             }
-        } catch (e: Exception) {
-            dispatch(IndividualChatIntent.Error(e.message.orEmpty()))
         }
     }
 
@@ -74,20 +77,22 @@ class IndividualChatViewModel @Inject constructor(
     }
 
     private fun getUnreadMessages(combinedUid: String) {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                getUnreadMessageAndOwnerUseCase(
-                    ownerUid = getUidDataStoreUseCase(),
-                    combinedUid = combinedUid
-                ).collect { unreadMsgs ->
-                    if (unreadMsgs.first)
-                        dispatch(IndividualChatIntent.UpdateUnreadMsgs(unreadMsgs.second))
-                    else
-                        dispatch(IndividualChatIntent.UpdateUnreadMsgs(0))
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val flow = getUnreadMessageAndOwnerUseCase(
+                ownerUid = getUidDataStoreUseCase(),
+                combinedUid = combinedUid
+            )) {
+                is Result.Success -> {
+                    flow.data.collect { unreadMsgs ->
+                        if (unreadMsgs.first)
+                            dispatch(IndividualChatIntent.UpdateUnreadMsgs(unreadMsgs.second))
+                        else
+                            dispatch(IndividualChatIntent.UpdateUnreadMsgs(0))
+                    }
                 }
+
+                is Result.Error -> dispatch(IndividualChatIntent.Error(flow.error.asUiText()))
             }
-        } catch (e: Exception) {
-            dispatch(IndividualChatIntent.Error(e.message.orEmpty()))
         }
     }
 
@@ -109,13 +114,16 @@ class IndividualChatViewModel @Inject constructor(
         msg: String
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            addNewMessageUseCase(
+            when(val new = addNewMessageUseCase(
                 msg = msg,
                 combinedUid = combinedUid,
                 otherUid = otherUid,
                 otherNickname = otherNickname,
                 otherProfilePicture = otherProfilePicture
-            )
+            )){
+                is Result.Error ->dispatch(IndividualChatIntent.Error(new.error.asUiText()))
+                is Result.Success -> {/*do nothing*/}
+            }
         }
     }
 }

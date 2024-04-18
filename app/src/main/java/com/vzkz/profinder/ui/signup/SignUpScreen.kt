@@ -83,7 +83,6 @@ fun SignUpScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenBody(
     onSignInClicked: () -> Unit,
@@ -111,8 +110,6 @@ private fun ScreenBody(
         var isEmailValid by remember { mutableStateOf(true) }
         var isPasswordValid by remember { mutableStateOf(true) }
         var isSamePassword by remember { mutableStateOf(true) }
-        var showDialog by remember { mutableStateOf(false) }
-        showDialog = state.error.isError
         var isFirstnameValid by remember { mutableStateOf(true) }
         var isLastnameValid by remember { mutableStateOf(true) }
         var isProfessionValid by remember { mutableStateOf(true) }
@@ -340,13 +337,14 @@ private fun ScreenBody(
             Text(text = stringResource(id = R.string.signup))
         }
 
-        MyAlertDialog(
-            title = stringResource(R.string.error_during_sign_up),
-            text = state.error.errorMsg ?: stringResource(R.string.account_already_exists),
-            onDismiss = { onCloseDialog() },
-            onConfirm = { onCloseDialog() },
-            showDialog = showDialog
-        )
+        if(state.error != null){
+            MyAlertDialog(
+                title = stringResource(R.string.error_during_sign_up),
+                text = state.error.asString(),
+                onDismiss = { onCloseDialog() },
+                onConfirm = { onCloseDialog() },
+            )
+        }
     }
 }
 

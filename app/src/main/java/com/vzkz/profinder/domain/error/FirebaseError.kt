@@ -1,14 +1,14 @@
 package com.vzkz.profinder.domain.error
 
-sealed interface DataError: Error {
-    enum class Authentication: DataError {
+sealed interface FirebaseError: Error {
+    enum class Authentication: FirebaseError {
         WRONG_EMAIL_OR_PASSWORD,
         USERNAME_ALREADY_IN_USE,
         ACCOUNT_WITH_THAT_EMAIL_ALREADY_EXISTS,
         UNKNOWN_ERROR,
 
     }
-    enum class Firestore: DataError {
+    enum class Firestore: FirebaseError {
         USER_NOT_FOUND_IN_DATABASE,
         CONNECTION_ERROR,
         NICKNAME_IN_USE,
@@ -25,7 +25,7 @@ sealed interface DataError: Error {
         LOCATION_UPDATE_ERROR
     }
 
-    enum class Realtime: DataError {
+    enum class Realtime: FirebaseError {
         NULL_REALTIME_USERDATA,
         RECENT_CHAT_UPDATE_ERROR,
         ERROR_GETTING_RECENT_CHATS,
@@ -34,7 +34,7 @@ sealed interface DataError: Error {
 
     }
 
-    enum class Storage: DataError {
+    enum class Storage: FirebaseError {
         PHOTO_DELETION_ERROR,
         UNKNOWN_ERROR,
 

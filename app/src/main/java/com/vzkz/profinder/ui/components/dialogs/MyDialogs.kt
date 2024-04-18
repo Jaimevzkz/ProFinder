@@ -15,7 +15,7 @@ fun MyAlertDialog(
     text: String,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
-    showDialog: Boolean
+    showDialog: Boolean = true
 ) {
     if (showDialog) {
         AlertDialog(

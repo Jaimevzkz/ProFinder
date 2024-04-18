@@ -4,11 +4,12 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.model.ActorModel
-import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import com.vzkz.profinder.domain.usecases.user.ModifyUserDataUseCase
 import com.vzkz.profinder.domain.usecases.user.UploadPhotoUseCase
+import com.vzkz.profinder.ui.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +31,7 @@ class EditProfileViewModel @Inject constructor(
     ): EditProfileState { //This function reduces each intent with a when
         return when (intent) {
             is EditProfileIntent.Error -> state.copy(
-                error = UiError(true, intent.errorMsg),
+                error = intent.error,
                 success = false,
                 loading = true
             )
@@ -42,12 +43,11 @@ class EditProfileViewModel @Inject constructor(
             )
 
             EditProfileIntent.CloseError -> state.copy(
-                error = UiError(false, null),
+                error = null,
                 success = true
             )
 
             EditProfileIntent.Success -> state.copy(
-                error = UiError(false, null),
                 success = false
             )
 
@@ -62,53 +62,38 @@ class EditProfileViewModel @Inject constructor(
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                val user = getUserUseCase()
-                dispatch(EditProfileIntent.SetUser(user))
-            }
-        } catch (e: Exception) {
-            dispatch(EditProfileIntent.Error(e.message ?: "Error getting user"))
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = getUserUseCase()
+            dispatch(EditProfileIntent.SetUser(user))
         }
+
     }
 
     fun onModifyUserData(newUser: ActorModel, oldUser: ActorModel) {
         dispatch(EditProfileIntent.Loading)
-        viewModelScope.launch {
-            try {
-                withContext(Dispatchers.IO) {
-                    modifyUserDataUseCase(
-                        newUser = newUser,
-                        oldUser = oldUser
-                    )
-                    dispatch(EditProfileIntent.Success)
-                }
-
-            } catch (e: Exception) {
-                dispatch(EditProfileIntent.Error("${e.message}"))
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val modification = modifyUserDataUseCase(
+                newUser = newUser,
+                oldUser = oldUser
+            )) {
+                is Result.Success -> dispatch(EditProfileIntent.Success)
+                is Result.Error -> dispatch(EditProfileIntent.Error(modification.error.asUiText()))
             }
         }
-
     }
+
 
     fun onCloseDialog() = dispatch(EditProfileIntent.CloseError)
 
     fun onUploadPhoto(uri: Uri, user: ActorModel) {
         viewModelScope.launch {
-            try {
-                val result = withContext(Dispatchers.IO) {
-                    uploadPhotoUseCase(
-                        uri = uri,
-                        user = user
-                    )
-                }
-                dispatch(EditProfileIntent.SetImg(user.copy(profilePhoto = result)))
-            } catch (e: Exception) {
-                Log.e("Jaime", "Error calling storage. ${e.message}")
-                dispatch(EditProfileIntent.Error("Error calling storage. ${e.message}"))
+            val result = withContext(Dispatchers.IO) {
+                uploadPhotoUseCase(
+                    uri = uri,
+                    user = user
+                )
             }
+            dispatch(EditProfileIntent.SetImg(user.copy(profilePhoto = result)))
         }
     }
-
-
 }

@@ -2,7 +2,6 @@ package com.vzkz.profinder.core.boilerplate.template
 
 import com.vzkz.profinder.core.boilerplate.IndividualChatntent
 import com.vzkz.profinder.core.boilerplate.State
-import com.vzkz.profinder.domain.model.UiError
 
 
 data class tState(

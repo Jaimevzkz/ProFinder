@@ -19,7 +19,7 @@ import com.vzkz.profinder.data.dto.ParticipantDataDto
 import com.vzkz.profinder.data.dto.RecentChatDto
 import com.vzkz.profinder.data.response.IndividualChatResponse
 import com.vzkz.profinder.data.response.RecentFinalChatResponse
-import com.vzkz.profinder.domain.error.DataError
+import com.vzkz.profinder.domain.error.FirebaseError
 import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import kotlinx.coroutines.channels.awaitClose
@@ -56,7 +56,7 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
         timestamp: Long,
         senderUid: String,
         participants: Map<String, ParticipantDataDto>
-    ): Result<Unit, DataError.Realtime> {
+    ): Result<Unit, FirebaseError.Realtime> {
         try {
             realtimeDB.child(RECENT_CHATS).child(combinedUids).child(PARTCIPANTS).setValue(participants)
             realtimeDB.child(RECENT_CHATS).child(combinedUids).child(LAST_MSG).setValue(message)
@@ -94,7 +94,7 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
                     throw Exception()
                 }
         } catch (e: Exception){
-            return Result.Error(DataError.Realtime.RECENT_CHAT_UPDATE_ERROR)
+            return Result.Error(FirebaseError.Realtime.RECENT_CHAT_UPDATE_ERROR)
         }
         return Result.Success(Unit)
     }

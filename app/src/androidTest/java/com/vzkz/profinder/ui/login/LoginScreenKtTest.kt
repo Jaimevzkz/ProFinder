@@ -2,7 +2,6 @@ package com.vzkz.profinder.ui.login
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.vzkz.profinder.domain.model.UiError
 import org.junit.Rule
 import org.junit.Test
 

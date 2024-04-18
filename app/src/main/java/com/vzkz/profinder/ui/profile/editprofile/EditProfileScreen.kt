@@ -37,6 +37,7 @@ import com.vzkz.profinder.R
 import com.vzkz.profinder.core.USERMODELFORTESTS
 import com.vzkz.profinder.destinations.ProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyGenericTextField
 import com.vzkz.profinder.ui.components.MyRow
@@ -68,16 +69,11 @@ fun EditProfileScreen(
     } else {
         var user: ActorModel? by remember { mutableStateOf(null) }
         user = editProfileViewModel.state.user
-        var isError by remember { mutableStateOf(false) }
-        isError = editProfileViewModel.state.error.isError
-        var errorMsg: String? by remember { mutableStateOf(null) }
-        errorMsg = editProfileViewModel.state.error.errorMsg
         var profilePhoto: Uri? by remember { mutableStateOf(null) }
         profilePhoto = user?.profilePhoto
         ScreenBody(
-            isError = isError,
             user = user,
-            errorMsg = errorMsg,
+            error = editProfileViewModel.state.error,
             profilePhoto = profilePhoto,
             onUploadImage = { uriToUpload ->
                 editProfileViewModel.onUploadPhoto(
@@ -96,9 +92,8 @@ fun EditProfileScreen(
 
 @Composable
 private fun ScreenBody(
-    isError: Boolean,
     user: ActorModel?,
-    errorMsg: String?,
+    error: UiText?,
     profilePhoto: Uri?,
     onUploadImage: (Uri) -> Unit,
     onModifyUserData: (ActorModel, ActorModel) -> Unit,
@@ -129,8 +124,6 @@ private fun ScreenBody(
         var readOnlyActor by remember { mutableStateOf(true) }
 
         var firstTime by remember { mutableStateOf(true) }
-        var showAlertDialog by remember { mutableStateOf(false) }
-        showAlertDialog = isError
         var showConfirmDialog by remember { mutableStateOf(false) }
 
         val spaceBetween = 8
@@ -212,17 +205,18 @@ private fun ScreenBody(
             showDialog = showConfirmDialog
         )
 
-        MyAlertDialog( //Error Dialog
-            title = stringResource(R.string.error_during_profile_modification),
-            text = errorMsg.orEmpty(),
-            onDismiss = {
-                onCloseDialog()
-            },
-            onConfirm = {
-                onCloseDialog()
-            },
-            showDialog = showAlertDialog
-        )
+        if(error != null){
+            MyAlertDialog( //Error Dialog
+                title = stringResource(R.string.error_during_profile_modification),
+                text = error.asString(),
+                onDismiss = {
+                    onCloseDialog()
+                },
+                onConfirm = {
+                    onCloseDialog()
+                },
+            )
+        }
 
         if (showPhotoDialog) {
             UploadPhotoDialog(
@@ -249,9 +243,8 @@ private fun ScreenBody(
 fun DarkPreview() {
     ProFinderTheme {
         ScreenBody(
-            isError = false,
             user = USERMODELFORTESTS,
-            errorMsg = null,
+            error = null,
             onModifyUserData = { _, _ -> },
             onCloseDialog = {},
             onBackClicked = {},

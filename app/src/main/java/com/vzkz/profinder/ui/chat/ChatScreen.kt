@@ -52,7 +52,7 @@ import com.vzkz.profinder.core.CHATLISTITEMFORTEST
 import com.vzkz.profinder.destinations.ChatScreenDestination
 import com.vzkz.profinder.destinations.IndividualChatScreenDestination
 import com.vzkz.profinder.domain.model.ChatListItemModel
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
@@ -100,7 +100,7 @@ private fun ScreenBody(
     chatList: List<ChatListItemModel>,
     loading: Boolean,
     uid: String,
-    error: UiError,
+    error: UiText?,
     onChatClicked: (String, Uri?, String) -> Unit,
     onFormatTime: (Long) -> String,
     onCloseDialog: () -> Unit,
@@ -200,13 +200,15 @@ private fun ScreenBody(
                 }
             }
 
-            MyAlertDialog(
-                title = stringResource(R.string.error),
-                text = error.errorMsg.orEmpty(),
-                onDismiss = { onCloseDialog() },
-                onConfirm = { onCloseDialog() },
-                showDialog = error.isError
-            )
+            if(error != null){
+                MyAlertDialog(
+                    title = stringResource(R.string.error),
+                    text = error.asString(),
+                    onDismiss = { onCloseDialog() },
+                    onConfirm = { onCloseDialog() },
+                )
+
+            }
         }
     }
 }
@@ -326,7 +328,7 @@ private fun LightPreview() {
 //            loading = true,
             loading = false,
             onFormatTime = { "12:00 P.M." },
-            error = UiError(false, "Account wasn't created"),
+            error = null,
             onCloseDialog = {},
             onBottomBarClicked = {},
             onChatClicked = { _, _, _ -> }

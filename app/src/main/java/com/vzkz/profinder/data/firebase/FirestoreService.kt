@@ -36,7 +36,7 @@ import com.vzkz.profinder.core.Constants.STATE
 import com.vzkz.profinder.core.Constants.UID
 import com.vzkz.profinder.core.Constants.USERS_COLLECTION
 import com.vzkz.profinder.data.dto.JobDto
-import com.vzkz.profinder.domain.error.DataError
+import com.vzkz.profinder.domain.error.FirebaseError
 import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
@@ -63,8 +63,8 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         return !userInfo.isEmpty
     }
 
-    fun insertUser(userData: ActorModel?): Result<Unit, DataError.Firestore> {
-        if (userData == null) return Result.Error(DataError.Firestore.USER_NOT_FOUND_IN_DATABASE)
+    fun insertUser(userData: ActorModel?): Result<Unit, FirebaseError.Firestore> {
+        if (userData == null) return Result.Error(FirebaseError.Firestore.USER_NOT_FOUND_IN_DATABASE)
 
         val userDocument = usersCollection.document(userData.uid)
 
@@ -81,13 +81,13 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw Exception()
                 }
         } catch (e: Exception) {
-            return Result.Error(DataError.Firestore.INSERTION_ERROR)
+            return Result.Error(FirebaseError.Firestore.INSERTION_ERROR)
         }
 
         return Result.Success(Unit)
     }
 
-    suspend fun getUserData(uid: String): Result<ActorModel, DataError.Firestore> {
+    suspend fun getUserData(uid: String): Result<ActorModel, FirebaseError.Firestore> {
 
         val userDocumentRef = usersCollection.document(uid)
 
@@ -104,7 +104,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     Professions.Plumber.name -> Professions.Plumber
                     Professions.Hairdresser.name -> Professions.Hairdresser
                     Professions.Electrician.name -> Professions.Electrician
-                    else -> return Result.Error(DataError.Firestore.NON_EXISTENT_USER_FIELD)
+                    else -> return Result.Error(FirebaseError.Firestore.NON_EXISTENT_USER_FIELD)
                 }
             }
             val state = if (isUser) null else {
@@ -112,7 +112,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     ProfState.Active.name -> ProfState.Active
                     ProfState.Working.name -> ProfState.Working
                     ProfState.Inactive.name -> ProfState.Inactive
-                    else -> return Result.Error(DataError.Firestore.NON_EXISTENT_USER_FIELD)
+                    else -> return Result.Error(FirebaseError.Firestore.NON_EXISTENT_USER_FIELD)
                 }
             }
             val profilePicture = userData.getOrDefault(PROFILEPHOTO, null) as String?
@@ -138,9 +138,9 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                 return Result.Success(userModel)
             } catch (e: Exception) {
                 Log.e("Jaime", "error fetching user data from db. ${e.message}")
-                return Result.Error(DataError.Firestore.NON_EXISTENT_USER_FIELD)
+                return Result.Error(FirebaseError.Firestore.NON_EXISTENT_USER_FIELD)
             }
-        } else return Result.Error(DataError.Firestore.CONNECTION_ERROR)
+        } else return Result.Error(FirebaseError.Firestore.CONNECTION_ERROR)
 
 
     }
@@ -148,9 +148,9 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     suspend fun modifyUserData(
         oldUser: ActorModel,
         newUser: ActorModel
-    ): Result<Unit, DataError.Firestore> { //todo this functionality does not work
+    ): Result<Unit, FirebaseError.Firestore> { //todo this functionality does not work
         if ((oldUser.nickname != newUser.nickname) && (nicknameExists(newUser.nickname))) {
-            return Result.Error(DataError.Firestore.NICKNAME_IN_USE)
+            return Result.Error(FirebaseError.Firestore.NICKNAME_IN_USE)
         }
 
         // Gets the reference to the user document
@@ -170,13 +170,13 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw Exception()
                 }
         } catch (e: Exception) {
-            return Result.Error(DataError.Firestore.MODIFICATION_ERROR)
+            return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
         }
         return Result.Success(Unit)
     }
 
 
-    fun changeProfState(uid: String, state: ProfState): Result<Unit, DataError.Firestore> {
+    fun changeProfState(uid: String, state: ProfState): Result<Unit, FirebaseError.Firestore> {
         try {
             usersCollection.document(uid).update(STATE, state.name)
                 .addOnSuccessListener {
@@ -187,7 +187,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw Exception(MODIFICATION_ERROR)
                 }
         } catch (e: Exception) {
-            return Result.Error(DataError.Firestore.MODIFICATION_ERROR)
+            return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
         }
         return Result.Success(Unit)
     }
@@ -196,7 +196,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         uidListOwner: String,
         uidToChange: String,
         add: Boolean
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         val docRef = usersCollection.document(uidListOwner)
         if (add) {
             try {
@@ -209,7 +209,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                         throw Exception()
                     }
             } catch (e: Exception) {
-                return Result.Error(DataError.Firestore.MODIFICATION_ERROR)
+                return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
             }
         } else {
             try {
@@ -222,7 +222,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                         throw Exception()
                     }
             } catch (e: Exception) {
-                return Result.Error(DataError.Firestore.MODIFICATION_ERROR)
+                return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
             }
         }
         return Result.Success(Unit)
@@ -234,7 +234,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         return favList.contains(uidToCheck)
     }
 
-    suspend fun getFavouritesList(uid: String): Result<List<ActorModel>, DataError.Firestore> {
+    suspend fun getFavouritesList(uid: String): Result<List<ActorModel>, FirebaseError.Firestore> {
         return try {
             val doc = usersCollection.document(uid).get().await()
             val favList = doc[FAVOURITES] as List<String>?
@@ -248,14 +248,14 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                 }
                 Result.Success(favActorList.toList())
             } else {
-                Result.Error(DataError.Firestore.CORRUPTED_DATABASE_DATA)
+                Result.Error(FirebaseError.Firestore.CORRUPTED_DATABASE_DATA)
             }
         } catch (e: Exception) {
-            Result.Error(DataError.Firestore.CORRUPTED_DATABASE_DATA)
+            Result.Error(FirebaseError.Firestore.CORRUPTED_DATABASE_DATA)
         }
     }
 
-    fun changeProfilePicture(uid: String, uri: Uri): Result<Unit, DataError.Firestore> {
+    fun changeProfilePicture(uid: String, uri: Uri): Result<Unit, FirebaseError.Firestore> {
         try {
             usersCollection.document(uid).update(PROFILEPHOTO, uri)
                 .addOnSuccessListener {
@@ -266,12 +266,12 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw Exception()
                 }
         } catch (e: Exception) {
-            return Result.Error(DataError.Firestore.MODIFICATION_ERROR)
+            return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
         }
         return Result.Success(Unit)
     }
 
-    fun updateRating(uid: String, newRating: Int): Result<Unit, DataError.Firestore> {
+    fun updateRating(uid: String, newRating: Int): Result<Unit, FirebaseError.Firestore> {
         try {
             usersCollection.document(uid).get()
                 .addOnSuccessListener { docSnapshot ->
@@ -307,7 +307,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                 }
             return Result.Success(Unit)
         } catch (e: Exception) {
-            return Result.Error(DataError.Firestore.MODIFICATION_ERROR)
+            return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
         }
 
     }
@@ -315,7 +315,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     //Services
     private val servicesCollection = firestore.collection(SERVICES_COLLECTION)
 
-    suspend fun getServiceListByUid(uid: String): Result<List<ServiceModel>, DataError.Firestore> {
+    suspend fun getServiceListByUid(uid: String): Result<List<ServiceModel>, FirebaseError.Firestore> {
         val querySnapshot = servicesCollection
             .whereEqualTo(UID, uid)
             .get()
@@ -323,7 +323,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         return fillList(querySnapshot)
     }
 
-    suspend fun getActiveServiceList(): Result<List<ServiceModel>, DataError.Firestore> {
+    suspend fun getActiveServiceList(): Result<List<ServiceModel>, FirebaseError.Firestore> {
         val querySnapshot = servicesCollection
             .whereEqualTo(IS_ACTIVE, true)
             .get()
@@ -331,16 +331,16 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         return fillList(querySnapshot)
     }
 
-    private suspend fun fillList(querySnapshot: QuerySnapshot): Result<List<ServiceModel>, DataError.Firestore> {
+    private suspend fun fillList(querySnapshot: QuerySnapshot): Result<List<ServiceModel>, FirebaseError.Firestore> {
         val serviceList = mutableListOf<ServiceModel>()
         for (document in querySnapshot.documents) {
             val category = when (document.getString(CATEGORY)) {
                 Categories.Beauty.name -> Categories.Beauty
                 Categories.Household.name -> Categories.Household
-                else -> return Result.Error(DataError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE)
+                else -> return Result.Error(FirebaseError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE)
             }
             val ownerUid = document.getString(UID)
-                ?: return Result.Error(DataError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE)
+                ?: return Result.Error(FirebaseError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE)
             when (val owner = getUserData(ownerUid)) {
                 is Result.Error -> return Result.Error(owner.error)
                 is Result.Success -> {
@@ -351,13 +351,13 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                             name = document.getString(NAME)
                                 ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE),
                             isActive = document.getBoolean(IS_ACTIVE) ?: return Result.Error(
-                                DataError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE
+                                FirebaseError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE
                             ),
                             category = category,
                             servDescription = document.getString(SERV_DESCRIPTION)
-                                ?: return Result.Error(DataError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE),
+                                ?: return Result.Error(FirebaseError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE),
                             price = document.getDouble(PRICE)
-                                ?: return Result.Error(DataError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE),
+                                ?: return Result.Error(FirebaseError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE),
                             owner = owner.data
                         )
                     )
@@ -368,7 +368,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         return Result.Success(serviceList.toList())
     }
 
-    fun insertService(service: ServiceModel): Result<Unit, DataError.Firestore> {
+    fun insertService(service: ServiceModel): Result<Unit, FirebaseError.Firestore> {
         val serviceDocument = servicesCollection.document()
 
         val serviceMap: Map<String, Any?> = service.toMap()
@@ -384,12 +384,12 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw it
                 }
         } catch (e: Exception) {
-            return Result.Error(DataError.Firestore.INSERTION_ERROR)
+            return Result.Error(FirebaseError.Firestore.INSERTION_ERROR)
         }
         return Result.Success(Unit)
     }
 
-    fun deleteService(sid: String): Result<Unit, DataError.Firestore> {
+    fun deleteService(sid: String): Result<Unit, FirebaseError.Firestore> {
         try {
             servicesCollection.document(sid).delete()
                 .addOnSuccessListener {
@@ -400,12 +400,12 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw it
                 }
         } catch (e: Exception) {
-            return Result.Error(DataError.Firestore.DELETION_ERROR)
+            return Result.Error(FirebaseError.Firestore.DELETION_ERROR)
         }
         return Result.Success(Unit)
     }
 
-    fun modifyServiceActivity(sid: String, newValue: Boolean): Result<Unit, DataError.Firestore> {
+    fun modifyServiceActivity(sid: String, newValue: Boolean): Result<Unit, FirebaseError.Firestore> {
         try {
             servicesCollection.document(sid).update(IS_ACTIVE, newValue)
                 .addOnSuccessListener {
@@ -416,7 +416,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw it
                 }
         } catch (e: Exception) {
-            return Result.Error(DataError.Firestore.MODIFICATION_ERROR)
+            return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
         }
         return Result.Success(Unit)
     }
@@ -460,7 +460,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         isRequest: Boolean,
         profUid: String,
         request: JobDto
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         val collectionName = if (isRequest) REQUESTS else JOBS
         val docRef = usersCollection.document(profUid).collection(collectionName).document()
         try {
@@ -482,7 +482,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw Exception()
                 }
         } catch (e: Exception) {
-            return Result.Error(if(isRequest)DataError.Firestore.REQUEST_ADDITION_ERROR else DataError.Firestore.JOB_ADDITION_ERROR)
+            return Result.Error(if(isRequest)FirebaseError.Firestore.REQUEST_ADDITION_ERROR else FirebaseError.Firestore.JOB_ADDITION_ERROR)
         }
         return Result.Success(Unit)
     }
@@ -492,7 +492,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         uid: String,
         otherUid: String,
         id: String
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         try {
             val collectionName = if (isRequest) REQUESTS else JOBS
             usersCollection.document(uid).collection(collectionName).document(id).delete()
@@ -514,7 +514,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw Exception()
                 }
         } catch (e: Exception) {
-            return Result.Error(DataError.Firestore.DELETION_ERROR)
+            return Result.Error(FirebaseError.Firestore.DELETION_ERROR)
         }
         return Result.Success(Unit)
     }
@@ -523,7 +523,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         rid: String,
         uid: String,
         request: JobDto
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         return when(val deletion = deleteJobOrRequest(isRequest = true, uid = uid, otherUid = request.otherId, id = rid)){
             is Result.Success -> {
                 when(val addition = addNewJobOrRequest(isRequest = false, profUid = uid, request = request)) {
@@ -540,7 +540,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     fun updateUserLocation(
         uid: String,
         location: LatLng
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         try {
             usersCollection.document(uid).update(LOCATION, location)
                 .addOnSuccessListener {
@@ -551,7 +551,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw Exception()
                 }
         } catch (e: Exception) {
-            return Result.Error(DataError.Firestore.LOCATION_UPDATE_ERROR)
+            return Result.Error(FirebaseError.Firestore.LOCATION_UPDATE_ERROR)
         }
         return Result.Success(Unit)
     }

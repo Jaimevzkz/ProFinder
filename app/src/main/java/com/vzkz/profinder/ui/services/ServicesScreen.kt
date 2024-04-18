@@ -32,7 +32,7 @@ import com.vzkz.profinder.destinations.ViewProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ServiceModel
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.services.components.ServicesScreenShimmer
 import com.vzkz.profinder.ui.services.components.professionalscreen.ProfessionalScreenBody
@@ -56,7 +56,6 @@ fun ServicesScreen(
     activeServices = servicesViewModel.state.activeServiceList
     var inActiveServices: List<ServiceModel> by remember { mutableStateOf(emptyList()) }
     inActiveServices = servicesViewModel.state.inActiveServiceList
-    val error = servicesViewModel.state.error
     var user: ActorModel? by remember { mutableStateOf(null) }
     user = servicesViewModel.state.user
     var actor: Actors? by remember { mutableStateOf(null) }
@@ -71,7 +70,7 @@ fun ServicesScreen(
         activeServices = activeServices,
         requestExists = requestExists,
         inactiveServices = inActiveServices,
-        error = error,
+        error = servicesViewModel.state.error,
         onCheckRequestExists = { servicesViewModel.checkExistingRequests(it) },
         onRequestService = { servicesViewModel.onRequestService(it) },
         onCancelRequest = { servicesViewModel.onDeleteRequest(it) },
@@ -100,7 +99,7 @@ private fun ScreenBody(
     activeServices: List<ServiceModel>,
     requestExists: ServiceState,
     inactiveServices: List<ServiceModel>,
-    error: UiError,
+    error: UiText?,
     onCheckRequestExists: (String) -> Unit,
     onRequestService: (ServiceModel) -> Unit,
     onCancelRequest: (String) -> Unit,
@@ -164,7 +163,9 @@ private fun ScreenBody(
                             onSeeMap = { showMap = true },
                             onCheckRequestExists = onCheckRequestExists,
                             onRequestService = { onRequestService(it) },
-                            onCancelRequest = onCancelRequest
+                            onCancelRequest = onCancelRequest,
+                            onCloseDialog = { onCloseDialog() },
+                            error = error
                         )
                     }
                 }
@@ -211,7 +212,7 @@ fun DarkPreview() {
             activeServices = SERVICELISTFORTEST,
             inactiveServices = SERVICELISTFORTEST,
             requestExists = ServiceState.FREE,
-            error = UiError(false, ""),
+            error = null,
             onCheckRequestExists = {},
             onActivityChange = {},
             onServiceAdded = {},

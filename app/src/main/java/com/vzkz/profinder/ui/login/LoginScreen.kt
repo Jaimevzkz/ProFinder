@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -29,7 +28,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
 import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.SignUpScreenDestination
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.MyAuthHeader
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyEmailTextField
@@ -71,7 +70,7 @@ internal fun ScreenBody(
     onLogin: (String, String) -> Unit,
     onSignUpClicked: () -> Unit,
     onCloseDialog: () -> Unit,
-    error: UiError
+    error: UiText?
 ) {
     Box(
         modifier = Modifier
@@ -138,13 +137,14 @@ internal fun ScreenBody(
             Text(text = stringResource(id = R.string.login))
         }
 
-        MyAlertDialog(
-            title = stringResource(R.string.error_during_login),
-            text = error.errorMsg ?: stringResource(R.string.invalid_password),
-            onDismiss = { onCloseDialog() },
-            onConfirm = { onCloseDialog() },
-            showDialog = error.isError
-        )
+        if(error != null){
+            MyAlertDialog(
+                title = stringResource(R.string.error_during_login),
+                text = error.asString(),
+                onDismiss = { onCloseDialog() },
+                onConfirm = { onCloseDialog() },
+            )
+        }
     }
 }
 
@@ -156,7 +156,7 @@ fun LoginPreview() {
             onLogin = { _, _ -> },
             onSignUpClicked = {},
             onCloseDialog = {},
-            error = UiError(false, "")
+            error = null
         )
     }
 }

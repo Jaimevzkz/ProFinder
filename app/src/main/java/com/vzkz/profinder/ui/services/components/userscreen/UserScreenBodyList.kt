@@ -28,9 +28,11 @@ import com.vzkz.profinder.R
 import com.vzkz.profinder.core.SERVICELISTFORTEST
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.ServiceModel
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyGenericTextField
 import com.vzkz.profinder.ui.components.MySpacer
+import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Composable
@@ -38,10 +40,12 @@ fun UserScreenBody(
     modifier: Modifier = Modifier,
     requestExists: ServiceState,
     serviceList: List<ServiceModel>,
+    error: UiText?,
     onCheckRequestExists: (String) -> Unit,
     onCancelRequest: (String) -> Unit,
     onSeeProfile: (ActorModel) -> Unit,
     onRequestService: (ServiceModel) -> Unit,
+    onCloseDialog: () -> Unit,
     onSeeMap: () -> Unit
 ) {
 
@@ -112,6 +116,15 @@ fun UserScreenBody(
             )
         }
 
+        if(error != null){
+            MyAlertDialog(
+                title = stringResource(R.string.error),
+                text = error.asString(),
+                onDismiss = { onCloseDialog() },
+                onConfirm = { onCloseDialog() },
+            )
+        }
+
     }
 
     if (serviceToShow != null) {
@@ -153,7 +166,9 @@ fun UserScreenBodyPreview() {
             onSeeMap = {},
             onRequestService = {},
             onCheckRequestExists = {},
-            onCancelRequest = {}
+            onCancelRequest = {},
+            error = null,
+            onCloseDialog = {}
         )
     }
 }

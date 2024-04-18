@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.vzkz.profinder.R
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.ServiceModel
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
@@ -40,7 +40,7 @@ fun ProfessionalScreenBody(
     user: ActorModel,
     activeServices: List<ServiceModel>,
     inactiveServices: List<ServiceModel>,
-    error: UiError,
+    error: UiText?,
     addDialogVisibility: Boolean,
     onConfirmDialogVisibilityChange: (Boolean) -> Unit,
     onCloseDialog: () -> Unit,
@@ -128,13 +128,14 @@ fun ProfessionalScreenBody(
             },
             showDialog = confirmDialogVisibility
         )
-        MyAlertDialog(
-            title = stringResource(R.string.error),
-            text = error.errorMsg.orEmpty(),
-            onDismiss = { onCloseDialog() },
-            onConfirm = { onCloseDialog() },
-            showDialog = error.isError
-        )
+        if(error != null){
+            MyAlertDialog(
+                title = stringResource(R.string.error),
+                text = error.asString(),
+                onDismiss = { onCloseDialog() },
+                onConfirm = { onCloseDialog() },
+            )
+        }
     }
 }
 

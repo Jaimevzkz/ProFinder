@@ -1,12 +1,13 @@
 package com.vzkz.profinder.ui.signup
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Professions
-import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.auth.SignUpUseCase
+import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
+import com.vzkz.profinder.ui.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,20 +31,19 @@ class SignUpViewModel @Inject constructor(
             )
 
             is SignUpIntent.SignUp -> state.copy(
-                error = Error(false, null),
                 user = intent.user,
                 loading = false,
                 success = true
             )
 
             is SignUpIntent.Error -> state.copy(
-                error = Error(true, intent.errorMsg),
+                error = intent.error,
                 loading = false,
                 success = false
             )
 
             SignUpIntent.CloseError -> state.copy(
-                error = Error(false, null),
+                error = null,
                 loading = false,
                 success = false
             )
@@ -62,7 +62,7 @@ class SignUpViewModel @Inject constructor(
     ) {
         dispatch(SignUpIntent.Loading(isLoading = true))
         viewModelScope.launch(Dispatchers.IO) {
-            signUpUseCase(
+            when (val signUp = signUpUseCase(
                 email = email,
                 password = password,
                 nickname = nickname,
@@ -70,15 +70,14 @@ class SignUpViewModel @Inject constructor(
                 firstname = firstname,
                 lastname = lastname,
                 profession = profession
-            ).onSuccess { actor ->
-                withContext(Dispatchers.IO) { saveUidDataStoreUseCase(actor.uid) }
-                dispatch(SignUpIntent.SignUp(actor))
+            )) {
+                is Result.Success -> {
+                    withContext(Dispatchers.IO) { saveUidDataStoreUseCase(signUp.data.uid) }
+                    dispatch(SignUpIntent.SignUp(signUp.data))
+                }
 
-            }.onFailure { e ->
-                Log.e("Jaime", e.message.orEmpty())
-                dispatch(SignUpIntent.Error(e.message.orEmpty()))
+                is Result.Error -> dispatch(SignUpIntent.Error(signUp.error.asUiText()))
             }
-
         }
     }
 

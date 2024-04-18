@@ -1,7 +1,6 @@
 package com.vzkz.profinder.ui.profile.viewprofile
 
 import android.content.res.Configuration
-import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,9 +49,8 @@ import com.vzkz.profinder.core.PROFESSIONALMODELFORTESTS
 import com.vzkz.profinder.destinations.IndividualChatScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.MyColumn
-import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.ProfilePicture
 import com.vzkz.profinder.ui.components.RatingBar
@@ -60,7 +58,6 @@ import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.shimmer.IconShimmer
 import com.vzkz.profinder.ui.components.starColor
 import com.vzkz.profinder.ui.theme.ProFinderTheme
-import com.vzkz.profinder.ui.theme.orange
 
 @Destination
 @Composable
@@ -87,7 +84,7 @@ fun ViewProfileScreen(
             viewProfileViewModel.onFavouriteChanged(uidToChange = uidToSee, add = !isFavourite)
         },
         onChatClicked = {
-            if(uid != null){
+            if (uid != null) {
                 navigator.navigate(
                     IndividualChatScreenDestination(
                         otherNickname = userToSee?.nickname ?: "Guess",
@@ -110,7 +107,7 @@ fun ViewProfileScreen(
 @Composable
 private fun ScreenBody(
     userToSee: ActorModel,
-    error: UiError,
+    error: UiText?,
     loading: Boolean,
     isFavourite: Boolean,
     onChangeFavourite: () -> Unit,
@@ -302,14 +299,14 @@ private fun ScreenBody(
             }
         }
 
-
-        MyAlertDialog(
-            title = stringResource(R.string.error),
-            text = error.errorMsg.orEmpty(),
-            onDismiss = { onCloseDialog() },
-            onConfirm = { onCloseDialog() },
-            showDialog = error.isError
-        )
+        if (error != null) {
+            MyAlertDialog(
+                title = stringResource(R.string.error),
+                text = error.asString(),
+                onDismiss = { onCloseDialog() },
+                onConfirm = { onCloseDialog() },
+            )
+        }
     }
 }
 
@@ -425,7 +422,7 @@ private fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
             userToSee = PROFESSIONALMODELFORTESTS,
-            error = UiError(false, "Account wasn't created"),
+            error = null,
             isFavourite = true,
             onChangeFavourite = {},
             onChatClicked = {},

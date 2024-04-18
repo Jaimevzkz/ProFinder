@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -49,7 +48,7 @@ import com.vzkz.profinder.core.INDIVIDUALCHATITEMFORTEST
 import com.vzkz.profinder.destinations.ChatScreenDestination
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.ReadStatus
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyGenericTextField
 import com.vzkz.profinder.ui.components.MyRow
@@ -120,7 +119,7 @@ private fun ScreenBody(
     onFormatTime: (Long) -> String,
     onGetDate: (Long) -> String,
     onBackClicked: () -> Unit,
-    error: UiError,
+    error: UiText?,
     onCloseDialog: () -> Unit,
 ) {
     var message by remember { mutableStateOf("") }
@@ -266,17 +265,17 @@ private fun ScreenBody(
                     scrollState.scrollToItem(messageList.size - 1)
             }
 
-            MyAlertDialog(
-                title = stringResource(R.string.error),
-                text = error.errorMsg.orEmpty(),
-                onDismiss = { onCloseDialog() },
-                onConfirm = { onCloseDialog() },
-                showDialog = error.isError
-            )
+            if(error != null){
+                MyAlertDialog(
+                    title = stringResource(R.string.error),
+                    text = error.asString(),
+                    onDismiss = { onCloseDialog() },
+                    onConfirm = { onCloseDialog() },
+                )
+            }
         }
 
     }
-
 }
 
 @Composable
@@ -350,7 +349,7 @@ private fun LightPreview() {
             nickname = "larbyysbarber",
             profilePhoto = null,
             onFormatTime = { _ -> "12:00 PM" },
-            error = UiError(false, "Account wasn't created"),
+            error = null,
             onBackClicked = {},
             onCloseDialog = {},
             onSendMessage = {},

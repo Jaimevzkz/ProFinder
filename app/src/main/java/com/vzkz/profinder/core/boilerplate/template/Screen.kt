@@ -14,7 +14,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
-import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 

@@ -4,10 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.DateFormatter
 import com.vzkz.profinder.core.UidCombiner
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.usecases.chat.GetRecentChatsUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
-import com.vzkz.profinder.ui.home.HomeIntent
+import com.vzkz.profinder.ui.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,12 +30,12 @@ class ChatViewModel @Inject constructor(
 
 
             is ChatIntent.Error -> state.copy(
-                error = UiError(true, intent.errorMsg),
+                error = intent.error,
                 loading = false
             )
 
             ChatIntent.CloseError -> state.copy(
-                error = UiError(false, null),
+                error = null,
                 loading = false
             )
 
@@ -51,15 +51,16 @@ class ChatViewModel @Inject constructor(
     //Observe events from UI and dispatch them, this are the methods called from the UI
 
     fun onInit() {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                dispatch(ChatIntent.SetUid(getUidDataStoreUseCase()))
-                getRecentChatsUseCase().collect { updatedList ->
-                    dispatch(ChatIntent.UpdateList(updatedList.reversed()))
+        viewModelScope.launch(Dispatchers.IO) {
+            dispatch(ChatIntent.SetUid(getUidDataStoreUseCase()))
+            when(val flow = getRecentChatsUseCase()){
+                is Result.Success -> {
+                    flow.data.collect { updatedList ->
+                        dispatch(ChatIntent.UpdateList(updatedList.reversed()))
+                    }
                 }
+                is Result.Error -> dispatch(ChatIntent.Error(flow.error.asUiText()))
             }
-        } catch (e: Exception) {
-            dispatch(ChatIntent.Error(e.message.orEmpty()))
         }
     }
 

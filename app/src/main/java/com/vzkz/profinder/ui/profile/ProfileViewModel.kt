@@ -2,11 +2,12 @@ package com.vzkz.profinder.ui.profile
 
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.model.ProfState
-import com.vzkz.profinder.domain.model.UiError
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import com.vzkz.profinder.domain.usecases.auth.LogoutUseCase
 import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCase
+import com.vzkz.profinder.ui.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,14 +28,13 @@ class ProfileViewModel @Inject constructor(
             ProfileIntent.Logout -> state.copy(logout = true)
             is ProfileIntent.Error -> state.copy(
                 logout = false,
-                error = UiError(true, intent.errorMsg),
+                error = intent.error,
                 loading = true
             )
 
             is ProfileIntent.SetUser -> state.copy(
                 logout = false,
                 user = intent.user,
-                error = UiError(false, null),
                 loading = false
             )
 
@@ -43,7 +43,7 @@ class ProfileViewModel @Inject constructor(
             }
 
             is ProfileIntent.CloseError -> state.copy(
-                error = UiError(false, null),
+                error = null,
                 loading = false
             )
         }
@@ -51,13 +51,9 @@ class ProfileViewModel @Inject constructor(
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                val user = getUserUseCase()
-                dispatch(ProfileIntent.SetUser(user))
-            }
-        } catch (e: Exception) {
-            dispatch(ProfileIntent.Error(e.message ?: "Error getting user"))
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = getUserUseCase()
+            dispatch(ProfileIntent.SetUser(user))
         }
     }
 
@@ -69,11 +65,11 @@ class ProfileViewModel @Inject constructor(
     }
     
     fun onChangeState(uid: String, state: ProfState){
-        try{
-            viewModelScope.launch(Dispatchers.IO) { changeStateUseCase(uid = uid, state = state) }
-            dispatch(ProfileIntent.SetState(state))
-        } catch(e: Exception){
-            dispatch(ProfileIntent.Error(e.message.orEmpty()))
+        viewModelScope.launch(Dispatchers.IO) {
+            when(val change = changeStateUseCase(uid = uid, state = state)){
+                is Result.Success -> dispatch(ProfileIntent.SetState(state))
+                is Result.Error -> dispatch(ProfileIntent.Error(change.error.asUiText()))
+            }
         }
     }
 

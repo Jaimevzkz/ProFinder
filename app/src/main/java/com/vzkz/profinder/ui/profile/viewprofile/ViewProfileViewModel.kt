@@ -3,10 +3,11 @@ package com.vzkz.profinder.ui.profile.viewprofile
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.UidCombiner
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCase
+import com.vzkz.profinder.ui.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,12 +28,12 @@ class ViewProfileViewModel @Inject constructor(
 
 
             is ViewProfileIntent.Error -> state.copy(
-                error = UiError(true, intent.errorMsg),
+                error = intent.error,
                 loading = false
             )
 
             ViewProfileIntent.CloseError -> state.copy(
-                error = UiError(false, null),
+                error = null,
                 loading = false
             )
 
@@ -64,12 +65,12 @@ class ViewProfileViewModel @Inject constructor(
 
     fun onFavouriteChanged(uidToChange: String, add: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            favouriteListUseCase.changeFavouriteList(uidToChange, add)
-            dispatch(ViewProfileIntent.ChangeFavourite(add))
+            when(val favList = favouriteListUseCase.changeFavouriteList(uidToChange, add)){
+                is Result.Success -> dispatch(ViewProfileIntent.ChangeFavourite(add))
+                is Result.Error -> dispatch(ViewProfileIntent.Error(favList.error.asUiText()))
+            }
         }
     }
 
     fun combineUids(uid1: String, uid2: String) = uidCombiner.combineUids(uid1 = uid1, uid2 = uid2)
-
-
 }

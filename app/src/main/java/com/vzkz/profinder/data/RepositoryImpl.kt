@@ -14,7 +14,7 @@ import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.data.firebase.RealtimeService
 import com.vzkz.profinder.data.firebase.StorageService
 import com.vzkz.profinder.domain.Repository
-import com.vzkz.profinder.domain.error.DataError
+import com.vzkz.profinder.domain.error.FirebaseError
 import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
@@ -38,12 +38,12 @@ class RepositoryImpl @Inject constructor(
 ) : Repository {
 
     //Firebase
-    override suspend fun login(email: String, password: String): Result<ActorModel, DataError> {
+    override suspend fun login(email: String, password: String): Result<ActorModel, FirebaseError> {
         val user: FirebaseUser?
         try {
             user = authService.login(email, password)
         } catch (e: Exception) {
-            return Result.Error(DataError.Authentication.WRONG_EMAIL_OR_PASSWORD)
+            return Result.Error(FirebaseError.Authentication.WRONG_EMAIL_OR_PASSWORD)
         }
         return if (user != null) {
             when (val userFromFirestore = getUserFromFirestore(user.uid)) {
@@ -52,10 +52,10 @@ class RepositoryImpl @Inject constructor(
                     Result.Success(userFromFirestore.data)
                 }
             }
-        } else Result.Error(DataError.Firestore.USER_NOT_FOUND_IN_DATABASE)
+        } else Result.Error(FirebaseError.Firestore.USER_NOT_FOUND_IN_DATABASE)
     }
 
-    override suspend fun getUserFromFirestore(uid: String): Result<ActorModel, DataError.Firestore> {
+    override suspend fun getUserFromFirestore(uid: String): Result<ActorModel, FirebaseError.Firestore> {
         return when (val userData = firestoreService.getUserData(uid)) {
             is Result.Success -> {
                 val profilePhoto = storageService.getProfilePhoto(uid)
@@ -67,7 +67,7 @@ class RepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun getServiceListByUidFromFirestore(uid: String): Result<List<ServiceModel>, DataError.Firestore> {
+    override suspend fun getServiceListByUidFromFirestore(uid: String): Result<List<ServiceModel>, FirebaseError.Firestore> {
         return when (val serviceList = firestoreService.getServiceListByUid(uid)) {
             is Result.Success -> Result.Success(serviceList.data)
 
@@ -75,7 +75,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getActiveServiceListFromFirestore(): Result<List<ServiceModel>, DataError.Firestore> {
+    override suspend fun getActiveServiceListFromFirestore(): Result<List<ServiceModel>, FirebaseError.Firestore> {
         return when (val activeServices = firestoreService.getActiveServiceList()) {
             is Result.Success -> Result.Success(activeServices.data)
 
@@ -84,7 +84,7 @@ class RepositoryImpl @Inject constructor(
     }
 
 
-    override fun insertServiceInFirestore(service: ServiceModel): Result<Unit, DataError.Firestore> {
+    override fun insertServiceInFirestore(service: ServiceModel): Result<Unit, FirebaseError.Firestore> {
         return when (val serviceFromFirestore = firestoreService.insertService(service)) {
             is Result.Success -> Result.Success(serviceFromFirestore.data)
 
@@ -92,7 +92,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun deleteService(sid: String): Result<Unit, DataError.Firestore> {
+    override fun deleteService(sid: String): Result<Unit, FirebaseError.Firestore> {
         return when (val deletion = firestoreService.deleteService(sid)) {
             is Result.Success -> Result.Success(deletion.data)
 
@@ -108,9 +108,9 @@ class RepositoryImpl @Inject constructor(
         lastname: String,
         actor: Actors,
         profession: Professions?
-    ): Result<ActorModel, DataError> {
+    ): Result<ActorModel, FirebaseError> {
         if (firestoreService.nicknameExists(nickname)) {
-            return Result.Error(DataError.Authentication.USERNAME_ALREADY_IN_USE)
+            return Result.Error(FirebaseError.Authentication.USERNAME_ALREADY_IN_USE)
         } else {
             val user: ActorModel
             try {
@@ -128,7 +128,7 @@ class RepositoryImpl @Inject constructor(
                     throw Exception()
                 }
             } catch (e: Exception) {
-                return Result.Error(DataError.Authentication.ACCOUNT_WITH_THAT_EMAIL_ALREADY_EXISTS)
+                return Result.Error(FirebaseError.Authentication.ACCOUNT_WITH_THAT_EMAIL_ALREADY_EXISTS)
             }
             return when (val userFromFirestore = firestoreService.insertUser(user)) {
                 is Result.Success -> Result.Success(user)
@@ -144,7 +144,7 @@ class RepositoryImpl @Inject constructor(
     override suspend fun modifyUserData(
         oldUser: ActorModel,
         newUser: ActorModel
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         return when (val modification =
             firestoreService.modifyUserData(oldUser = oldUser, newUser = newUser)) {
             is Result.Success -> Result.Success(modification.data)
@@ -152,7 +152,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun changeProfState(uid: String, state: ProfState): Result<Unit, DataError.Firestore> {
+    override fun changeProfState(uid: String, state: ProfState): Result<Unit, FirebaseError.Firestore> {
         return when (val modification = firestoreService.changeProfState(uid, state)) {
             is Result.Success -> Result.Success(modification.data)
             is Result.Error -> Result.Error(modification.error)
@@ -162,7 +162,7 @@ class RepositoryImpl @Inject constructor(
     override fun modifyServiceActivity(
         sid: String,
         newValue: Boolean
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         return when (val modification = firestoreService.modifyServiceActivity(sid, newValue)) {
             is Result.Success -> Result.Success(modification.data)
             is Result.Error -> Result.Error(modification.error)
@@ -173,7 +173,7 @@ class RepositoryImpl @Inject constructor(
         uidListOwner: String,
         uidToChange: String,
         add: Boolean
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         return when (val modification = firestoreService.changeFavouritesList(
             uidListOwner = uidListOwner,
             uidToChange = uidToChange,
@@ -191,14 +191,14 @@ class RepositoryImpl @Inject constructor(
         )
 
 
-    override suspend fun getFavouriteList(uid: String): Result<List<ActorModel>, DataError.Firestore> {
+    override suspend fun getFavouriteList(uid: String): Result<List<ActorModel>, FirebaseError.Firestore> {
         return when (val favList = firestoreService.getFavouritesList(uid)) {
             is Result.Success -> Result.Success(favList.data)
             is Result.Error -> Result.Error(favList.error)
         }
     }
 
-    override fun updateRating(uid: String, newRating: Int): Result<Unit, DataError.Firestore> {
+    override fun updateRating(uid: String, newRating: Int): Result<Unit, FirebaseError.Firestore> {
         return when (val modification =
             firestoreService.updateRating(uid = uid, newRating = newRating)) {
             is Result.Success -> Result.Success(modification.data)
@@ -209,12 +209,12 @@ class RepositoryImpl @Inject constructor(
     override fun getJobsOrRequests(
         isRequest: Boolean,
         uid: String
-    ): Result<Flow<List<JobModel>>, DataError.Firestore> {
+    ): Result<Flow<List<JobModel>>, FirebaseError.Firestore> {
         return try {
             val flow = firestoreService.getJobsOrRequests(isRequest = isRequest, uid = uid)
             Result.Success(flow)
         } catch (e: Exception) {
-            Result.Error(DataError.Firestore.NONEXISTENT_REQUEST_ATTRIBUTE)
+            Result.Error(FirebaseError.Firestore.NONEXISTENT_REQUEST_ATTRIBUTE)
         }
     }
 
@@ -227,7 +227,7 @@ class RepositoryImpl @Inject constructor(
         serviceName: String,
         serviceId: String,
         price: Double
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         return when (val addition =
             firestoreService.addNewJobOrRequest(
                 isRequest = isRequest,
@@ -251,7 +251,7 @@ class RepositoryImpl @Inject constructor(
         uid: String,
         otherUid: String,
         id: String
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         return when (val deletion =
             firestoreService.deleteJobOrRequest(
                 isRequest = isRequest,
@@ -268,7 +268,7 @@ class RepositoryImpl @Inject constructor(
         ownerNickname: String,
         uid: String,
         request: JobModel
-    ): Result<Unit, DataError.Firestore> {
+    ): Result<Unit, FirebaseError.Firestore> {
         return when (val modification =
             firestoreService.turnRequestIntoJob(
                 request.id,
@@ -303,11 +303,11 @@ class RepositoryImpl @Inject constructor(
     }
 
     //Realtime
-    override fun getRecentChats(uid: String): Result<Flow<List<ChatListItemModel>>, DataError.Realtime> {
+    override fun getRecentChats(uid: String): Result<Flow<List<ChatListItemModel>>, FirebaseError.Realtime> {
         return try {
             Result.Success(realtimeService.getRecentChats(uid))
         } catch (e: Exception) {
-            Result.Error(DataError.Realtime.ERROR_GETTING_RECENT_CHATS)
+            Result.Error(FirebaseError.Realtime.ERROR_GETTING_RECENT_CHATS)
         }
     }
 
@@ -353,7 +353,7 @@ class RepositoryImpl @Inject constructor(
         timestamp: Long,
         senderUid: String,
         participants: Map<String, ParticipantDataDto>
-    ): Result<Unit, DataError.Realtime> {
+    ): Result<Unit, FirebaseError.Realtime> {
         return when (val update = realtimeService.updateRecentChats(
             combinedUids = combinedUid,
             message = message,
@@ -373,20 +373,20 @@ class RepositoryImpl @Inject constructor(
     override fun getUnreadMsgAndOwner(
         ownerUid: String,
         combinedUid: String
-    ): Result<Flow<Pair<Boolean, Int>>, DataError.Realtime> {
+    ): Result<Flow<Pair<Boolean, Int>>, FirebaseError.Realtime> {
         return try {
             val flow =
                 realtimeService.getUnreadMsgAndOwner(ownerUid = ownerUid, combinedUid = combinedUid)
             Result.Success(flow)
         } catch (e: Exception) {
-            Result.Error(DataError.Realtime.ERROR_GETTING_RECENT_CHATS)
+            Result.Error(FirebaseError.Realtime.ERROR_GETTING_RECENT_CHATS)
         }
     }
 
     override fun getIndividualChat(
         ownerUid: String,
         otherUid: String
-    ): Result<Flow<List<ChatMsgModel>>, DataError.Realtime> {
+    ): Result<Flow<List<ChatMsgModel>>, FirebaseError.Realtime> {
         return try {
             val flow =
                 realtimeService.getChats(
@@ -395,7 +395,7 @@ class RepositoryImpl @Inject constructor(
                 )
             Result.Success(flow)
         } catch (e: Exception) {
-            Result.Error(DataError.Realtime.ERROR_GETTING_RECENT_CHATS)
+            Result.Error(FirebaseError.Realtime.ERROR_GETTING_RECENT_CHATS)
         }
     }
 

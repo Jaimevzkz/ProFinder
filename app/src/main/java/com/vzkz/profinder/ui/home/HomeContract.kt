@@ -4,13 +4,13 @@ import com.vzkz.profinder.core.boilerplate.IndividualChatntent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.JobModel
-import com.vzkz.profinder.domain.model.UiError
+import com.vzkz.profinder.ui.UiText
 
 
 data class HomeState(
     val loading: Boolean,
     val isUser: Boolean,
-    val error: UiError,
+    val error: UiText?,
     val favList: List<ActorModel>,
     val requestList: List<JobModel>,
     val jobList: List<JobModel>
@@ -19,7 +19,7 @@ data class HomeState(
         val initial: HomeState = HomeState(
             loading = true,
             isUser = false,
-            error = UiError(false, null),
+            error = null,
             favList = emptyList(),
             requestList = emptyList(),
             jobList = emptyList()
@@ -29,7 +29,7 @@ data class HomeState(
 
 sealed class HomeIntent: IndividualChatntent {
     data object Loading: HomeIntent()
-    data class Error(val errorMsg: String): HomeIntent()
+    data class Error(val error: UiText): HomeIntent()
     data object CloseError: HomeIntent()
     data class ChangeFavList(val favList: List<ActorModel>): HomeIntent()
     data class ChangeRequestList(val requestList: List<JobModel>): HomeIntent()
