@@ -17,11 +17,15 @@ class TurnJobIntoRequestUseCaseImpl @Inject constructor(
     private val getUserUseCase: GetUserUseCase
 ) : TurnJobIntoRequestUseCase {
     override suspend operator fun invoke(request: JobModel): Result<Unit, FirebaseError.Firestore> {
-        val user = getUserUseCase()
-        return repository.turnRequestIntoJob(
-            ownerNickname = user.nickname,
-            uid = user.uid,
-            request = request
-        )
+        return when(val user = getUserUseCase()){
+            is Result.Success -> {
+                repository.turnRequestIntoJob(
+                    ownerNickname = user.data.nickname,
+                    uid = user.data.uid,
+                    request = request
+                )
+            }
+            is Result.Error -> Result.Error(user.error)
+        }
     }
 }

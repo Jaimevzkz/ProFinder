@@ -1,6 +1,5 @@
 package com.vzkz.profinder.ui.login
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.error.Result

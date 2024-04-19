@@ -26,14 +26,16 @@ import com.vzkz.profinder.domain.usecases.jobs.CheckExistingRequestUseCase
 import com.vzkz.profinder.domain.usecases.jobs.CheckExistingRequestUseCaseImpl
 import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCase
 import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCaseImpl
-import com.vzkz.profinder.domain.usecases.jobs.GetRequestsUseCase
-import com.vzkz.profinder.domain.usecases.jobs.GetRequestsUseCaseImpl
+import com.vzkz.profinder.domain.usecases.jobs.GetJobOrRequestsUseCase
+import com.vzkz.profinder.domain.usecases.jobs.GetJobOrRequestsUseCaseImpl
 import com.vzkz.profinder.domain.usecases.jobs.RateJobUseCase
 import com.vzkz.profinder.domain.usecases.jobs.RateJobUseCaseUseCaseImpl
 import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCase
 import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCaseImpl
 import com.vzkz.profinder.domain.usecases.location.GetLocationUseCase
 import com.vzkz.profinder.domain.usecases.location.GetLocationUseCaseImpl
+import com.vzkz.profinder.domain.usecases.location.GetOtherLocationsUseCase
+import com.vzkz.profinder.domain.usecases.location.GetOtherLocationsUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCase
 import com.vzkz.profinder.domain.usecases.services.ChangeServiceActivityUseCaseImpl
 import com.vzkz.profinder.domain.usecases.services.DeleteServiceUseCase
@@ -116,7 +118,7 @@ abstract class UseCaseModule {
     @Binds
     abstract fun bindGetUnreadMessageAndOwnerUseCase(impl: GetUnreadMessageAndOwnerUseCaseImpl): GetUnreadMessageAndOwnerUseCase
     @Binds
-    abstract fun bindGetRequestsUseCase(impl: GetRequestsUseCaseImpl): GetRequestsUseCase
+    abstract fun bindGetRequestsUseCase(impl: GetJobOrRequestsUseCaseImpl): GetJobOrRequestsUseCase
     @Binds
     abstract fun bindAddRequestsUseCase(impl: AddJobOrJobOrRequestsUseCaseImpl): AddJobOrRequestsUseCase
     @Binds
@@ -129,4 +131,6 @@ abstract class UseCaseModule {
     abstract fun bindRateJobUseCase(impl: RateJobUseCaseUseCaseImpl): RateJobUseCase
     @Binds
     abstract fun bindGetLocationUseCase(impl: GetLocationUseCaseImpl): GetLocationUseCase
+    @Binds
+    abstract fun bindGetLocationsUseCase(impl: GetOtherLocationsUseCaseImpl): GetOtherLocationsUseCase
 }

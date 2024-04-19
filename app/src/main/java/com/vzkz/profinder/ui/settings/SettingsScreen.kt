@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -63,7 +64,7 @@ private fun ScreenBody(
         IconButton(modifier = Modifier.align(Alignment.TopStart), onClick = {
             onBackClicked()
         }) {
-            Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Cancel")
+            Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Cancel")
         }
         Column(
             Modifier.align(Alignment.TopCenter),

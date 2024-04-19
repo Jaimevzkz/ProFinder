@@ -9,6 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults.centerAlignedTopAppBarColors
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.android.gms.maps.model.LatLng
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
@@ -31,9 +33,10 @@ import com.vzkz.profinder.destinations.ServicesScreenDestination
 import com.vzkz.profinder.destinations.ViewProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
+import com.vzkz.profinder.domain.model.LocationModel
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.UiText
-import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
+import com.vzkz.profinder.ui.components.bottombar.MyBottomBar
 import com.vzkz.profinder.ui.services.components.ServicesScreenShimmer
 import com.vzkz.profinder.ui.services.components.professionalscreen.ProfessionalScreenBody
 import com.vzkz.profinder.ui.services.components.userscreen.MapScreenBody
@@ -70,6 +73,8 @@ fun ServicesScreen(
         activeServices = activeServices,
         requestExists = requestExists,
         inactiveServices = inActiveServices,
+        location = servicesViewModel.state.location,
+        otherLocations = servicesViewModel.state.otherLocations,
         error = servicesViewModel.state.error,
         onCheckRequestExists = { servicesViewModel.checkExistingRequests(it) },
         onRequestService = { servicesViewModel.onRequestService(it) },
@@ -99,6 +104,8 @@ private fun ScreenBody(
     activeServices: List<ServiceModel>,
     requestExists: ServiceState,
     inactiveServices: List<ServiceModel>,
+    location: LatLng?,
+    otherLocations: List<LocationModel>,
     error: UiText?,
     onCheckRequestExists: (String) -> Unit,
     onRequestService: (ServiceModel) -> Unit,
@@ -112,9 +119,15 @@ private fun ScreenBody(
 ) {
     var addDialogVisibility by remember { mutableStateOf(false) }
     var showMap by remember { mutableStateOf(false) }
-    MyBottomBarScaffold(
-        currentDestination = ServicesScreenDestination,
-        onBottomBarClicked = { onBottomBarClicked(it) },
+    Scaffold(
+        bottomBar = {
+            if (!showMap) {
+                MyBottomBar(
+                    currentDestination = ServicesScreenDestination,
+                    onClick = { if (ServicesScreenDestination != it) onBottomBarClicked(it) }
+                )
+            }
+        },
         topBar = {
             if (!showMap) {
                 CenterAlignedTopAppBar(
@@ -152,7 +165,9 @@ private fun ScreenBody(
                     if (showMap) {
                         MapScreenBody(
                             modifier = Modifier.padding(paddingValues),
-                            onSeeList = { showMap = false }
+                            onSeeList = { showMap = false },
+                            location = location,
+                            otherLocations = otherLocations
                         )
                     } else {
                         UserScreenBody(
@@ -213,6 +228,8 @@ fun DarkPreview() {
             inactiveServices = SERVICELISTFORTEST,
             requestExists = ServiceState.FREE,
             error = null,
+            location = null,
+            otherLocations = emptyList(),
             onCheckRequestExists = {},
             onActivityChange = {},
             onServiceAdded = {},
@@ -222,7 +239,7 @@ fun DarkPreview() {
             user = PROFESSIONALMODELFORTESTS,
             onSeeProfile = {},
             onRequestService = {},
-            onCancelRequest = {}
+            onCancelRequest = {},
         )
     }
 }

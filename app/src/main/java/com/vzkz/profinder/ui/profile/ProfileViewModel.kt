@@ -52,8 +52,10 @@ class ProfileViewModel @Inject constructor(
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
         viewModelScope.launch(Dispatchers.IO) {
-            val user = getUserUseCase()
-            dispatch(ProfileIntent.SetUser(user))
+            when(val user = getUserUseCase()){
+                is Result.Success -> dispatch(ProfileIntent.SetUser(user.data))
+                is Result.Error -> dispatch(ProfileIntent.Error(user.error.asUiText()))
+            }
         }
     }
 

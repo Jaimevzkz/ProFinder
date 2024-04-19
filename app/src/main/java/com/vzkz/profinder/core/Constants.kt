@@ -13,7 +13,12 @@ object Constants {
     const val FAVOURITES = "favourites"
     const val RATING = "rating"
     const val REVIEW_NUMBER = "reviewNumber"
+
+    //Location
+    const val LOCATION_COLLECTION = "locations"
     const val LOCATION = "location"
+    const val LATITUDE = "latitude"
+    const val LONGITUDE = "longitude"
 
     //Services
     const val SERVICES_COLLECTION = "services"

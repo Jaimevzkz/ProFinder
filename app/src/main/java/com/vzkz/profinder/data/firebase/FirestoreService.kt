@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.vzkz.profinder.core.Constants.CATEGORY
@@ -15,7 +16,10 @@ import com.vzkz.profinder.core.Constants.IS_ACTIVE
 import com.vzkz.profinder.core.Constants.IS_USER
 import com.vzkz.profinder.core.Constants.JOBS
 import com.vzkz.profinder.core.Constants.LASTNAME
+import com.vzkz.profinder.core.Constants.LATITUDE
 import com.vzkz.profinder.core.Constants.LOCATION
+import com.vzkz.profinder.core.Constants.LOCATION_COLLECTION
+import com.vzkz.profinder.core.Constants.LONGITUDE
 import com.vzkz.profinder.core.Constants.MODIFICATION_ERROR
 import com.vzkz.profinder.core.Constants.NAME
 import com.vzkz.profinder.core.Constants.NICKNAME
@@ -42,6 +46,7 @@ import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Categories
 import com.vzkz.profinder.domain.model.JobModel
+import com.vzkz.profinder.domain.model.LocationModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
@@ -241,7 +246,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             val favActorList = mutableListOf<ActorModel>()
             if (favList != null) {
                 for (fav in favList) {
-                    when (val userData = getUserData(uid)) {
+                    when (val userData = getUserData(fav)) {
                         is Result.Error -> return Result.Error(userData.error)
                         is Result.Success -> favActorList.add(userData.data)
                     }
@@ -405,7 +410,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         return Result.Success(Unit)
     }
 
-    fun modifyServiceActivity(sid: String, newValue: Boolean): Result<Unit, FirebaseError.Firestore> {
+    fun modifyServiceActivity(
+        sid: String,
+        newValue: Boolean
+    ): Result<Unit, FirebaseError.Firestore> {
         try {
             servicesCollection.document(sid).update(IS_ACTIVE, newValue)
                 .addOnSuccessListener {
@@ -422,7 +430,6 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     }
 
     //Requests/jobs
-    //todo handle error in repo
     fun getJobsOrRequests(isRequest: Boolean, uid: String): Flow<List<JobModel>> = callbackFlow {
         val requestList = mutableListOf<JobModel>()
         val collectionName = if (isRequest) REQUESTS else JOBS
@@ -438,7 +445,8 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                                     ?: throw Exception(),
                                 otherUid = docSnapshot.getString(OTHER_ID) ?: throw Exception(),
                                 serviceId = docSnapshot.getString(SERVICE_ID) ?: throw Exception(),
-                                serviceName = docSnapshot.getString(SERVICE_NAME) ?: throw Exception(),
+                                serviceName = docSnapshot.getString(SERVICE_NAME)
+                                    ?: throw Exception(),
                                 price = docSnapshot.getDouble(PRICE) ?: throw Exception()
                             )
                         )
@@ -482,7 +490,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                     throw Exception()
                 }
         } catch (e: Exception) {
-            return Result.Error(if(isRequest)FirebaseError.Firestore.REQUEST_ADDITION_ERROR else FirebaseError.Firestore.JOB_ADDITION_ERROR)
+            return Result.Error(if (isRequest) FirebaseError.Firestore.REQUEST_ADDITION_ERROR else FirebaseError.Firestore.JOB_ADDITION_ERROR)
         }
         return Result.Success(Unit)
     }
@@ -498,13 +506,17 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             usersCollection.document(uid).collection(collectionName).document(id).delete()
                 .addOnSuccessListener {
                     Log.i("Jaime", "Job/Request deleted correctly")
-                    usersCollection.document(otherUid).collection(collectionName).document(id).delete()
+                    usersCollection.document(otherUid).collection(collectionName).document(id)
+                        .delete()
                         .addOnSuccessListener {
                             Log.i("Jaime", "Job/Request 2 deleted correctly")
 
                         }
                         .addOnFailureListener {
-                            Log.e("Jaime", "Error deleting job/request 2 from firestore: ${it.message}")
+                            Log.e(
+                                "Jaime",
+                                "Error deleting job/request 2 from firestore: ${it.message}"
+                            )
                             throw Exception()
                         }
 
@@ -524,9 +536,11 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         uid: String,
         request: JobDto
     ): Result<Unit, FirebaseError.Firestore> {
-        return when(val deletion = deleteJobOrRequest(isRequest = true, uid = uid, otherUid = request.otherId, id = rid)){
+        return when (val deletion =
+            deleteJobOrRequest(isRequest = true, uid = uid, otherUid = request.otherId, id = rid)) {
             is Result.Success -> {
-                when(val addition = addNewJobOrRequest(isRequest = false, profUid = uid, request = request)) {
+                when (val addition =
+                    addNewJobOrRequest(isRequest = false, profUid = uid, request = request)) {
                     is Result.Error -> Result.Error(addition.error)
                     is Result.Success -> Result.Success(Unit)
                 }
@@ -537,12 +551,20 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     }
 
     //Location
+    private val locationCollection = firestore.collection(LOCATION_COLLECTION)
     fun updateUserLocation(
         uid: String,
+        profilePhoto: Uri?,
         location: LatLng
     ): Result<Unit, FirebaseError.Firestore> {
         try {
-            usersCollection.document(uid).update(LOCATION, location)
+            val locationData: MutableMap<String, Any> = mutableMapOf()
+            if (profilePhoto != null)
+                locationData[PROFILEPHOTO] = profilePhoto.toString()
+
+            locationData[LOCATION] = GeoPoint(location.latitude, location.longitude)
+
+            locationCollection.document(uid).set(locationData, SetOptions.merge())
                 .addOnSuccessListener {
                     Log.i("Jaime", "Location updated succesfully")
                 }
@@ -555,4 +577,40 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         }
         return Result.Success(Unit)
     }
+
+    fun getLocations(uid: String): Flow<List<LocationModel>> = callbackFlow {
+        val locationList = mutableListOf<LocationModel>()
+        val listener =
+            locationCollection
+                .addSnapshotListener { value, error ->
+                    locationList.clear()
+                    value?.documents?.forEach { docSnapshot ->
+                        if(docSnapshot.id != uid){
+                            val location = docSnapshot.getGeoPoint(LOCATION)
+                            val profilePicture = docSnapshot.getString(PROFILEPHOTO)
+                            locationList.add(
+                                LocationModel(
+                                    uid = docSnapshot.id,
+                                    profilePhoto  = profilePicture?.let { Uri.parse(it) },
+                                    location = LatLng(
+                                        location?.latitude ?: throw Exception(),
+                                        location.longitude
+                                    )
+                                )
+                            )
+                        }
+                    }
+                    if (error != null) {
+                        Log.e("Jaime", "error found getting locations: ${error.message}")
+                        throw Exception(error.message)
+                    }
+                    trySend(locationList)
+                }
+        awaitClose {
+            // Cancel the snapshot listener when the flow is closed
+            listener.remove()
+        }
+
+    }
 }
+

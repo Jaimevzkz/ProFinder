@@ -21,6 +21,7 @@ import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.JobModel
+import com.vzkz.profinder.domain.model.LocationModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
@@ -152,7 +153,10 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun changeProfState(uid: String, state: ProfState): Result<Unit, FirebaseError.Firestore> {
+    override fun changeProfState(
+        uid: String,
+        state: ProfState
+    ): Result<Unit, FirebaseError.Firestore> {
         return when (val modification = firestoreService.changeProfState(uid, state)) {
             is Result.Success -> Result.Success(modification.data)
             is Result.Error -> Result.Error(modification.error)
@@ -292,7 +296,7 @@ class RepositoryImpl @Inject constructor(
         uri: Uri,
         uid: String,
         oldProfileUri: Uri?
-    ): Uri { //throws exception
+    ): Uri {
         val storageUri = storageService.uploadAndDownloadProgressPhoto(
             uri = uri,
             uid = uid,
@@ -410,12 +414,23 @@ class RepositoryImpl @Inject constructor(
         )
 
     //location
-    override suspend fun getLocation(uid: String): Flow<LatLng?> {
-        return locationService.requestLocationUpdates().also { locationFlow ->
-            locationFlow.collect { location ->
-                if (location != null)
-                    firestoreService.updateUserLocation(uid = uid, location = location)
-            }
+    override suspend fun getLocation(): Flow<LatLng?> = locationService.requestLocationUpdates()
+
+    override suspend fun updateFirestoreLocation(uid: String, profilePhoto: Uri?) {
+        locationService.requestLocationUpdates().collect { location ->
+            if (location != null)
+                firestoreService.updateUserLocation(uid = uid, location = location, profilePhoto = profilePhoto)
+        }
+    }
+
+    override fun getLocations(
+        uid: String
+    ): Result<Flow<List<LocationModel>>, FirebaseError.Firestore> {
+        return try {
+            val flow = firestoreService.getLocations(uid)
+            Result.Success(flow)
+        } catch (e: Exception) {
+            Result.Error(FirebaseError.Firestore.ERROR_GETTING_LOCATIONS)
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.vzkz.profinder.ui.home
 
+import android.Manifest
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
@@ -64,6 +68,7 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
     LaunchedEffect(key1 = true) {
         homeViewModel.onInit()
     }
+    RequestLocationPermission()
     val error = homeViewModel.state.error
     var favList: List<ActorModel> by remember { mutableStateOf(emptyList()) }
     favList = homeViewModel.state.favList
@@ -375,6 +380,48 @@ private fun RatingDialog(
 //        else PermissionDialog { permissionState.launchPermissionRequest() }
 //    }
 //}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun RequestLocationPermission(
+    onPermissionGranted: () -> Unit = {},
+    onPermissionDenied: () -> Unit = {},
+    onPermissionsRevoked: () -> Unit = {}
+) {
+    // Initialize the state for managing multiple location permissions.
+    val permissionState = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        )
+    )
+
+    // Use LaunchedEffect to handle permissions logic when the composition is launched.
+    LaunchedEffect(key1 = permissionState) {
+        // Check if all previously granted permissions are revoked.
+        val allPermissionsRevoked =
+            permissionState.permissions.size == permissionState.revokedPermissions.size
+
+        // Filter permissions that need to be requested.
+        val permissionsToRequest = permissionState.permissions.filter {
+            !it.status.isGranted
+        }
+
+        // If there are permissions to request, launch the permission request.
+        if (permissionsToRequest.isNotEmpty()) permissionState.launchMultiplePermissionRequest()
+
+        // Execute callbacks based on permission status.
+        if (allPermissionsRevoked) {
+            onPermissionsRevoked()
+        } else {
+            if (permissionState.allPermissionsGranted) {
+                onPermissionGranted()
+            } else {
+                onPermissionDenied()
+            }
+        }
+    }
+}
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable

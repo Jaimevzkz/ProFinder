@@ -22,11 +22,12 @@ sealed interface FirebaseError: Error {
         DELETION_ERROR,
         REQUEST_ADDITION_ERROR,
         JOB_ADDITION_ERROR,
-        LOCATION_UPDATE_ERROR
+        LOCATION_UPDATE_ERROR,
+        ERROR_GETTING_LOCATIONS
     }
 
     enum class Realtime: FirebaseError {
-        NULL_REALTIME_USERDATA,
+        NULL_REALTIME_DATA,
         RECENT_CHAT_UPDATE_ERROR,
         ERROR_GETTING_RECENT_CHATS,
         REALTIME_ACCESS_INTERRUPTED,

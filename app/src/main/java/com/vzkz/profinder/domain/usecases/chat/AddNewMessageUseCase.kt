@@ -36,35 +36,38 @@ class AddNewMessageUseCaseImpl @Inject constructor(
         msg: String
     ): Result<Unit, FirebaseError> {
         val timestamp = System.currentTimeMillis()
-        val actor = getUserUseCase()
-
-        repository.addNewMessage(
-            ownerUid = getUidDataStoreUseCase(),
-            otherUid = otherUid,
-            chatMsgModel = ChatMsgModel(
-                msgId = "new",
-                isMine = true,
-                msg = msg,
-                timestamp = timestamp,
-            )
-        )
-
-        return repository.updateRecentChat(
-            combinedUid = combinedUid,
-            message = msg,
-            timestamp = timestamp,
-            senderUid = actor.uid,
-            participants = mapOf(
-                actor.uid to ParticipantDataDto(
-                    nickname = actor.nickname,
-                    profilePhoto = actor.profilePhoto?.toString()
-                ),
-                otherUid to ParticipantDataDto(
-                    nickname = otherNickname,
-                    profilePhoto = otherProfilePicture?.toString()
+        return when(val actor = getUserUseCase()){
+            is Result.Success -> {
+                repository.addNewMessage(
+                    ownerUid = getUidDataStoreUseCase(),
+                    otherUid = otherUid,
+                    chatMsgModel = ChatMsgModel(
+                        msgId = "new",
+                        isMine = true,
+                        msg = msg,
+                        timestamp = timestamp,
+                    )
                 )
-            )
-        )
+
+                return repository.updateRecentChat(
+                    combinedUid = combinedUid,
+                    message = msg,
+                    timestamp = timestamp,
+                    senderUid = actor.data.uid,
+                    participants = mapOf(
+                        actor.data.uid to ParticipantDataDto(
+                            nickname = actor.data.nickname,
+                            profilePhoto = actor.data.profilePhoto?.toString()
+                        ),
+                        otherUid to ParticipantDataDto(
+                            nickname = otherNickname,
+                            profilePhoto = otherProfilePicture?.toString()
+                        )
+                    )
+                )
+            }
+            is Result.Error -> Result.Error(actor.error)
+        }
     }
 }
 

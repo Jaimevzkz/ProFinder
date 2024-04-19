@@ -17,7 +17,7 @@ class LoginScreenKtTest{
                 onLogin =  { email, password -> /*TODO*/ },
                 onSignUpClicked = { /*TODO*/ },
                 onCloseDialog = { /*TODO*/ },
-                error = UiError(false, null)
+                error = null
             )
         }
 

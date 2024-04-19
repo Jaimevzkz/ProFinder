@@ -11,7 +11,7 @@ interface CheckExistingRequestUseCase {
     suspend operator fun invoke(sid: String): Result<ServiceState, FirebaseError.Firestore>}
 
 class CheckExistingRequestUseCaseImpl @Inject constructor(
-    private val getRequestsUseCase: GetRequestsUseCase
+    private val getRequestsUseCase: GetJobOrRequestsUseCase
 ) : CheckExistingRequestUseCase {
     override suspend operator fun invoke(sid: String): Result<ServiceState, FirebaseError.Firestore> {
         val requestList = when(val request = getRequestsUseCase(isRequest = true)){

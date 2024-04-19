@@ -101,7 +101,6 @@ fun UserScreenBody(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(10.dp)
-                .padding(bottom = 20.dp)
                 .shadow(1.dp, shape = CircleShape)
                 .background(MaterialTheme.colorScheme.primary),
             onClick = {

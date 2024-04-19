@@ -23,16 +23,21 @@ class AddJobOrJobOrRequestsUseCaseImpl @Inject constructor(
         isRequest: Boolean,
         serviceModel: ServiceModel
     ): Result<Unit, FirebaseError.Firestore> {
-        val user = getUserUseCase()
-        return repository.addJobOrRequest(
-            isRequest = isRequest,
-            profUid = serviceModel.owner.uid,
-            profNickname = serviceModel.owner.nickname,
-            clientNickname = user.nickname,
-            clientId = user.uid,
-            serviceName = serviceModel.name,
-            serviceId = serviceModel.sid,
-            price = serviceModel.price
-        )
+        return when(val user = getUserUseCase()){
+            is Result.Success -> {
+                repository.addJobOrRequest(
+                    isRequest = isRequest,
+                    profUid = serviceModel.owner.uid,
+                    profNickname = serviceModel.owner.nickname,
+                    clientNickname = user.data.nickname,
+                    clientId = user.data.uid,
+                    serviceName = serviceModel.name,
+                    serviceId = serviceModel.sid,
+                    price = serviceModel.price
+                )
+            }
+            is Result.Error -> Result.Error(user.error)
+        }
+
     }
 }

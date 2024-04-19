@@ -10,6 +10,7 @@ import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.domain.model.ChatMsgModel
 import com.vzkz.profinder.domain.model.JobModel
+import com.vzkz.profinder.domain.model.LocationModel
 import com.vzkz.profinder.domain.model.ProfState
 import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.domain.model.ServiceModel
@@ -110,5 +111,7 @@ interface Repository {
     ): Result<Flow<List<ChatMsgModel>>, FirebaseError.Realtime>
 
     fun addNewMessage(ownerUid: String, otherUid: String, chatMsgModel: ChatMsgModel)
-    suspend fun getLocation(uid: String): Flow<LatLng?>
+    suspend fun getLocation(): Flow<LatLng?>
+    suspend fun updateFirestoreLocation(uid: String, profilePhoto: Uri?)
+    fun getLocations(uid: String): Result<Flow<List<LocationModel>>, FirebaseError.Firestore>
 }

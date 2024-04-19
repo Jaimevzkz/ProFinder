@@ -16,8 +16,7 @@ interface FavouriteListUseCase {
     ): Result<Unit, FirebaseError.Firestore>
 
     suspend fun checkIsFavourite(uidToCheck: String): Boolean
-    suspend fun getFavouriteList(): List<ActorModel>
-}
+    suspend fun getFavouriteList(): Result<List<ActorModel>, FirebaseError.Firestore>}
 
 class FavouriteListUseCaseImpl @Inject constructor(
     private val repository: Repository,
@@ -55,7 +54,7 @@ class FavouriteListUseCaseImpl @Inject constructor(
         )
     }
 
-    override suspend fun getFavouriteList(): List<ActorModel> {
+    override suspend fun getFavouriteList(): Result<List<ActorModel>, FirebaseError.Firestore> {
         return if (!favListInstance.cachedList()) {
             favListInstance.getData(dataStoreRepository.getUid())
         } else {

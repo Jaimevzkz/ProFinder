@@ -14,15 +14,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vzkz.profinder.R
+import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
 @Composable
 fun TScreen(navigator: DestinationsNavigator, tViewModel: tViewModel = hiltViewModel()) {
-    val error = tViewModel.state.error
     ScreenBody(
-        error = error,
+        error = tViewModel.state.error,
         onCloseDialog = {
             tViewModel.onCloseDialog()
         }
@@ -31,7 +31,7 @@ fun TScreen(navigator: DestinationsNavigator, tViewModel: tViewModel = hiltViewM
 
 @Composable
 private fun ScreenBody(
-    error: UiError,
+    error: UiText?,
     onCloseDialog: () -> Unit,
 ) {
     Box(
@@ -43,13 +43,14 @@ private fun ScreenBody(
         //TODO
 
 
-        MyAlertDialog(
-            title = stringResource(R.string.error),
-            text = error.errorMsg.orEmpty(),
-            onDismiss = { onCloseDialog() },
-            onConfirm = { onCloseDialog() },
-            showDialog = error.isError
-        )
+        if(error != null){
+            MyAlertDialog(
+                title = stringResource(R.string.error),
+                text = error.asString(),
+                onDismiss = { onCloseDialog() },
+                onConfirm = { onCloseDialog() },
+            )
+        }
     }
 }
 
@@ -58,7 +59,7 @@ private fun ScreenBody(
 private fun LightPreview() {
     ProFinderTheme {
         ScreenBody(
-            error = UiError(false, "Account wasn't created"),
+            error = null,
             onCloseDialog = {},
         )
     }

@@ -53,11 +53,16 @@ class ViewProfileViewModel @Inject constructor(
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit(uidToSee: String){
         viewModelScope.launch(Dispatchers.IO) {
-            val userToSee = userProfileToSeeUseCase.getUser(uidToSee)
-            val isFavourite = favouriteListUseCase.checkIsFavourite(uidToSee)
-            dispatch(ViewProfileIntent.ChangeFavourite(isFavourite))
-            dispatch(ViewProfileIntent.SetUid(getUidDataStoreUseCase()))
-            dispatch(ViewProfileIntent.Setuser(userToSee))
+            when(val userToSee = userProfileToSeeUseCase.getUser(uidToSee)){
+                is Result.Success -> {
+                    val isFavourite = favouriteListUseCase.checkIsFavourite(uidToSee)
+                    dispatch(ViewProfileIntent.ChangeFavourite(isFavourite))
+                    dispatch(ViewProfileIntent.SetUid(getUidDataStoreUseCase()))
+                    dispatch(ViewProfileIntent.Setuser(userToSee.data))
+                }
+                is Result.Error -> dispatch(ViewProfileIntent.Error(userToSee.error.asUiText()))
+            }
+
         }
     }
 

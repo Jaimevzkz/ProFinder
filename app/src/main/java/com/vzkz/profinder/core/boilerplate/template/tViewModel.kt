@@ -14,22 +14,18 @@ class tViewModel @Inject constructor(): BaseViewModel<tState, tIntent>(tState.in
 
 
             is tIntent.Error -> state.copy(
-                error = UiError(true, intent.errorMsg),
+                error = intent.error,
                 loading = false
             )
 
             tIntent.CloseError -> state.copy(
-                error = UiError(false, null),
+                error = null,
                 loading = false
             )
         }
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
-    fun onX(){ //Example fun
-        dispatch(tIntent.Loading)
-    }
-
     fun onCloseDialog() = dispatch(tIntent.CloseError)
 
 }

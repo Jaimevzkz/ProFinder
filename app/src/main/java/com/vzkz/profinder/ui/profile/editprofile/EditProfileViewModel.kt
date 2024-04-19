@@ -63,10 +63,11 @@ class EditProfileViewModel @Inject constructor(
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
         viewModelScope.launch(Dispatchers.IO) {
-            val user = getUserUseCase()
-            dispatch(EditProfileIntent.SetUser(user))
+            when(val user = getUserUseCase()){
+                is Result.Success -> dispatch(EditProfileIntent.SetUser(user.data))
+                is Result.Error -> dispatch(EditProfileIntent.Error(user.error.asUiText()))
+            }
         }
-
     }
 
     fun onModifyUserData(newUser: ActorModel, oldUser: ActorModel) {

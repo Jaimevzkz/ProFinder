@@ -84,6 +84,7 @@
     <string name="request_addition_error">An error occurred while adding the request.</string>
     <string name="job_addition_error">An error occurred while adding the job.</string>
     <string name="location_update_error">An error occurred while updating location</string>
+    <string name="error_getting_location">An error occurred while getting other location</string>
     <string name="recent_chat_update_error">An error occurred while updating recent chats</string>
     <string name="recent_chat_get_error">An error occurred while getting recent chats</string>
     <string name="phto_deletion_error">An error occurred while deleting profile photo</string>

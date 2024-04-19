@@ -6,7 +6,7 @@ import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.JobModel
 import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCase
-import com.vzkz.profinder.domain.usecases.jobs.GetRequestsUseCase
+import com.vzkz.profinder.domain.usecases.jobs.GetJobOrRequestsUseCase
 import com.vzkz.profinder.domain.usecases.jobs.RateJobUseCase
 import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCase
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val favouriteListUseCase: FavouriteListUseCase,
-    private val getRequestsUseCase: GetRequestsUseCase,
+    private val getRequestsUseCase: GetJobOrRequestsUseCase,
     private val getUserUseCase: GetUserUseCase,
     private val deleteRequestUseCase: DeleteJobOrRequestUseCase,
     private val turnJobIntoRequestUseCase: TurnJobIntoRequestUseCase,
@@ -68,8 +68,16 @@ class HomeViewModel @Inject constructor(
         setJobs()
         setRequests()
         viewModelScope.launch(Dispatchers.IO) {
-            dispatch(HomeIntent.SetIsUser(getUserUseCase().actor == Actors.User))
-            dispatch(HomeIntent.ChangeFavList(favouriteListUseCase.getFavouriteList()))
+            when(val user = getUserUseCase()){
+                is Result.Success -> {
+                    dispatch(HomeIntent.SetIsUser(user.data.actor == Actors.User))
+                    when(val favList = favouriteListUseCase.getFavouriteList()){
+                        is Result.Success -> dispatch(HomeIntent.ChangeFavList(favList.data))
+                        is Result.Error -> dispatch(HomeIntent.Error(favList.error.asUiText()))
+                    }
+                }
+                is Result.Error -> dispatch(HomeIntent.Error(user.error.asUiText()))
+            }
         }
     }
 
@@ -108,7 +116,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             when (val favList =
                 favouriteListUseCase.changeFavouriteList(uidToChange = uid, add = false)) {
-                is Result.Success -> dispatch(HomeIntent.ChangeFavList(favouriteListUseCase.getFavouriteList()))
+                is Result.Success -> {
+                    when(val favouriteList = favouriteListUseCase.getFavouriteList()){
+                        is Result.Success -> dispatch(HomeIntent.ChangeFavList(favouriteList.data))
+                        is Result.Error -> dispatch(HomeIntent.Error(favouriteList.error.asUiText()))
+                    }
+                }
                 is Result.Error -> dispatch(HomeIntent.Error(favList.error.asUiText()))
             }
         }

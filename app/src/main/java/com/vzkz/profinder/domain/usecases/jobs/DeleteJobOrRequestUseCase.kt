@@ -24,28 +24,32 @@ interface DeleteJobOrRequestUseCase {
 class DeleteJobOrRequestUseCaseImpl @Inject constructor(
     private val repository: Repository,
     private val getUidDataStoreUseCase: GetUidDataStoreUseCase,
-    private val getRequestsUseCase: GetRequestsUseCase
+    private val getRequestsUseCase: GetJobOrRequestsUseCase
 ) : DeleteJobOrRequestUseCase {
     override suspend operator fun invoke(
         isRequest: Boolean,
         sid: String
     ): Result<Unit, FirebaseError.Firestore> {
-        val requestList = getRequestsUseCase(isRequest = isRequest).first()
-        for (request in requestList) {
-            if (request.serviceId == sid) {
-                when (val deletion = repository.deleteJobOrRequest(
-                    isRequest = isRequest,
-                    uid = getUidDataStoreUseCase(),
-                    otherUid = request.otherUid,
-                    id = request.id
-                )) {
-                    is Result.Error -> return Result.Error(deletion.error)
-                    is Result.Success -> {/*do nothing*/
+        return when(val requestList = getRequestsUseCase(isRequest = isRequest)){
+            is Result.Success -> {
+                for (request in requestList.data.first()) {
+                    if (request.serviceId == sid) {
+                        when (val deletion = repository.deleteJobOrRequest(
+                            isRequest = isRequest,
+                            uid = getUidDataStoreUseCase(),
+                            otherUid = request.otherUid,
+                            id = request.id
+                        )) {
+                            is Result.Error -> return Result.Error(deletion.error)
+                            is Result.Success -> {/*do nothing*/
+                            }
+                        }
                     }
                 }
+                Result.Success(Unit)
             }
+            is Result.Error -> Result.Error(requestList.error)
         }
-        return Result.Success(Unit)
     }
 
     override suspend fun deleteWithRid(

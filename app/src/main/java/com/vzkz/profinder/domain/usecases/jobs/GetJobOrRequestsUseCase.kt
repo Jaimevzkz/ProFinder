@@ -9,15 +9,15 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
-interface GetRequestsUseCase {
+interface GetJobOrRequestsUseCase {
     suspend operator fun invoke(isRequest: Boolean): Result<Flow<List<JobModel>>, FirebaseError.Firestore>
 }
 
 
-class GetRequestsUseCaseImpl @Inject constructor(
+class GetJobOrRequestsUseCaseImpl @Inject constructor(
     private val repository: Repository,
     private val getUidDataStoreUseCase: GetUidDataStoreUseCase
-) : GetRequestsUseCase {
+) : GetJobOrRequestsUseCase {
     override suspend operator fun invoke(isRequest: Boolean): Result<Flow<List<JobModel>>, FirebaseError.Firestore> =
         repository.getJobsOrRequests(isRequest = isRequest, uid = getUidDataStoreUseCase())
 

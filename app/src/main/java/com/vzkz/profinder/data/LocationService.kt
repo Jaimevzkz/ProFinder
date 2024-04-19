@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Build
 import android.os.Looper
 import androidx.annotation.RequiresApi
@@ -18,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 interface ILocationService {
@@ -32,7 +32,9 @@ class LocationService @Inject constructor(
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.S)
     override fun requestLocationUpdates(): Flow<LatLng?> = callbackFlow {
-        var lastKnowLocation: Location? = null
+        var lastKnowLocation: Pair<Double, Double>? = null
+        val decimalFormat = DecimalFormat("#.###")
+
         if (!context.hasLocationPermission()) {
             trySend(null)
             return@callbackFlow
@@ -46,9 +48,11 @@ class LocationService @Inject constructor(
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult.locations.lastOrNull()?.let {
-                    if(lastKnowLocation != it){
+                    val latitude = decimalFormat.format(it.latitude).toDouble()
+                    val longitude = decimalFormat.format(it.longitude).toDouble()
+                    if(lastKnowLocation == null || (lastKnowLocation?.first != latitude && lastKnowLocation?.second != longitude)){
                         trySend(LatLng(it.latitude, it.longitude))
-                        lastKnowLocation = it
+                        lastKnowLocation = Pair(latitude, longitude)
                     }
                 }
             }
