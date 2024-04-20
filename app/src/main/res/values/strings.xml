@@ -88,5 +88,6 @@
     <string name="recent_chat_update_error">An error occurred while updating recent chats</string>
     <string name="recent_chat_get_error">An error occurred while getting recent chats</string>
     <string name="phto_deletion_error">An error occurred while deleting profile photo</string>
+    <string name="no_pending_requests">No pending requests...</string>
 
 </resources>

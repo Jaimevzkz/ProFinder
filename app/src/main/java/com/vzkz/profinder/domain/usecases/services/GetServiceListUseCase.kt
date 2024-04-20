@@ -10,11 +10,12 @@ import javax.inject.Inject
 
 interface GetServiceListUseCase {
     suspend operator fun invoke(): Result<Pair<List<ServiceModel>, List<ServiceModel>>, FirebaseError.Firestore>
+    suspend fun getOtherServiceList(otherUid: String): Result<List<ServiceModel>, FirebaseError.Firestore>
 
 }
 
 class GetServiceListUseCaseImpl @Inject constructor(
-    repository: Repository,
+    private val repository: Repository,
     private val getUidDataStoreUseCase: GetUidDataStoreUseCase
 ) : GetServiceListUseCase {
 
@@ -31,5 +32,12 @@ class GetServiceListUseCaseImpl @Inject constructor(
                 is Result.Error -> Result.Error(serviceList.error)
             }
         }
+    }
+
+    override suspend fun getOtherServiceList(otherUid: String): Result<List<ServiceModel>, FirebaseError.Firestore> {
+       return  when (val serviceList = repository.getServiceListByUidFromFirestore(otherUid)) {
+           is Result.Success -> Result.Success(serviceList.data.filter { it.isActive })
+           is Result.Error -> Result.Error(serviceList.error)
+       }
     }
 }

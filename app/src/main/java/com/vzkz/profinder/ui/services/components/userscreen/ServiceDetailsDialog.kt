@@ -67,7 +67,8 @@ fun ServiceDetailsDialog(
                         Text(
                             text = service.owner.firstname,
                             fontSize = 28.sp,
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.SemiBold,
+                            color = fontColor
                         )
                         Text(
                             text = service.owner.nickname,
@@ -138,7 +139,7 @@ fun ServiceDetailsDialog(
                 modifier = Modifier.align(Alignment.TopEnd),
                 onClick = { onCloseDialog() }
             ) {
-                Icon(imageVector = Icons.Filled.Close, contentDescription = "Close description")
+                Icon(imageVector = Icons.Filled.Close, tint = fontColor, contentDescription = "Close description")
             }
         }
     }

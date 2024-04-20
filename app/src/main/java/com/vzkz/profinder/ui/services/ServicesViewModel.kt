@@ -3,7 +3,6 @@ package com.vzkz.profinder.ui.services
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.error.Result
-import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.domain.usecases.jobs.AddJobOrRequestsUseCase
@@ -17,7 +16,6 @@ import com.vzkz.profinder.domain.usecases.services.GetActiveServiceListUseCase
 import com.vzkz.profinder.domain.usecases.services.GetServiceListUseCase
 import com.vzkz.profinder.domain.usecases.services.InsertServiceUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
-import com.vzkz.profinder.domain.usecases.user.UserProfileToSeeUseCase
 import com.vzkz.profinder.ui.asUiText
 import com.vzkz.profinder.ui.services.components.userscreen.ServiceState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +32,6 @@ class ServicesViewModel @Inject constructor(
     private val deleteServiceUseCase: DeleteServiceUseCase,
     private val changeServiceActivityUseCase: ChangeServiceActivityUseCase,
     private val getUserUseCase: GetUserUseCase,
-    private val userProfileToSeeUseCase: UserProfileToSeeUseCase,
     private val addRequestsUseCase: AddJobOrRequestsUseCase,
     private val checkExistingRequestUseCase: CheckExistingRequestUseCase,
     private val deleteRequestUseCase: DeleteJobOrRequestUseCase,
@@ -71,7 +68,9 @@ class ServicesViewModel @Inject constructor(
             )
 
             is ServicesIntent.SetRequestExists -> state.copy(requestExists = intent.requestExists)
+
             is ServicesIntent.SetLocation -> state.copy(location = intent.location)
+
             is ServicesIntent.SetOtherLocations -> state.copy(otherLocations = intent.locationList)
         }
     }
@@ -85,7 +84,7 @@ class ServicesViewModel @Inject constructor(
             when (val user = getUserUseCase()) {
                 is Result.Success -> {
                     dispatch(ServicesIntent.SetUser(user.data))
-                    if(user.data.actor == Actors.Professional)
+                    if (user.data.actor == Actors.Professional)
                         onUpdateFirestoreLocation()
                     when (user.data.actor) {
                         Actors.User -> {
@@ -146,8 +145,6 @@ class ServicesViewModel @Inject constructor(
         }
     }
 
-    fun onSetProfileToSee(actor: ActorModel) = userProfileToSeeUseCase.setUser(actor)
-
     fun onCloseDialog() = dispatch(ServicesIntent.CloseError)
 
     fun onRequestService(service: ServiceModel) {
@@ -187,12 +184,13 @@ class ServicesViewModel @Inject constructor(
 
     private fun onGetOtherLocations() {
         viewModelScope.launch(Dispatchers.IO) {
-            when(val locations = getLocationsUseCase()){
+            when (val locations = getLocationsUseCase()) {
                 is Result.Success -> {
-                    locations.data.collect{locationList ->
+                    locations.data.collect { locationList ->
                         dispatch(ServicesIntent.SetOtherLocations(locationList))
                     }
                 }
+
                 is Result.Error -> dispatch(ServicesIntent.Error(locations.error.asUiText()))
             }
         }
@@ -201,7 +199,8 @@ class ServicesViewModel @Inject constructor(
     private fun onUpdateFirestoreLocation() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val update = getLocationUseCase.updateFirestoreLocation()) {
-                is Result.Success -> {/*do nothing*/}
+                is Result.Success -> {/*do nothing*/
+                }
 
                 is Result.Error -> dispatch(ServicesIntent.Error(update.error.asUiText()))
             }

@@ -2,6 +2,9 @@ package com.vzkz.profinder.ui.profile.viewprofile
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +22,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Chat
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
@@ -46,9 +51,12 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.valentinilk.shimmer.shimmer
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.PROFESSIONALMODELFORTESTS
+import com.vzkz.profinder.core.SERVICELISTFORTEST
+import com.vzkz.profinder.core.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.destinations.IndividualChatScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
+import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MySpacer
@@ -57,6 +65,9 @@ import com.vzkz.profinder.ui.components.RatingBar
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.shimmer.IconShimmer
 import com.vzkz.profinder.ui.components.starColor
+import com.vzkz.profinder.ui.services.components.userscreen.ServiceCard
+import com.vzkz.profinder.ui.services.components.userscreen.ServiceDetailsDialog
+import com.vzkz.profinder.ui.services.components.userscreen.ServiceState
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
@@ -75,11 +86,14 @@ fun ViewProfileScreen(
     val isFavourite = viewProfileViewModel.state.isFavourite
     val loading = viewProfileViewModel.state.loading
     val uid = viewProfileViewModel.state.uid
+
     ScreenBody(
         userToSee = userToSee ?: ActorModel(),
         loading = loading,
         error = error,
         isFavourite = isFavourite,
+        serviceList = viewProfileViewModel.state.serviceList,
+        requestExists = viewProfileViewModel.state.requestExists,
         onChangeFavourite = {
             viewProfileViewModel.onFavouriteChanged(uidToChange = uidToSee, add = !isFavourite)
         },
@@ -94,6 +108,15 @@ fun ViewProfileScreen(
                     )
                 )
             }
+        },
+        onCheckRequestExists = {
+            viewProfileViewModel.checkExistingRequests(it)
+        },
+        onRequestService = {
+            viewProfileViewModel.onRequestService(it)
+        },
+        onCancelRequest = {
+            viewProfileViewModel.onDeleteRequest(it)
         },
         onCloseDialog = {
             viewProfileViewModel.onCloseDialog()
@@ -110,10 +133,15 @@ private fun ScreenBody(
     error: UiText?,
     loading: Boolean,
     isFavourite: Boolean,
+    serviceList: List<ServiceModel>,
+    requestExists: ServiceState,
+    onCancelRequest: (String) -> Unit,
+    onRequestService: (ServiceModel) -> Unit,
     onChangeFavourite: () -> Unit,
     onChatClicked: () -> Unit,
     onCloseDialog: () -> Unit,
-    onNavBack: () -> Unit
+    onNavBack: () -> Unit,
+    onCheckRequestExists: (String) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -125,17 +153,8 @@ private fun ScreenBody(
         val cardColor = MaterialTheme.colorScheme.surfaceVariant
         val cardContentColor = MaterialTheme.colorScheme.onSurfaceVariant
         val defaultVal = "- "
-        IconButton(
-            onClick = { onNavBack() }, modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(12.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Close,
-                contentDescription = "Navigate back",
-                tint = MaterialTheme.colorScheme.onBackground
-            )
-        }
+        var showServiceInfo by remember { mutableStateOf(false) }
+        var serviceToShow: ServiceModel? by remember { mutableStateOf(null) }
         if (loading) {
             ViewProfileShimmer(
                 modifier = Modifier
@@ -145,8 +164,9 @@ private fun ScreenBody(
                 cardColor = cardColor
             )
         } else {
+            val modifier = if(!showServiceInfo) Modifier.verticalScroll(rememberScrollState()) else Modifier
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
                     .padding(horizontal = 20.dp)
@@ -256,15 +276,14 @@ private fun ScreenBody(
                 MySpacer(size = 16)
 
                 //profile_details
+                var expanded by remember { mutableStateOf(false) }
                 Column(
                     modifier = Modifier
                         .padding(bottom = 12.dp)
                         .shadow(elevation = 10.dp, shape = RoundedCornerShape(10))
                         .background(cardColor)
                         .padding(horizontal = 16.dp)
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState()),
+                        .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
@@ -291,12 +310,88 @@ private fun ScreenBody(
                     )
                     MySpacer(size = innerSpaceBetween)
                     Text(
+                        modifier = Modifier.clickable { expanded = !expanded },
                         text = userToSee.description ?: defaultVal,
                         style = MaterialTheme.typography.titleLarge,
-                        color = cardContentColor
+                        color = cardContentColor,
+                        maxLines = if (!expanded) 4 else Int.MAX_VALUE
+                    )
+                    if (userToSee.description != null && !expanded) {
+                        Icon(
+                            imageVector = Icons.Filled.ExpandMore,
+                            contentDescription = "expand description",
+                            tint = cardContentColor,
+                            modifier = Modifier.clickable { expanded = !expanded }
+                        )
+                    } else if(userToSee.description != null) {
+                        Icon(
+                            imageVector = Icons.Filled.ExpandLess,
+                            contentDescription = "expand less description",
+                            tint = cardContentColor,
+                            modifier = Modifier.clickable { expanded = !expanded }
+                        )
+                    }
+                }
+                Text(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    fontWeight = FontWeight.SemiBold,
+                    text = "Services",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = cardContentColor
+                )
+                serviceList.forEach {serviceModel ->
+                    MySpacer(size = 8)
+                    ServiceCard(
+                        modifier = Modifier,
+                        userCalling = true,
+                        buttonsEnabled = !showServiceInfo,
+                        service = serviceModel,
+                        backgroundColor = cardColor,
+                        fontColor = cardContentColor,
+                        onServiceInfo ={
+                            onCheckRequestExists(serviceModel.sid)
+                            serviceToShow = serviceModel
+                            showServiceInfo = true
+                        }
                     )
                 }
             }
+        }
+        if (serviceToShow != null) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6f))
+            ) {
+                ServiceDetailsDialog(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    isVisible = showServiceInfo,
+                    service = serviceToShow!!,
+                    requestExists = requestExists,
+                    backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+                    fontColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    onSeeProfile = {},
+                    onRequest = { onRequestService(serviceToShow!!) },
+                    onCancelRequest = onCancelRequest,
+                    onCloseDialog = {
+                        serviceToShow = null
+                        showServiceInfo = false
+                    }
+                )
+            }
+        }
+        IconButton(
+            enabled = !showServiceInfo,
+            onClick = { onNavBack() }, modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(12.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "Navigate back",
+                tint = MaterialTheme.colorScheme.onBackground
+            )
         }
 
         if (error != null) {
@@ -424,11 +519,16 @@ private fun LightPreview() {
             userToSee = PROFESSIONALMODELFORTESTS,
             error = null,
             isFavourite = true,
+            requestExists = ServiceState.REQUESTED,
             onChangeFavourite = {},
             onChatClicked = {},
             onCloseDialog = {},
             onNavBack = {},
-            loading = false
+            onRequestService = {},
+            onCancelRequest = {},
+            onCheckRequestExists = {},
+            loading = false,
+            serviceList = SERVICELISTFORTEST
         )
     }
 

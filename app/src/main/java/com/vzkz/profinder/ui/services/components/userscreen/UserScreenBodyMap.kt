@@ -1,14 +1,12 @@
 package com.vzkz.profinder.ui.services.components.userscreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.outlined.FormatListNumbered
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,23 +17,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import androidx.compose.ui.unit.sp
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.AdvancedMarker
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.MarkerComposable
-import com.google.maps.android.compose.MarkerInfoWindowContent
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.valentinilk.shimmer.shimmer
@@ -44,7 +39,6 @@ import com.vzkz.profinder.data.hasLocationPermission
 import com.vzkz.profinder.domain.model.LocationModel
 import com.vzkz.profinder.ui.components.LocationBubbleShape
 import com.vzkz.profinder.ui.components.MyColumn
-import com.vzkz.profinder.ui.components.ProfilePicture
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 
 @Composable
@@ -52,6 +46,7 @@ fun MapScreenBody(
     modifier: Modifier = Modifier,
     location: LatLng?,
     otherLocations: List<LocationModel>,
+    onSeeProfile: (String) -> Unit,
     onSeeList: () -> Unit
 ) {
     if (location == null) {
@@ -118,6 +113,10 @@ fun MapScreenBody(
                 otherLocations.forEach { locationModel ->
                     MarkerComposable(
                         state = MarkerState(locationModel.location),
+                        onClick = {
+                            onSeeProfile(locationModel.uid)
+                            false
+                        }
                     ) {
                         Box(
                             modifier = Modifier
@@ -127,15 +126,14 @@ fun MapScreenBody(
                             MyColumn(
                                 modifier = Modifier
                                     .padding(12.dp)
-                                    .padding(bottom = 8.dp)
+                                    .padding(bottom = 12.dp)
                             ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Engineering,
-                                    contentDescription = null
-                                )
                                 Text(
                                     text = locationModel.nickname,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    fontWeight = FontWeight.Light,
+                                    fontSize = 16.sp,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    textDecoration = TextDecoration.Underline
                                 )
                             }
                         }

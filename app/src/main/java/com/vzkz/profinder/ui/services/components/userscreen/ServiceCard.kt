@@ -51,6 +51,7 @@ fun ServiceCard(
     userCalling: Boolean,
     service: ServiceModel,
     backgroundColor: Color,
+    buttonsEnabled: Boolean = true,
     fontColor: Color,
     onServiceInfo: () -> Unit = {},
     onActiveChange: () -> Unit ={},
@@ -73,6 +74,7 @@ fun ServiceCard(
 
         if(userCalling){
             IconButton(
+                enabled = buttonsEnabled,
                 onClick = { onServiceInfo() },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
@@ -92,6 +94,7 @@ fun ServiceCard(
             ) { //options Icon
                 var expandedActorDropdownMenu by remember { mutableStateOf(false) }
                 IconButton(
+                    enabled = buttonsEnabled,
                     onClick = { expandedActorDropdownMenu = true },
                     modifier = Modifier
                 ) {

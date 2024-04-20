@@ -89,8 +89,7 @@ fun ServicesScreen(
         },
         onBottomBarClicked = { navigator.navigate(it) },
         onSeeProfile = {
-            servicesViewModel.onSetProfileToSee(it)
-            navigator.navigate(ViewProfileScreenDestination(it.uid))
+            navigator.navigate(ViewProfileScreenDestination(it))
         }
     )
 }
@@ -115,7 +114,7 @@ private fun ScreenBody(
     onServiceAdded: (ServiceModel) -> Unit,
     onServiceDeleted: (String) -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
-    onSeeProfile: (ActorModel) -> Unit
+    onSeeProfile: (String) -> Unit
 ) {
     var addDialogVisibility by remember { mutableStateOf(false) }
     var showMap by remember { mutableStateOf(false) }
@@ -167,14 +166,15 @@ private fun ScreenBody(
                             modifier = Modifier.padding(paddingValues),
                             onSeeList = { showMap = false },
                             location = location,
-                            otherLocations = otherLocations
+                            otherLocations = otherLocations,
+                            onSeeProfile = onSeeProfile
                         )
                     } else {
                         UserScreenBody(
                             modifier = Modifier.padding(paddingValues),
                             serviceList = activeServices,
                             requestExists = requestExists,
-                            onSeeProfile = { onSeeProfile(it) },
+                            onSeeProfile = { onSeeProfile(it.uid) },
                             onSeeMap = { showMap = true },
                             onCheckRequestExists = onCheckRequestExists,
                             onRequestService = { onRequestService(it) },

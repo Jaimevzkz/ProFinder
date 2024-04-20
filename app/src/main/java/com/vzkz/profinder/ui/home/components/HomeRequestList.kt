@@ -52,7 +52,7 @@ fun HomeRequestList(
         MyColumn(modifier = Modifier.fillMaxSize()){
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text =  "No pending requests...",
+                text = stringResource(R.string.no_pending_requests),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.weight(1.7f))
