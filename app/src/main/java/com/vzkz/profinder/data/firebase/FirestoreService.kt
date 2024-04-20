@@ -554,14 +554,12 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     private val locationCollection = firestore.collection(LOCATION_COLLECTION)
     fun updateUserLocation(
         uid: String,
-        profilePhoto: Uri?,
+        nickname: String,
         location: LatLng
     ): Result<Unit, FirebaseError.Firestore> {
         try {
             val locationData: MutableMap<String, Any> = mutableMapOf()
-            if (profilePhoto != null)
-                locationData[PROFILEPHOTO] = profilePhoto.toString()
-
+            locationData[NICKNAME] = nickname
             locationData[LOCATION] = GeoPoint(location.latitude, location.longitude)
 
             locationCollection.document(uid).set(locationData, SetOptions.merge())
@@ -585,13 +583,13 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                 .addSnapshotListener { value, error ->
                     locationList.clear()
                     value?.documents?.forEach { docSnapshot ->
-                        if(docSnapshot.id != uid){
+                        if (docSnapshot.id != uid) {
                             val location = docSnapshot.getGeoPoint(LOCATION)
-                            val profilePicture = docSnapshot.getString(PROFILEPHOTO)
+                            val nickname = docSnapshot.getString(NICKNAME)
                             locationList.add(
                                 LocationModel(
                                     uid = docSnapshot.id,
-                                    profilePhoto  = profilePicture?.let { Uri.parse(it) },
+                                    nickname = nickname ?: throw Exception(),
                                     location = LatLng(
                                         location?.latitude ?: throw Exception(),
                                         location.longitude

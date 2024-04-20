@@ -30,7 +30,7 @@ class GetLocationUseCaseImpl @Inject constructor(
             is Result.Success -> {
                 repository.updateFirestoreLocation(
                     uid = user.data.uid,
-                    profilePhoto = user.data.profilePhoto
+                    nickname = user.data.nickname
                 )
                 Result.Success(Unit)
             }

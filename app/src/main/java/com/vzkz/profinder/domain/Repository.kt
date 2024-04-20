@@ -112,6 +112,6 @@ interface Repository {
 
     fun addNewMessage(ownerUid: String, otherUid: String, chatMsgModel: ChatMsgModel)
     suspend fun getLocation(): Flow<LatLng?>
-    suspend fun updateFirestoreLocation(uid: String, profilePhoto: Uri?)
+    suspend fun updateFirestoreLocation(uid: String, nickname: String)
     fun getLocations(uid: String): Result<Flow<List<LocationModel>>, FirebaseError.Firestore>
 }

@@ -416,10 +416,10 @@ class RepositoryImpl @Inject constructor(
     //location
     override suspend fun getLocation(): Flow<LatLng?> = locationService.requestLocationUpdates()
 
-    override suspend fun updateFirestoreLocation(uid: String, profilePhoto: Uri?) {
+    override suspend fun updateFirestoreLocation(uid: String, nickname: String) {
         locationService.requestLocationUpdates().collect { location ->
             if (location != null)
-                firestoreService.updateUserLocation(uid = uid, location = location, profilePhoto = profilePhoto)
+                firestoreService.updateUserLocation(uid = uid, location = location, nickname = nickname)
         }
     }
 

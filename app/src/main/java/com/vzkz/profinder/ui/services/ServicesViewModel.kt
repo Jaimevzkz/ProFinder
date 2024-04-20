@@ -80,11 +80,13 @@ class ServicesViewModel @Inject constructor(
     fun onInit() {
         onGetLocation()
         onGetOtherLocations()
-        onUpdateFirestoreLocation()
+
         viewModelScope.launch(Dispatchers.IO) {
             when (val user = getUserUseCase()) {
                 is Result.Success -> {
                     dispatch(ServicesIntent.SetUser(user.data))
+                    if(user.data.actor == Actors.Professional)
+                        onUpdateFirestoreLocation()
                     when (user.data.actor) {
                         Actors.User -> {
                             when (val activeServiceList = getActiveServiceListUseCase()) {
