@@ -96,9 +96,12 @@ fun HomeScreen(navigator: DestinationsNavigator, homeViewModel: HomeViewModel = 
         onProfileInfo = {
             navigator.navigate(ViewProfileScreenDestination(uidToSee = it))
         },
-        onSubmitRating = { jobModel, rating ->
-            homeViewModel.onRateJob(job = jobModel, rating = rating)
-        }
+        onRateUser = { jobModel, rating ->
+            homeViewModel.onRateUser(job = jobModel, rating = rating)
+        },
+        onRateProf = { jobModel, rating ->
+            homeViewModel.onRateProf(job = jobModel, rating = rating)
+        },
     )
 }
 
@@ -116,7 +119,8 @@ private fun ScreenBody(
     onCloseDialog: () -> Unit,
     onProfileInfo: (String) -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
-    onSubmitRating: (JobModel, Int) -> Unit
+    onRateUser: (JobModel, Int) -> Unit,
+    onRateProf: (JobModel, Int) -> Unit
 ) {
     MyBottomBarScaffold(
         currentDestination = HomeScreenDestination,
@@ -130,6 +134,7 @@ private fun ScreenBody(
         var editFavList by remember { mutableStateOf(false) }
         var isRatingVisible by remember { mutableStateOf(false) }
         var jobToRate: JobModel? by remember { mutableStateOf(null) }
+        var isUserRating by remember { mutableStateOf(false) }
 
         Box(
             modifier = Modifier
@@ -261,7 +266,13 @@ private fun ScreenBody(
                         HomeJobList(
                             jobList = jobList,
                             isUser = isUser,
-                            onFinishJob = {
+                            onRateUser = {
+                                isUserRating = false
+                                jobToRate = it
+                                isRatingVisible = true
+                            },
+                            onRateProf = {
+                                isUserRating = true
                                 jobToRate = it
                                 isRatingVisible = true
                             },
@@ -275,7 +286,7 @@ private fun ScreenBody(
 //                RequestNotificationPermissionDialog()
 //            }
 
-            if(error != null){
+            if (error != null) {
                 MyAlertDialog(
                     title = stringResource(R.string.error),
                     text = error.asString(),
@@ -297,7 +308,11 @@ private fun ScreenBody(
                     onHideDialog = { isRatingVisible = false },
                     onSubmitRating = {
                         isRatingVisible = false
-                        onSubmitRating(jobToRate!!, rating)
+                        if(isUserRating){
+                            onRateProf(jobToRate!!, rating)
+                        } else{
+                            onRateUser(jobToRate!!, rating)
+                        }
                     }
                 )
             }
@@ -430,7 +445,7 @@ private fun LightPreview() {
         ScreenBody(
 //            favList = emptyList(),
             favList = PROFFESIONALLISTFORTEST,
-            isUser = false,
+            isUser = true,
             error = null,
             requestList = JOBLISTFORTEST,
             jobList = JOBLISTFORTEST,
@@ -442,7 +457,8 @@ private fun LightPreview() {
             onProfileInfo = {},
             onAcceptRequest = {},
             onRejectRequest = { _, _ -> },
-            onSubmitRating = { _, _ -> }
+            onRateUser = { _, _ -> },
+            onRateProf = { _, _ -> }
         )
     }
 

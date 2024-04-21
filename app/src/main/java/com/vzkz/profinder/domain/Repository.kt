@@ -114,4 +114,6 @@ interface Repository {
     suspend fun getLocation(): Flow<LatLng?>
     suspend fun updateFirestoreLocation(uid: String, nickname: String)
     fun getLocations(uid: String): Result<Flow<List<LocationModel>>, FirebaseError.Firestore>
+    fun setRatingPending(uid: String, jid: String): Result<Unit, FirebaseError.Firestore>
+    fun deleteIndividualJob(uid: String, jid: String): Result<Unit, FirebaseError.Firestore>
 }

@@ -9,45 +9,43 @@ import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
 import javax.inject.Inject
 
 
-interface RateJobUseCase {
+interface RateUserUseCase {
     suspend operator fun invoke(
         job: JobModel,
         rating: Int
     ): Result<Unit, FirebaseError.Firestore>
 }
 
-class RateJobUseCaseUseCaseImpl @Inject constructor(
+class RateUserUseCaseImpl @Inject constructor(
     private val repository: Repository,
     private val getUidDataStoreUseCase: GetUidDataStoreUseCase
-) : RateJobUseCase {
+) : RateUserUseCase {
 
     private val profileToSeeInstance = getUserProfileToSeeInstance(repository)
     override suspend operator fun invoke(
         job: JobModel,
         rating: Int
     ): Result<Unit, FirebaseError.Firestore> {
-        val uid = getUidDataStoreUseCase()
-        when (val deletion = repository.deleteJobOrRequest( //Delete the job
-            isRequest = false,
-            uid = uid,
-            otherUid = job.otherUid,
-            id = job.id
-        )) {
-            is Result.Error -> return Result.Error(deletion.error)
-            is Result.Success -> {/*do nothing*/
-            }
+
+        when(val update = repository.setRatingPending(uid = job.otherUid, jid = job.id)){
+            is Result.Success -> {/*do nothing*/}
+            is Result.Error -> return Result.Error(update.error)
         }
 
+        when(val delete = repository.deleteIndividualJob(uid = getUidDataStoreUseCase(), jid = job.id)){
+            is Result.Success -> {/*do nothing*/}
+            is Result.Error -> return Result.Error(delete.error)
+        }
 
         when (val update = repository.updateRating(
             uid = job.otherUid,
             newRating = rating
         )) {//Update the rating
-            is Result.Error -> return Result.Error(update.error)
             is Result.Success -> {/*do nothing*/}
+            is Result.Error -> return Result.Error(update.error)
         }
 
-        profileToSeeInstance.flushCache() //flush the singleton so that the profile view is updated
+        profileToSeeInstance.flushCache() //flush the singleton so that the profile view is updated (used for rating update)
 
         return Result.Success(Unit)
     }

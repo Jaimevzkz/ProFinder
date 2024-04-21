@@ -268,6 +268,8 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override fun deleteIndividualJob(uid: String, jid: String) = firestoreService.deleteIndividualJob(uid = uid, jid = jid)
+
     override fun turnRequestIntoJob(
         ownerNickname: String,
         uid: String,
@@ -290,6 +292,8 @@ class RepositoryImpl @Inject constructor(
             is Result.Error -> Result.Error(modification.error)
         }
     }
+
+    override fun setRatingPending(uid: String, jid: String) = firestoreService.setRatingPending(uid = uid, jid = jid)
 
     //Storage
     override suspend fun uploadAndDownloadProfilePhoto(

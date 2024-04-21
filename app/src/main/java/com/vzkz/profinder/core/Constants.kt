@@ -28,6 +28,7 @@ object Constants {
     const val CATEGORY = "category"
     const val SERV_DESCRIPTION = "description"
     const val PRICE = "price"
+    const val IS_RATING_PENDING = "isRatingPending"
 
     //Requests
     const val REQUESTS = "requests"

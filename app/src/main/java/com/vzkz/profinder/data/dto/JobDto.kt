@@ -1,5 +1,6 @@
 package com.vzkz.profinder.data.dto
 
+import com.vzkz.profinder.core.Constants.IS_RATING_PENDING
 import com.vzkz.profinder.core.Constants.OTHER_ID
 import com.vzkz.profinder.core.Constants.OTHER_NICKNAME
 import com.vzkz.profinder.core.Constants.PRICE
@@ -29,7 +30,7 @@ data class JobDto(
             OTHER_ID to profUid,
             SERVICE_NAME to serviceName,
             SERVICE_ID to serviceId,
-            PRICE to price
+            PRICE to price,
         )
     }
 }

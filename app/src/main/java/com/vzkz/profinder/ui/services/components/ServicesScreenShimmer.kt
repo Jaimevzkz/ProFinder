@@ -4,6 +4,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,10 +21,9 @@ fun ServicesScreenShimmer(
     modifier: Modifier = Modifier,
     cardBackgroundColor: Color
 ) {
-    val scrollstate = rememberScrollState()
     MyColumn (modifier = modifier
         .padding(12.dp)
-        .scrollable(scrollstate, orientation = Orientation.Vertical)) {
+        .verticalScroll(rememberScrollState())) {
 
         MySpacer(size = 16)
         for (i in 0..5) {

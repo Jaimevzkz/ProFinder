@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -35,7 +34,8 @@ import com.vzkz.profinder.ui.components.MySpacer
 fun HomeJobList(
     jobList: List<JobModel>,
     isUser: Boolean,
-    onFinishJob: (JobModel) -> Unit,
+    onRateUser: (JobModel) -> Unit,
+    onRateProf: (JobModel) -> Unit,
     onSeeProfile: (String) -> Unit,
 ) {
     val fontColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -97,7 +97,60 @@ fun HomeJobList(
                                 }
                             }
                         }
-                    } else {
+                        Spacer(modifier = Modifier.weight(1f))
+                        OutlinedButton(
+                            onClick = { onRateUser(job) },
+                            border = BorderStroke(1.dp, fontColor),
+                            modifier = Modifier.padding(end = 2.dp)
+                        ) {
+                            Text(text = stringResource(R.string.finish_job), color = fontColor)
+                        }
+                    } else if(job.isRatingPending){
+                        MyColumn {
+                            Text(
+                                text = job.serviceName,
+                                fontFamily = FontFamily(Font(R.font.oswald)),
+                                fontSize = 22.sp,
+                                textDecoration = TextDecoration.LineThrough,
+                                color = fontColor
+                            )
+                            MyRow {
+                                Text(
+                                    text = job.otherNickname,
+                                    fontWeight = FontWeight.Light,
+                                    fontSize = 16.sp,
+                                    color = fontColor,
+                                    textDecoration = TextDecoration.Underline,
+                                    modifier = Modifier.clickable {
+                                        onSeeProfile(job.otherUid)
+                                    }
+                                )
+                                MySpacer(size = 4)
+                                Box(
+                                    modifier = Modifier
+                                        .padding(2.dp)
+                                        .shadow(1.dp, shape = CircleShape)
+                                        .background(MaterialTheme.colorScheme.tertiaryContainer)
+                                        .padding(2.dp)
+                                ) {
+                                    Text(
+                                        text = job.price.toString() + stringResource(R.string.h),
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colorScheme.onTertiaryContainer
+                                    )
+                                }
+                            }
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        OutlinedButton(
+                            onClick = { onRateProf(job) },
+                            border = BorderStroke(1.dp, fontColor),
+                            modifier = Modifier.padding(end = 2.dp)
+                        ) {
+                            Text(text = "Rate", color = fontColor)
+                        }
+                    }  else {
                         MyRow {
                             MyColumn {
                                 Text(
@@ -135,16 +188,6 @@ fun HomeJobList(
                         }
                     }
 
-                    if (!isUser) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        OutlinedButton(
-                            onClick = { onFinishJob(job) },
-                            border = BorderStroke(1.dp, fontColor),
-                            modifier = Modifier.padding(end = 2.dp)
-                        ) {
-                            Text(text = stringResource(R.string.finish_job), color = fontColor/*, fontSize = 10.sp*/)
-                        }
-                    }
                 }
                 MySpacer(size = 2)
             }

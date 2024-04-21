@@ -40,9 +40,19 @@ val JOBMODELFORTESTS: JobModel = JobModel(
     otherUid = "123",
     serviceId = "123",
     serviceName = "Plumbing",
-    price = 12.3
+    price = 12.3,
+    isRatingPending = false
 )
-val JOBLISTFORTEST = listOf(JOBMODELFORTESTS, JOBMODELFORTESTS, JOBMODELFORTESTS, JOBMODELFORTESTS)
+val JOBMODELFORTESTS2: JobModel = JobModel(
+    id = "123",
+    otherNickname = "jaimee1",
+    otherUid = "123",
+    serviceId = "123",
+    serviceName = "Tap check",
+    price = 9.99,
+    isRatingPending = true
+)
+val JOBLISTFORTEST = listOf(JOBMODELFORTESTS, JOBMODELFORTESTS2, JOBMODELFORTESTS, JOBMODELFORTESTS)
 
 val SERVICEMODELFORTEST = ServiceModel(
     sid = "-1",

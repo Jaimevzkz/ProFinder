@@ -7,7 +7,8 @@ import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.JobModel
 import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCase
 import com.vzkz.profinder.domain.usecases.jobs.GetJobOrRequestsUseCase
-import com.vzkz.profinder.domain.usecases.jobs.RateJobUseCase
+import com.vzkz.profinder.domain.usecases.jobs.RateProfUseCase
+import com.vzkz.profinder.domain.usecases.jobs.RateUserUseCase
 import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCase
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
@@ -25,7 +26,8 @@ class HomeViewModel @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val deleteRequestUseCase: DeleteJobOrRequestUseCase,
     private val turnJobIntoRequestUseCase: TurnJobIntoRequestUseCase,
-    private val rateJobUseCase: RateJobUseCase
+    private val rateProfUseCase: RateProfUseCase,
+    private val rateUserUseCase: RateUserUseCase
 ) : BaseViewModel<HomeState, HomeIntent>(HomeState.initial) {
 
     override fun reduce(state: HomeState, intent: HomeIntent): HomeState {
@@ -141,9 +143,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onRateJob(job: JobModel, rating: Int) {
+    fun onRateProf(job: JobModel, rating: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            rateJobUseCase(job = job, rating = rating)
+            rateProfUseCase(job = job, rating = rating)
+        }
+    }
+    fun onRateUser(job: JobModel, rating: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            rateUserUseCase(job = job, rating = rating)
         }
     }
 }

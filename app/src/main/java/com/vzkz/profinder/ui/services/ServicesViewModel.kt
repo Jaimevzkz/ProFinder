@@ -71,7 +71,7 @@ class ServicesViewModel @Inject constructor(
 
             is ServicesIntent.SetLocation -> state.copy(location = intent.location)
 
-            is ServicesIntent.SetOtherLocations -> state.copy(otherLocations = intent.locationList)
+            is ServicesIntent.SetOtherLocations -> state.copy(otherLocations = intent.locationList, requestExists = ServiceState.FREE)
         }
     }
 
@@ -187,6 +187,7 @@ class ServicesViewModel @Inject constructor(
             when (val locations = getLocationsUseCase()) {
                 is Result.Success -> {
                     locations.data.collect { locationList ->
+                        dispatch(ServicesIntent.SetRequestExists(ServiceState.REQUESTED)) //hack to solve recomposition bug
                         dispatch(ServicesIntent.SetOtherLocations(locationList))
                     }
                 }

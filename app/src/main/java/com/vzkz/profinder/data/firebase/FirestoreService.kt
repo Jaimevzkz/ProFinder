@@ -13,6 +13,7 @@ import com.vzkz.profinder.core.Constants.DESCRIPTION
 import com.vzkz.profinder.core.Constants.FAVOURITES
 import com.vzkz.profinder.core.Constants.FIRSTNAME
 import com.vzkz.profinder.core.Constants.IS_ACTIVE
+import com.vzkz.profinder.core.Constants.IS_RATING_PENDING
 import com.vzkz.profinder.core.Constants.IS_USER
 import com.vzkz.profinder.core.Constants.JOBS
 import com.vzkz.profinder.core.Constants.LASTNAME
@@ -447,7 +448,8 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                                 serviceId = docSnapshot.getString(SERVICE_ID) ?: throw Exception(),
                                 serviceName = docSnapshot.getString(SERVICE_NAME)
                                     ?: throw Exception(),
-                                price = docSnapshot.getDouble(PRICE) ?: throw Exception()
+                                price = docSnapshot.getDouble(PRICE) ?: throw Exception(),
+                                isRatingPending = docSnapshot.getBoolean(IS_RATING_PENDING) ?: false
                             )
                         )
                     }
@@ -531,6 +533,25 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         return Result.Success(Unit)
     }
 
+    fun deleteIndividualJob(
+        uid: String,
+        jid: String
+    ): Result<Unit, FirebaseError.Firestore> {
+        try {
+            usersCollection.document(uid).collection(JOBS).document(jid).delete()
+                .addOnSuccessListener {
+                    Log.i("Jaime", "Job deleted correctly")
+                }
+                .addOnFailureListener {
+                    Log.e("Jaime", "Error deleting job from firestore: ${it.message}")
+                    throw Exception()
+                }
+        } catch (e: Exception) {
+            return Result.Error(FirebaseError.Firestore.DELETION_ERROR)
+        }
+        return Result.Success(Unit)
+    }
+
     fun turnRequestIntoJob(
         rid: String,
         uid: String,
@@ -547,6 +568,21 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             }
 
             is Result.Error -> Result.Error(deletion.error)
+        }
+    }
+
+    fun setRatingPending(uid: String, jid: String): Result<Unit, FirebaseError.Firestore> {
+        return try {
+            usersCollection.document(uid).collection(JOBS).document(jid)
+                .update(IS_RATING_PENDING, true)
+                .addOnSuccessListener {
+                    Log.i("Jaime", "Rating pending updated correctly")
+                }
+                .addOnFailureListener { throw Exception() }
+            Result.Success(Unit)
+
+        } catch (e: Exception) {
+            Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
         }
     }
 

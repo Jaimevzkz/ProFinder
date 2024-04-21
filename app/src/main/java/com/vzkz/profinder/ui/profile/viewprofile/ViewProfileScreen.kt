@@ -66,6 +66,7 @@ import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.shimmer.IconShimmer
 import com.vzkz.profinder.ui.components.starColor
 import com.vzkz.profinder.ui.services.components.userscreen.ServiceCard
+import com.vzkz.profinder.ui.services.components.userscreen.ServiceCardShimmer
 import com.vzkz.profinder.ui.services.components.userscreen.ServiceDetailsDialog
 import com.vzkz.profinder.ui.services.components.userscreen.ServiceState
 import com.vzkz.profinder.ui.theme.ProFinderTheme
@@ -164,9 +165,9 @@ private fun ScreenBody(
                 cardColor = cardColor
             )
         } else {
-            val modifier = if(!showServiceInfo) Modifier.verticalScroll(rememberScrollState()) else Modifier
             Column(
-                modifier = modifier
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState(), enabled = !showServiceInfo)
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
                     .padding(horizontal = 20.dp)
@@ -323,7 +324,7 @@ private fun ScreenBody(
                             tint = cardContentColor,
                             modifier = Modifier.clickable { expanded = !expanded }
                         )
-                    } else if(userToSee.description != null) {
+                    } else if (userToSee.description != null) {
                         Icon(
                             imageVector = Icons.Filled.ExpandLess,
                             contentDescription = "expand less description",
@@ -332,14 +333,16 @@ private fun ScreenBody(
                         )
                     }
                 }
-                Text(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    fontWeight = FontWeight.SemiBold,
-                    text = "Services",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = cardContentColor
-                )
-                serviceList.forEach {serviceModel ->
+                if (userToSee.actor == Actors.Professional){
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        fontWeight = FontWeight.SemiBold,
+                        text = "Services",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = cardContentColor
+                    )
+                }
+                serviceList.forEach { serviceModel ->
                     MySpacer(size = 8)
                     ServiceCard(
                         modifier = Modifier,
@@ -348,7 +351,7 @@ private fun ScreenBody(
                         service = serviceModel,
                         backgroundColor = cardColor,
                         fontColor = cardContentColor,
-                        onServiceInfo ={
+                        onServiceInfo = {
                             onCheckRequestExists(serviceModel.sid)
                             serviceToShow = serviceModel
                             showServiceInfo = true
@@ -408,7 +411,7 @@ private fun ScreenBody(
 @Composable
 private fun ViewProfileShimmer(modifier: Modifier = Modifier, cardColor: Color) {
     Column(
-        modifier = modifier
+        modifier = modifier.verticalScroll(rememberScrollState())
     ) {
         MySpacer(size = 32)
         Row(
@@ -465,7 +468,7 @@ private fun ViewProfileShimmer(modifier: Modifier = Modifier, cardColor: Color) 
                 .shadow(elevation = 10.dp, shape = RoundedCornerShape(10))
                 .background(cardColor)
                 .padding(horizontal = 16.dp)
-                .weight(1f)
+                .padding(bottom = 16.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
@@ -497,7 +500,7 @@ private fun ViewProfileShimmer(modifier: Modifier = Modifier, cardColor: Color) 
                     .background(Color.Gray)
             )
             MySpacer(size = innerSpaceBetween)
-            for (i in 0..5) {
+            for (i in 0..3) {
                 Box(
                     modifier = Modifier
                         .shimmer()
@@ -507,6 +510,19 @@ private fun ViewProfileShimmer(modifier: Modifier = Modifier, cardColor: Color) 
                 )
                 MySpacer(size = 6)
             }
+        }
+        Box(
+            modifier = Modifier
+                .shimmer()
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 12.dp)
+                .width(120.dp)
+                .height(25.dp)
+                .background(Color.Gray)
+        )
+        for (i in 0..3) {
+            ServiceCardShimmer(backgroundColor = MaterialTheme.colorScheme.surfaceVariant)
+            MySpacer(size = 6)
         }
     }
 }
@@ -531,5 +547,26 @@ private fun LightPreview() {
             serviceList = SERVICELISTFORTEST
         )
     }
+}
 
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun ShimmerPreview() {
+    ProFinderTheme {
+        ScreenBody(
+            userToSee = PROFESSIONALMODELFORTESTS,
+            error = null,
+            isFavourite = true,
+            requestExists = ServiceState.REQUESTED,
+            onChangeFavourite = {},
+            onChatClicked = {},
+            onCloseDialog = {},
+            onNavBack = {},
+            onRequestService = {},
+            onCancelRequest = {},
+            onCheckRequestExists = {},
+            loading = true,
+            serviceList = SERVICELISTFORTEST
+        )
+    }
 }

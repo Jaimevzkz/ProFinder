@@ -6,5 +6,6 @@ data class JobModel(
     val otherUid: String,
     val serviceId: String,
     val serviceName: String,
-    val price: Double
+    val price: Double,
+    val isRatingPending: Boolean = false
 )

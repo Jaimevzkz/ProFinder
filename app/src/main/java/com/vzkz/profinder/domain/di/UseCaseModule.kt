@@ -28,8 +28,10 @@ import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCase
 import com.vzkz.profinder.domain.usecases.jobs.DeleteJobOrRequestUseCaseImpl
 import com.vzkz.profinder.domain.usecases.jobs.GetJobOrRequestsUseCase
 import com.vzkz.profinder.domain.usecases.jobs.GetJobOrRequestsUseCaseImpl
-import com.vzkz.profinder.domain.usecases.jobs.RateJobUseCase
-import com.vzkz.profinder.domain.usecases.jobs.RateJobUseCaseUseCaseImpl
+import com.vzkz.profinder.domain.usecases.jobs.RateProfUseCase
+import com.vzkz.profinder.domain.usecases.jobs.RateProfUseCaseUseCaseImpl
+import com.vzkz.profinder.domain.usecases.jobs.RateUserUseCase
+import com.vzkz.profinder.domain.usecases.jobs.RateUserUseCaseImpl
 import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCase
 import com.vzkz.profinder.domain.usecases.jobs.TurnJobIntoRequestUseCaseImpl
 import com.vzkz.profinder.domain.usecases.location.GetLocationUseCase
@@ -128,9 +130,11 @@ abstract class UseCaseModule {
     @Binds
     abstract fun bindTurnJobIntoRequestUseCase(impl: TurnJobIntoRequestUseCaseImpl): TurnJobIntoRequestUseCase
     @Binds
-    abstract fun bindRateJobUseCase(impl: RateJobUseCaseUseCaseImpl): RateJobUseCase
+    abstract fun bindRateJobUseCase(impl: RateProfUseCaseUseCaseImpl): RateProfUseCase
     @Binds
     abstract fun bindGetLocationUseCase(impl: GetLocationUseCaseImpl): GetLocationUseCase
     @Binds
     abstract fun bindGetLocationsUseCase(impl: GetOtherLocationsUseCaseImpl): GetOtherLocationsUseCase
+    @Binds
+    abstract fun bindRateUserUseCase(impl: RateUserUseCaseImpl): RateUserUseCase
 }
