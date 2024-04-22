@@ -68,6 +68,8 @@ class RepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun getAllUsers() = firestoreService.getAllUsers()
+
     override suspend fun getServiceListByUidFromFirestore(uid: String): Result<List<ServiceModel>, FirebaseError.Firestore> {
         return when (val serviceList = firestoreService.getServiceListByUid(uid)) {
             is Result.Success -> Result.Success(serviceList.data)

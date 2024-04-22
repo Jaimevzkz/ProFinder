@@ -18,15 +18,15 @@ class ProfileViewUserSingleton(private val repository: Repository) {
         }
     }
 
-    private var cachedUser: ActorModel? = null // Stores the user locally
+    private var cachedUser: ActorModel? = null
 
     fun cachedUser(uid: String): Boolean = cachedUser != null && cachedUser?.uid == uid
 
-    suspend fun getData(uid: String = ""): Result<ActorModel, FirebaseError.Firestore> { //gets cached user or calls firebase
+    suspend fun getData(uid: String = ""): Result<ActorModel, FirebaseError.Firestore> {
         return if (uid != "") {
-            fetchDataFromFirestore(uid) //get user from firestore
+            fetchDataFromFirestore(uid)
         } else {
-            Result.Success(cachedUser!!) //user cached locally
+            Result.Success(cachedUser!!)
         }
     }
 

@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.snapshots
 import com.vzkz.profinder.core.Constants.CATEGORY
 import com.vzkz.profinder.core.Constants.DESCRIPTION
 import com.vzkz.profinder.core.Constants.FAVOURITES
@@ -316,6 +317,57 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
         }
 
+    }
+
+    suspend fun getAllUsers(): Result<List<ActorModel>, FirebaseError.Firestore> {
+        return try {
+            val userList: MutableList<ActorModel> = mutableListOf()
+            val documents = usersCollection.get().await()
+            for (userData in documents) {
+                val isUser = userData[IS_USER] as Boolean
+                val description: String? =
+                    if (userData[DESCRIPTION] == "-") null else userData[DESCRIPTION] as String
+                val profession = if (isUser) null else {
+                    when (userData[PROFESSION]) {
+                        Professions.Plumber.name -> Professions.Plumber
+                        Professions.Hairdresser.name -> Professions.Hairdresser
+                        Professions.Electrician.name -> Professions.Electrician
+                        else -> return Result.Error(FirebaseError.Firestore.ERROR_GETTING_USERS)
+                    }
+                }
+                val state = if (isUser) null else {
+                    when (userData[STATE]) {
+                        ProfState.Active.name -> ProfState.Active
+                        ProfState.Working.name -> ProfState.Working
+                        ProfState.Inactive.name -> ProfState.Inactive
+                        else -> return Result.Error(FirebaseError.Firestore.ERROR_GETTING_USERS)
+                    }
+                }
+                val profilePicture = userData.get(PROFILEPHOTO) as String?
+                val reviewNumber = userData.get(REVIEW_NUMBER) as Double?
+                var rating = userData.get(RATING) as Double?
+                if (rating != null)
+                    rating = (rating * 100.0).roundToInt() / 100.0
+                val userModel = ActorModel(
+                    uid = userData.id,
+                    nickname = userData[NICKNAME] as String,
+                    firstname = userData[FIRSTNAME] as String,
+                    lastname = userData[LASTNAME] as String,
+                    actor = if (isUser) Actors.User else Actors.Professional,
+                    description = description,
+                    profession = profession,
+                    state = state,
+                    profilePhoto = profilePicture?.let { Uri.parse(it) },
+                    rating = rating,
+                    reviewNumber = reviewNumber?.toInt()
+                )
+
+                userList.add(userModel)
+            }
+            Result.Success(userList.toList())
+         } catch (e: Exception) {
+            Result.Error(FirebaseError.Firestore.CONNECTION_ERROR)
+        }
     }
 
     //Services

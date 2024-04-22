@@ -36,6 +36,7 @@
     <string name="unknown_error_occurred">Unknown error occurred…</string>
     <string name="user_type">User type</string>
     <string name="services">Services</string>
+    <string name="search">Search</string>
     <string name="user_professional">User/Professional</string>
     <string name="last_name">Last name</string>
     <string name="first_name">First name</string>
@@ -85,9 +86,13 @@
     <string name="job_addition_error">An error occurred while adding the job.</string>
     <string name="location_update_error">An error occurred while updating location</string>
     <string name="error_getting_location">An error occurred while getting other location</string>
+    <string name="error_getting_users">An error occurred while getting users, try again later…</string>
     <string name="recent_chat_update_error">An error occurred while updating recent chats</string>
     <string name="recent_chat_get_error">An error occurred while getting recent chats</string>
     <string name="phto_deletion_error">An error occurred while deleting profile photo</string>
-    <string name="no_pending_requests">No pending requests...</string>
+    <string name="no_pending_requests">No pending requests…</string>
+    <string name="type_a_user_to_search">Type a user to search</string>
+    <string name="users">Users</string>
+    <string name="professionals">Professionals</string>
 
 </resources>

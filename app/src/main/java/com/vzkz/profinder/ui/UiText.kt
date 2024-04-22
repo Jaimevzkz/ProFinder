@@ -19,11 +19,4 @@ sealed class UiText {
             is StringResource -> LocalContext.current.getString(id, *args)
         }
     }
-
-//    fun asString(context: Context): String{ //I think this is not needed (this app is full compose)
-//        return when(this){
-//            is DynamicString -> value
-//            is StringResource -> context.getString(id, *args)
-//        }
-//    }
 }

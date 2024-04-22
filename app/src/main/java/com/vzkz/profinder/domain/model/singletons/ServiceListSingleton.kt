@@ -19,15 +19,15 @@ class ServiceListSingleton(private val repository: Repository) {
         }
     }
 
-    private var cachedServiceList: List<ServiceModel>? = null // Stores the user locally
+    private var cachedServiceList: List<ServiceModel>? = null
 
     fun cachedServiceList(): Boolean = cachedServiceList != null
 
-    suspend fun getData(uid: String = ""): Result<List<ServiceModel>, FirebaseError.Firestore> { //gets cached user or calls firebase
+    suspend fun getData(uid: String = ""): Result<List<ServiceModel>, FirebaseError.Firestore> {
         return if (cachedServiceList == null) {
-            fetchServiceListFromFirestore(uid) //get user from firestore
+            fetchServiceListFromFirestore(uid)
         } else {
-            Result.Success(cachedServiceList!!) //user cached locally
+            Result.Success(cachedServiceList!!)
         }
     }
 

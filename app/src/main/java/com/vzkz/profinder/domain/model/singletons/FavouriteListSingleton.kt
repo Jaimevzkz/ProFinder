@@ -18,15 +18,15 @@ class FavouriteListSingleton(private val repository: Repository) {
         }
     }
 
-    private var cachedFavList: List<ActorModel>? = null // Stores the user locally
+    private var cachedFavList: List<ActorModel>? = null
 
     fun cachedList(): Boolean = cachedFavList != null
 
-    suspend fun getData(uid: String = ""): Result<List<ActorModel>, FirebaseError.Firestore> { //gets cached user or calls firebase
+    suspend fun getData(uid: String = ""): Result<List<ActorModel>, FirebaseError.Firestore> {
         return if (cachedFavList == null) {
-            fetchDataFromFirestore(uid) //get user from firestore
+            fetchDataFromFirestore(uid)
         } else {
-            Result.Success(cachedFavList!!) //user cached locally
+            Result.Success(cachedFavList!!)
         }
     }
 

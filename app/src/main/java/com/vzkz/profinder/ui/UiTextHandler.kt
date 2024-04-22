@@ -42,6 +42,8 @@ fun FirebaseError.asUiText(): UiText {
 
         FirebaseError.Firestore.ERROR_GETTING_LOCATIONS -> UiText.StringResource(R.string.error_getting_location)
 
+        FirebaseError.Firestore.ERROR_GETTING_USERS -> UiText.StringResource(R.string.error_getting_users)
+
         FirebaseError.Realtime.NULL_REALTIME_DATA -> UiText.StringResource(R.string.realtime_data_was_corrupted)
 
         FirebaseError.Realtime.REALTIME_ACCESS_INTERRUPTED -> UiText.StringResource(R.string.access_to_realtime_database_was_interrupted)

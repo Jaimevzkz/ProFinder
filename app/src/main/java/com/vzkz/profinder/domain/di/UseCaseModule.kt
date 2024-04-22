@@ -52,6 +52,8 @@ import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCase
 import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCase
 import com.vzkz.profinder.domain.usecases.user.FavouriteListUseCaseImpl
+import com.vzkz.profinder.domain.usecases.user.GetAllUsersUseCase
+import com.vzkz.profinder.domain.usecases.user.GetAllUsersUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
@@ -137,4 +139,6 @@ abstract class UseCaseModule {
     abstract fun bindGetLocationsUseCase(impl: GetOtherLocationsUseCaseImpl): GetOtherLocationsUseCase
     @Binds
     abstract fun bindRateUserUseCase(impl: RateUserUseCaseImpl): RateUserUseCase
+    @Binds
+    abstract fun bindGetAllUsersUseCase(impl: GetAllUsersUseCaseImpl): GetAllUsersUseCase
 }
