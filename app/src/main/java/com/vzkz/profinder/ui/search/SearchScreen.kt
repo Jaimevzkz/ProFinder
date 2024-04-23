@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -28,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
+import com.valentinilk.shimmer.shimmer
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.PROFFESIONALLISTFORTEST
 import com.vzkz.profinder.destinations.SearchScreenDestination
@@ -48,8 +52,10 @@ import com.vzkz.profinder.ui.components.MyGenericTextField
 import com.vzkz.profinder.ui.components.MyRow
 import com.vzkz.profinder.ui.components.MySpacer
 import com.vzkz.profinder.ui.components.ProfilePicture
+import com.vzkz.profinder.ui.components.ProfilePictureShimmer
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
+import com.vzkz.profinder.ui.components.shimmer.IconShimmer
 import com.vzkz.profinder.ui.theme.ProFinderTheme
 
 @Destination
@@ -83,15 +89,7 @@ private fun ScreenBody(
         onBottomBarClicked = { onBottomBarClicked(it) }
     ) { paddingValues ->
         if (state.loading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(12.dp)
-                    .background(MaterialTheme.colorScheme.background),
-            ) {
-                Text(text = "Hola")
-            }
+            ProfileScreenShimmer()
         } else {
             Box(
                 modifier = Modifier
@@ -194,7 +192,7 @@ private fun filterItem(
     isUserChipSelected: Boolean,
     isProfessionalChipSelected: Boolean
 ) =
-    (actor.nickname.contains(query) || actor.firstname.contains(query) || actor.lastname.contains(
+    (actor.nickname.contains(query) || actor.firstname.lowercase().contains(query) || actor.lastname.lowercase().contains(
         query
     )) && (isUserChipSelected && actor.actor == Actors.User || isProfessionalChipSelected && actor.actor == Actors.Professional)
 
@@ -236,8 +234,83 @@ fun ProfileItem(modifier: Modifier = Modifier, actor: ActorModel, onClick: (Stri
 }
 
 @Composable
-fun ProfileItemShimmer(){
+fun ProfileScreenShimmer(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(12.dp)
+            .background(MaterialTheme.colorScheme.background),
+    ) {
+        MyColumn(Modifier.align(Alignment.TopCenter)) {
+            Box(
+                modifier = Modifier
+                    .shimmer()
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .background(Color.Gray)
+            )
+            MySpacer(size = 12)
+            Row {
+                Box(
+                    modifier = Modifier
+                        .shimmer()
+                        .width(85.dp)
+                        .height(35.dp)
+                        .clip(CircleShape)
+                        .background(Color.Gray)
+                )
+                MySpacer(size = 12)
+                Box(
+                    modifier = Modifier
+                        .shimmer()
+                        .width(110.dp)
+                        .height(35.dp)
+                        .clip(CircleShape)
+                        .background(Color.Gray)
+                )
+            }
+            MySpacer(size = 12)
+            for (i in 1..10){
+                MyRow(modifier = Modifier.fillMaxWidth()) {
+                    ProfilePictureShimmer(size = 65, shape = MaterialTheme.shapes.large)
+                    MySpacer(size = 12)
+                    MyColumn {
+                        Box(
+                            modifier = Modifier
+                                .shimmer()
+                                .padding(top = 4.dp)
+                                .width(170.dp)
+                                .height(20.dp)
+                                .background(Color.Gray)
+                        )
+                        MySpacer(size = 8)
+                        MyRow {
+                            Box(
+                                modifier = Modifier
+                                    .shimmer()
+                                    .width(60.dp)
+                                    .height(22.dp)
+                                    .background(Color.Gray)
+                            )
+                            MySpacer(size = 12)
+                            Box(
+                                modifier = Modifier
+                                    .shimmer()
+                                    .clip(CircleShape)
+                                    .width(100.dp)
+                                    .height(30.dp)
+                                    .background(Color.Gray)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    IconShimmer()
+                }
+                MySpacer(size = 12)
+            }
 
+        }
+    }
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
@@ -253,4 +326,18 @@ private fun LightPreview() {
         )
     }
 
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun ShimmerPreview() {
+    ProFinderTheme {
+        ScreenBody(
+            error = null,
+            onCloseDialog = {},
+            onBottomBarClicked = {},
+            state = SearchState.initial.copy(userList = PROFFESIONALLISTFORTEST, loading = true),
+            onSeeProfile = {}
+        )
+    }
 }

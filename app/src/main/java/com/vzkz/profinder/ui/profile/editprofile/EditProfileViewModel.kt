@@ -30,30 +30,29 @@ class EditProfileViewModel @Inject constructor(
         intent: EditProfileIntent
     ): EditProfileState { //This function reduces each intent with a when
         return when (intent) {
+
+            is EditProfileIntent.Loading -> state.copy(
+                loading = !this.state.loading
+            )
             is EditProfileIntent.Error -> state.copy(
                 error = intent.error,
                 success = false,
-                loading = true
+                loading = false
             )
 
             is EditProfileIntent.SetUser -> state.copy(
                 user = intent.user,
                 success = false,
-                loading = false
+                wholeScreenLoading = false
             )
 
-            EditProfileIntent.CloseError -> state.copy(
+            is EditProfileIntent.CloseError -> state.copy(
                 error = null,
-                success = true
             )
 
-            EditProfileIntent.Success -> state.copy(
-                success = false
-            )
-
-            is EditProfileIntent.Loading -> state.copy(
-                success = false,
-                loading = true
+            is EditProfileIntent.Success -> state.copy(
+                success = true,
+                loading = false
             )
 
             is EditProfileIntent.SetImg -> state.copy(user = intent.updatedUser)
@@ -70,12 +69,12 @@ class EditProfileViewModel @Inject constructor(
         }
     }
 
-    fun onModifyUserData(newUser: ActorModel, oldUser: ActorModel) {
+    fun onModifyUserData(uid: String, changedFields: Map<String, Any>) {
         dispatch(EditProfileIntent.Loading)
         viewModelScope.launch(Dispatchers.IO) {
             when (val modification = modifyUserDataUseCase(
-                newUser = newUser,
-                oldUser = oldUser
+                uid = uid,
+                changedFields = changedFields
             )) {
                 is Result.Success -> dispatch(EditProfileIntent.Success)
                 is Result.Error -> dispatch(EditProfileIntent.Error(modification.error.asUiText()))

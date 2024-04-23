@@ -153,22 +153,15 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     }
 
     suspend fun modifyUserData(
-        oldUser: ActorModel,
-        newUser: ActorModel
-    ): Result<Unit, FirebaseError.Firestore> { //todo this functionality does not work
-        if ((oldUser.nickname != newUser.nickname) && (nicknameExists(newUser.nickname))) {
+        uid: String,
+        changedFields: Map<String, Any>
+    ): Result<Unit, FirebaseError.Firestore> {
+        if (changedFields.containsKey(NICKNAME) && nicknameExists(changedFields[NICKNAME].toString()))
             return Result.Error(FirebaseError.Firestore.NICKNAME_IN_USE)
-        }
 
-        // Gets the reference to the user document
-        val userDocumentReference = usersCollection.document(oldUser.uid)
-
-        // Casts the new UserModel to map in order to update only the needed fields
-        val newUserMap = newUser.toMap()
-
-        // Updates firestore data and wait for the update to complete
+        val userDocumentReference = usersCollection.document(uid)
         try {
-            userDocumentReference.update(newUserMap)
+            userDocumentReference.set(changedFields, SetOptions.merge())
                 .addOnSuccessListener {
                     Log.i("Jaime", "User data updated successfully")
                 }
@@ -180,6 +173,31 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
         }
         return Result.Success(Unit)
+
+//        if ((oldUser.nickname != newUser.nickname) && (nicknameExists(newUser.nickname))) {
+//            return Result.Error(FirebaseError.Firestore.NICKNAME_IN_USE)
+//        }
+//
+//        // Gets the reference to the user document
+//        val userDocumentReference = usersCollection.document(oldUser.uid)
+//
+//        // Casts the new UserModel to map in order to update only the needed fields
+//        val newUserMap = newUser.toMap()
+//
+//        // Updates firestore data and wait for the update to complete
+//        try {
+//            userDocumentReference.update(newUserMap)
+//                .addOnSuccessListener {
+//                    Log.i("Jaime", "User data updated successfully")
+//                }
+//                .addOnFailureListener {
+//                    Log.e("Jaime", "Error updating user data: ${it.message}")
+//                    throw Exception()
+//                }
+//        } catch (e: Exception) {
+//            return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
+//        }
+//        return Result.Success(Unit)
     }
 
 

@@ -37,11 +37,6 @@ interface Repository {
 
     suspend fun logout()
     fun isUserLogged(): Boolean
-    suspend fun modifyUserData(
-        oldUser: ActorModel,
-        newUser: ActorModel
-    ): Result<Unit, FirebaseError.Firestore>
-
     fun changeProfState(uid: String, state: ProfState): Result<Unit, FirebaseError.Firestore>
     fun modifyServiceActivity(sid: String, newValue: Boolean): Result<Unit, FirebaseError.Firestore>
     fun changeFavouriteList(
@@ -117,4 +112,8 @@ interface Repository {
     fun setRatingPending(uid: String, jid: String): Result<Unit, FirebaseError.Firestore>
     fun deleteIndividualJob(uid: String, jid: String): Result<Unit, FirebaseError.Firestore>
     suspend fun getAllUsers(): Result<List<ActorModel>, FirebaseError.Firestore>
+    suspend fun modifyUserData(
+        uid: String,
+        changedFields: Map<String, Any>
+    ): Result<Unit, FirebaseError.Firestore>
 }

@@ -145,15 +145,9 @@ class RepositoryImpl @Inject constructor(
     override fun isUserLogged() = authService.isUserLogged()
 
     override suspend fun modifyUserData(
-        oldUser: ActorModel,
-        newUser: ActorModel
-    ): Result<Unit, FirebaseError.Firestore> {
-        return when (val modification =
-            firestoreService.modifyUserData(oldUser = oldUser, newUser = newUser)) {
-            is Result.Success -> Result.Success(modification.data)
-            is Result.Error -> Result.Error(modification.error)
-        }
-    }
+        uid: String,
+        changedFields: Map<String, Any>
+    ): Result<Unit, FirebaseError.Firestore> = firestoreService.modifyUserData(uid, changedFields)
 
     override fun changeProfState(
         uid: String,

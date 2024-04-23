@@ -10,14 +10,16 @@ data class EditProfileState(
     val user: ActorModel?,
     val error: UiText?,
     val success: Boolean,
-    val loading: Boolean
+    val loading: Boolean,
+    val wholeScreenLoading: Boolean
 ) : State {
     companion object {
         val initial: EditProfileState = EditProfileState(
             user = null,
             error = null,
             success = false,
-            loading = true
+            loading = false,
+            wholeScreenLoading = true
         )
     }
 }

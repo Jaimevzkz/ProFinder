@@ -103,7 +103,7 @@ private fun ScreenBody(
         var nickname by remember { mutableStateOf("jaimee1") } //jaimee
         var firstname by remember { mutableStateOf("Jaime") } //Jaime
         var lastname by remember { mutableStateOf("Vázquez") } //Vázquez
-        var actorType: Actors by remember { mutableStateOf(Actors.User) }
+        var actorType: Actors by remember { mutableStateOf(Actors.Professional) }
         var profession: Professions? by remember { mutableStateOf(null) }
         //validation
         var enableSignup by remember { mutableStateOf(false) }
