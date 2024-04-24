@@ -3,8 +3,6 @@ package com.vzkz.profinder.ui.profile.viewprofile
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,7 +50,6 @@ import com.valentinilk.shimmer.shimmer
 import com.vzkz.profinder.R
 import com.vzkz.profinder.core.PROFESSIONALMODELFORTESTS
 import com.vzkz.profinder.core.SERVICELISTFORTEST
-import com.vzkz.profinder.core.SERVICEMODEL1FORTEST
 import com.vzkz.profinder.destinations.IndividualChatScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
@@ -337,7 +334,7 @@ private fun ScreenBody(
                     Text(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         fontWeight = FontWeight.SemiBold,
-                        text = "Services",
+                        text = stringResource(R.string.services),
                         style = MaterialTheme.typography.titleLarge,
                         color = cardContentColor
                     )

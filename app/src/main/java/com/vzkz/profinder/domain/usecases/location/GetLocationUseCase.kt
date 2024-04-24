@@ -6,7 +6,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.error.FirebaseError
 import com.vzkz.profinder.domain.error.Result
-import com.vzkz.profinder.domain.usecases.user.GetUidDataStoreUseCase
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

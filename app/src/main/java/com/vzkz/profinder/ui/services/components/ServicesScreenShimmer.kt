@@ -33,9 +33,6 @@ fun ServicesScreenShimmer(
     }
 }
 
-
-
-
 @Preview
 @Composable
 fun ServicesScreenShimmerPreview() {

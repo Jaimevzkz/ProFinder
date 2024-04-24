@@ -1,7 +1,6 @@
 package com.vzkz.profinder.ui.profile.editprofile
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.error.Result
@@ -36,13 +35,11 @@ class EditProfileViewModel @Inject constructor(
             )
             is EditProfileIntent.Error -> state.copy(
                 error = intent.error,
-                success = false,
                 loading = false
             )
 
             is EditProfileIntent.SetUser -> state.copy(
                 user = intent.user,
-                success = false,
                 wholeScreenLoading = false
             )
 

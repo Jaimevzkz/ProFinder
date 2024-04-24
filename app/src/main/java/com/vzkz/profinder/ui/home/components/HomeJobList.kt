@@ -43,7 +43,7 @@ fun HomeJobList(
         MyColumn(modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "No active jobs...",
+                text = stringResource(R.string.no_active_jobs),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.weight(1.7f))
@@ -58,7 +58,6 @@ fun HomeJobList(
                         .shadow(1.dp, shape = MaterialTheme.shapes.medium)
                         .background(MaterialTheme.colorScheme.primaryContainer)
                         .padding(6.dp)
-//                        .padding(horizontal = 8.dp)
                 ) {
 
                     if (!isUser) {

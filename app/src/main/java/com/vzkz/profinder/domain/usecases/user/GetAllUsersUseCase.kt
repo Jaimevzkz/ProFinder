@@ -3,7 +3,6 @@ package com.vzkz.profinder.domain.usecases.user
 import com.vzkz.profinder.domain.Repository
 import com.vzkz.profinder.domain.error.FirebaseError
 import com.vzkz.profinder.domain.error.Result
-import com.vzkz.profinder.domain.model.singletons.UserDataSingleton.Companion.getUserInstance
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.singletons.UserListSingleton.Companion.getUserListInstance
 import javax.inject.Inject

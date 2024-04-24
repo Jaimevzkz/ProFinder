@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +37,6 @@ import com.vzkz.profinder.destinations.HomeScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.domain.model.Actors
 import com.vzkz.profinder.domain.model.Professions
-import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.MyAuthHeader
 import com.vzkz.profinder.ui.components.MyCircularProgressbar
 import com.vzkz.profinder.ui.components.MyEmailTextField
@@ -46,6 +44,7 @@ import com.vzkz.profinder.ui.components.MyGenericTextField
 import com.vzkz.profinder.ui.components.MyImageLogo
 import com.vzkz.profinder.ui.components.MyPasswordTextField
 import com.vzkz.profinder.ui.components.MySpacer
+import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
 import com.vzkz.profinder.ui.components.validateEmail
 import com.vzkz.profinder.ui.components.validatePassword
 import com.vzkz.profinder.ui.theme.ProFinderTheme
@@ -97,12 +96,12 @@ private fun ScreenBody(
             .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
-        var email by remember { mutableStateOf("jaimevzkz1+1@gmail.com") } //jaimevzkz1+2@gmail.com
-        var password by remember { mutableStateOf("1234Qwerty") } //1234Qwerty
-        var repeatPassword by remember { mutableStateOf("1234Qwerty") } //1234Qwerty
-        var nickname by remember { mutableStateOf("jaimee1") } //jaimee
-        var firstname by remember { mutableStateOf("Jaime") } //Jaime
-        var lastname by remember { mutableStateOf("Vázquez") } //Vázquez
+        var email by remember { mutableStateOf("") }
+        var password by remember { mutableStateOf("") }
+        var repeatPassword by remember { mutableStateOf("") }
+        var nickname by remember { mutableStateOf("") }
+        var firstname by remember { mutableStateOf("") }
+        var lastname by remember { mutableStateOf("") }
         var actorType: Actors by remember { mutableStateOf(Actors.Professional) }
         var profession: Professions? by remember { mutableStateOf(null) }
         //validation
@@ -167,7 +166,7 @@ private fun ScreenBody(
                 })
             if (!isSamePassword) {
                 Text(
-                    text = "Passwords must coincide.",
+                    text = stringResource(R.string.passwords_must_coincide),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -265,7 +264,7 @@ private fun ScreenBody(
                             OutlinedTextField(
                                 value = profession?.name ?: "",
                                 onValueChange = {/*Only read*/ },
-                                label = { Text("Profession") },
+                                label = { Text(stringResource(R.string.profession)) },
                                 leadingIcon = {
                                     IconButton(onClick = { expandedProfessionDropdownMenu = true }) {
                                         Icon(
@@ -319,7 +318,7 @@ private fun ScreenBody(
         }
 
         Button(
-            onClick = { //if(actortype == null)  if(profession == null) gestionar
+            onClick = {
                 if(actorType == Actors.Professional && profession ==  null){
                     isProfessionValid = false
                 } else{

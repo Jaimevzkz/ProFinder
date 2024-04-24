@@ -38,11 +38,10 @@ object NetworkModule {
         firestoreService: FirestoreService,
         storageService: StorageService,
         realtimeService: RealtimeService,
-        @ApplicationContext context: Context,
         uidCombiner: UidCombiner,
         locationService: ILocationService
     ): Repository {
-        return RepositoryImpl(authService, firestoreService, storageService, realtimeService, context, uidCombiner, locationService)
+        return RepositoryImpl(authService, firestoreService, storageService, realtimeService, uidCombiner, locationService)
     }
 
     @Singleton

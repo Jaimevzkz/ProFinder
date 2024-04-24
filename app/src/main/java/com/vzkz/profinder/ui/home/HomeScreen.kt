@@ -214,7 +214,7 @@ private fun ScreenBody(
                         isEditFavListEmpty = favList.isEmpty(),
                         editFavList = editFavList,
                         onEditFavList = { editFavList = !editFavList },
-                        title = "Favorites",
+                        title = stringResource(R.string.favorites),
                         placeRight = true,
                         content = {
                             MySpacer(size = 4)
@@ -260,7 +260,7 @@ private fun ScreenBody(
                         fontFamily = fontFamily,
                         cardPadding = cardPadding,
                         contentPadding = contentPadding,
-                        title = "Active jobs",
+                        title = stringResource(R.string.active_jobs),
                         placeRight = false
                     ) {
                         HomeJobList(
@@ -281,10 +281,6 @@ private fun ScreenBody(
                     }
                 }
             }
-
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                RequestNotificationPermissionDialog()
-//            }
 
             if (error != null) {
                 MyAlertDialog(
@@ -383,18 +379,6 @@ private fun RatingDialog(
         }
     }
 }
-
-//@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-//@OptIn(ExperimentalPermissionsApi::class)
-//@Composable
-//fun RequestNotificationPermissionDialog() {
-//    val permissionState = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
-//
-//    if (!permissionState.status.isGranted) {
-//        if (permissionState.status.shouldShowRationale) RationaleDialog()
-//        else PermissionDialog { permissionState.launchPermissionRequest() }
-//    }
-//}
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable

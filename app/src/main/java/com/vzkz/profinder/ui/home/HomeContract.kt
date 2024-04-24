@@ -1,6 +1,6 @@
 package com.vzkz.profinder.ui.home
 
-import com.vzkz.profinder.core.boilerplate.IndividualChatntent
+import com.vzkz.profinder.core.boilerplate.Intent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.JobModel
@@ -27,7 +27,7 @@ data class HomeState(
     }
 }
 
-sealed class HomeIntent: IndividualChatntent {
+sealed class HomeIntent: Intent {
     data object Loading: HomeIntent()
     data class Error(val error: UiText): HomeIntent()
     data object CloseError: HomeIntent()

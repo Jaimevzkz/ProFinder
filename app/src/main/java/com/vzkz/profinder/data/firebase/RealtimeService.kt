@@ -47,7 +47,6 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
                 }
 
             }
-
     }
 
     fun updateRecentChats(
@@ -90,7 +89,7 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
 
                 }
                 .addOnFailureListener{ //if it get here it means its a new chat
-                    Log.e("Jaime", "Something went wrong while updating recent chats")
+                    Log.e("PF", "Something went wrong while updating recent chats")
                     throw Exception()
                 }
         } catch (e: Exception){
@@ -117,7 +116,7 @@ class RealtimeService @Inject constructor(private val realtimeDB: DatabaseRefere
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Log.e("Jaime", error.message)
+                    Log.e("PF", error.message)
                     throw Exception(REALTIME_ACCESS_INTERRUPTED)
                 }
 

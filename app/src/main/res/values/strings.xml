@@ -2,26 +2,25 @@
     <string name="app_name">ProFinder</string>
     <string name="login">Login</string>
     <string name="signup">Sign up</string>
-    <string name="email">Email</string>
+    <string name="email" translatable="false">Email</string>
     <string name="password">Password</string>
     <string name="repeat_password">Repeat Password</string>
     <string name="wrong_email_or_password">"Wrong email or password. "</string>
     <string name="error_during_login">Error during login</string>
     <string name="email_must_have_a_valid_format">Email must have a valid format.</string>
     <string name="invalid_password">Invalid Password.</string>
-    <string name="ok">Ok</string>
+    <string name="ok" translatable="false">Ok</string>
     <string name="error_during_sign_up">Error during sign up</string>
     <string name="account_already_exists">An account with that email already exists. The account wasn\'t created.</string>
     <string name="this_email_is_already_in_use">This email is already in use</string>
-    <string name="home">Home</string>
+    <string name="home" translatable="false">Home</string>
     <string name="map">Map</string>
-    <string name="chat">Chat</string>
+    <string name="chat" translatable="false">Chat</string>
     <string name="profile">Profile</string>
     <string name="network_failure_while_checking_user_existence">Network Failure while checking user existence</string>
     <string name="user_not_found">user not found</string>
     <string name="couldn_t_insert_user_in_database">Couldn\'t insert user in database</string>
     <string name="logout">Logout</string>
-    <string name="dark_mode">Dark Mode:</string>
     <string name="username_already_in_use">Username already in use</string>
     <string name="couldn_t_find_the_user">Couldn\'t find the user.</string>
     <string name="nickname">Nickname</string>
@@ -53,7 +52,7 @@
     <string name="set_as_inactive">Set as Inactive</string>
     <string name="set_as_active">Set as active</string>
     <string name="error_logging_user">Error logging user (user not found in db)</string>
-    <string name="error">ERROR</string>
+    <string name="error" translatable="false">ERROR</string>
     <string name="active">Active</string>
     <string name="inactive">Inactive</string>
     <string name="h">" $/h"</string>
@@ -64,7 +63,6 @@
     <string name="you_don_t_have_any_favorites_yet">You don\'t have any favorites yet…</string>
     <string name="needed_values_missing_in_database">Needed values missing in database</string>
     <string name="attribute_of_a_service_corrupted_in_the_database">An attribute of a service was corrupted in the database. No service retrieved.</string>
-    <string name="default_notification_channel_id" translatable="false">default_not_channel</string>
     <string name="realtime_data_was_corrupted">Realtime data was corrupted</string>
     <string name="access_to_realtime_database_was_interrupted">Access to realtime database was interrupted</string>
     <string name="you">"You: "</string>
@@ -93,6 +91,19 @@
     <string name="no_pending_requests">No pending requests…</string>
     <string name="type_a_user_to_search">Type a user to search</string>
     <string name="users">Users</string>
+    <string name="user">User</string>
     <string name="professionals">Professionals</string>
+    <string name="professional">Professional</string>
+    <string name="no_active_jobs">No active jobs…</string>
+    <string name="accept_request">accept request</string>
+    <string name="reject_request">reject request</string>
+    <string name="favorites">Favorites</string>
+    <string name="active_jobs">Active jobs</string>
+    <string name="successful_modification">Successful modification</string>
+    <string name="profession">Profession</string>
+    <string name="profile_changes_like_username_may_not_be_undoable">Profile changes like username may not be undoable</string>
+    <string name="location_permission_is_required_for_the_map_functionality_to_work_grant_it_in_settings_and_try_again">Location permission is required for the map functionality to work. Grant it in settings and try again.</string>
+    <string name="passwords_must_coincide">Passwords must coincide.</string>
+    <string name="profinder" translatable="false">ProFinder</string>
 
 </resources>

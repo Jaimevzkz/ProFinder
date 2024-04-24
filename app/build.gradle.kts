@@ -64,10 +64,10 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2024.02.01"))
+    implementation("androidx.activity:activity-compose:1.9.0")
+    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -85,17 +85,17 @@ dependencies {
     //Ui Test
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.02.01"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.01"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //Hilt
-    val hiltVersion = "2.48.1"
+    val hiltVersion = "2.49"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     ksp("com.google.dagger:hilt-compiler:$hiltVersion")
     //Hilt navigation
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     //Destinations
     val destinationsVersion = "1.9.54"
@@ -103,10 +103,10 @@ dependencies {
     ksp("io.github.raamcosta.compose-destinations:ksp:$destinationsVersion")
 
     //Icons Extended
-    implementation("androidx.compose.material:material-icons-extended:1.6.2")
+    implementation("androidx.compose.material:material-icons-extended:1.6.6")
 
     //FireBase
-    val bomVersion = "32.7.4"
+    val bomVersion = "32.8.1"
     implementation(platform("com.google.firebase:firebase-bom:$bomVersion"))
     //Auth
     implementation("com.google.firebase:firebase-auth-ktx")
@@ -116,16 +116,14 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     //Storage
     implementation("com.google.firebase:firebase-storage")
-    //Cloud messaging
-    implementation("com.google.firebase:firebase-messaging")
     //Realtime database
     implementation("com.google.firebase:firebase-database")
 
     //Animation
-    implementation("androidx.compose.animation:animation:1.6.5")
+    implementation("androidx.compose.animation:animation:1.6.6")
 
     //DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.0")
 
     //Coil
     implementation("io.coil-kt:coil-compose:2.4.0")

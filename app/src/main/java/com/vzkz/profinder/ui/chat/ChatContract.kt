@@ -1,6 +1,6 @@
 package com.vzkz.profinder.ui.chat
 
-import com.vzkz.profinder.core.boilerplate.IndividualChatntent
+import com.vzkz.profinder.core.boilerplate.Intent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ChatListItemModel
 import com.vzkz.profinder.ui.UiText
@@ -22,7 +22,7 @@ data class ChatState(
     }
 }
 
-sealed class ChatIntent: IndividualChatntent {
+sealed class ChatIntent: Intent {
     data object Loading: ChatIntent()
     data class Error(val error: UiText): ChatIntent()
     data object CloseError: ChatIntent()

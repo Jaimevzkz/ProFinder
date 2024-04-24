@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.EditOff
 import androidx.compose.material.icons.outlined.ArrowBackIosNew
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,7 +31,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +48,6 @@ import com.vzkz.profinder.core.Constants.LASTNAME
 import com.vzkz.profinder.core.Constants.NICKNAME
 import com.vzkz.profinder.core.Constants.PROFESSION
 import com.vzkz.profinder.core.PROFESSIONALMODELFORTESTS
-import com.vzkz.profinder.core.USERMODELFORTESTS
 import com.vzkz.profinder.destinations.ProfileScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
@@ -68,7 +66,6 @@ import com.vzkz.profinder.ui.components.dialogs.MyConfirmDialog
 import com.vzkz.profinder.ui.components.galleryIntent
 import com.vzkz.profinder.ui.components.generateUri
 import com.vzkz.profinder.ui.theme.ProFinderTheme
-import kotlinx.coroutines.launch
 
 @Destination
 @Composable
@@ -76,16 +73,13 @@ fun EditProfileScreen(
     navigator: DestinationsNavigator,
     editProfileViewModel: EditProfileViewModel = hiltViewModel()
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         editProfileViewModel.onInit()
     }
     val state = editProfileViewModel.state
-    LaunchedEffect(state.success) {
-        coroutineScope.launch {
-            Toast.makeText(context, "Successful modification", Toast.LENGTH_SHORT).show()
-        }
+    if(state.success){
+        Toast.makeText(context, stringResource(R.string.successful_modification), Toast.LENGTH_SHORT).show()
     }
     if (state.wholeScreenLoading) {
         MyCircularProgressbar()
@@ -161,7 +155,6 @@ private fun ScreenBody(
         var readOnlyDescription by remember { mutableStateOf(true) }
 
         var profession: Professions? by remember { mutableStateOf(null) }
-        var readOnlyProfession by remember { mutableStateOf(true) }
 
         var readOnlyActor by remember { mutableStateOf(true) }
 
@@ -216,7 +209,7 @@ private fun ScreenBody(
                 readOnly = readOnlyNickname,
                 trailingIcon = {
                     IconButton(onClick = { readOnlyNickname = !readOnlyNickname }) {
-                        Icon(imageVector = Icons.Filled.Edit, contentDescription = "Edit Icon")
+                        Icon(imageVector = if(readOnlyNickname) Icons.Filled.Edit else Icons.Filled.EditOff, contentDescription = "Edit Icon")
                     }
                 }
             )
@@ -229,7 +222,7 @@ private fun ScreenBody(
                 readOnly = readOnlyFirstName,
                 trailingIcon = {
                     IconButton(onClick = { readOnlyFirstName = !readOnlyFirstName }) {
-                        Icon(imageVector = Icons.Filled.Edit, contentDescription = "Edit Icon")
+                        Icon(imageVector = if(readOnlyFirstName) Icons.Filled.Edit else Icons.Filled.EditOff, contentDescription = "Edit Icon")
                     }
                 }
             )
@@ -242,7 +235,7 @@ private fun ScreenBody(
                 readOnly = readOnlyLastName,
                 trailingIcon = {
                     IconButton(onClick = { readOnlyLastName = !readOnlyLastName }) {
-                        Icon(imageVector = Icons.Filled.Edit, contentDescription = "Edit Icon")
+                        Icon(imageVector = if(readOnlyLastName) Icons.Filled.Edit else Icons.Filled.EditOff, contentDescription = "Edit Icon")
                     }
                 }
             )
@@ -253,7 +246,7 @@ private fun ScreenBody(
                         OutlinedTextField(
                             value = profession?.name ?: "",
                             onValueChange = {/*Only read*/ },
-                            label = { Text("Profession") },
+                            label = { Text(stringResource(R.string.profession)) },
                             leadingIcon = {
                                 IconButton(onClick = { expandedProfessionDropdownMenu = true }) {
                                     Icon(
@@ -300,7 +293,7 @@ private fun ScreenBody(
                 readOnly = readOnlyDescription,
                 trailingIcon = {
                     IconButton(onClick = { readOnlyDescription = !readOnlyDescription }) {
-                        Icon(imageVector = Icons.Filled.Edit, contentDescription = "Edit Icon")
+                        Icon(imageVector = if(readOnlyDescription) Icons.Filled.Edit else Icons.Filled.EditOff, contentDescription = "Edit Icon")
                     }
                 }
             )
@@ -325,8 +318,8 @@ private fun ScreenBody(
         }
 
         MyConfirmDialog(
-            title = "Are you sure?",
-            text = "Profile changes like username may not be undoable",
+            title = stringResource(R.string.are_you_sure),
+            text = stringResource(R.string.profile_changes_like_username_may_not_be_undoable),
             onDismiss = {
                 readOnlyNickname = true
                 readOnlyActor = true
@@ -375,7 +368,7 @@ private fun ScreenBody(
                 },
                 onCameraClicked = {
                     uri = generateUri(userTitle, context)
-                    intentCameraLauncher.launch(uri)
+                    intentCameraLauncher.launch(uri!!)
                     showPhotoDialog = false
                 },
                 onGalleryClicked = {

@@ -33,7 +33,6 @@ class RepositoryImpl @Inject constructor(
     private val firestoreService: FirestoreService,
     private val storageService: StorageService,
     private val realtimeService: RealtimeService,
-    private val context: Context,
     private val uidCombiner: UidCombiner,
     private val locationService: ILocationService
 ) : Repository {

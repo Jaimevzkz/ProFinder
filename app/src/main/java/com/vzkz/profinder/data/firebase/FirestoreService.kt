@@ -81,10 +81,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             //SetOptions.merge() used to add the user without overriding other potential fields
             userDocument.set(userMap, SetOptions.merge())
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Success inserting user in database")
+                    Log.i("PF", "Success inserting user in database")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Failure inserting user: ${it.message}")
+                    Log.e("PF", "Failure inserting user: ${it.message}")
                     throw Exception()
                 }
         } catch (e: Exception) {
@@ -144,7 +144,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
 
                 return Result.Success(userModel)
             } catch (e: Exception) {
-                Log.e("Jaime", "error fetching user data from db. ${e.message}")
+                Log.e("PF", "error fetching user data from db. ${e.message}")
                 return Result.Error(FirebaseError.Firestore.NON_EXISTENT_USER_FIELD)
             }
         } else return Result.Error(FirebaseError.Firestore.CONNECTION_ERROR)
@@ -163,41 +163,16 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         try {
             userDocumentReference.set(changedFields, SetOptions.merge())
                 .addOnSuccessListener {
-                    Log.i("Jaime", "User data updated successfully")
+                    Log.i("PF", "User data updated successfully")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error updating user data: ${it.message}")
+                    Log.e("PF", "Error updating user data: ${it.message}")
                     throw Exception()
                 }
         } catch (e: Exception) {
             return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
         }
         return Result.Success(Unit)
-
-//        if ((oldUser.nickname != newUser.nickname) && (nicknameExists(newUser.nickname))) {
-//            return Result.Error(FirebaseError.Firestore.NICKNAME_IN_USE)
-//        }
-//
-//        // Gets the reference to the user document
-//        val userDocumentReference = usersCollection.document(oldUser.uid)
-//
-//        // Casts the new UserModel to map in order to update only the needed fields
-//        val newUserMap = newUser.toMap()
-//
-//        // Updates firestore data and wait for the update to complete
-//        try {
-//            userDocumentReference.update(newUserMap)
-//                .addOnSuccessListener {
-//                    Log.i("Jaime", "User data updated successfully")
-//                }
-//                .addOnFailureListener {
-//                    Log.e("Jaime", "Error updating user data: ${it.message}")
-//                    throw Exception()
-//                }
-//        } catch (e: Exception) {
-//            return Result.Error(FirebaseError.Firestore.MODIFICATION_ERROR)
-//        }
-//        return Result.Success(Unit)
     }
 
 
@@ -205,10 +180,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         try {
             usersCollection.document(uid).update(STATE, state.name)
                 .addOnSuccessListener {
-                    Log.i("Jaime", "State updated successfully")
+                    Log.i("PF", "State updated successfully")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error updating state: ${it.message}")
+                    Log.e("PF", "Error updating state: ${it.message}")
                     throw Exception(MODIFICATION_ERROR)
                 }
         } catch (e: Exception) {
@@ -227,10 +202,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             try {
                 docRef.update(FAVOURITES, FieldValue.arrayUnion(uidToChange))
                     .addOnSuccessListener {
-                        Log.i("Jaime", "Favourite added successfully")
+                        Log.i("PF", "Favourite added successfully")
                     }
                     .addOnFailureListener {
-                        Log.e("Jaime", "Error adding favourite: ${it.message}")
+                        Log.e("PF", "Error adding favourite: ${it.message}")
                         throw Exception()
                     }
             } catch (e: Exception) {
@@ -240,10 +215,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             try {
                 docRef.update(FAVOURITES, FieldValue.arrayRemove(uidToChange))
                     .addOnSuccessListener {
-                        Log.i("Jaime", "Favourite removed successfully")
+                        Log.i("PF", "Favourite removed successfully")
                     }
                     .addOnFailureListener {
-                        Log.e("Jaime", "Error removing favourite: ${it.message}")
+                        Log.e("PF", "Error removing favourite: ${it.message}")
                         throw Exception()
                     }
             } catch (e: Exception) {
@@ -284,10 +259,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         try {
             usersCollection.document(uid).update(PROFILEPHOTO, uri)
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Profile picture updated successfully")
+                    Log.i("PF", "Profile picture updated successfully")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error updating profile picture: ${it.message}")
+                    Log.e("PF", "Error updating profile picture: ${it.message}")
                     throw Exception()
                 }
         } catch (e: Exception) {
@@ -309,25 +284,25 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
 
                     usersCollection.document(uid).update(RATING, finalRating)
                         .addOnSuccessListener {
-                            Log.i("Jaime", "$RATING updated successfully")
+                            Log.i("PF", "$RATING updated successfully")
                             usersCollection.document(uid).update(REVIEW_NUMBER, finalReviewNumber)
                                 .addOnSuccessListener {
-                                    Log.i("Jaime", "$REVIEW_NUMBER updated successfully")
+                                    Log.i("PF", "$REVIEW_NUMBER updated successfully")
                                 }
                                 .addOnFailureListener {
-                                    Log.e("Jaime", "Error updating $REVIEW_NUMBER: ${it.message}")
+                                    Log.e("PF", "Error updating $REVIEW_NUMBER: ${it.message}")
                                     throw Exception()
                                 }
 
                         }
                         .addOnFailureListener {
-                            Log.e("Jaime", "Error updating $RATING: ${it.message}")
+                            Log.e("PF", "Error updating $RATING: ${it.message}")
                             throw Exception()
                         }
 
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error getting user for rating update: ${it.message}")
+                    Log.e("PF", "Error getting user for rating update: ${it.message}")
                     throw Exception()
                 }
             return Result.Success(Unit)
@@ -453,10 +428,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             //SetOptions.merge() used to add the user without overriding other potential fields
             serviceDocument.set(serviceMap, SetOptions.merge())
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Success inserting service in database")
+                    Log.i("PF", "Success inserting service in database")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Failure inserting service: ${it.message}")
+                    Log.e("PF", "Failure inserting service: ${it.message}")
                     throw it
                 }
         } catch (e: Exception) {
@@ -469,10 +444,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         try {
             servicesCollection.document(sid).delete()
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Service deleted correctly")
+                    Log.i("PF", "Service deleted correctly")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error deleting service: ${it.message}")
+                    Log.e("PF", "Error deleting service: ${it.message}")
                     throw it
                 }
         } catch (e: Exception) {
@@ -488,10 +463,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         try {
             servicesCollection.document(sid).update(IS_ACTIVE, newValue)
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Service activity modified correctly")
+                    Log.i("PF", "Service activity modified correctly")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error modifying service activity: ${it.message}")
+                    Log.e("PF", "Error modifying service activity: ${it.message}")
                     throw it
                 }
         } catch (e: Exception) {
@@ -524,7 +499,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                         )
                     }
                     if (error != null) {
-                        Log.e("Jaime", "error found getting jobs/requests: ${error.message}")
+                        Log.e("PF", "error found getting jobs/requests: ${error.message}")
                         throw Exception(error.message)
                     }
                     trySend(requestList)
@@ -546,19 +521,19 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         try {
             docRef.set(request.toMapProf())
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Job/Request added correctly")
+                    Log.i("PF", "Job/Request added correctly")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error adding job/request to firestore: ${it.message}")
+                    Log.e("PF", "Error adding job/request to firestore: ${it.message}")
                     throw Exception()
                 }
             usersCollection.document(request.otherId).collection(collectionName).document(docRef.id)
                 .set(request.toMapUser(profUid))
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Job/Request added correctly")
+                    Log.i("PF", "Job/Request added correctly")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error adding job/request to firestore: ${it.message}")
+                    Log.e("PF", "Error adding job/request to firestore: ${it.message}")
                     throw Exception()
                 }
         } catch (e: Exception) {
@@ -577,16 +552,16 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             val collectionName = if (isRequest) REQUESTS else JOBS
             usersCollection.document(uid).collection(collectionName).document(id).delete()
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Job/Request deleted correctly")
+                    Log.i("PF", "Job/Request deleted correctly")
                     usersCollection.document(otherUid).collection(collectionName).document(id)
                         .delete()
                         .addOnSuccessListener {
-                            Log.i("Jaime", "Job/Request 2 deleted correctly")
+                            Log.i("PF", "Job/Request 2 deleted correctly")
 
                         }
                         .addOnFailureListener {
                             Log.e(
-                                "Jaime",
+                                "PF",
                                 "Error deleting job/request 2 from firestore: ${it.message}"
                             )
                             throw Exception()
@@ -594,7 +569,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
 
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error deleting job/request from firestore: ${it.message}")
+                    Log.e("PF", "Error deleting job/request from firestore: ${it.message}")
                     throw Exception()
                 }
         } catch (e: Exception) {
@@ -610,10 +585,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         try {
             usersCollection.document(uid).collection(JOBS).document(jid).delete()
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Job deleted correctly")
+                    Log.i("PF", "Job deleted correctly")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error deleting job from firestore: ${it.message}")
+                    Log.e("PF", "Error deleting job from firestore: ${it.message}")
                     throw Exception()
                 }
         } catch (e: Exception) {
@@ -646,7 +621,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             usersCollection.document(uid).collection(JOBS).document(jid)
                 .update(IS_RATING_PENDING, true)
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Rating pending updated correctly")
+                    Log.i("PF", "Rating pending updated correctly")
                 }
                 .addOnFailureListener { throw Exception() }
             Result.Success(Unit)
@@ -670,10 +645,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
 
             locationCollection.document(uid).set(locationData, SetOptions.merge())
                 .addOnSuccessListener {
-                    Log.i("Jaime", "Location updated succesfully")
+                    Log.i("PF", "Location updated succesfully")
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "Error updating user location: ${it.message}")
+                    Log.e("PF", "Error updating user location: ${it.message}")
                     throw Exception()
                 }
         } catch (e: Exception) {
@@ -705,7 +680,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                         }
                     }
                     if (error != null) {
-                        Log.e("Jaime", "error found getting locations: ${error.message}")
+                        Log.e("PF", "error found getting locations: ${error.message}")
                         throw Exception(error.message)
                     }
                     trySend(locationList)

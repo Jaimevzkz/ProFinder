@@ -110,7 +110,7 @@ fun HomeRequestList(
                             border = BorderStroke(1.dp, fontColor),
                             modifier = Modifier.padding(end = 2.dp)
                         ) {
-                            Text(text = "Cancel", color = fontColor, fontSize = 12.sp)
+                            Text(text = stringResource(R.string.cancel), color = fontColor, fontSize = 12.sp)
                         }
                     } else {
                         MyRow {
@@ -124,7 +124,7 @@ fun HomeRequestList(
                             ) {
                                 Icon(
                                     imageVector = Icons.Filled.Check,
-                                    contentDescription = "accept request",
+                                    contentDescription = stringResource(R.string.accept_request),
                                 )
                             }
                             MySpacer(size = 8)
@@ -138,7 +138,7 @@ fun HomeRequestList(
                             ) {
                                 Icon(
                                     imageVector = Icons.Filled.Close,
-                                    contentDescription = "reject request",
+                                    contentDescription = stringResource(R.string.reject_request),
                                 )
                             }
                         }

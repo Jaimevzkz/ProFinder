@@ -14,7 +14,7 @@ class LoginScreenKtTest{
     fun testLoginScreen(){
         composeTestRule.setContent {
             ScreenBody(
-                onLogin =  { email, password -> /*TODO*/ },
+                onLogin =  { _, _ -> /*TODO*/ },
                 onSignUpClicked = { /*TODO*/ },
                 onCloseDialog = { /*TODO*/ },
                 error = null

@@ -7,8 +7,8 @@ import com.vzkz.profinder.domain.model.singletons.ServiceListSingleton.Companion
 import javax.inject.Inject
 
 interface ChangeServiceActivityUseCase {
-    suspend operator fun invoke(sid: String, actualValue: Boolean): Result<Unit, FirebaseError.Firestore>}
-
+    suspend operator fun invoke(sid: String, actualValue: Boolean): Result<Unit, FirebaseError.Firestore>
+}
 
 class ChangeServiceActivityUseCaseImpl @Inject constructor(
     private val repository: Repository,

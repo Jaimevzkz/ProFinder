@@ -6,8 +6,6 @@ import com.vzkz.profinder.domain.model.ServiceModel
 import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import javax.inject.Inject
 import com.vzkz.profinder.domain.error.Result
-
-
 interface AddJobOrRequestsUseCase {
     suspend operator fun invoke(
         isRequest: Boolean,

@@ -6,12 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -37,21 +36,23 @@ fun ProfileScreenShimmer(
     MyColumn(
         modifier = modifier
             .padding(horizontal = 20.dp)
+            .padding(bottom = 12.dp)
     ) {
         //Top screen
         Row(
             modifier = Modifier
                 .align(Alignment.End)
-                .padding(horizontal = 16.dp)
                 .padding(top = 16.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconShimmer()
+            Spacer(modifier = Modifier.weight(1f))
+            IconShimmer()
             MySpacer(size = 16)
             IconShimmer()
         }
-
+        MySpacer(size = 12)
         //Header
         Row(
             modifier = Modifier
@@ -84,11 +85,11 @@ fun ProfileScreenShimmer(
         MySpacer(size = 8)
         Box( //State (Prof)
             modifier = Modifier
-            .shimmer()
-            .height(60.dp)
-            .width(180.dp)
-            .shadow(elevation = 10.dp, shape = RoundedCornerShape(40))
-            .background(Color.Gray)
+                .shimmer()
+                .height(60.dp)
+                .width(180.dp)
+                .shadow(elevation = 10.dp, shape = RoundedCornerShape(40))
+                .background(Color.Gray)
         )
 
         //profile_details
@@ -156,18 +157,6 @@ fun ProfileScreenShimmer(
                     .background(Color.Gray)
             )
         }
-
-        //Footer
-        MySpacer(size = 24)
-        Box( //Logout Button
-            modifier = Modifier
-                .shimmer()
-                .height(40.dp)
-                .width(100.dp)
-                .shadow(elevation = 1.dp, shape = RoundedCornerShape(60))
-                .background(Color.Gray)
-        )
-        MySpacer(size = 24)
     }
 }
 

@@ -77,7 +77,6 @@ fun MapScreenBody(
         Box(
             modifier = modifier.fillMaxSize()
         ) {
-            val library = LatLng(40.523356, -3.891714)
             val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(location, 16f)
             }
@@ -161,7 +160,7 @@ fun MapScreenBody(
         if (!LocalContext.current.hasLocationPermission()) {
             MyAlertDialog(
                 title = stringResource(R.string.error),
-                text = "Location permission is required for the map functionality to work. Grant it in settings and try again.",
+                text = stringResource(R.string.location_permission_is_required_for_the_map_functionality_to_work_grant_it_in_settings_and_try_again),
                 onDismiss = { onSeeList() },
                 onConfirm = { onSeeList() },
             )

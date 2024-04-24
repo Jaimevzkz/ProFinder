@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 private const val BUFFER_SIZE = 64
 
-abstract class BaseViewModel<S : State, I: IndividualChatntent> (initialState: S): ViewModel(){
+abstract class BaseViewModel<S : State, I: Intent> (initialState: S): ViewModel(){
 
     private val intents = MutableSharedFlow<I>(extraBufferCapacity = BUFFER_SIZE) // Intent pipeline
 
@@ -30,7 +30,7 @@ abstract class BaseViewModel<S : State, I: IndividualChatntent> (initialState: S
 
     fun dispatch(intent: I) { //This is the method used to push intents to the pipeline
         val success = intents.tryEmit(intent)
-        if (!success) Log.e("Jaime", "MVI action buffer overflow")
+        if (!success) Log.e("PF", "MVI action buffer overflow")
     }
 
 }

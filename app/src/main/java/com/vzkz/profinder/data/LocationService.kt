@@ -18,6 +18,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 import javax.inject.Inject
 
 interface ILocationService {
@@ -33,7 +35,7 @@ class LocationService @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.S)
     override fun requestLocationUpdates(): Flow<LatLng?> = callbackFlow {
         var lastKnowLocation: Pair<Double, Double>? = null
-        val decimalFormat = DecimalFormat("#.###")
+        val decimalFormat = DecimalFormat("#.###", DecimalFormatSymbols(Locale.US))
 
         if (!context.hasLocationPermission()) {
             trySend(null)

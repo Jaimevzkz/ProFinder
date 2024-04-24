@@ -1,5 +1,6 @@
 package com.vzkz.profinder.domain.model
 
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCut
 import androidx.compose.material.icons.outlined.ElectricalServices
@@ -8,15 +9,17 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Plumbing
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.vzkz.profinder.R
 import com.vzkz.profinder.ui.theme.active
 import com.vzkz.profinder.ui.theme.inactive
 import com.vzkz.profinder.ui.theme.working
 
 enum class Actors(
-    val icon: ImageVector
+    val icon: ImageVector,
+    @StringRes val string: Int
 ) {
-    User(icon = Icons.Outlined.Person),
-    Professional(icon = Icons.Outlined.Engineering)
+    User(icon = Icons.Outlined.Person, R.string.user),
+    Professional(icon = Icons.Outlined.Engineering, R.string.professional)
 }
 enum class ProfState(
     val tint: Color
@@ -27,11 +30,10 @@ enum class ProfState(
 }
 enum class Professions(
     val icon: ImageVector,
-    category: Categories
 ) {
-    Plumber(icon = Icons.Outlined.Plumbing, category = Categories.Household),
-    Hairdresser(icon = Icons.Outlined.ContentCut, category = Categories.Beauty),
-    Electrician(icon = Icons.Outlined.ElectricalServices, category = Categories.Household)
+    Plumber(icon = Icons.Outlined.Plumbing),
+    Hairdresser(icon = Icons.Outlined.ContentCut),
+    Electrician(icon = Icons.Outlined.ElectricalServices)
 }
 enum class Categories{
     Household,

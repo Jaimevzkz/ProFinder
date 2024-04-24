@@ -1,13 +1,13 @@
 package com.vzkz.profinder.ui.profile
 
 import android.content.res.Configuration
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,9 +16,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.outlined.LightMode
+import androidx.compose.material.icons.outlined.PowerSettingsNew
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,16 +44,14 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.vzkz.profinder.R
+import com.vzkz.profinder.core.Constants.ERRORSTR
+import com.vzkz.profinder.core.USERMODELFORTESTS
 import com.vzkz.profinder.destinations.EditProfileScreenDestination
 import com.vzkz.profinder.destinations.LoginScreenDestination
 import com.vzkz.profinder.destinations.ProfileScreenDestination
-import com.vzkz.profinder.destinations.SettingsScreenDestination
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.Actors
-import com.vzkz.profinder.core.Constants.ERRORSTR
-import com.vzkz.profinder.core.USERMODELFORTESTS
 import com.vzkz.profinder.domain.model.ProfState
-import com.vzkz.profinder.domain.model.Professions
 import com.vzkz.profinder.ui.UiText
 import com.vzkz.profinder.ui.components.MyColumn
 import com.vzkz.profinder.ui.components.MyRow
@@ -61,6 +60,7 @@ import com.vzkz.profinder.ui.components.ProfilePicture
 import com.vzkz.profinder.ui.components.RatingBar
 import com.vzkz.profinder.ui.components.bottombar.MyBottomBarScaffold
 import com.vzkz.profinder.ui.components.dialogs.MyAlertDialog
+import com.vzkz.profinder.ui.components.dialogs.MyConfirmDialog
 import com.vzkz.profinder.ui.components.starColor
 import com.vzkz.profinder.ui.profile.shimmer.ProfileScreenShimmer
 import com.vzkz.profinder.ui.theme.ProFinderTheme
@@ -83,55 +83,45 @@ fun ProfileScreen(
         user = profileViewModel.state.user
         val loading = profileViewModel.state.loading
         val error = profileViewModel.state.error
+        val darkTheme = profileViewModel.state.darkTheme
 
-        ScreenBody(
-            user = user,
-            loading = loading,
-            error = error,
-            onCloseDialog = { profileViewModel.onCloseDialog() },
-            onChangeState = {
-                profileViewModel.onChangeState(user?.uid ?: ERRORSTR, it)
-            },
-            onLogout = { profileViewModel.onLogout() },
-            onBottomBarClicked = { navigator.navigate(it) },
-            onSettingsClicked = { navigator.navigate(SettingsScreenDestination) },
-            onEditProfileClicked = { navigator.navigate(EditProfileScreenDestination) }
-        )
+        if(user != null){
+            ScreenBody(
+                user = user!!,
+                loading = loading,
+                error = error,
+                darkTheme = darkTheme,
+                onThemeSwitch = profileViewModel::onThemeSwitch,
+                onCloseDialog = { profileViewModel.onCloseDialog() },
+                onChangeState = {
+                    profileViewModel.onChangeState(user?.uid ?: ERRORSTR, it)
+                },
+                onLogout = { profileViewModel.onLogout() },
+                onBottomBarClicked = { navigator.navigate(it) },
+                onEditProfileClicked = { navigator.navigate(EditProfileScreenDestination) }
+            )
+        }
     }
 
 }
 
 @Composable
 private fun ScreenBody(
-    user: ActorModel?,
+    user: ActorModel,
     onLogout: () -> Unit,
     error: UiText?,
+    darkTheme: Boolean,
+    onThemeSwitch: () -> Unit,
     onBottomBarClicked: (DirectionDestinationSpec) -> Unit,
     loading: Boolean,
     onCloseDialog: () -> Unit,
     onChangeState: (ProfState) -> Unit,
-    onSettingsClicked: () -> Unit,
     onEditProfileClicked: () -> Unit
 ) {
     val cardColor = MaterialTheme.colorScheme.surfaceVariant
     val cardContentColor = MaterialTheme.colorScheme.onSurfaceVariant
     val defaultVal = "- "
-    var nickname by remember { mutableStateOf("") }
-    nickname = user?.nickname ?: defaultVal
-    var firstname by remember { mutableStateOf("") }
-    firstname = user?.firstname ?: defaultVal
-    var lastname by remember { mutableStateOf("") }
-    lastname = user?.lastname ?: defaultVal
-    var description by remember { mutableStateOf("") }
-    description = user?.description ?: defaultVal
-    var actor: Actors by remember { mutableStateOf(Actors.User) }
-    actor = user?.actor ?: Actors.User
-    var profession: Professions? by remember { mutableStateOf(null) }
-    profession = user?.profession
-    var state: ProfState? by remember { mutableStateOf(null) }
-    state = user?.state
-    var profilePhoto: Uri? by remember { mutableStateOf(null) }
-    profilePhoto = user?.profilePhoto
+    var logout by remember { mutableStateOf(false) }
 
     MyBottomBarScaffold(
         currentDestination = ProfileScreenDestination,
@@ -149,6 +139,7 @@ private fun ScreenBody(
             Box(
                 modifier = Modifier
                     .padding(paddingValues)
+                    .padding(bottom = 12.dp)
                     .background(MaterialTheme.colorScheme.background)
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -163,12 +154,15 @@ private fun ScreenBody(
                     //Top screen
                     Row(
                         modifier = Modifier
-                            .align(Alignment.End)
-                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
                             .padding(top = 16.dp),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        IconButton(onClick = { logout = true }) {
+                            Icon(imageVector = Icons.Outlined.PowerSettingsNew, contentDescription = "logout")
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
                         IconButton(
                             onClick = { onEditProfileClicked() }
                         ) {
@@ -179,10 +173,10 @@ private fun ScreenBody(
                         }
                         MySpacer(size = 8)
                         IconButton(
-                            onClick = { onSettingsClicked() }
+                            onClick = onThemeSwitch
                         ) {
                             Icon(
-                                imageVector = Icons.Outlined.Settings,
+                               imageVector = if(darkTheme) Icons.Outlined.LightMode else Icons.Outlined.DarkMode,
                                 contentDescription = "App Settings Button"
                             )
                         }
@@ -196,24 +190,24 @@ private fun ScreenBody(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        ProfilePicture(modifier = Modifier, profilePhoto = profilePhoto, size = 100)
+                        ProfilePicture(modifier = Modifier, profilePhoto = user.profilePhoto, size = 100)
                         MySpacer(size = 4)
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text(
-                                text = firstname,
+                                text = user.firstname,
                                 style = MaterialTheme.typography.displaySmall,
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = lastname,
+                                text = user.lastname,
                                 style = MaterialTheme.typography.displaySmall,
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                     }
-                    val rating = user?.rating ?: 0.0
+                    val rating = user.rating ?: 0.0
                     MyColumn(Modifier.align(Alignment.CenterHorizontally)) {
                         RatingBar(
                             modifier = Modifier,
@@ -222,7 +216,7 @@ private fun ScreenBody(
                             starsColor = starColor(rating = rating),
                         )
                         Text(
-                            text = if (user?.rating != null) "${user.rating} (${user.reviewNumber} reviews)" else stringResource(
+                            text = if (user.rating != null) "${user.rating} (${user.reviewNumber} reviews)" else stringResource(
                                 R.string.no_reviews_yet
                             ),
                             color = MaterialTheme.colorScheme.onBackground,
@@ -230,7 +224,7 @@ private fun ScreenBody(
                         )
                     }
                     MySpacer(size = 8)
-                    if (actor == Actors.Professional) {
+                    if (user.actor == Actors.Professional) {
                         //State
                         MySpacer(size = 8)
                         Row(
@@ -249,13 +243,13 @@ private fun ScreenBody(
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_dot),
                                 contentDescription = null,
-                                tint = state?.tint ?: Color.Transparent,
+                                tint = user.state?.tint ?: Color.Transparent,
                                 modifier = Modifier
                                     .size(20.dp),
                             )
                             MySpacer(size = 16)
                             Text(
-                                text = profession!!.name,
+                                text = user.profession!!.name,
                                 style = MaterialTheme.typography.titleLarge,
                                 color = cardContentColor
                             )
@@ -285,7 +279,7 @@ private fun ScreenBody(
                         )
                         MySpacer(size = innerSpaceBetween)
                         Text(
-                            text = nickname, style = MaterialTheme.typography.titleLarge,
+                            text = user.nickname, style = MaterialTheme.typography.titleLarge,
                             color = cardContentColor
                         )
                         MySpacer(size = spaceBetween)
@@ -297,20 +291,9 @@ private fun ScreenBody(
                         )
                         MySpacer(size = innerSpaceBetween)
                         Text(
-                            text = description, style = MaterialTheme.typography.titleLarge,
+                            text = user.description ?: defaultVal, style = MaterialTheme.typography.titleLarge,
                             color = cardContentColor
                         )
-                    }
-
-                    //Footer
-                    Button(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = 8.dp)
-                            .padding(16.dp),
-                        onClick = { onLogout() }
-                    ) {
-                        Text(text = stringResource(R.string.logout))
                     }
                 }
 
@@ -319,7 +302,7 @@ private fun ScreenBody(
                         modifier = Modifier
                             .align(Alignment.Center),
                         onStateClicked = {
-                            if (state != it) {
+                            if (user.state != it) {
                                 onChangeState(it)
                             }
                             changeStateVisibility = false
@@ -334,6 +317,14 @@ private fun ScreenBody(
                         onConfirm = { onCloseDialog() },
                     )
                 }
+
+                MyConfirmDialog(
+                    title = stringResource(id = R.string.logout),
+                    text = stringResource(id = R.string.are_you_sure),
+                    onDismiss = { logout = false },
+                    onConfirm = { onLogout() },
+                    showDialog = logout
+                )
             }
         }
     }
@@ -391,13 +382,33 @@ fun LightPreview() {
             onLogout = { },
             onCloseDialog = {},
             error = null,
+            darkTheme = true,
+            onThemeSwitch = {},
             onBottomBarClicked = {},
 //            loading = true,
             loading = false,
             onChangeState = {},
-            onSettingsClicked = { }
-        ) {
-
-        }
+            onEditProfileClicked = {}
+        )
+    }
+}
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ShimmerPreview() {
+    ProFinderTheme {
+        ScreenBody(
+            user = USERMODELFORTESTS,
+//            user = PROFESSIONALMODELFORTESTS,
+            onLogout = { },
+            onCloseDialog = {},
+            error = null,
+            darkTheme = true,
+            onThemeSwitch = {},
+            onBottomBarClicked = {},
+            loading = true,
+//            loading = false,
+            onChangeState = {},
+            onEditProfileClicked = {}
+        )
     }
 }

@@ -34,9 +34,9 @@ class StorageService @Inject constructor(private val storage: FirebaseStorage) {
         try {
             val reference = storage.reference.child("${uri.lastPathSegment}")
             reference.delete().addOnSuccessListener {
-                Log.i("Jaime","Photo deleted correctly")
+                Log.i("PF","Photo deleted correctly")
             }.addOnFailureListener {
-                Log.e("Jaime","Error deleting photo")
+                Log.e("PF","Error deleting photo")
                 throw Exception()
             }
         } catch (e: Exception){

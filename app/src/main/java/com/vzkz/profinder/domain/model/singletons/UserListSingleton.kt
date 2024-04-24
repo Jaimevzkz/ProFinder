@@ -22,9 +22,9 @@ class UserListSingleton(private val repository: Repository) {
 
     fun cachedServiceList(): Boolean = cachedUserList != null
 
-    suspend fun getData(uid: String = ""): Result<List<ActorModel>, FirebaseError.Firestore> { //gets cached user or calls firebase
+    suspend fun getData(): Result<List<ActorModel>, FirebaseError.Firestore> { //gets cached user or calls firebase
         return if (cachedUserList == null) {
-            fetchServiceListFromFirestore()
+            fetchAllUsersFromFirestore()
         } else {
             Result.Success(cachedUserList!!)
         }
@@ -35,7 +35,7 @@ class UserListSingleton(private val repository: Repository) {
     }
 
 
-    private suspend fun fetchServiceListFromFirestore(): Result<List<ActorModel>, FirebaseError.Firestore> {
+    private suspend fun fetchAllUsersFromFirestore(): Result<List<ActorModel>, FirebaseError.Firestore> {
         return when (val list = repository.getAllUsers()) {
             is Result.Success -> {
                 cachedUserList = list.data

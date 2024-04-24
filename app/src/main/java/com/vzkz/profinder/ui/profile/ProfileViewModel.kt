@@ -4,9 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.vzkz.profinder.core.boilerplate.BaseViewModel
 import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.model.ProfState
-import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
+import com.vzkz.profinder.domain.usecases.ThemeDSUseCase
 import com.vzkz.profinder.domain.usecases.auth.LogoutUseCase
 import com.vzkz.profinder.domain.usecases.user.ChangeStateUseCase
+import com.vzkz.profinder.domain.usecases.user.GetUserUseCase
 import com.vzkz.profinder.ui.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val logoutUseCase: LogoutUseCase,
-    private val changeStateUseCase: ChangeStateUseCase
+    private val changeStateUseCase: ChangeStateUseCase,
+    private val themeDSUseCase: ThemeDSUseCase
 ) : BaseViewModel<ProfileState, ProfileIntent>(ProfileState.initial) {
     override fun reduce(
         state: ProfileState,
@@ -46,16 +48,33 @@ class ProfileViewModel @Inject constructor(
                 error = null,
                 loading = false
             )
+
+            is ProfileIntent.SetTheme -> state.copy(darkTheme = intent.theme)
         }
     }
 
     //Observe events from UI and dispatch them, this are the methods called from the UI
     fun onInit() {
+        collectTheme()
         viewModelScope.launch(Dispatchers.IO) {
             when(val user = getUserUseCase()){
                 is Result.Success -> dispatch(ProfileIntent.SetUser(user.data))
                 is Result.Error -> dispatch(ProfileIntent.Error(user.error.asUiText()))
             }
+        }
+    }
+
+    private fun collectTheme(){
+        viewModelScope.launch(Dispatchers.IO) {
+            themeDSUseCase().collect{
+                dispatch(ProfileIntent.SetTheme(it))
+            }
+        }
+    }
+
+    fun onThemeSwitch() {
+        viewModelScope.launch(Dispatchers.IO) {
+            themeDSUseCase.switchTheme()
         }
     }
 

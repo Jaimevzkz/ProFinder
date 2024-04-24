@@ -17,7 +17,7 @@ class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) {
                     cancellableContinuation.resume(it.user)
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "${it.message}")
+                    Log.e("PF", "${it.message}")
                     cancellableContinuation.resumeWithException(it)
                 }
 
@@ -32,7 +32,7 @@ class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) {
                     cancellableContinuation.resume(it.user)
                 }
                 .addOnFailureListener {
-                    Log.e("Jaime", "${it.message}")
+                    Log.e("PF", "${it.message}")
                     cancellableContinuation.resumeWithException(it)
                 }
         }

@@ -1,7 +1,7 @@
 package com.vzkz.profinder.ui.services
 
 import com.google.android.gms.maps.model.LatLng
-import com.vzkz.profinder.core.boilerplate.IndividualChatntent
+import com.vzkz.profinder.core.boilerplate.Intent
 import com.vzkz.profinder.core.boilerplate.State
 import com.vzkz.profinder.domain.model.ActorModel
 import com.vzkz.profinder.domain.model.LocationModel
@@ -34,7 +34,7 @@ data class ServicesState(
     }
 }
 
-sealed class ServicesIntent : IndividualChatntent {
+sealed class ServicesIntent : Intent {
     data class SetServiceLists(val lists: Pair<List<ServiceModel>, List<ServiceModel>>) : ServicesIntent()
     data class SetActiveServiceLists(val list: List<ServiceModel>) : ServicesIntent()
     data class Error(val error: UiText) : ServicesIntent()

@@ -215,7 +215,7 @@ fun ProfileItem(modifier: Modifier = Modifier, actor: ActorModel, onClick: (Stri
                 Text(text = actor.nickname, fontWeight = FontWeight.Light)
                 MySpacer(size = 12)
                 Text(
-                    text = actor.actor.name,
+                    text = stringResource(id = actor.actor.string),
                     modifier = Modifier
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.primaryContainer)
