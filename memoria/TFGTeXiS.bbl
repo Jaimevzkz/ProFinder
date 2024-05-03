@@ -1,4 +1,4 @@
-\begin{thebibliography}{6}
+\begin{thebibliography}{7}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 
 \bibitem[{Bautista et\ al.(1998)Bautista, Oetiker, Partl, Hyna y
@@ -34,5 +34,11 @@
 {\sc Oetiker, T.}, {\sc Partl, H.}, {\sc Hyna, I.} y {\sc Schlegl, E.}
 \newblock {\em The Not So Short Introduction to \LaTeXe\/}.
 \newblock Versión electrónica, 1996.
+
+\bibitem[{Thornsby(2020)}]{androidViews}
+{\sc Thornsby, J.}
+\newblock Building your android ui: Everything you need to know about views.
+\newblock Disponible en
+  \url{https://www.studytonight.com/android/introduction-to-views}.
 
 \end{thebibliography}
