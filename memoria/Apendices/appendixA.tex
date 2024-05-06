@@ -1,4 +1,208 @@
-\chapter{Título del Apéndice A}
-\label{Appendix:Key1}
+\chapter{Especificación de requisitos}
+\label{Appendix:srs}
 
-Los apéndices son secciones al final del documento en las que se agrega texto con el objetivo de ampliar los contenidos del documento principal.
+En este apendice se especifican los actores y casos de uso de la aplicación Profinder. Se trata de una especificación inicial por lo que tanto actores como casos de uso han sido cambiados, ampliados o recortados a lo largo del proceso de desarrollo.
+
+\section{Actores}
+A continuación se describen los distintos actores de la aplicación:
+\begin{itemize}
+    \item \textbf{Usuario}: Un usuario es cualquier persona que se dé de alta como tal, debe haberse creado una cuenta e iniciado sesión para ser identificado, estos son los que contratan los servicios que los profesionales ofrecen, entre otras funciones los usuarios pueden ver el mapa de profesionales en tiempo real y filtrar los datos que le aparecen según la categoría de trabajo seleccionada.
+    \item \textbf{Profesional}: Un profesional es cualquier persona que se dé de alta como tal, su proceso de registro es ligeramente diferente al de un usuario normal ya que deben especificar la categoría en la que son profesionales, así como otros detalles que sean importantes para su profesión.
+    \item \textbf{Administrador}: El administrador de la aplicación es el que se encarga de la organización y el correcto funcionamiento de la misma, podrá añadir o eliminar categorías, bloquear usuarios y/o profesionales, así como responder a mensajes dirigidos a soporte, los administradores deben ser asignados una vez creada la cuenta desde fuera de la aplicación.
+\end{itemize}
+\section{Casos de Uso}
+Los casos de uso se han clasificado en cuatro categorías según el actor principal del mismo.
+\subsection{Índice de casos de uso}
+\renewcommand{\labelenumii}{\theenumi.\arabic{enumii}.}
+\begin{enumerate}
+    \item Casos de uso generales
+    \begin{enumerate}
+        \item Registro/baja
+        \item Modificar datos
+        \item Login/logout
+        \item Configurar app
+        \item Ver lista de favoritos
+        \item Valorar cliente/profesional
+        \item Chatear con cliente/profesional
+    \end{enumerate}
+    \item Casos de uso de usuarios
+    \begin{enumerate}
+        \item Configurar búsqueda
+        \item Buscar servicio
+        \item Consultar profesional
+        \item Contratar servicio
+        \item Añadir/modificar/quitar profesional de lista de favoritos.
+    \end{enumerate}
+    \item Casos de uso de profesionales
+    \begin{enumerate}
+        \item Cambiar estado de profesional
+        \item Dar de alta/baja servicio
+        \item Modificar servicio
+        \item Listar servicios dados de alta
+        \item Contestar solicitud de contratación
+        \item Consultar cliente
+        \item Añadir/modificar/quitar cliente de lista de favoritos
+    \end{enumerate}
+    \item Casos de uso de administrador
+    \begin{enumerate}
+        \item Añadir/eliminar/modificar categorías de servicios ofrecidos.
+        \item Consultar datos/estadísticas de profesional/clientes
+        \item Buscar clientes/profesionales
+        \item Modificar datos clientes/profesionales /servicios ofrecidos
+        \item Dar de baja usuarios
+    \end{enumerate}
+\end{enumerate}
+\newpage
+\subsection{Casos de uso generales}
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	Requisito & Registro/baja \\
+	\hline
+	Identificador & 1.1 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & En caso de baja: tener una cuenta creada. \\
+	\hline
+	Descripción & Los actores de la aplicación tendrán que crear una cuenta para poder interactuar con la misma, así mismo tendrán la capacidad de dar de baja su cuenta cuando lo deseen. \\
+	\hline
+	Entrada & Nombre de usuario, correo electrónico, contraseña. \\
+	\hline
+	Salida & Actor registrado/dado de baja \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El actor abre la aplicación y se le muestra la pantalla para iniciar sesión con un botón específico para registrarse. \\
+		\hline  
+		2 & se selecciona la opción ‘Registrarse’. \\
+		\hline  
+		3 & El actor rellena el formulario con los datos de entrada y pulsa ‘Enviar’. \\
+		\hline  
+		4 & El sistema procesa el formulario y crea la cuenta. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se ha creado la cuenta. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		4 & Los datos introducidos son incorrectos o no cumplen los requisitos. No se crea la cuenta y se avisa al usuario. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & Este caso de uso permite registrar o dar de baja de la aplicación a actores de la misma. \\
+	\hline
+	Actores & Usuario, Profesional \\
+	\hline            
+	\end{tabularx}
+	\caption{Registro/baja}
+	\label{tab:cu_1}  
+\end{table}
+
+%---------------------------------------------------------------
+
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	Requisito & Modificar datos \\
+	\hline
+	Identificador & 1.2 \\
+	\hline
+	Prioridad & Media \\
+	\hline
+	Precondición & Haber iniciado sesión. \\
+	\hline
+	Descripción & Una vez creada una cuenta, tanto profesionales como usuarios podrán modificar sus datos de perfil. \\
+	\hline
+	Entrada & Datos a cambiar. \\
+	\hline
+	Salida & Nuevos datos. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El actor se dirigirá al apartado de 'Mi perfil' y seleccionará la opción 'Modificar perfil'. \\
+		\hline  
+		2 & Dentro de esta pantalla se modificarán todos los datos deseados. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se han modificado los datos de perfil deseados. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		2 & Los nuevos datos no son válidos. No se guarda la modificación. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & Este caso de uso permite modificar datos de su perfil a los actores. \\
+	\hline
+	Actores & Usuario, Profesional \\
+	\hline            
+	\end{tabularx}
+	\caption{Modificar datos}
+	\label{tab:cu_2}  
+\end{table}
+\newpage
+\subsection{Casos de uso de usuarios}
+
+\newpage
+\subsection{Casos de uso de profesionales}
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	Requisito & Modificar servicio \\
+	\hline
+	Identificador & 3.3 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Haber iniciado sesión como profesional, tener al menos un servicio dado de alta. \\
+	\hline
+	Descripción & Permite al Profesional modificar la información de un servicio que ofrece. \\
+	\hline
+	Entrada & Detalles actualizados del servicio. \\
+	\hline
+	Salida & Confirmación de la modificación del servicio. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El profesional navega hasta la sección de gestión de servicios. \\
+		\hline  
+		2 & Selecciona el servicio que desea modificar. \\
+		\hline  
+		3 & Realiza las modificaciones necesarias en los detalles del servicio. \\
+		\hline  
+		4 & Confirma la acción de modificación. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & El servicio se actualiza con la nueva información en el perfil del Profesional. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		3 & Si no se proporciona la información necesaria, se muestra un mensaje de error. \\
+		\hline  
+		4 & Si la operación falla por algún motivo, se notifica al Profesional. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & Este caso de uso permite a los Profesionales mantener actualizada la información de sus servicios. \\
+	\hline
+	Actores & Profesional   \\
+	\hline            
+	\end{tabularx}
+	\caption{Modificar servicio}
+	\label{tab:cu_15}  
+\end{table}
+\newpage
+\subsection{Casos de uso de administrador}
+
+
+
+
+
+

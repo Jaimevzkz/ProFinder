@@ -1,0 +1,64 @@
+This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: TFGTeXiS.aux
+A level-1 auxiliary file: Cascaras/cover.aux
+A level-1 auxiliary file: Cascaras/dedicatoria.aux
+A level-1 auxiliary file: Cascaras/agradecimientos.aux
+A level-1 auxiliary file: Cascaras/resumen.aux
+A level-1 auxiliary file: Cascaras/abstract.aux
+A level-1 auxiliary file: TeXiS/TeXiS_toc.aux
+A level-1 auxiliary file: Capitulos/Introduccion.aux
+A level-1 auxiliary file: Capitulos/EstadoDeLaCuestion.aux
+A level-1 auxiliary file: Capitulos/DescripcionTrabajo.aux
+A level-1 auxiliary file: Capitulos/ConclusionesTrabajoFuturo.aux
+A level-1 auxiliary file: Capitulos/Introduction.aux
+A level-1 auxiliary file: Capitulos/ConclusionsFutureWork.aux
+A level-1 auxiliary file: Cascaras/bibliografia.aux
+The style file: TeXiS/TeXiS.bst
+A level-1 auxiliary file: Apendices/appendixA.aux
+A level-1 auxiliary file: Apendices/appendixB.aux
+A level-1 auxiliary file: Cascaras/fin.aux
+Database file #1: biblio.bib
+Warning--empty journal in BibTexOriginal
+You've used 1 entry,
+            2962 wiz_defined-function locations,
+            1096 strings with 12799 characters,
+and the built_in function-call counts, 476 in all, are:
+= -- 34
+> -- 10
+< -- 1
++ -- 4
+- -- 3
+* -- 31
+:= -- 78
+add.period$ -- 4
+call.type$ -- 1
+change.case$ -- 6
+chr.to.int$ -- 1
+cite$ -- 2
+duplicate$ -- 43
+empty$ -- 39
+format.name$ -- 4
+if$ -- 88
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 9
+newline$ -- 10
+num.names$ -- 4
+pop$ -- 21
+preamble$ -- 1
+purify$ -- 5
+quote$ -- 0
+skip$ -- 16
+stack$ -- 0
+substring$ -- 11
+swap$ -- 18
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 10
+warning$ -- 1
+while$ -- 3
+width$ -- 0
+write$ -- 16
+(There was 1 warning)
