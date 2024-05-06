@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
@@ -115,15 +117,13 @@ private fun ScreenBody(
 
         if(profession != null) isProfessionValid = true
         if(actorType == Actors.User) profession = null
-
-        MyAuthHeader(Modifier.align(Alignment.TopEnd))
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(y = (-50).dp)
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 100.dp, end = 12.dp)
         ) {
             MyImageLogo()
             MySpacer(16)
@@ -335,6 +335,8 @@ private fun ScreenBody(
         ) {
             Text(text = stringResource(id = R.string.signup))
         }
+
+        MyAuthHeader(Modifier.align(Alignment.TopEnd))
 
         if(state.error != null){
             MyAlertDialog(
