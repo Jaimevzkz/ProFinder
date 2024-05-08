@@ -58,7 +58,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\begin{tabularx}{\textwidth}{|c|X|}
 	\rowcolor[HTML]{00D2CB} 
 	\hline          
-	Requisito & Registro/baja \\
+	\textbf{Requisito} & \textbf{Registro/baja} \\
 	\hline
 	Identificador & 1.1 \\
 	\hline
@@ -72,7 +72,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Salida & Actor registrado/dado de baja \\
 	\hline
-	Secuencia normal & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
 		1 & El actor abre la aplicación y se le muestra la pantalla para iniciar sesión con un botón específico para registrarse. \\
@@ -86,7 +86,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Postcondición & Se ha creado la cuenta. \\
 	\hline
-	Excepciones & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
 		4 & Los datos introducidos son incorrectos o no cumplen los requisitos. No se crea la cuenta y se avisa al usuario. \\
@@ -102,12 +102,12 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 \end{table}
 
 %---------------------------------------------------------------
-
+\newpage
 \begin{table}[!h]
 	\begin{tabularx}{\textwidth}{|c|X|}
 	\rowcolor[HTML]{00D2CB} 
 	\hline          
-	Requisito & Modificar datos \\
+	\textbf{Requisito} & \textbf{Modificar datos} \\
 	\hline
 	Identificador & 1.2 \\
 	\hline
@@ -121,7 +121,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Salida & Nuevos datos. \\
 	\hline
-	Secuencia normal & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
 		1 & El actor se dirigirá al apartado de 'Mi perfil' y seleccionará la opción 'Modificar perfil'. \\
@@ -131,7 +131,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Postcondición & Se han modificado los datos de perfil deseados. \\
 	\hline
-	Excepciones & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
 		2 & Los nuevos datos no son válidos. No se guarda la modificación. \\
@@ -145,16 +145,550 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\caption{Modificar datos}
 	\label{tab:cu_2}  
 \end{table}
+
+%---------------------------------------------------------------
+\begin{table}[tbph]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Login/Logout} \\
+	\hline
+	Identificador & 1.3 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Haber creado una cuenta previamente, en caso de logout tener sesión iniciada. \\
+	\hline
+	Descripción & Para poder interactuar con la aplicación, tanto usuarios como profesionales tendrán que iniciar sesión en la aplicación. Los usuarios que ya hayan iniciado sesión y quieran cerrarla tendrán la opción de hacerlo. \\
+	\hline
+	Entrada & En caso de login: correo electrónico/nombre de usuario, contraseña. \\
+	\hline
+	Salida & N.A. \\
+	\hline
+	Secuencia normal de login & \begin{tabular}{@{}p{1.5cm}|p{7.2cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El actor abre la aplicación y se le muestra la pantalla de  ‘Iniciar sesión’. \\
+		\hline  
+		2 & Se muestra una pantalla con el formulario de inicio de sesión. El usuario introduce los datos de entrada y pulsa el botón ‘Iniciar sesión’. \\
+		\end{tabular} \\
+	\hline
+	Secuencia normal de logout & \begin{tabular}{@{}p{1.5cm}|p{7.2cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El actor se dirige a la sección ‘Mi perfil’ donde se le mostrarán múltiples opciones de gestión de su cuenta. \\
+		\hline  
+		2 & Dentro de estas opciones se encontrará la opción ‘Cerrar sesión’. El actor pulsará el botón. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se ha iniciado sesión/se ha cerrado sesión. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1.5cm}|p{7.2cm}@{}}
+		Paso & Acción \\
+		\hline  
+		2 (login) & Los campos rellenados no concuerdan con ningún actor del sistema. No se completa el login. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & Este caso de uso permite iniciar sesión en la aplicación, así como cerrar la misma. \\
+	\hline
+	Actores & Usuario, Profesional, Administrador \\
+	\hline            
+	\end{tabularx}
+	\caption{Login/Logout}
+	\label{tab:cu_3}  
+\end{table}
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Configurar app} \\
+	\hline
+	Identificador & 1.4 \\
+	\hline
+	Prioridad & Baja \\
+	\hline
+	Precondición & Haber iniciado sesión. \\
+	\hline
+	Descripción & Dentro de la app se podrán configurar aspectos como el tema de la aplicación (claro/oscuro). \\
+	\hline
+	Entrada & Nuevos datos de configuración. \\
+	\hline
+	Salida & Configuración modificada. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El actor se dirigirá a la sección de ‘Mi Perfil’ y entre las opciones seleccionará ‘Configuración de la aplicación’. \\
+		\hline  
+		2 & Dentro de esta pantalla el usuario cambiará los valores deseados. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se han cambiado los parámetros de la aplicación deseados. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		2 & Los nuevos parámetros de configuración no son correctos. Se mantiene la configuración anterior. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & Este caso de uso permite modificar la configuración de la aplicación. \\
+	\hline
+	Actores & Usuario, Profesional \\
+	\hline            
+	\end{tabularx}
+	\caption{Configurar app}
+	\label{tab:cu_4}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Ver lista de favoritos} \\
+	\hline
+	Identificador & 1.5 \\
+	\hline
+	Prioridad & Media \\
+	\hline
+	Precondición & El Usuario o Profesional debe estar autenticado en la aplicación y tener al menos un elemento en su lista de favoritos. \\
+	\hline
+	Descripción & Permite al Usuario o Profesional ver la lista de elementos marcados como favoritos (por ejemplo, Clientes o Profesionales) para un acceso rápido y conveniente. \\
+	\hline
+	Entrada & Selección de la opción para ver la lista de favoritos. \\
+	\hline
+	Salida & Lista de elementos marcados como favoritos con detalles relevantes. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El Usuario o Profesional accede a la sección de lista de favoritos. \\
+		\hline  
+		2 & Selecciona la opción para ver la lista de favoritos. \\
+		\hline  
+		3 & Visualiza la lista de elementos marcados como favoritos con sus detalles. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & El Usuario o Profesional ve la lista de elementos marcados como favoritos. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		2 & Si la lista de favoritos está vacía, se muestra un mensaje indicando que no hay elementos en la lista. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & N.A. \\
+	\hline
+	Actores & Usuario, profesional \\
+	\hline            
+	\end{tabularx}
+	\caption{Ver lista de favoritos}
+	\label{tab:cu_5}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Valorar cliente/profesional} \\
+	\hline
+	Identificador & 1.6 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Haber iniciado sesión, haber recibido el trabajo de un profesional o haber realizado un trabajo a un usuario. \\
+	\hline
+	Descripción & Una vez realizado/recibido un trabajo, los usuarios/profesionales podrán valorar a ese profesional/usuario así como denunciarlo si lo vieran necesario. \\
+	\hline
+	Entrada & Datos de valoración, mensaje con más detalles (opcional) \\
+	\hline
+	Salida & N.A. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & Una vez recibido/realizado el trabajo, se mostrará la opción de valorar al profesional/usuario. \\
+		\hline  
+		2 & El usuario/profesional rellena el formulario de valoración. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se ha valorado al profesional/usuario. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		2 & Los datos de entrada no son correctos. No se completa la valoración. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & N.A. \\
+	\hline
+	Actores & Usuario, profesional \\
+	\hline            
+	\end{tabularx}
+	\caption{Valorar cliente/profesional}
+	\label{tab:cu_6}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Chatear con cliente/profesional} \\
+	\hline
+	Identificador & 1.7 \\
+	\hline
+	Prioridad & Media \\
+	\hline
+	Precondición & Haber iniciado sesión, estar en el perfil de un profesional/cliente. \\
+	\hline
+	Descripción & En el perfil de los profesionales/clientes habrá un botón para iniciar un chat privado que servirá para aclarar dudas, pedir/dar presupuestos para cosas concretas, etc…  \\
+	\hline
+	Entrada & botón de chat, mensaje(s) a enviar. \\
+	\hline
+	Salida & N.A. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & Una vez en el perfil del profesional/usuario se pulsa el botón ‘Chat privado’. \\
+		\hline  
+		2 & Al hacerlo, se abre un chat entre usuario y profesional donde se podrán enviar mensajes. \\
+		\hline  
+		3 & El usuario/profesional envía los mensajes deseados. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se ha creado un chat privado entre usuario y profesional. \\
+	\hline
+	Excepciones & N.A.\\
+	\hline
+	Comentarios & Este caso de uso permite establecer una conversación entre usuario y profesional. \\
+	\hline
+	Actores & Usuario, profesional \\
+	\hline            
+	\end{tabularx}
+	\caption{Chatear con profesional}
+	\label{tab:cu_7}  
+\end{table}
+
 \newpage
 \subsection{Casos de uso de usuarios}
 
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Configurar búsqueda} \\
+	\hline
+	Identificador & 2.1 \\
+	\hline
+	Prioridad & Media \\
+	\hline
+	Precondición & Haber iniciado sesión. \\
+	\hline
+	Descripción & A la hora de buscar el servicio de un profesional, los usuarios tendrán la opción de configurar los parámetros de la búsqueda como por ejemplo, seleccionar una categoría u ordenar por valoración. \\
+	\hline
+	Entrada & Datos de configuración de búsqueda. \\
+	\hline
+	Salida & N.A. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & Dentro de la aplicación, el usuario seleccionará la opción ‘Buscar profesional’. \\
+		\hline  
+		2 & Se configurarán todos los parámetros de la búsqueda y se pulsará el botón ‘Buscar’. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se han configurado los parámetros de la búsqueda. \\
+	\hline
+	Excepciones & N.A.  \\
+	\hline
+	Comentarios & Este caso de uso permite establecer unos parámetros determinados de búsqueda. \\
+	\hline
+	Actores & Usuario \\
+	\hline            
+	\end{tabularx}
+	\caption{Configurar búsqueda}
+	\label{tab:cu_8}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Buscar servicio} \\
+	\hline
+	Identificador & 2.2 \\
+	\hline
+	Prioridad & Media \\
+	\hline
+	Precondición & Haber iniciado sesión, haber configurado la búsqueda. \\
+	\hline
+	Descripción & Una vez configurados los parámetros de búsqueda, se mostrarán los servicios que cumplen los parámetros de la búsqueda para que el usuario pueda realizar la búsqueda.  \\
+	\hline
+	Entrada & Servicio a buscar. \\
+	\hline
+	Salida & Resultados de servicios que coinciden con la búsqueda. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El usuario podrá recorrer una lista con todos los servicios ofrecidos que cumplen los filtros establecidos. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se ha realizado una búsqueda de servicio. \\
+	\hline
+	Excepciones & N.A.\\
+	\hline
+	Comentarios & Este caso de uso sirve para que los usuarios puedan buscar servicios de acuerdo con unos parámetros \\
+	\hline
+	Actores & Usuario \\
+	\hline            
+	\end{tabularx}
+	\caption{Buscar servicio}
+	\label{tab:cu_9}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Consultar profesional} \\
+	\hline
+	Identificador & 2.3 \\
+	\hline
+	Prioridad & Media \\
+	\hline
+	Precondición & Haber iniciado sesión, Hay profesionales disponibles. \\
+	\hline
+	Descripción & Los usuarios tendrán la posibilidad de consultar el perfil de los distintos profesionales: sus datos (categoría, honorarios, etc…), sus valoraciones y otras estadísticas.  \\
+	\hline
+	Entrada & Profesional a consultar. \\
+	\hline
+	Salida & Detalles del profesional consultado \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El usuario realiza una búsqueda de profesional o escoge uno de los que se muestra en el mapa. \\
+		\hline  
+		2 & Al pulsar en el profesional se abrirá su perfil con todos los datos de ese profesional. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se ha consultado el profesional seleccionado. \\
+	\hline
+	Excepciones & N.A.\\
+	\hline
+	Comentarios & Este caso de uso permite obtener más detalles acerca de un profesional determinado. \\
+	\hline
+	Actores & Usuario \\
+	\hline            
+	\end{tabularx}
+	\caption{Chatear con profesional}
+	\label{tab:cu_10}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Contratar servicio} \\
+	\hline
+	Identificador & 2.4 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Haber iniciado sesión. \\
+	\hline
+	Descripción & Cuando un usuario encuentre el servicio que necesita tendrá la posibilidad de contratarlo y el profesional decidirá si tomar o no el trabajo.  \\
+	\hline
+	Entrada & Servicio elegido, respuesta del profesional. \\
+	\hline
+	Salida & N.A. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & Una vez seleccionado el profesional, en la pantalla del perfil del mismo habrá una opción llamada ‘Contratar servicio’, el usuario pulsará el botón. \\
+		\hline  
+		2 & El sistema procesa y valida la contratación. \\
+		\hline  
+		3 & La propuesta de trabajo llega al profesional que decide si la acepta o rechaza. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se ha contratado el servicio. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		2 & Fallo en el proceso y validación de la petición. Se avisa al usuario y no se envía la propuesta. \\
+		\end{tabular}\\
+	\hline
+	Comentarios & N.A. \\
+	\hline
+	Actores & Usuario \\
+	\hline            
+	\end{tabularx}
+	\caption{Contratar servicio}
+	\label{tab:cu_11}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Añadir/Quitar Profesional de lista de favoritos} \\
+	\hline
+	Identificador & 2.5 \\
+	\hline
+	Prioridad & Media \\
+	\hline
+	Precondición & Haber iniciado sesión, estar en el perfil de un profesional. \\
+	\hline
+	Descripción & Los usuarios tendrán la posibilidad de añadir o quitar a profesionales de su lista de favoritos, lista en la que podrán tener un acceso rápido a los perfiles de dichos profesionales.  \\
+	\hline
+	Entrada & Botón de añadir/quitar de favoritos. \\
+	\hline
+	Salida & Lista de favoritos modificada. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & Una vez dentro del perfil de un profesional, el usuario dispondrá de un botón de favoritos. \\
+		\hline  
+		2 & Dependiendo de si quiere añadir o quitar al profesional de favorito lo activará o desactivará. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se ha añadido/quitado un profesional en la lista de favoritos. \\
+	\hline
+	Excepciones & N.A.\\
+	\hline
+	Comentarios & N.A. \\
+	\hline
+	Actores & Usuario \\
+	\hline            
+	\end{tabularx}
+	\caption{Contratar servicio}
+	\label{tab:cu_12}  
+\end{table}
+%---------------------------------------------------------------
 \newpage
 \subsection{Casos de uso de profesionales}
 \begin{table}[!h]
 	\begin{tabularx}{\textwidth}{|c|X|}
 	\rowcolor[HTML]{00D2CB} 
 	\hline          
-	Requisito & Modificar servicio \\
+	\textbf{Requisito} & \textbf{Cambiar estado de profesional} \\
+	\hline
+	Identificador & 3.1 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Haber iniciado sesión como profesional. \\
+	\hline
+	Descripción & El profesional puede cambiar su estado entre activo/inactivo/trabajando para indicar a los usuarios su disponibilidad actual. \\
+	\hline
+	Entrada & Nuevo estado. \\
+	\hline
+	Salida & N.A. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El profesional se dirige al apartado de ‘Mi Perfil’. \\
+		\hline  
+		2 & Dentro del mismo selecciona la opción ‘Cambiar estado’. \\
+		\hline  
+		3 & El profesional selecciona el nuevo estado que figura en su perfil. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se ha cambiado el estado de profesional. \\
+	\hline
+	Excepciones & N.A. \\
+	\hline
+	Comentarios & N.A. \\
+	\hline
+	Profesional   \\
+	\hline            
+	\end{tabularx}
+	\caption{Cambiar estado de profesional}
+	\label{tab:cu_13}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Dar de alta/baja servicio} \\
+	\hline
+	Identificador & 3.2 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Haber iniciado sesión como profesional. \\
+	\hline
+	Descripción & Los profesionales tendrán la opción de dar de alta y baja los servicios, en el primer caso esto significa que sube un servicio y en el segundo que retira de la oferta de servicios. \\
+	\hline
+	Entrada & Servicio a dar de baja/alta. \\
+	\hline
+	Salida & Confirmación de la baja/alta del servicio. \\
+	\hline
+	Secuencia normal: alta de servicio & \begin{tabular}{@{}p{1cm}|p{6.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & Cuando un usuario contrata el servicio de un profesional, a este le llega una solicitud de servicio. \\
+		\hline  
+		2 & El profesional abre la oferta, donde verá los detalles del servicio. \\
+		\hline  
+		3 & Pulsa el botón ‘Aceptar servicio’. \\
+		\end{tabular} \\
+	\hline
+	Secuencia normal: baja de servicio & \begin{tabular}{@{}p{1cm}|p{6.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El profesional abre el servicio que había aceptado con anterioridad. \\
+		\hline  
+		2 & Entre los detalles del servicio se muestra la opción ‘Dar de baja servicio’ el profesional pulsa el botón. \\
+		\hline  
+		3 & Se muestra un mensaje de confirmación de baja de servicio. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Se ha dado de alta/baja un servicio. \\
+	\hline
+	Excepciones & N.A.  \\
+	\hline
+	Comentarios & N.A. \\
+	\hline
+	Actores & Profesional   \\
+	\hline            
+	\end{tabularx}
+	\caption{Dar de alta/baja servicio}
+	\label{tab:cu_14}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Modificar servicio} \\
 	\hline
 	Identificador & 3.3 \\
 	\hline
@@ -168,7 +702,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Salida & Confirmación de la modificación del servicio. \\
 	\hline
-	Secuencia normal & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
 		1 & El profesional navega hasta la sección de gestión de servicios. \\
@@ -182,7 +716,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Postcondición & El servicio se actualiza con la nueva información en el perfil del Profesional. \\
 	\hline
-	Excepciones & \begin{tabular}{@{}p{2cm}|p{8.5cm}@{}}
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
 		3 & Si no se proporciona la información necesaria, se muestra un mensaje de error. \\
@@ -198,6 +732,205 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\caption{Modificar servicio}
 	\label{tab:cu_15}  
 \end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Listar servicios dados de alta} \\
+	\hline
+	Identificador & 3.4 \\
+	\hline
+	Prioridad & Baja \\
+	\hline
+	Precondición & Haber iniciado sesión como profesional, tener al menos un servicio dado de alta. \\
+	\hline
+	Descripción & Permite al Profesional ver una lista de todos los servicios que ha dado de alta. \\
+	\hline
+	Entrada & Selección de la opción para listar servicios. \\
+	\hline
+	Salida & Lista de servicios con detalles. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El profesional navega hasta la sección de gestión de servicios. \\
+		\hline  
+		2 & Selecciona la opción para listar sus servicios. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & El Profesional puede ver una lista de los servicios que ha dado de alta. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		2 & Si no tiene servicios dados de alta, se muestra un mensaje indicando que no tiene servicios registrados. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & N.A. \\
+	\hline
+	Actores & Profesional   \\
+	\hline            
+	\end{tabularx}
+	\caption{Listar servicios dados de alta}
+	\label{tab:cu_16}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Modificar servicio} \\
+	\hline
+	Identificador & 3.5 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Haber iniciado sesión como profesional, tener al menos un servicio dado de alta. \\
+	\hline
+	Descripción & Permite al Profesional modificar la información de un servicio que ofrece. \\
+	\hline
+	Entrada & Detalles actualizados del servicio. \\
+	\hline
+	Salida & Confirmación de la modificación del servicio. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El profesional navega hasta la sección de gestión de servicios. \\
+		\hline  
+		2 & Selecciona el servicio que desea modificar. \\
+		\hline  
+		3 & Realiza las modificaciones necesarias en los detalles del servicio. \\
+		\hline  
+		4 & Confirma la acción de modificación. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & El servicio se actualiza con la nueva información en el perfil del Profesional. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		3 & Si no se proporciona la información necesaria, se muestra un mensaje de error. \\
+		\hline  
+		4 & Si la operación falla por algún motivo, se notifica al Profesional. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & Este caso de uso permite a los Profesionales mantener actualizada la información de sus servicios. \\
+	\hline
+	Actores & Profesional   \\
+	\hline            
+	\end{tabularx}
+	\caption{Modificar servicio}
+	\label{tab:cu_17}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Modificar servicio} \\
+	\hline
+	Identificador & 3.6 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Haber iniciado sesión como profesional, tener al menos un servicio dado de alta. \\
+	\hline
+	Descripción & Permite al Profesional modificar la información de un servicio que ofrece. \\
+	\hline
+	Entrada & Detalles actualizados del servicio. \\
+	\hline
+	Salida & Confirmación de la modificación del servicio. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El profesional navega hasta la sección de gestión de servicios. \\
+		\hline  
+		2 & Selecciona el servicio que desea modificar. \\
+		\hline  
+		3 & Realiza las modificaciones necesarias en los detalles del servicio. \\
+		\hline  
+		4 & Confirma la acción de modificación. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & El servicio se actualiza con la nueva información en el perfil del Profesional. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		3 & Si no se proporciona la información necesaria, se muestra un mensaje de error. \\
+		\hline  
+		4 & Si la operación falla por algún motivo, se notifica al Profesional. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & Este caso de uso permite a los Profesionales mantener actualizada la información de sus servicios. \\
+	\hline
+	Actores & Profesional   \\
+	\hline            
+	\end{tabularx}
+	\caption{Modificar servicio}
+	\label{tab:cu_18}  
+\end{table}
+
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Modificar servicio} \\
+	\hline
+	Identificador & 3.7 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Haber iniciado sesión como profesional, tener al menos un servicio dado de alta. \\
+	\hline
+	Descripción & Permite al Profesional modificar la información de un servicio que ofrece. \\
+	\hline
+	Entrada & Detalles actualizados del servicio. \\
+	\hline
+	Salida & Confirmación de la modificación del servicio. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El profesional navega hasta la sección de gestión de servicios. \\
+		\hline  
+		2 & Selecciona el servicio que desea modificar. \\
+		\hline  
+		3 & Realiza las modificaciones necesarias en los detalles del servicio. \\
+		\hline  
+		4 & Confirma la acción de modificación. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & El servicio se actualiza con la nueva información en el perfil del Profesional. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		3 & Si no se proporciona la información necesaria, se muestra un mensaje de error. \\
+		\hline  
+		4 & Si la operación falla por algún motivo, se notifica al Profesional. \\
+		\end{tabular}  \\
+	\hline
+	Comentarios & Este caso de uso permite a los Profesionales mantener actualizada la información de sus servicios. \\
+	\hline
+	Actores & Profesional   \\
+	\hline            
+	\end{tabularx}
+	\caption{Modificar servicio}
+	\label{tab:cu_19}  
+\end{table}
+
 \newpage
 \subsection{Casos de uso de administrador}
 

@@ -9,7 +9,9 @@ A level-1 auxiliary file: Cascaras/abstract.aux
 A level-1 auxiliary file: TeXiS/TeXiS_toc.aux
 A level-1 auxiliary file: Capitulos/Introduccion.aux
 A level-1 auxiliary file: Capitulos/EstadoDeLaCuestion.aux
-A level-1 auxiliary file: Capitulos/DescripcionTrabajo.aux
+A level-1 auxiliary file: Capitulos/tecnlogiasEmpleadas.aux
+A level-1 auxiliary file: Capitulos/JustificacionYConsideraciones.aux
+A level-1 auxiliary file: Capitulos/modeloDeDatos.aux
 A level-1 auxiliary file: Capitulos/ConclusionesTrabajoFuturo.aux
 A level-1 auxiliary file: Capitulos/Introduction.aux
 A level-1 auxiliary file: Capitulos/ConclusionsFutureWork.aux
@@ -22,7 +24,7 @@ Database file #1: biblio.bib
 Warning--empty journal in BibTexOriginal
 You've used 1 entry,
             2962 wiz_defined-function locations,
-            1096 strings with 12799 characters,
+            1098 strings with 12870 characters,
 and the built_in function-call counts, 476 in all, are:
 = -- 34
 > -- 10
