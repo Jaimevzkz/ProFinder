@@ -784,48 +784,44 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\begin{tabularx}{\textwidth}{|c|X|}
 	\rowcolor[HTML]{00D2CB} 
 	\hline          
-	\textbf{Requisito} & \textbf{Modificar servicio} \\
+	\textbf{Requisito} & \textbf{Contestar solicitud de contratación.} \\
 	\hline
 	Identificador & 3.5 \\
 	\hline
 	Prioridad & Alta \\
 	\hline
-	Precondición & Haber iniciado sesión como profesional, tener al menos un servicio dado de alta. \\
+	Precondición & El Profesional debe estar autenticado en la aplicación y haber recibido una solicitud de contratación. \\
 	\hline
-	Descripción & Permite al Profesional modificar la información de un servicio que ofrece. \\
+	Descripción & Permite al Profesional aceptar o rechazar una solicitud de contratación de un Usuario. \\
 	\hline
-	Entrada & Detalles actualizados del servicio. \\
+	Entrada & Solicitud de contratación. \\
 	\hline
-	Salida & Confirmación de la modificación del servicio. \\
+	Salida & Confirmación de la respuesta a la solicitud. \\
 	\hline
 	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
-		1 & El profesional navega hasta la sección de gestión de servicios. \\
+		1 & El profesional recibe una notificación de solicitud de contratación. \\
 		\hline  
-		2 & Selecciona el servicio que desea modificar. \\
+		2 & Accede a la solicitud y selecciona aceptar o rechazar. \\
 		\hline  
-		3 & Realiza las modificaciones necesarias en los detalles del servicio. \\
-		\hline  
-		4 & Confirma la acción de modificación. \\
+		3 & Confirma la respuesta. \\
 		\end{tabular} \\
 	\hline
-	Postcondición & El servicio se actualiza con la nueva información en el perfil del Profesional. \\
+	Postcondición & La solicitud de contratación se responde y se notifica al Usuario. \\
 	\hline
 	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
-		3 & Si no se proporciona la información necesaria, se muestra un mensaje de error. \\
-		\hline  
-		4 & Si la operación falla por algún motivo, se notifica al Profesional. \\
+		3 & Si la solicitud ha caducado, se informa al Profesional. \\
 		\end{tabular}  \\
 	\hline
-	Comentarios & Este caso de uso permite a los Profesionales mantener actualizada la información de sus servicios. \\
+	Comentarios & N.A. \\
 	\hline
-	Actores & Profesional   \\
+	Actores & Usuario, Profesional   \\
 	\hline            
 	\end{tabularx}
-	\caption{Modificar servicio}
+	\caption{Contestar solicitud de contratación.}
 	\label{tab:cu_17}  
 \end{table}
 
@@ -835,48 +831,40 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\begin{tabularx}{\textwidth}{|c|X|}
 	\rowcolor[HTML]{00D2CB} 
 	\hline          
-	\textbf{Requisito} & \textbf{Modificar servicio} \\
+	\textbf{Requisito} & \textbf{Consultar cliente} \\
 	\hline
 	Identificador & 3.6 \\
 	\hline
-	Prioridad & Alta \\
+	Prioridad & Media \\
 	\hline
-	Precondición & Haber iniciado sesión como profesional, tener al menos un servicio dado de alta. \\
+	Precondición & Haber iniciado sesión como profesional y estar trabajando o haber trabajado con el cliente. \\
 	\hline
-	Descripción & Permite al Profesional modificar la información de un servicio que ofrece. \\
+	Descripción & Permite al Profesional consultar información sobre el cliente, incluyendo sus datos, las valoraciones que ha recibido y otras estadísticas relevantes. \\
 	\hline
-	Entrada & Detalles actualizados del servicio. \\
+	Entrada & Selección del Cliente a consultar. \\
 	\hline
-	Salida & Confirmación de la modificación del servicio. \\
+	Salida & Información detallada del Cliente, incluyendo sus datos personales, valoraciones recibidas y estadísticas. \\
 	\hline
 	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
-		1 & El profesional navega hasta la sección de gestión de servicios. \\
+		1 & El profesional accede a la sección de consulta de Clientes. \\
 		\hline  
-		2 & Selecciona el servicio que desea modificar. \\
+		2 & Selecciona el Cliente cuya información desea consultar. \\
 		\hline  
-		3 & Realiza las modificaciones necesarias en los detalles del servicio. \\
-		\hline  
-		4 & Confirma la acción de modificación. \\
+		3 & Visualiza los datos y estadísticas del cliente. \\
 		\end{tabular} \\
 	\hline
-	Postcondición & El servicio se actualiza con la nueva información en el perfil del Profesional. \\
+	Postcondición & El Profesional obtiene información sobre el cliente. \\
 	\hline
-	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
-		Paso & Acción \\
-		\hline  
-		3 & Si no se proporciona la información necesaria, se muestra un mensaje de error. \\
-		\hline  
-		4 & Si la operación falla por algún motivo, se notifica al Profesional. \\
-		\end{tabular}  \\
+	Excepciones & N.A.\\
 	\hline
-	Comentarios & Este caso de uso permite a los Profesionales mantener actualizada la información de sus servicios. \\
+	Comentarios & Este caso de uso brinda al Profesional acceso a información relevante sobre los Clientes con los que ha interactuado. \\
 	\hline
-	Actores & Profesional   \\
+	Actores & Usuario, Profesional \\
 	\hline            
 	\end{tabularx}
-	\caption{Modificar servicio}
+	\caption{Consultar cliente.}
 	\label{tab:cu_18}  
 \end{table}
 
@@ -886,56 +874,275 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\begin{tabularx}{\textwidth}{|c|X|}
 	\rowcolor[HTML]{00D2CB} 
 	\hline          
-	\textbf{Requisito} & \textbf{Modificar servicio} \\
+	\textbf{Requisito} & \textbf{Añadir/Modificar/Quitar cliente de lista de favoritos.} \\
 	\hline
 	Identificador & 3.7 \\
 	\hline
-	Prioridad & Alta \\
+	Prioridad & Media \\
 	\hline
-	Precondición & Haber iniciado sesión como profesional, tener al menos un servicio dado de alta. \\
+	Precondición & Haber iniciado sesión como profesional. \\
 	\hline
-	Descripción & Permite al Profesional modificar la información de un servicio que ofrece. \\
+	Descripción & Permite al Profesional agregar, modificar o quitar Clientes de su lista de favoritos para un acceso más rápido y conveniente. \\
 	\hline
-	Entrada & Detalles actualizados del servicio. \\
+	Entrada & Selección de la acción (añadir, modificar o quitar) y Cliente seleccionado. \\
 	\hline
-	Salida & Confirmación de la modificación del servicio. \\
+	Salida & N.A. \\
 	\hline
 	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
-		1 & El profesional navega hasta la sección de gestión de servicios. \\
+		1 & El profesional navega hasta la sección de gestión de favoritos. \\
 		\hline  
-		2 & Selecciona el servicio que desea modificar. \\
+		2 & Selecciona la acción deseada (añadir, modificar o quitar) y el cliente correspondiente. \\
 		\hline  
-		3 & Realiza las modificaciones necesarias en los detalles del servicio. \\
-		\hline  
-		4 & Confirma la acción de modificación. \\
+		3 & Confirma la acción. \\
 		\end{tabular} \\
 	\hline
-	Postcondición & El servicio se actualiza con la nueva información en el perfil del Profesional. \\
+	Postcondición & La lista de favoritos se actualiza según la acción realizada. \\
 	\hline
 	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
-		3 & Si no se proporciona la información necesaria, se muestra un mensaje de error. \\
-		\hline  
-		4 & Si la operación falla por algún motivo, se notifica al Profesional. \\
+		2 & Si el Cliente ya está en la lista de favoritos y se selecciona "añadir", se muestra un mensaje informativo. \\
 		\end{tabular}  \\
 	\hline
-	Comentarios & Este caso de uso permite a los Profesionales mantener actualizada la información de sus servicios. \\
+	Comentarios & Este caso de uso permite al Profesional gestionar su lista de favoritos para un acceso más rápido a los Clientes preferidos. \\
 	\hline
-	Actores & Profesional   \\
+	Actores & Usuario, Profesional   \\
 	\hline            
 	\end{tabularx}
-	\caption{Modificar servicio}
+	\caption{Añadir/Modificar/Quitar cliente de lista de favoritos.}
 	\label{tab:cu_19}  
 \end{table}
 
 \newpage
 \subsection{Casos de uso de administrador}
 
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Añadir/eliminar/Modificar categorías de servicios ofrecidos.} \\
+	\hline
+	Identificador & 4.1 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Estar registrado en la aplicación como administrador. \\
+	\hline
+	Descripción & Permite al Administrador gestionar las categorías de servicios ofrecidos, incluyendo la adición, eliminación o modificación de categorías existentes. \\
+	\hline
+	Entrada & Selección de la acción (añadir, eliminar o modificar) y detalles de la categoría. \\
+	\hline
+	Salida & Confirmación de la acción realizada en las categorías. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El administrador accede a la sección de gestión de categorías de servicios. \\
+		\hline  
+		2 & Selecciona la acción deseada (añadir, eliminar o modificar) y proporciona los detalles necesarios. \\
+		\hline  
+		3 & Confirma la acción. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Las categorías se actualizan según la acción realizada. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		3 & Si la categoría ya existe y se selecciona ‘añadir’, se muestra un mensaje informativo. \\
+		\hline  
+		3 & Si la categoría no existe y se selecciona ‘eliminar’ o ‘modificar’, se muestra un mensaje informativo. \\
+		\end{tabular} \\
+	\hline
+	Comentarios & Este caso de uso permite al Administrador gestionar las categorías de servicios para mantener la organización de la plataforma. \\
+	\hline
+	Actores & Administrador \\
+	\hline            
+	\end{tabularx}
+	\caption{Añadir/eliminar/Modificar categorías de servicios ofrecidos.}
+	\label{tab:cu_20}  
+\end{table}
 
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Consultar datos/estadísticas de profesional/clientes.} \\
+	\hline
+	Identificador & 4.2 \\
+	\hline
+	Prioridad & Media \\
+	\hline
+	Precondición & Estar registrado en la aplicación como administrador. \\
+	\hline
+	Descripción & Permite al Administrador acceder a datos y estadísticas relacionadas con Profesionales y Clientes, lo que le permite realizar análisis y tomar decisiones informadas. \\
+	\hline
+	Entrada & Selección de Profesional o Cliente a consultar. \\
+	\hline
+	Salida & Información detallada y estadísticas del Profesional o Cliente seleccionado. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El administrador accede a la sección de consulta de datos/estadísticas. \\
+		\hline  
+		2 & Selecciona el Profesional o Cliente cuya información desea consultar. \\
+		\hline  
+		3 & Visualiza los datos y estadísticas. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & El Administrador obtiene información detallada sobre el Profesional o Cliente seleccionado. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		2 & Si no se encuentra información para el Profesional o Cliente seleccionado, se muestra un mensaje informativo. \\
+		\end{tabular} \\
+	\hline
+	Comentarios & Este caso de uso proporciona al Administrador acceso a datos relevantes para la toma de decisiones y la gestión de la plataforma. \\
+	\hline
+	Actores & Administrador \\
+	\hline            
+	\end{tabularx}
+	\caption{Consultar datos/estadísticas de profesional/clientes.}
+	\label{tab:cu_21}  
+\end{table}
 
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Buscar clientes/profesionales.} \\
+	\hline
+	Identificador & 4.3 \\
+	\hline
+	Prioridad & Media \\
+	\hline
+	Precondición & Estar registrado en la aplicación como administrador. \\
+	\hline
+	Descripción & Permite al Administrador buscar Clientes o Profesionales dentro de la aplicación según diversos criterios. \\
+	\hline
+	Entrada & Criterios de búsqueda. \\
+	\hline
+	Salida & Lista de Clientes o Profesionales que coinciden con los criterios de búsqueda. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El administrador accede a la sección de búsqueda de Clientes o Profesionales. \\
+		\hline  
+		2 & Ingresa los criterios de búsqueda. \\
+		\hline  
+		3 & Realiza la búsqueda. \\
+		\hline  
+		4 & Visualiza la lista de resultados. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & El Administrador obtiene una lista de Clientes o Profesionales que coinciden con los criterios de búsqueda. \\
+	\hline
+	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		3 & Si no se encuentran resultados que coincidan con los criterios, se muestra un mensaje informativo. \\		
+		\end{tabular} \\
+	\hline
+	Comentarios & Este caso de uso permite al Administrador buscar y acceder a perfiles de Clientes o Profesionales de manera eficiente. \\
+	\hline
+	Actores & Administrador \\
+	\hline            
+	\end{tabularx}
+	\caption{Buscar clientes/profesionales.}
+	\label{tab:cu_22}  
+\end{table}
 
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Modificar datos de clientes/profesionales/servicios ofrecidos.} \\
+	\hline
+	Identificador & 4.4 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Estar registrado en la aplicación como administrador. \\
+	\hline
+	Descripción & Permite al Administrador realizar modificaciones en los datos de Clientes, Profesionales o Servicios Ofrecidos cuando sea necesario. \\
+	\hline
+	Entrada & Selección del tipo de modificación (Cliente, Profesional o Servicio) y detalles de la modificación. \\
+	\hline
+	Salida & Confirmación de la modificación realizada. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El administrador accede a la sección de modificación de datos. \\
+		\hline  
+		2 & Selecciona el tipo de modificación deseada (Cliente, Profesional o Servicio) y proporciona los detalles necesarios. \\
+		\hline  
+		3 & Confirma la modificación. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & Los datos se actualizan según la modificación realizada. \\
+	\hline
+	Excepciones & N.A.\\
+	\hline
+	Comentarios & Este caso de uso permite al Administrador gestionar y mantener actualizados los datos de la plataforma. \\
+	\hline
+	Actores & Administrador \\
+	\hline            
+	\end{tabularx}
+	\caption{Modificar datos de clientes/profesionales/servicios ofrecidos.}
+	\label{tab:cu_23}  
+\end{table}
 
-
+%---------------------------------------------------------------
+\newpage
+\begin{table}[!h]
+	\begin{tabularx}{\textwidth}{|c|X|}
+	\rowcolor[HTML]{00D2CB} 
+	\hline          
+	\textbf{Requisito} & \textbf{Dar de baja usuarios.} \\
+	\hline
+	Identificador & 4.5 \\
+	\hline
+	Prioridad & Alta \\
+	\hline
+	Precondición & Estar registrado en la aplicación como administrador. \\
+	\hline
+	Descripción & Permite al Administrador dar de baja a Usuarios de la aplicación en casos de incumplimiento de términos y condiciones u otras razones legítimas. \\
+	\hline
+	Entrada & Selección del Usuario a dar de baja y motivo de la baja. \\
+	\hline
+	Salida & Confirmación de la baja del Usuario. \\
+	\hline
+	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
+		Paso & Acción \\
+		\hline  
+		1 & El administrador accede a la sección de gestión de bajas de Usuarios. \\
+		\hline  
+		2 & Selecciona el Usuario a dar de baja y especifica el motivo. \\
+		\hline  
+		3 & Confirma la baja del Usuario. \\
+		\end{tabular} \\
+	\hline
+	Postcondición & El Usuario queda dado de baja de la aplicación. \\
+	\hline
+	Excepciones & N.A.\\
+	\hline
+	Comentarios & Este caso de uso permite al Administrador mantener la integridad de la plataforma al dar de baja a Usuarios que incumplen las reglas o políticas. \\
+	\hline
+	Actores & Administrador \\
+	\hline            
+	\end{tabularx}
+	\caption{Dar de baja usuarios.}
+	\label{tab:cu_24}  
+\end{table}
