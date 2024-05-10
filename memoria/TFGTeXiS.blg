@@ -22,46 +22,46 @@ A level-1 auxiliary file: Apendices/appendixB.aux
 A level-1 auxiliary file: Apendices/appendixC.aux
 A level-1 auxiliary file: Cascaras/fin.aux
 Database file #1: biblio.bib
-Warning--empty journal in BibTexOriginal
-You've used 2 entries,
+Warning--I didn't find a database entry for "BibTexOriginal"
+You've used 5 entries,
             2962 wiz_defined-function locations,
-            1107 strings with 13188 characters,
-and the built_in function-call counts, 933 in all, are:
-= -- 69
-> -- 20
-< -- 2
-+ -- 8
-- -- 6
-* -- 60
-:= -- 149
-add.period$ -- 8
-call.type$ -- 2
-change.case$ -- 12
-chr.to.int$ -- 2
-cite$ -- 3
-duplicate$ -- 87
-empty$ -- 78
-format.name$ -- 8
-if$ -- 177
+            1125 strings with 13705 characters,
+and the built_in function-call counts, 2186 in all, are:
+= -- 160
+> -- 50
+< -- 5
++ -- 22
+- -- 15
+* -- 120
+:= -- 351
+add.period$ -- 17
+call.type$ -- 5
+change.case$ -- 27
+chr.to.int$ -- 5
+cite$ -- 5
+duplicate$ -- 196
+empty$ -- 202
+format.name$ -- 20
+if$ -- 434
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 18
-newline$ -- 16
-num.names$ -- 8
-pop$ -- 39
+missing$ -- 42
+newline$ -- 31
+num.names$ -- 20
+pop$ -- 93
 preamble$ -- 1
-purify$ -- 10
+purify$ -- 25
 quote$ -- 0
-skip$ -- 31
+skip$ -- 82
 stack$ -- 0
-substring$ -- 22
-swap$ -- 38
+substring$ -- 57
+swap$ -- 76
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 20
-warning$ -- 1
-while$ -- 6
+type$ -- 41
+warning$ -- 0
+while$ -- 15
 width$ -- 0
-write$ -- 30
+write$ -- 67
 (There was 1 warning)

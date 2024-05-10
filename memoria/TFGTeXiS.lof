@@ -14,6 +14,16 @@
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Recycler View utilizando Android views \citep {RecyclerVsLazy}\relax }}{13}{figure.caption.50}%
 \contentsline {figure}{\numberline {3.4}{\ignorespaces LazyColumn utilizando Jetpack Compose\relax }}{14}{figure.caption.51}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Ejemplo de estado.\relax }}{17}{figure.caption.70}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Ejemplo de definición de los \textit {intents} de una vista.\relax }}{18}{figure.caption.71}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Representación gráfica del ciclo MVI \citep {mviExplanation}.\relax }}{18}{figure.caption.72}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Ejemplo de primer principio SOLID.\relax }}{19}{figure.caption.75}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Ejemplo del quinto principio SOLID.\relax }}{20}{figure.caption.80}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Interfaz Error.\relax }}{20}{figure.caption.83}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Interfaz Result.\relax }}{21}{figure.caption.84}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Ejemplo de tipo de error.\relax }}{21}{figure.caption.85}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Ejemplo de implementación de Result.\relax }}{22}{figure.caption.86}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Ejemplo de llamada a función implementando Result.\relax }}{22}{figure.caption.87}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \babel@toc {english}{}\relax 

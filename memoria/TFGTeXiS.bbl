@@ -1,5 +1,20 @@
-\begin{thebibliography}{2}
+\begin{thebibliography}{5}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Fuentes(2020)}]{mviExplanation}
+{\sc Fuentes, R.}
+\newblock ¿qué es y cómo funciona la arquitectura mvi? ejemplos—
+  desarrollo android— kotlin.
+\newblock {\em Medium\/}, 2020.
+\newblock Disponible en
+  \url{https://medium.com/@robercoding/qu%C3%A9-es-y-c%C3%B3mo-funciona-la-arquitectura-mvi-desarrollo-android-kotlin-e6a161e1b2db}
+  (último acceso,  Mayo, 2024).
+
+\bibitem[{Isaacson(2015)}]{Innovators}
+{\sc Isaacson, W.}
+\newblock {\em The Innovators: How a Group of Hackers, Geniuses and Geeks
+  Created the Digital Revolution\/}.
+\newblock Simon And Schuster, 2015.
 
 \bibitem[{Khan(2023)}]{RecyclerVsLazy}
 {\sc Khan, M.~H.}
@@ -10,12 +25,15 @@
   \url{https://medium.com/@humzakhalid94/recyclerview-vs-lazyrow-lazycolumn-choosing-the-right-layout-for-dynamic-lists-in-android-ec9912049375}
   (último acceso,  Mayo, 2024).
 
-\bibitem[{Patashnik(1988)}]{BibTexOriginal}
-{\sc Patashnik, O.}
-\newblock {BibTeX}ing.
-\newblock 1988.
-\newblock Disponible en
-  \url{ftp://ftp.ctan.org/tex-archive/biblio/bibtex/contrib/doc/btxdoc.pdf}
-  (último acceso,  Octubre, 2009).
+\bibitem[{Martin(2008)}]{CleanCode}
+{\sc Martin, R.~C.}
+\newblock {\em Clean Code: A Handbook of Agile Software Craftsmanship\/}.
+\newblock Pearson, 2008.
+
+\bibitem[{Martin(2017)}]{CleanArchitecture}
+{\sc Martin, R.~C.}
+\newblock {\em Clean Architecture: A Craftsman's Guide to Software Structure
+  and Design\/}.
+\newblock Prentice Hall, 2017.
 
 \end{thebibliography}
