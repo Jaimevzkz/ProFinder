@@ -54,6 +54,7 @@ Esta estructura define un flujo unidireccional de datos: La vista lanza intents 
 \end{figure}
 
 \subsection{Principios SOLID}
+\label{subsec:solid}
 Los principios SOLID son un conjunto de cinco principios de diseño de software que fueron introducidos en el libro Clean Code \citep{CleanCode}. Están destinados a guiar a los desarrolladores hacia la creación de código fuente limpio, modular, mantenible y extensible. A continuación se ha descrito brevemente cada uno de ellos, adjuntando una captura del código de la aplicación que lo implementa o una explicación de en qué parte del código se ha implementado cuando lo anterior no sea posible:
 \begin{enumerate}
     \item Principio de Responsabilidad Única (\textit{Single Responsibility Principle}): establece que una clase debería tener una única razón para cambiar. En otras palabras, una clase debe tener una sola responsabilidad o función dentro del sistema. En el ejemplo, cualquier clase que implemente la interfaz tendrá la responsabilidad única de implementar el metodo \textit{invoke}.

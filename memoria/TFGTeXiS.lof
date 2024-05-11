@@ -13,18 +13,33 @@
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Función en Kotlin\relax }}{12}{figure.caption.47}%
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Recycler View utilizando Android views \citep {RecyclerVsLazy}\relax }}{13}{figure.caption.50}%
 \contentsline {figure}{\numberline {3.4}{\ignorespaces LazyColumn utilizando Jetpack Compose\relax }}{14}{figure.caption.51}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Ejemplo de inyección de un caso de uso usando Hilt\relax }}{14}{figure.caption.54}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Ejemplo de módulo de dependencias\relax }}{15}{figure.caption.55}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Ejemplo de viewmodel inyectado\relax }}{15}{figure.caption.56}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Ejemplo de estado.\relax }}{17}{figure.caption.70}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Ejemplo de definición de los \textit {intents} de una vista.\relax }}{18}{figure.caption.71}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Representación gráfica del ciclo MVI \citep {mviExplanation}.\relax }}{18}{figure.caption.72}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Ejemplo de primer principio SOLID.\relax }}{19}{figure.caption.75}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Ejemplo del quinto principio SOLID.\relax }}{20}{figure.caption.80}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Interfaz Error.\relax }}{20}{figure.caption.83}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Interfaz Result.\relax }}{21}{figure.caption.84}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces Ejemplo de tipo de error.\relax }}{21}{figure.caption.85}%
-\contentsline {figure}{\numberline {4.9}{\ignorespaces Ejemplo de implementación de Result.\relax }}{22}{figure.caption.86}%
-\contentsline {figure}{\numberline {4.10}{\ignorespaces Ejemplo de llamada a función implementando Result.\relax }}{22}{figure.caption.87}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Ejemplo de estado.\relax }}{19}{figure.caption.73}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Ejemplo de definición de los \textit {intents} de una vista.\relax }}{20}{figure.caption.74}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Representación gráfica del ciclo MVI \citep {mviExplanation}.\relax }}{20}{figure.caption.75}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Ejemplo de primer principio SOLID.\relax }}{21}{figure.caption.78}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Ejemplo del quinto principio SOLID.\relax }}{22}{figure.caption.83}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Interfaz Error.\relax }}{22}{figure.caption.86}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Interfaz Result.\relax }}{23}{figure.caption.87}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Ejemplo de tipo de error.\relax }}{23}{figure.caption.88}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Ejemplo de implementación de Result.\relax }}{24}{figure.caption.89}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Ejemplo de llamada a función implementando Result.\relax }}{24}{figure.caption.90}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Clase ActorModel.\relax }}{25}{figure.caption.93}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Clase ServiceModel.\relax }}{26}{figure.caption.94}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Clase JobModel.\relax }}{26}{figure.caption.95}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Clase ChatListItemModel.\relax }}{26}{figure.caption.96}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Clase ChatMsgModel.\relax }}{27}{figure.caption.97}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Clase LocationModel.\relax }}{27}{figure.caption.98}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Ejemplo de enumerado (actores).\relax }}{27}{figure.caption.99}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Captura de pantalla del panel de control de Firebase Authentication.\relax }}{28}{figure.caption.102}%
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Captura de pantalla del panel de control de la base de datos Firestore.\relax }}{29}{figure.caption.104}%
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Captura de pantalla de la estruectura de Realtime Database\relax }}{29}{figure.caption.106}%
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Ejemplo de función getData()\relax }}{31}{figure.caption.110}%
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Ejemplo de Singleton con datos de usuario\relax }}{31}{figure.caption.111}%
 \addvspace {10\p@ }
 \babel@toc {english}{}\relax 
 \babel@toc {spanish}{}\relax 

@@ -3,7 +3,8 @@
 En este capítulo se explican todas la tecnologías, aplicaciones y herramientas que se han utilizado durante el proceso de desarrollo. El capítulo se ha dividido en dos apartados principales, uno dedicado a tecnologías generales y otro dedicado a tecnologías específicas del desarollo Android.
 
 \section{Aplicaciones y herramientas generales}
-\subsection{Android Studio}\hypertarget{subsec:android_studio}{}
+\hypertarget{subsec:android_studio}{}
+\subsection{Android Studio}
 \href{https://developer.android.com/studio/intro}{Android Studio} es el entorno de desarrollo integrado (IDE) oficial utilizado para el desarrollo de aplicaciones en Android. Esta basado en \href{https://www.jetbrains.com/idea}{Intellij Idea}, un editor multiplataforma con soporte para lenguajes como \hyperlink{subsec:kotlin}{Kotlin}, \href{https://www.java.com}{Java} y \href{https://www.scala-lang.org}{Scala} entre otros. 
 
 Android Studio ha sido utilizado a lo largo del proceso completo de desarrollo, siendo de gran utilidad sus modernas funcionalidades como ayuda al correcto flujo de trabajo. Este entorno te permite utilizar emuladores para probar las aplicaciones, sin embargo estos emuladores consumen gran cantidad de recursos del ordenador, esto ha sido un poco problemático en el caso de este proyecto ya que el ordenador con el que se contaba para el desarrollo no contaba con recursos suficientes para ejecutar el emulador correctamente, provocando en algunos casos problemas de \textit{lag} y \textit{crashes} ocasionales. A pesar de esto, ha sido posible desarrollar la aplicación usando estos emuladores.
@@ -33,7 +34,8 @@ También merece mención en este apartado la herramienta de código abierto \hre
 
 \section{Tecnologías específicas de Android}
 
-\subsection{Kotlin}\hypertarget{subsec:kotlin}{}
+\hypertarget{subsec:kotlin}{}
+\subsection{Kotlin}
 \href{https://kotlinlang.org/}{Kotlin} es un lenguaje de programación de código abierto creado por JetBrains, es un lenguaje de tipado estático, lo que significa que se puede desarrollar sobre la JVM (Java Virtual Machine) y es totalmente compatible e interoperable con Java lo que facilita la migración desde el primero \footnote{Artículo que explica en detalle qué es kotlin: \href{https://www.plainconcepts.com/es/kotlin-android/}{Plain Concepts}}. 
 
 Este lenguaje de programación ha sido seleccionado para el proyecto ya que, a parte de ser el recomendado por Google y ser muy cómodo y útil de usar, con el paso de los años se está consolidando como el lenguaje de referencia para el desarrollo Android, dejando obsoleto el anterior lenguaje de referencia: Java.
@@ -63,7 +65,8 @@ A continuación se muestra una breve comparación del mismo código -que declara
 	\label{fig:kotlinFun}
 \end{figure}
 
-\subsection{Jetpack Compose}\hypertarget{subsec:compose}{}
+\hypertarget{subsec:compose}{}
+\subsection{Jetpack Compose}
 \href{https://developer.android.com/develop/ui/compose}{Jetpack Compose} es un moderno kit de herramientas de desarrollo de interfaces de usuario (UI) para Android, desarrollado por Google. Permite a los desarrolladores construir interfaces de usuario de aplicaciones de forma más fácil y eficiente, utilizando un enfoque declarativo. Jetpack Compose fue elegida como tecnología principal para el desarrollo de las interfaces porque suponía un reto apasionante, es una tecnología puntera y muy demandada actualmente en el mundo profesional. Por estos motivos, desde el principio del desarrollo de Profinder se decidió utilizar. 
 
 Jetpack Composes es una forma más cómoda, sencilla y mejor de desarrollar aplicaciones frente al sistema tradicional de vistas con XML. A continuación se intenta explicar el por qué de esta afirmación.
@@ -82,6 +85,7 @@ Para terminar esta comparativa, a continuación se muestran dos formas de hacer 
 	\caption{Recycler View utilizando Android views \citep{RecyclerVsLazy}}
 	\label{fig:views_demo}
 \end{figure}
+\newpage
 \begin{figure}[h]
 	\centering
 	\includegraphics[width = 1\textwidth]{Imagenes/Fuentes/compose_demo.png}
@@ -90,8 +94,37 @@ Para terminar esta comparativa, a continuación se muestran dos formas de hacer 
 \end{figure}
 
 \subsection{Testing}
+Durante el proceso de desarrollo de Profinder, se han encontrado numerosos desafíos que resolver pero sin duda el testing ha sido el más complicado. La cantidad de cosas que se pueden hacer y conocimientos que aprender son un mundo y debido a los ajustados tiempos del proyecto solo ha sido posible rascar la superficie.
+
+Se han implementado pequeños test unitarios sobretodo del repositorio, en el que se han podido probar todas las funciones. También se han podido probar algunos casos de uso y se ha intentado probar los viewmodel, pero debido a la complejidad sus pruebas no ha dado tiempo ha hacer algo que de verdad valga la pena, por eso los tests se clasificarán en el capítulo \ref{cap:conclusiones} como una línea de trabajo futuro.
 
 \subsection{Dagger Hilt}
+Todo el proyecto ha sido implementado utilizando inyección de dependencias mediante \href{https://dagger.dev/hilt/}{Dagger Hilt}. 
+
+Dagger Hilt es un framework que realiza operaciones en tiempo de compilación (autogenerando ficheros) para Android, el cual se encarga de crear y administrar la creación de objetos en toda la aplicación, esto tiene muchas ventajas pero la principal es que facilita la codificación inmensamente ya que evita tener que saber donde se crea cada objeto.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = 1\textwidth]{Imagenes/Fuentes/ejemplo_hilt1.png}
+	\caption{Ejemplo de inyección de un caso de uso usando Hilt}
+	\label{fig:ejemplo_hilt1}
+\end{figure}
+
+Se han creado módulos para inyectar todos los servicios remotos de \hyperlink{subsec:firebase}{Firebase}, así como para el servicio de localización, creando automáticamente instancias que serán utilizadas por todas las interfaces que las requieran.
+\newpage
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = 0.7\textwidth]{Imagenes/Fuentes/ejemplo_hilt2.png}
+	\caption{Ejemplo de módulo de dependencias}
+	\label{fig:ejemplo_hilt2}
+\end{figure}
+
+Por último, en todas las vistas se han inyectado los \textit{viewmodels}:
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = 0.7\textwidth]{Imagenes/Fuentes/ejemplo_hilt3.png}
+	\caption{Ejemplo de viewmodel inyectado}
+	\label{fig:ejemplo_hilt3}
+\end{figure}
 
 \subsection{Maps}
 
@@ -99,7 +132,8 @@ Para terminar esta comparativa, a continuación se muestran dos formas de hacer 
 
 \subsection{Compose Destinations}
 
-\subsection{Coil}
+\hypertarget{subsec:coil}{}
+\subsection{Coil} 
 
 \subsection{Material design}
 \label{subsec:material_design}
