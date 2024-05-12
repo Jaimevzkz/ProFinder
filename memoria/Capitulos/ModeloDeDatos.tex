@@ -56,6 +56,7 @@ En este capítulo se explicará todo el modelo de datos de la aplicación. En pr
 
 \hypertarget{subsec:firebase}{}
 \section{Firebase} 
+\label{subsec:firebase}
 \href{https://firebase.google.com/}{Firebase} es una plataforma web desarrollada por Google que ofrece una amplia gama de servicios para ayudar a los desarrolladores a crear y mejorar aplicaciones. En Profinder, se ha utilizado como \textit{backend} para toda la aplicación y ha aportado la capacidad de plasmar el modelo de datos de la aplicación a una base datos, así como autenticación y almacenamiento para fotos. A continuación se ha explicado cada servicio utilizado.
 \subsection{Authentication}
 \href{https://firebase.google.com/docs/auth/}{Firebase Authentication} es un servicio de autenticación que ahorra todo el proceso de gurdado y cifrado de cotraseñas, también gestiona las sesiones de cada usuario, permitiendo mantener la sesión iniciada.Tiene compatibilidad para configurar diversos métodos de autenticación, sin embargo, en esta aplicación solo se ha considerado oportuno implementar la autenticación con \textit{email} y contraseña aunque si se quisiera sería sencillo añadir otros métodos.
@@ -81,6 +82,7 @@ Esta base de datos ha sido dividida en tres colecciones explicadas a continuaci�
     \caption{Captura de pantalla del panel de control de la base de datos Firestore.}
     \label{fig:ejemplo_firestore}
 \end{figure}
+\hypertarget{subsec:realtime}{}
 \subsection{Realtime Database}
 \href{https://firebase.google.com/docs/database/}{Realtime database} es una base datos de baja latencia, menos sofisticada que \hyperlink{subsec:firestore}{Firestore} pero cuyas funcionalidades han encajado perfectamente con las necesidades del proyecto. Se ha utilizado para toda la funcionalidad de chat ya que al ser los mensajes en tiempo real, era necesario que la latencia fuera mínima. 
 

@@ -14,10 +14,12 @@ Android Studio ha sido utilizado a lo largo del proceso completo de desarrollo, 
 
 En este proyecto, Obsidian ha servido como complemento al desarrollo. Se ha utilizado, entre otras cosas, para la planificación de hitos (apuntes personales sobre los casos de uso, fechas de entrega, dudas para tutoría...), reunión de ideas sobre las funcionalidades y documentación del ciclo de vida del proyecto.
 
+\hypertarget{subsec:figma}{}
 \subsection{Figma}
 \href{https://www.figma.com}{Figma} es una plataforma de diseño basada en la web que permite crear y prototipar diseños de interfaces de usuario, con ella ha sido posible crear diseños de una forma rápida y eficaz, que luego han sido materializados en \hyperlink{subsec:compose}{Jetpack Compose}. 
 
 En este proyecto en particular, figma ha sido utilizada para plasmar las ideas de diseño, sirviendo estas como una referencia no estricta de las interfaces finales. En el apéndice \ref{Appendix:interfacesfigma} se han adjuntado capturas de pantalla de todas las interfaces diseñadas. Como la aplicación se ha desarrollado utilizando \href{https://m3.material.io/}{Material 3} y \href{https://m3.material.io/styles/color/system/overview}{Dynamic Colors} (véase la subseccion \ref{subsec:material_design} para más detalles acerca de Material design) los colores varían dinámicamente en función del tema de cada dispositivo por lo que los colores de los diseños de figma no tienen por qué corresponderse con los colores que luego se han materializado en cada dispositivo.
+\hypertarget{subsec:drawio}{}
 \subsection{Drawio}
 \href{https://www.drawio.com/}{Drawio} es una herramienta de código abierto que permite a los usuarios crear una amplia variedad de diagramas (flujo, Gantt...), seleccionada para el proyecto por ser cómoda, personalizable y con gran capacidad de portabilidad, utilizando ficheros con extensión .io y dando la capacidad al usuario de cambiar de herramienta con facilidad. 
 
@@ -29,9 +31,6 @@ Para el control de versiones de la aplicación se ha utilizado la conocida herra
 El repositorio con el código de la aplicación y el código latex utilizado para la redacción de esta memoria se han almacenado de forma pública en \href{https://github.com/}{Github}, plataforma de desarrollo colaborativo basada en la web que utiliza Git como sistema de control de versiones.
 
 También merece mención en este apartado la herramienta de código abierto \href{https://github.com/jesseduffield/lazygit}{Lazygit}, interfaz gráfico de terminal para linux que proporciona una forma fácil y visual de interactuar con los repositorios Git. Está diseñado para simplificar el flujo de trabajo al proporcionar una interfaz gráfica intuitiva dentro de la terminal. Ha sido de gran ayuda para la agilización del uso de Git a lo largo del desarrollo del proyecto en conjunción con la extension de \hyperlink{subsec:android_studio}{Android Studio} para Git.
-
-
-
 \section{Tecnologías específicas de Android}
 
 \hypertarget{subsec:kotlin}{}
@@ -94,9 +93,10 @@ Para terminar esta comparativa, a continuación se muestran dos formas de hacer 
 \end{figure}
 
 \subsection{Testing}
+\label{subsec:testing}
 Durante el proceso de desarrollo de Profinder, se han encontrado numerosos desafíos que resolver pero sin duda el testing ha sido el más complicado. La cantidad de cosas que se pueden hacer y conocimientos que aprender son un mundo y debido a los ajustados tiempos del proyecto solo ha sido posible rascar la superficie.
 
-Se han implementado pequeños test unitarios sobretodo del repositorio, en el que se han podido probar todas las funciones. También se han podido probar algunos casos de uso y se ha intentado probar los viewmodel, pero debido a la complejidad sus pruebas no ha dado tiempo ha hacer algo que de verdad valga la pena, por eso los tests se clasificarán en el capítulo \ref{cap:conclusiones} como una línea de trabajo futuro.
+Se han implementado pequeños test unitarios usando librerías como \href{https://mockk.io/ANDROID.html}{mockk} sobretodo del repositorio, en el que se han podido probar todas las funciones. También se han podido probar algunos casos de uso y se ha intentado probar los viewmodel, pero debido a la complejidad sus pruebas no ha dado tiempo ha hacer algo que de verdad valga la pena, por eso los tests se clasificarán en el capítulo \ref{cap:conclusiones} como una línea de trabajo futuro.
 
 \subsection{Dagger Hilt}
 Todo el proyecto ha sido implementado utilizando inyección de dependencias mediante \href{https://dagger.dev/hilt/}{Dagger Hilt}. 
@@ -127,13 +127,44 @@ Por último, en todas las vistas se han inyectado los \textit{viewmodels}:
 \end{figure}
 
 \subsection{Maps}
+Para el desarrollo de la funcionalidad del mapa, ha sido necesario utilizar el \href{https://developers.google.com/maps/documentation/android-sdk}{SDK de Google Maps para Android}. Para utilizarlo es necesario darse de alta en la consola de Google para desarrolladores e introducir un método de pago (aunque el límite de uso gratuito es bastante por lo que esto no supone un problema) para recibir la clave de API necesaria.
 
-\subsection{Permisos y localización}
-
+Una vez obtenida la clave de API ya es posible implementar mapas en la aplicación, para ello se utilizó una adaptación del SDK para el uso en \hyperlink{subsec:compose}{Jetpack Compsose} creada por múltiples desarrolladores de Google como herramienta \textit{open source}.
+\footnote{Link al repositorio: \href{https://github.com/googlemaps/android-maps-compose}{android-maps-compose}}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = 0.6\textwidth]{Imagenes/Fuentes/maps_compose.png}
+	\caption{Uso del \textit{composable} GoogleMap para dibujar un mapa en la aplicación}
+	\label{fig:maps_compose}
+\end{figure}
 \subsection{Compose Destinations}
+La navegación nativa que ofrece \hyperlink{subsec:compose}{Jetpack Compsose} no es demasiado cómoda por el momento ya que usa navegación por rutas en formato de \textit{string}, lo cual puede llegar a ser confuso y poco seguro. 
+
+Para solucionar este problema se ha encontrado una biblioteca creada por la comunidad llamada \href{https://github.com/raamcosta/compose-destinations}{Compose Destinations}. Esta biblioteca utiliza como base la navegación nativa pero añade una capa encima que permite estructuración y tipado de los argumentos, ofreciendo una navegación más segura y sencilla de utilizar. Este recurso ha sido muy útil, haciendo el desarrollo con múltiples vistas sustancialmente más sencillo.
+
+Para utilizarlo solo hay que utilizar el tag \textit{Destination} en la funciones que participen en la navegación, esta etiqueta autogenera el código necesario -usando la navegación nativa- en tiempo de compilación. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = 0.6\textwidth]{Imagenes/Fuentes/ejemplo_destination.png}
+	\caption{Ejemplo de declaración de función como Destination.}
+	\label{fig:ejemplo_destination}
+\end{figure}
+
+Una vez generado este código se podrá utilizar la variable \textit{navigator} para navegar a esas pantallas de forma sencilla. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = 0.6\textwidth]{Imagenes/Fuentes/ejemplo_navigator.png}
+	\caption{Ejemplo de uso de variable navigator.}
+	\label{fig:ejemplo_navigator}
+\end{figure}
 
 \hypertarget{subsec:coil}{}
 \subsection{Coil} 
-
+\href{https://coil-kt.github.io/coil/compose/}{Coil} es una biblioteca creada para \hyperlink{subsec:compose}{Jetpack compose} (equivalente a \href{https://github.com/bumptech/glide}{Glide} en Android views). Sirve para cargar imágenes en las interfaces, proporciona el componente AsyncImage que se ha utilizado para mostrar las fotos de perfil de los usuarios en la aplicación. Se ha optado por Coil en lugar de bibliotecas como \href{https://square.github.io/picasso/}{Picasso} ya que ofrece un rendimiento e integración con \hyperlink{subsec:compose}{Jetpack compose} mucho mejor. 
 \subsection{Material design}
 \label{subsec:material_design}
+\href{https://m3.material.io/}{Material Design} es un sistema de diseño creado por Google que se utiliza para crear experiencias de usuario coherentes y atractivas en aplicaciones. 
+
+Para esta aplicación se ha utilizado Material 3 que ofrece la funcionalidad de Dynamic colors, esto significa que no tiene una paleta de colores estática, sino que dependiendo del tema de cada dispositivo específico, crea una paleta de colores personalizada. De esta forma se consigue una mejor experiencia de usuario, que gracias al algoritmo que se usa para crear la paleta de colores mantiene la armonía entre aplicaciones que usen Material.
+
+Gracias a este sistema, también ha sido posible hacer la aplicación con tema claro y oscuro, para conseguir esto se declaran dos colores para cada elemento de la paleta de colores (dinámicamente) y en función de una variable \textit{booleana} controlada por la aplicación se decide que tema se utiliza.

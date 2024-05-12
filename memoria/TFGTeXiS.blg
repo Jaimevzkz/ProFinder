@@ -20,11 +20,10 @@ The style file: TeXiS/TeXiS.bst
 A level-1 auxiliary file: Apendices/appendixA.aux
 A level-1 auxiliary file: Apendices/appendixB.aux
 A level-1 auxiliary file: Apendices/appendixC.aux
-A level-1 auxiliary file: Cascaras/fin.aux
 Database file #1: biblio.bib
 You've used 5 entries,
             2962 wiz_defined-function locations,
-            1123 strings with 13677 characters,
+            1122 strings with 13661 characters,
 and the built_in function-call counts, 2186 in all, are:
 = -- 160
 > -- 50
