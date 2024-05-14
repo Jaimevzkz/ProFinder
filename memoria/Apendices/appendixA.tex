@@ -26,7 +26,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Precondición & En caso de baja: tener una cuenta creada. \\
 	\hline
-	Descripción & Los actores de la aplicación tendrán que crear una cuenta para poder interactuar con la misma, así mismo tendrán la capacidad de dar de baja su cuenta cuando lo deseen. \\
+	Descripción & Los actores de la aplicación tendrán que crear una cuenta para poder interactuar con la misma, asimismo tendrán la capacidad de dar de baja su cuenta cuando lo deseen. \\
 	\hline
 	Entrada & Nombre de usuario, correo electrónico, contraseña. \\
 	\hline
@@ -83,7 +83,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	Secuencia normal & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
-		1 & El actor se dirigirá al apartado de 'Mi perfil' y seleccionará la opción 'Modificar perfil'. \\
+		1 & El actor se dirigirá al apartado de ‘Mi perfil’ y seleccionará la opción ‘Modificar perfil’. \\
 		\hline  
 		2 & Dentro de esta pantalla se modificarán todos los datos deseados. \\
 		\end{tabular} \\
@@ -386,7 +386,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Precondición & Haber iniciado sesión, haber configurado la búsqueda. \\
 	\hline
-	Descripción & Una vez configurados los parámetros de búsqueda, se mostrarán los servicios que cumplen los parámetros de la búsqueda para que el usuario pueda realizar la búsqueda.  \\
+	Descripción & Una vez configurados los parámetros de búsqueda, se mostrarán los servicios que cumplen los parámetros de la búsqueda.  \\
 	\hline
 	Entrada & Servicio a buscar. \\
 	\hline
@@ -422,7 +422,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Prioridad & Media \\
 	\hline
-	Precondición & Haber iniciado sesión, Hay profesionales disponibles. \\
+	Precondición & Haber iniciado sesión, hay profesionales disponibles. \\
 	\hline
 	Descripción & Los usuarios tendrán la posibilidad de consultar el perfil de los distintos profesionales: sus datos (categoría, honorarios, etc…), sus valoraciones y otras estadísticas.  \\
 	\hline
@@ -484,6 +484,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
+		\hline  
 		2 & Fallo en el proceso y validación de la petición. Se avisa al usuario y no se envía la propuesta. \\
 		\end{tabular}\\
 	\hline
@@ -572,7 +573,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Comentarios & N.A. \\
 	\hline
-	Profesional   \\
+	Actores & Profesional \\
 	\hline            
 	\end{tabularx}
 	\caption{Cambiar estado de profesional}
@@ -592,7 +593,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Precondición & Haber iniciado sesión como profesional. \\
 	\hline
-	Descripción & Los profesionales tendrán la opción de dar de alta y baja los servicios, en el primer caso esto significa que sube un servicio y en el segundo que retira de la oferta de servicios. \\
+	Descripción & Los profesionales tendrán la opción de dar de alta y baja los servicios, en el primer caso esto significa que sube un servicio y en el segundo que lo retira de la oferta de servicios. \\
 	\hline
 	Entrada & Servicio a dar de baja/alta. \\
 	\hline
@@ -847,7 +848,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	Excepciones & \begin{tabular}{@{}p{1cm}|p{9.5cm}@{}}
 		Paso & Acción \\
 		\hline  
-		2 & Si el Cliente ya está en la lista de favoritos y se selecciona "añadir", se muestra un mensaje informativo. \\
+		2 & Si el Cliente ya está en la lista de favoritos y se selecciona ‘añadir’, se muestra un mensaje informativo. \\
 		\end{tabular}  \\
 	\hline
 	Comentarios & Este caso de uso permite al Profesional gestionar su lista de favoritos para un acceso más rápido a los Clientes preferidos. \\
@@ -865,7 +866,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\begin{tabularx}{\textwidth}{|c|X|}
 	\rowcolor[HTML]{00D2CB} 
 	\hline          
-	\textbf{Requisito} & \textbf{Añadir/eliminar/Modificar categorías de servicios ofrecidos.} \\
+	\textbf{Requisito} & \textbf{Añadir/Eliminar/Modificar categorías de servicios ofrecidos.} \\
 	\hline
 	Identificador & 4.1 \\
 	\hline
@@ -913,7 +914,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\begin{tabularx}{\textwidth}{|c|X|}
 	\rowcolor[HTML]{00D2CB} 
 	\hline          
-	\textbf{Requisito} & \textbf{Consultar datos/estadísticas de profesional/clientes.} \\
+	\textbf{Requisito} & \textbf{Consultar datos/estadísticas de profesionales/clientes.} \\
 	\hline
 	Identificador & 4.2 \\
 	\hline
@@ -950,7 +951,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	Actores & Administrador \\
 	\hline            
 	\end{tabularx}
-	\caption{Consultar datos/estadísticas de profesional/clientes.}
+	\caption{Consultar datos/estadísticas de profesionales/clientes.}
 	\label{tab:cu_21}  
 \end{table}
 %---------------------------------------------------------------
@@ -1015,7 +1016,7 @@ Los casos de uso se han clasificado en cuatro categorías según el actor princi
 	\hline
 	Precondición & Estar registrado en la aplicación como administrador. \\
 	\hline
-	Descripción & Permite al Administrador realizar modificaciones en los datos de Clientes, Profesionales o Servicios Ofrecidos cuando sea necesario. \\
+	Descripción & Permite al administrador realizar modificaciones en los datos de clientes, profesionales o servicios ofrecidos cuando sea necesario. \\
 	\hline
 	Entrada & Selección del tipo de modificación (Cliente, Profesional o Servicio) y detalles de la modificación. \\
 	\hline

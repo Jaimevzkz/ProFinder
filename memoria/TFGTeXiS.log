@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.18)  12 MAY 2024 21:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.18)  14 MAY 2024 20:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -507,7 +507,14 @@ Package: fancyhdr 2021/01/28 v4.0.1 Extensive control of page headers and footer
 \f@nch@O@erf=\skip80
 \f@nch@O@olf=\skip81
 \f@nch@O@orf=\skip82
-))
+)
+
+Package fancyhdr Warning: \fancyhead's `E' option without twoside option is useless on input line 128.
+
+
+Package fancyhdr Warning: \fancyhead's `E' option without twoside option is useless on input line 129.
+
+)
 
 LaTeX Warning: \include should only be used after \begin{document} on input line 467.
 
@@ -534,10 +541,14 @@ LaTeX Info: Redefining \% on input line 27.
  (./Cascaras/dedicatoria.aux) (./Cascaras/agradecimientos.aux) (./Cascaras/resumen.aux) (./Cascaras/abstract.aux) (./TeXiS/TeXiS_toc.aux)
 LaTeX Info: Redefining \. on input line 34.
 LaTeX Info: Redefining \% on input line 34.
- (./Capitulos/Introduccion.aux) (./Capitulos/EstadoDeLaCuestion.aux) (./Capitulos/tecnologiasEmpleadas.aux) (./Capitulos/JustificacionYConsideraciones.aux) (./Capitulos/modeloDeDatos.aux) (./Capitulos/ConclusionesTrabajoFuturo.aux) (./Capitulos/Introduction.aux) (./Capitulos/ConclusionsFutureWork.aux) (./Cascaras/bibliografia.aux)
+ (./Capitulos/Introduccion.aux) (./Capitulos/EstadoDeLaCuestion.aux) (./Capitulos/tecnologiasEmpleadas.aux) (./Capitulos/JustificacionYConsideraciones.aux) (./Capitulos/modeloDeDatos.aux) (./Capitulos/ConclusionesTrabajoFuturo.aux) (./Capitulos/Introduction.aux
+
+LaTeX Warning: Label `fig:Gantt' multiply defined.
+
+) (./Capitulos/ConclusionsFutureWork.aux) (./Cascaras/bibliografia.aux)
 LaTeX Info: Redefining \. on input line 45.
 LaTeX Info: Redefining \% on input line 45.
- (./Apendices/appendixA.aux) (./Apendices/appendixB.aux) (./Apendices/appendixC.aux))
+ (./Apendices/appendixA.aux) (./Apendices/appendixB.aux) (./Apendices/appendixC.aux) (./Apendices/appendixD.aux))
 \openout1 = `TFGTeXiS.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 105.
@@ -608,7 +619,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 * paper: a4paper
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: twoside 
+* modes: 
 * h-part:(L,W,R)=(85.35826pt, 426.79135pt, 85.35826pt)
 * v-part:(T,H,B)=(85.35826pt, 674.33032pt, 85.35826pt)
 * \paperwidth=597.50787pt
@@ -622,7 +633,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 * \headsep=19.8738pt
 * \topskip=12.0pt
 * \footskip=30.0pt
-* \marginparwidth=88.0pt
+* \marginparwidth=38.0pt
 * \marginparsep=7.0pt
 * \columnsep=10.0pt
 * \skip\footins=10.8pt plus 4.0pt minus 2.0pt
@@ -630,8 +641,8 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 * \voffset=0.0pt
 * \mag=1000
 * \@twocolumnfalse
-* \@twosidetrue
-* \@mparswitchtrue
+* \@twosidefalse
+* \@mparswitchfalse
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
@@ -651,7 +662,7 @@ Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 \evensidemarginOriginal=\skip86
 \oddsidemarginOriginal=\skip87
 \longTitulo=\skip88
-<Imagenes/Bitmap/escudoUCMcolor.png, id=253, 600.3228pt x 678.3744pt>
+<Imagenes/Bitmap/escudoUCMcolor.png, id=257, 600.3228pt x 678.3744pt>
 File: Imagenes/Bitmap/escudoUCMcolor.png Graphic file (type png)
 <use Imagenes/Bitmap/escudoUCMcolor.png>
 Package pdftex.def Info: Imagenes/Bitmap/escudoUCMcolor.png  used on input line 189.
@@ -664,79 +675,91 @@ Package pdftex.def Info: Imagenes/Bitmap/escudoUCMcolor.png  used on input line 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./Imagenes/Bitmap/escudoUCMcolor.png>] [2] [3])
 \openout2 = `Cascaras/dedicatoria.aux'.
 
- (./Cascaras/dedicatoria.tex [4
-
-
-
-
-]
+ (./Cascaras/dedicatoria.tex
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 10.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 10.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 10.
-) [5]
+) [4
+
+
+
+
+]
 \openout2 = `Cascaras/agradecimientos.aux'.
 
- (./Cascaras/agradecimientos.tex [6
+ (./Cascaras/agradecimientos.tex) [5
 
 
 
 
-]) [7]
+]
 \openout2 = `Cascaras/resumen.aux'.
 
- (./Cascaras/resumen.tex [8
+ (./Cascaras/resumen.tex) [6
 
 
 
 
-]) [9]
+]
 \openout2 = `Cascaras/abstract.aux'.
 
- (./Cascaras/abstract.tex [10
+ (./Cascaras/abstract.tex) [7
 
 
 
 
-]) [11]
+]
 LaTeX Info: Redefining \. on input line 125.
 LaTeX Info: Redefining \% on input line 125.
 \openout2 = `TeXiS/TeXiS_toc.aux'.
 
- (./TeXiS/TeXiS_toc.tex [12
+ (./TeXiS/TeXiS_toc.tex
 
+Package fancyhdr Warning: \fancyhead's `E' option without twoside option is useless on input line 77.
 
-
-
-] (./TFGTeXiS.toc
+(./TFGTeXiS.toc
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
 LaTeX Info: Redefining \. on input line 3.
 LaTeX Info: Redefining \% on input line 3.
- [13]
+ [8
+
+
+
+
+]
 LaTeX Info: Redefining \. on input line 55.
 LaTeX Info: Redefining \% on input line 55.
 )
 \tf@toc=\write6
 \openout6 = `TFGTeXiS.toc'.
 
- [14] (./TFGTeXiS.lof
+ [9]
+
+Package fancyhdr Warning: \fancyhead's `E' option without twoside option is useless on input line 92.
+
+(./TFGTeXiS.lof
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
 LaTeX Info: Redefining \. on input line 3.
 LaTeX Info: Redefining \% on input line 3.
- [15
+ [10
 
 ]
-LaTeX Info: Redefining \. on input line 48.
-LaTeX Info: Redefining \% on input line 48.
+LaTeX Info: Redefining \. on input line 49.
+LaTeX Info: Redefining \% on input line 49.
 )
 \tf@lof=\write7
 \openout7 = `TFGTeXiS.lof'.
 
- [16] (./TFGTeXiS.lot
+ [11]
+
+Package fancyhdr Warning: \fancyhead's `E' option without twoside option is useless on input line 105.
+
+(./TFGTeXiS.lot
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
 LaTeX Info: Redefining \. on input line 3.
@@ -747,16 +770,15 @@ LaTeX Info: Redefining \% on input line 11.
 \tf@lot=\write8
 \openout8 = `TFGTeXiS.lot'.
 
- [17
+ [12
 
-]) [18
+])
 
+Package fancyhdr Warning: \fancyhead's `E' option without twoside option is useless on input line 137.
 
-
-]
 \openout2 = `Capitulos/Introduccion.aux'.
 
- (./Capitulos/Introduccion.tex
+(./Capitulos/Introduccion.tex
 Cap\'itulo 1.
 LaTeX Font Info:    Trying to load font information for OT1+phv on input line 1.
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1phv.fd
@@ -768,6 +790,9 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 ) [1
 
 
+
+
+
 ]
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 37.
@@ -777,8 +802,8 @@ LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 37
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-LaTeX Info: Redefining \. on input line 40.
-LaTeX Info: Redefining \% on input line 40.
+LaTeX Info: Redefining \. on input line 41.
+LaTeX Info: Redefining \% on input line 41.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -788,13 +813,13 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
 [2]
-<Imagenes/Bitmap/Gantt_Diagram.png, id=575, 1645.14626pt x 463.7325pt>
+<Imagenes/Bitmap/Gantt_Diagram.png, id=556, 1645.14626pt x 463.7325pt>
 File: Imagenes/Bitmap/Gantt_Diagram.png Graphic file (type png)
 <use Imagenes/Bitmap/Gantt_Diagram.png>
 Package pdftex.def Info: Imagenes/Bitmap/Gantt_Diagram.png  used on input line 48.
 (pdftex.def)             Requested size: 426.79135pt x 120.2987pt.
-LaTeX Info: Redefining \. on input line 72.
-LaTeX Info: Redefining \% on input line 72.
+LaTeX Info: Redefining \. on input line 73.
+LaTeX Info: Redefining \% on input line 73.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -819,7 +844,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 
  (./Capitulos/EstadoDeLaCuestion.tex
 Cap\'itulo 2.
-<Imagenes/Fuentes/logo_Uber.png, id=588, 831.105pt x 301.125pt>
+<Imagenes/Fuentes/logo_Uber.png, id=569, 831.105pt x 301.125pt>
 File: Imagenes/Fuentes/logo_Uber.png Graphic file (type png)
 <use Imagenes/Fuentes/logo_Uber.png>
 Package pdftex.def Info: Imagenes/Fuentes/logo_Uber.png  used on input line 9.
@@ -830,12 +855,12 @@ Package pdftex.def Info: Imagenes/Fuentes/logo_Uber.png  used on input line 9.
 
 
  <./Imagenes/Fuentes/logo_Uber.png>]
-<Imagenes/Fuentes/habitissimo_logo.jpg, id=596, 540.5796pt x 85.2786pt>
+<Imagenes/Fuentes/habitissimo_logo.jpg, id=575, 540.5796pt x 85.2786pt>
 File: Imagenes/Fuentes/habitissimo_logo.jpg Graphic file (type jpg)
 <use Imagenes/Fuentes/habitissimo_logo.jpg>
 Package pdftex.def Info: Imagenes/Fuentes/habitissimo_logo.jpg  used on input line 18.
 (pdftex.def)             Requested size: 128.0387pt x 20.1979pt.
-<Imagenes/Fuentes/logo_booksy.png, id=599, 513.92pt x 118.4425pt>
+<Imagenes/Fuentes/logo_booksy.png, id=577, 513.92pt x 118.4425pt>
 File: Imagenes/Fuentes/logo_booksy.png Graphic file (type png)
 <use Imagenes/Fuentes/logo_booksy.png>
 Package pdftex.def Info: Imagenes/Fuentes/logo_booksy.png  used on input line 28.
@@ -851,7 +876,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
 [6 <./Imagenes/Fuentes/habitissimo_logo.jpg> <./Imagenes/Fuentes/logo_booksy.png>]
-<Imagenes/Fuentes/logo_upwork.png, id=609, 1003.75pt x 296.10625pt>
+<Imagenes/Fuentes/logo_upwork.png, id=584, 1003.75pt x 296.10625pt>
 File: Imagenes/Fuentes/logo_upwork.png Graphic file (type png)
 <use Imagenes/Fuentes/logo_upwork.png>
 Package pdftex.def Info: Imagenes/Fuentes/logo_upwork.png  used on input line 39.
@@ -870,14 +895,14 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 [7 <./Imagenes/Fuentes/logo_upwork.png>]
 \openout2 = `Capitulos/tecnologiasEmpleadas.aux'.
 
- (./Capitulos/TecnologiasEmpleadas.tex [8
+ (./Capitulos/TecnologiasEmpleadas.tex
+Cap\'itulo 3.
+[8
 
 
 
 
 ]
-Cap\'itulo 3.
-[9]
 LaTeX Info: Redefining \. on input line 39.
 LaTeX Info: Redefining \% on input line 39.
 
@@ -888,13 +913,13 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[10]
-<Imagenes/Fuentes/javaFun.png, id=658, 780.9175pt x 171.64125pt>
+[9]
+<Imagenes/Fuentes/javaFun.png, id=624, 780.9175pt x 171.64125pt>
 File: Imagenes/Fuentes/javaFun.png Graphic file (type png)
 <use Imagenes/Fuentes/javaFun.png>
 Package pdftex.def Info: Imagenes/Fuentes/javaFun.png  used on input line 56.
 (pdftex.def)             Requested size: 426.79135pt x 93.80582pt.
-<Imagenes/Fuentes/kotlinFun.png, id=659, 795.97375pt x 219.82124pt>
+<Imagenes/Fuentes/kotlinFun.png, id=625, 795.97375pt x 219.82124pt>
 File: Imagenes/Fuentes/kotlinFun.png Graphic file (type png)
 <use Imagenes/Fuentes/kotlinFun.png>
 Package pdftex.def Info: Imagenes/Fuentes/kotlinFun.png  used on input line 62.
@@ -915,7 +940,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[11]
+[10]
 LaTeX Info: Redefining \. on input line 76.
 LaTeX Info: Redefining \% on input line 76.
 
@@ -926,8 +951,8 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[12 <./Imagenes/Fuentes/javaFun.png> <./Imagenes/Fuentes/kotlinFun.png>]
-<Imagenes/Fuentes/views_demo.png, id=673, 780.9175pt x 377.41pt>
+[11 <./Imagenes/Fuentes/javaFun.png> <./Imagenes/Fuentes/kotlinFun.png>]
+<Imagenes/Fuentes/views_demo.png, id=640, 780.9175pt x 377.41pt>
 File: Imagenes/Fuentes/views_demo.png Graphic file (type png)
 <use Imagenes/Fuentes/views_demo.png>
 Package pdftex.def Info: Imagenes/Fuentes/views_demo.png  used on input line 83.
@@ -942,13 +967,13 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[13 <./Imagenes/Fuentes/views_demo.png>]
-<Imagenes/Fuentes/compose_demo.png, id=683, 504.88625pt x 122.4575pt>
+[12 <./Imagenes/Fuentes/views_demo.png>]
+<Imagenes/Fuentes/compose_demo.png, id=649, 504.88625pt x 122.4575pt>
 File: Imagenes/Fuentes/compose_demo.png Graphic file (type png)
 <use Imagenes/Fuentes/compose_demo.png>
 Package pdftex.def Info: Imagenes/Fuentes/compose_demo.png  used on input line 90.
-(pdftex.def)             Requested size: 426.79135pt x 103.51756pt.
-<Imagenes/Fuentes/ejemplo_hilt1.png, id=687, 558.085pt x 92.345pt>
+(pdftex.def)             Requested size: 298.75264pt x 72.4623pt.
+<Imagenes/Fuentes/ejemplo_hilt1.png, id=653, 558.085pt x 92.345pt>
 File: Imagenes/Fuentes/ejemplo_hilt1.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_hilt1.png>
 Package pdftex.def Info: Imagenes/Fuentes/ejemplo_hilt1.png  used on input line 107.
@@ -963,24 +988,24 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[14 <./Imagenes/Fuentes/compose_demo.png> <./Imagenes/Fuentes/ejemplo_hilt1.png>]
-<Imagenes/Fuentes/ejemplo_hilt2.png, id=694, 461.725pt x 202.7575pt>
+[13 <./Imagenes/Fuentes/compose_demo.png> <./Imagenes/Fuentes/ejemplo_hilt1.png>]
+<Imagenes/Fuentes/ejemplo_hilt2.png, id=660, 461.725pt x 202.7575pt>
 File: Imagenes/Fuentes/ejemplo_hilt2.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_hilt2.png>
 Package pdftex.def Info: Imagenes/Fuentes/ejemplo_hilt2.png  used on input line 116.
 (pdftex.def)             Requested size: 298.75264pt x 131.1906pt.
-<Imagenes/Fuentes/ejemplo_hilt3.png, id=695, 468.75125pt x 124.465pt>
+<Imagenes/Fuentes/ejemplo_hilt3.png, id=661, 468.75125pt x 124.465pt>
 File: Imagenes/Fuentes/ejemplo_hilt3.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_hilt3.png>
 Package pdftex.def Info: Imagenes/Fuentes/ejemplo_hilt3.png  used on input line 124.
 (pdftex.def)             Requested size: 298.75264pt x 79.32497pt.
-<Imagenes/Fuentes/maps_compose.png, id=700, 481.8pt x 246.9225pt>
+<Imagenes/Fuentes/maps_compose.png, id=666, 481.8pt x 246.9225pt>
 File: Imagenes/Fuentes/maps_compose.png Graphic file (type png)
 <use Imagenes/Fuentes/maps_compose.png>
-Package pdftex.def Info: Imagenes/Fuentes/maps_compose.png  used on input line 136.
+Package pdftex.def Info: Imagenes/Fuentes/maps_compose.png  used on input line 135.
 (pdftex.def)             Requested size: 256.07741pt x 131.24129pt.
-LaTeX Info: Redefining \. on input line 142.
-LaTeX Info: Redefining \% on input line 142.
+LaTeX Info: Redefining \. on input line 141.
+LaTeX Info: Redefining \% on input line 141.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -989,19 +1014,19 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[15 <./Imagenes/Fuentes/ejemplo_hilt2.png> <./Imagenes/Fuentes/ejemplo_hilt3.png> <./Imagenes/Fuentes/maps_compose.png>]
-<Imagenes/Fuentes/ejemplo_destination.png, id=709, 486.81876pt x 125.46875pt>
+[14 <./Imagenes/Fuentes/ejemplo_hilt2.png> <./Imagenes/Fuentes/ejemplo_hilt3.png> <./Imagenes/Fuentes/maps_compose.png>]
+<Imagenes/Fuentes/ejemplo_destination.png, id=675, 486.81876pt x 125.46875pt>
 File: Imagenes/Fuentes/ejemplo_destination.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_destination.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_destination.png  used on input line 148.
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_destination.png  used on input line 147.
 (pdftex.def)             Requested size: 256.07741pt x 65.99843pt.
-<Imagenes/Fuentes/ejemplo_navigator.png, id=710, 496.85625pt x 166.6225pt>
+<Imagenes/Fuentes/ejemplo_navigator.png, id=676, 496.85625pt x 166.6225pt>
 File: Imagenes/Fuentes/ejemplo_navigator.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_navigator.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_navigator.png  used on input line 156.
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_navigator.png  used on input line 155.
 (pdftex.def)             Requested size: 256.07741pt x 85.87637pt.
-LaTeX Info: Redefining \. on input line 169.
-LaTeX Info: Redefining \% on input line 169.
+LaTeX Info: Redefining \. on input line 168.
+LaTeX Info: Redefining \% on input line 168.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1010,7 +1035,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[16 <./Imagenes/Fuentes/ejemplo_destination.png> <./Imagenes/Fuentes/ejemplo_navigator.png>])
+[15 <./Imagenes/Fuentes/ejemplo_destination.png> <./Imagenes/Fuentes/ejemplo_navigator.png>])
 LaTeX Info: Redefining \. on input line 143.
 LaTeX Info: Redefining \% on input line 143.
 
@@ -1021,19 +1046,19 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[17]
+[16]
 \openout2 = `Capitulos/JustificacionYConsideraciones.aux'.
 
- (./Capitulos/JustificacionYConsideraciones.tex [18
+ (./Capitulos/JustificacionYConsideraciones.tex
+Cap\'itulo 4.
+[17
 
 
 
 
 ]
-Cap\'itulo 4.
-[19]
-LaTeX Info: Redefining \. on input line 26.
-LaTeX Info: Redefining \% on input line 26.
+LaTeX Info: Redefining \. on input line 27.
+LaTeX Info: Redefining \% on input line 27.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1042,14 +1067,14 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[20]
-<Imagenes/Fuentes/ejemplo_estado.png, id=762, 414.54875pt x 371.3875pt>
+[18]
+<Imagenes/Fuentes/ejemplo_estado.png, id=722, 414.54875pt x 371.3875pt>
 File: Imagenes/Fuentes/ejemplo_estado.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_estado.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_estado.png  used on input line 36.
-(pdftex.def)             Requested size: 298.75264pt x 267.6538pt.
-LaTeX Info: Redefining \. on input line 41.
-LaTeX Info: Redefining \% on input line 41.
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_estado.png  used on input line 37.
+(pdftex.def)             Requested size: 213.39568pt x 191.17319pt.
+LaTeX Info: Redefining \. on input line 42.
+LaTeX Info: Redefining \% on input line 42.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1058,19 +1083,19 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[21 <./Imagenes/Fuentes/ejemplo_estado.png>]
-<Imagenes/Fuentes/ejemplo_intent.png, id=769, 582.175pt x 312.16624pt>
+[19 <./Imagenes/Fuentes/ejemplo_estado.png>]
+<Imagenes/Fuentes/ejemplo_intent.png, id=732, 582.175pt x 312.16624pt>
 File: Imagenes/Fuentes/ejemplo_intent.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_intent.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_intent.png  used on input line 44.
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_intent.png  used on input line 45.
 (pdftex.def)             Requested size: 298.75264pt x 160.19344pt.
-<Imagenes/Fuentes/visual_mvi.png, id=770, 744.7825pt x 506.89375pt>
+<Imagenes/Fuentes/visual_mvi.png, id=733, 744.7825pt x 506.89375pt>
 File: Imagenes/Fuentes/visual_mvi.png Graphic file (type png)
 <use Imagenes/Fuentes/visual_mvi.png>
-Package pdftex.def Info: Imagenes/Fuentes/visual_mvi.png  used on input line 52.
-(pdftex.def)             Requested size: 213.39568pt x 145.23193pt.
-LaTeX Info: Redefining \. on input line 60.
-LaTeX Info: Redefining \% on input line 60.
+Package pdftex.def Info: Imagenes/Fuentes/visual_mvi.png  used on input line 53.
+(pdftex.def)             Requested size: 256.07741pt x 174.2907pt.
+LaTeX Info: Redefining \. on input line 61.
+LaTeX Info: Redefining \% on input line 61.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1079,14 +1104,14 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[22 <./Imagenes/Fuentes/ejemplo_intent.png> <./Imagenes/Fuentes/visual_mvi.png>]
-<Imagenes/Fuentes/change_state.png, id=781, 394.47375pt x 146.5475pt>
+[20 <./Imagenes/Fuentes/ejemplo_intent.png> <./Imagenes/Fuentes/visual_mvi.png>]
+<Imagenes/Fuentes/change_state.png, id=744, 394.47375pt x 146.5475pt>
 File: Imagenes/Fuentes/change_state.png Graphic file (type png)
 <use Imagenes/Fuentes/change_state.png>
-Package pdftex.def Info: Imagenes/Fuentes/change_state.png  used on input line 64.
+Package pdftex.def Info: Imagenes/Fuentes/change_state.png  used on input line 65.
 (pdftex.def)             Requested size: 298.75264pt x 110.98592pt.
-LaTeX Info: Redefining \. on input line 78.
-LaTeX Info: Redefining \% on input line 78.
+LaTeX Info: Redefining \. on input line 79.
+LaTeX Info: Redefining \% on input line 79.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1095,19 +1120,19 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[23 <./Imagenes/Fuentes/change_state.png>]
-<Imagenes/Fuentes/ejemplo_reduce.png, id=791, 369.38pt x 27.10126pt>
+[21 <./Imagenes/Fuentes/change_state.png>]
+<Imagenes/Fuentes/ejemplo_reduce.png, id=754, 369.38pt x 27.10126pt>
 File: Imagenes/Fuentes/ejemplo_reduce.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_reduce.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_reduce.png  used on input line 82.
-(pdftex.def)             Requested size: 298.75264pt x 21.91922pt.
-<Imagenes/Fuentes/error_interface.png, id=795, 184.69pt x 20.075pt>
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_reduce.png  used on input line 83.
+(pdftex.def)             Requested size: 213.39568pt x 15.6567pt.
+<Imagenes/Fuentes/error_interface.png, id=758, 184.69pt x 20.075pt>
 File: Imagenes/Fuentes/error_interface.png Graphic file (type png)
 <use Imagenes/Fuentes/error_interface.png>
-Package pdftex.def Info: Imagenes/Fuentes/error_interface.png  used on input line 96.
+Package pdftex.def Info: Imagenes/Fuentes/error_interface.png  used on input line 97.
 (pdftex.def)             Requested size: 128.0387pt x 13.9173pt.
-LaTeX Info: Redefining \. on input line 105.
-LaTeX Info: Redefining \% on input line 105.
+LaTeX Info: Redefining \. on input line 107.
+LaTeX Info: Redefining \% on input line 107.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1116,19 +1141,19 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[24 <./Imagenes/Fuentes/ejemplo_reduce.png> <./Imagenes/Fuentes/error_interface.png>]
-<Imagenes/Fuentes/ejemplo_result.png, id=802, 600.2425pt x 167.62625pt>
+[22 <./Imagenes/Fuentes/ejemplo_reduce.png> <./Imagenes/Fuentes/error_interface.png>]
+<Imagenes/Fuentes/ejemplo_result.png, id=765, 600.2425pt x 167.62625pt>
 File: Imagenes/Fuentes/ejemplo_result.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_result.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_result.png  used on input line 108.
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_result.png  used on input line 110.
 (pdftex.def)             Requested size: 426.79135pt x 119.19194pt.
-<Imagenes/Fuentes/ejemplo_tipo_error.png, id=805, 397.485pt x 383.4325pt>
+<Imagenes/Fuentes/ejemplo_tipo_error.png, id=768, 397.485pt x 383.4325pt>
 File: Imagenes/Fuentes/ejemplo_tipo_error.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_tipo_error.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_tipo_error.png  used on input line 117.
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_tipo_error.png  used on input line 120.
 (pdftex.def)             Requested size: 298.75264pt x 288.19969pt.
-LaTeX Info: Redefining \. on input line 123.
-LaTeX Info: Redefining \% on input line 123.
+LaTeX Info: Redefining \. on input line 126.
+LaTeX Info: Redefining \% on input line 126.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1137,16 +1162,16 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[25 <./Imagenes/Fuentes/ejemplo_result.png> <./Imagenes/Fuentes/ejemplo_tipo_error.png>]
-<Imagenes/Fuentes/ejemplo_impl_result.png, id=812, 763.85374pt x 19.07124pt>
+[23 <./Imagenes/Fuentes/ejemplo_result.png> <./Imagenes/Fuentes/ejemplo_tipo_error.png>]
+<Imagenes/Fuentes/ejemplo_impl_result.png, id=774, 763.85374pt x 19.07124pt>
 File: Imagenes/Fuentes/ejemplo_impl_result.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_impl_result.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_impl_result.png  used on input line 126.
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_impl_result.png  used on input line 129.
 (pdftex.def)             Requested size: 426.79135pt x 10.65565pt.
-<Imagenes/Fuentes/llamada_funcion_result.png, id=814, 676.5275pt x 141.52875pt>
+<Imagenes/Fuentes/llamada_funcion_result.png, id=776, 676.5275pt x 141.52875pt>
 File: Imagenes/Fuentes/llamada_funcion_result.png Graphic file (type png)
 <use Imagenes/Fuentes/llamada_funcion_result.png>
-Package pdftex.def Info: Imagenes/Fuentes/llamada_funcion_result.png  used on input line 134.
+Package pdftex.def Info: Imagenes/Fuentes/llamada_funcion_result.png  used on input line 137.
 (pdftex.def)             Requested size: 426.79135pt x 89.28667pt.
 )
 LaTeX Info: Redefining \. on input line 144.
@@ -1159,42 +1184,42 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[26 <./Imagenes/Fuentes/ejemplo_impl_result.png> <./Imagenes/Fuentes/llamada_funcion_result.png>]
+[24 <./Imagenes/Fuentes/ejemplo_impl_result.png> <./Imagenes/Fuentes/llamada_funcion_result.png>]
 \openout2 = `Capitulos/modeloDeDatos.aux'.
 
  (./Capitulos/ModeloDeDatos.tex
 Cap\'itulo 5.
-<Imagenes/Fuentes/actorModel.png, id=820, 539.01375pt x 283.0575pt>
+<Imagenes/Fuentes/actorModel.png, id=782, 539.01375pt x 283.0575pt>
 File: Imagenes/Fuentes/actorModel.png Graphic file (type png)
 <use Imagenes/Fuentes/actorModel.png>
 Package pdftex.def Info: Imagenes/Fuentes/actorModel.png  used on input line 9.
 (pdftex.def)             Requested size: 298.75264pt x 156.88712pt.
-<Imagenes/Fuentes/ServiceModel.png, id=821, 301.125pt x 204.765pt>
+<Imagenes/Fuentes/ServiceModel.png, id=783, 301.125pt x 204.765pt>
 File: Imagenes/Fuentes/ServiceModel.png Graphic file (type png)
 <use Imagenes/Fuentes/ServiceModel.png>
 Package pdftex.def Info: Imagenes/Fuentes/ServiceModel.png  used on input line 16.
 (pdftex.def)             Requested size: 213.39568pt x 145.11545pt.
-[27
+[25
 
 
 
 
  <./Imagenes/Fuentes/actorModel.png>]
-<Imagenes/Fuentes/JobModel.png, id=826, 331.2375pt x 186.6975pt>
+<Imagenes/Fuentes/JobModel.png, id=789, 331.2375pt x 186.6975pt>
 File: Imagenes/Fuentes/JobModel.png Graphic file (type png)
 <use Imagenes/Fuentes/JobModel.png>
 Package pdftex.def Info: Imagenes/Fuentes/JobModel.png  used on input line 23.
 (pdftex.def)             Requested size: 213.39568pt x 120.27794pt.
-<Imagenes/Fuentes/ChatListItemModel.png, id=827, 249.93375pt x 185.69376pt>
+<Imagenes/Fuentes/ChatListItemModel.png, id=790, 249.93375pt x 185.69376pt>
 File: Imagenes/Fuentes/ChatListItemModel.png Graphic file (type png)
 <use Imagenes/Fuentes/ChatListItemModel.png>
 Package pdftex.def Info: Imagenes/Fuentes/ChatListItemModel.png  used on input line 30.
 (pdftex.def)             Requested size: 128.0387pt x 95.13324pt.
-<Imagenes/Fuentes/ChatMsgModel.png, id=828, 208.78pt x 122.4575pt>
+<Imagenes/Fuentes/ChatMsgModel.png, id=791, 208.78pt x 122.4575pt>
 File: Imagenes/Fuentes/ChatMsgModel.png Graphic file (type png)
 <use Imagenes/Fuentes/ChatMsgModel.png>
 Package pdftex.def Info: Imagenes/Fuentes/ChatMsgModel.png  used on input line 37.
-(pdftex.def)             Requested size: 170.71393pt x 100.1355pt.
+(pdftex.def)             Requested size: 128.0387pt x 75.10443pt.
 LaTeX Info: Redefining \. on input line 41.
 LaTeX Info: Redefining \% on input line 41.
 
@@ -1205,13 +1230,13 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[28 <./Imagenes/Fuentes/ServiceModel.png> <./Imagenes/Fuentes/JobModel.png> <./Imagenes/Fuentes/ChatListItemModel.png>]
-<Imagenes/Fuentes/LocationModel.png, id=833, 208.78pt x 99.37125pt>
+[26 <./Imagenes/Fuentes/ServiceModel.png> <./Imagenes/Fuentes/JobModel.png> <./Imagenes/Fuentes/ChatListItemModel.png>]
+<Imagenes/Fuentes/LocationModel.png, id=796, 208.78pt x 99.37125pt>
 File: Imagenes/Fuentes/LocationModel.png Graphic file (type png)
 <use Imagenes/Fuentes/LocationModel.png>
 Package pdftex.def Info: Imagenes/Fuentes/LocationModel.png  used on input line 44.
-(pdftex.def)             Requested size: 170.71393pt x 81.2575pt.
-<Imagenes/Fuentes/ejemplo_enum.png, id=835, 551.05875pt x 143.53625pt>
+(pdftex.def)             Requested size: 128.0387pt x 60.9454pt.
+<Imagenes/Fuentes/ejemplo_enum.png, id=798, 551.05875pt x 143.53625pt>
 File: Imagenes/Fuentes/ejemplo_enum.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_enum.png>
 Package pdftex.def Info: Imagenes/Fuentes/ejemplo_enum.png  used on input line 51.
@@ -1226,38 +1251,35 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[29 <./Imagenes/Fuentes/ChatMsgModel.png> <./Imagenes/Fuentes/LocationModel.png> <./Imagenes/Fuentes/ejemplo_enum.png>]
-<Imagenes/Fuentes/ejemplo_auth.png, id=842, 946.53625pt x 189.70876pt>
+[27 <./Imagenes/Fuentes/ChatMsgModel.png> <./Imagenes/Fuentes/LocationModel.png> <./Imagenes/Fuentes/ejemplo_enum.png>]
+<Imagenes/Fuentes/ejemplo_auth.png, id=805, 946.53625pt x 189.70876pt>
 File: Imagenes/Fuentes/ejemplo_auth.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_auth.png>
 Package pdftex.def Info: Imagenes/Fuentes/ejemplo_auth.png  used on input line 65.
 (pdftex.def)             Requested size: 426.79135pt x 85.53893pt.
-<Imagenes/Fuentes/ejemplo_firestore.png, id=845, 1268.74pt x 618.31pt>
+LaTeX Info: Redefining \. on input line 79.
+LaTeX Info: Redefining \% on input line 79.
+
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
+
+[28 <./Imagenes/Fuentes/ejemplo_auth.png>]
+<Imagenes/Fuentes/ejemplo_firestore.png, id=813, 1268.74pt x 618.31pt>
 File: Imagenes/Fuentes/ejemplo_firestore.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_firestore.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_firestore.png  used on input line 81.
-(pdftex.def)             Requested size: 426.79135pt x 207.99603pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-LaTeX Info: Redefining \. on input line 88.
-LaTeX Info: Redefining \% on input line 88.
-
-Package fancyhdr Warning: \headheight is too small (14.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
-
-[30 <./Imagenes/Fuentes/ejemplo_auth.png>]
-<Imagenes/Fuentes/ejemplo_realtime.png, id=855, 839.135pt x 513.92pt>
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_firestore.png  used on input line 82.
+(pdftex.def)             Requested size: 384.1096pt x 187.19266pt.
+<Imagenes/Fuentes/ejemplo_realtime.png, id=816, 839.135pt x 513.92pt>
 File: Imagenes/Fuentes/ejemplo_realtime.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_realtime.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_realtime.png  used on input line 92.
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_realtime.png  used on input line 93.
 (pdftex.def)             Requested size: 341.43437pt x 209.10883pt.
-LaTeX Info: Redefining \. on input line 98.
-LaTeX Info: Redefining \% on input line 98.
+LaTeX Info: Redefining \. on input line 99.
+LaTeX Info: Redefining \% on input line 99.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1266,21 +1288,21 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[31 <./Imagenes/Fuentes/ejemplo_firestore.png> <./Imagenes/Fuentes/ejemplo_realtime.png>]
-<Imagenes/Fuentes/ejemplo_singleton1.png, id=867, 860.21375pt x 173.64874pt>
+[29 <./Imagenes/Fuentes/ejemplo_firestore.png> <./Imagenes/Fuentes/ejemplo_realtime.png>]
+<Imagenes/Fuentes/ejemplo_singleton1.png, id=828, 860.21375pt x 173.64874pt>
 File: Imagenes/Fuentes/ejemplo_singleton1.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_singleton1.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_singleton1.png  used on input line 114.
-(pdftex.def)             Requested size: 426.79135pt x 86.15643pt.
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_singleton1.png  used on input line 115.
+(pdftex.def)             Requested size: 384.1096pt x 77.53973pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<Imagenes/Fuentes/ejemplo_singleton2.png, id=868, 628.3475pt x 250.9375pt>
+<Imagenes/Fuentes/ejemplo_singleton2.png, id=829, 628.3475pt x 250.9375pt>
 File: Imagenes/Fuentes/ejemplo_singleton2.png Graphic file (type png)
 <use Imagenes/Fuentes/ejemplo_singleton2.png>
-Package pdftex.def Info: Imagenes/Fuentes/ejemplo_singleton2.png  used on input line 122.
-(pdftex.def)             Requested size: 426.79135pt x 170.44379pt.
+Package pdftex.def Info: Imagenes/Fuentes/ejemplo_singleton2.png  used on input line 123.
+(pdftex.def)             Requested size: 384.1096pt x 153.39711pt.
 )
 LaTeX Info: Redefining \. on input line 145.
 LaTeX Info: Redefining \% on input line 145.
@@ -1292,7 +1314,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[32]
+[30]
 LaTeX Info: Redefining \. on input line 145.
 LaTeX Info: Redefining \% on input line 145.
 
@@ -1303,17 +1325,28 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[33 <./Imagenes/Fuentes/ejemplo_singleton1.png> <./Imagenes/Fuentes/ejemplo_singleton2.png>]
+[31 <./Imagenes/Fuentes/ejemplo_singleton1.png> <./Imagenes/Fuentes/ejemplo_singleton2.png>]
 \openout2 = `Capitulos/ConclusionesTrabajoFuturo.aux'.
 
- (./Capitulos/ConclusionesTrabajoFuturo.tex [34
+ (./Capitulos/ConclusionesTrabajoFuturo.tex
+Cap\'itulo 6.
+[32
 
 
 
 
 ]
-Cap\'itulo 6.
-[35])
+LaTeX Info: Redefining \. on input line 21.
+LaTeX Info: Redefining \% on input line 21.
+
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
+
+[33])
 LaTeX Info: Redefining \. on input line 146.
 LaTeX Info: Redefining \% on input line 146.
 
@@ -1324,73 +1357,83 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[36]
+[34]
 \openout2 = `Capitulos/Introduction.aux'.
 
- (./Capitulos/Introduction.tex) [37
+ (./Capitulos/Introduction.tex [35
 
 
 
 
 ]
+File: Imagenes/Bitmap/Gantt_Diagram.png Graphic file (type png)
+<use Imagenes/Bitmap/Gantt_Diagram.png>
+Package pdftex.def Info: Imagenes/Bitmap/Gantt_Diagram.png  used on input line 45.
+(pdftex.def)             Requested size: 426.79135pt x 120.2987pt.
+LaTeX Info: Redefining \. on input line 49.
+LaTeX Info: Redefining \% on input line 49.
+
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
+
+[36]
+LaTeX Info: Redefining \. on input line 80.
+LaTeX Info: Redefining \% on input line 80.
+
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
+
+[37])
+LaTeX Info: Redefining \. on input line 152.
+LaTeX Info: Redefining \% on input line 152.
+
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
+
+[38]
 \openout2 = `Capitulos/ConclusionsFutureWork.aux'.
 
- (./Capitulos/ConclusionsFutureWork.tex [38
+ (./Capitulos/ConclusionsFutureWork.tex [39
 
 
 
 
-]) [39]
+])
+LaTeX Info: Redefining \. on input line 153.
+LaTeX Info: Redefining \% on input line 153.
+
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
+
+[40]
 LaTeX Info: Redefining \. on input line 154.
 LaTeX Info: Redefining \% on input line 154.
 \openout2 = `Cascaras/bibliografia.aux'.
 
- (./Cascaras/bibliografia.tex
-LaTeX Info: Redefining \. on input line 110.
-LaTeX Info: Redefining \% on input line 110.
-
-
-Package fancyhdr Warning: \headheight is too small (14.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
-
-[40
-
-
-
-]
-Overfull \hbox (22.38083pt too wide) in paragraph at lines 110--111
-[][]$\T1/cmtt/m/n/12 https : / / developer . android . com / topic / libraries / architecture / viewmodel$[] 
- []
-
-
-Overfull \hbox (42.4013pt too wide) in paragraph at lines 111--112
-[][]$\T1/cmtt/m/n/12 https : / / builtin . com / software-[]engineering-[]perspectives / mvvm-[]architecture$[] 
- []
-
-(./TFGTeXiS.bbl
-LaTeX Info: Redefining \. on input line 1.
-LaTeX Info: Redefining \% on input line 1.
-
-
-Package fancyhdr Warning: \headheight is too small (14.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
-
-[41] [42
-
-]
+ (./Cascaras/bibliografia.tex (./TFGTeXiS.bbl
 Underfull \hbox (badness 4832) in paragraph at lines 5--12
 []\T1/cmr/m/sc/12 Fuentes, R.  \T1/cmr/m/n/12 ¾qué es y có-mo fun-cio-na la ar-qui-tec-tu-ra mvi? ejem-
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 5--12
-\T1/cmr/m/n/12 plos^^V de-sa-rro-llo an-dro-id^^V kotlin.  \T1/cmr/m/it/12 Me-dium\T1/cmr/m/n/12 , 2020.  Dis-po-ni-
+\T1/cmr/m/n/12 plos ^^Vde-sa-rro-llo an-dro-id^^V kotlin.  \T1/cmr/m/it/12 Me-dium\T1/cmr/m/n/12 , 2020.  Dis-po-ni-
  []
 
 
@@ -1423,17 +1466,22 @@ Overfull \hbox (221.15475pt too wide) in paragraph at lines 20--27
 \T1/cmtt/m/n/12 recyclerview-[]vs-[]lazyrow-[]lazycolumn-[]choosing-[]the-[]right-[]layout-[]for-[]dynamic-[]lists-[]in-[]android-[]ec9912049375$[]
  []
 
-)) [43]
-\openout2 = `Apendices/appendixA.aux'.
-
- (./Apendices/appendixA.tex [44
+)) [41
 
 
 
 
 ]
+\openout2 = `Apendices/appendixA.aux'.
+
+ (./Apendices/appendixA.tex
 Ap\'{e}ndice A.
-[45]
+[42
+
+
+
+
+]
 LaTeX Info: Redefining \. on input line 64.
 LaTeX Info: Redefining \% on input line 64.
 
@@ -1444,7 +1492,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[46]
+[43]
 LaTeX Info: Redefining \. on input line 159.
 LaTeX Info: Redefining \% on input line 159.
 
@@ -1455,7 +1503,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[47]
+[44]
 LaTeX Info: Redefining \. on input line 159.
 LaTeX Info: Redefining \% on input line 159.
 
@@ -1466,7 +1514,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[48]
+[45]
 LaTeX Info: Redefining \. on input line 203.
 LaTeX Info: Redefining \% on input line 203.
 
@@ -1477,7 +1525,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[49]
+[46]
 LaTeX Info: Redefining \. on input line 249.
 LaTeX Info: Redefining \% on input line 249.
 
@@ -1488,7 +1536,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[50]
+[47]
 LaTeX Info: Redefining \. on input line 293.
 LaTeX Info: Redefining \% on input line 293.
 
@@ -1499,7 +1547,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[51]
+[48]
 LaTeX Info: Redefining \. on input line 335.
 LaTeX Info: Redefining \% on input line 335.
 
@@ -1510,7 +1558,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[52]
+[49]
 LaTeX Info: Redefining \. on input line 414.
 LaTeX Info: Redefining \% on input line 414.
 
@@ -1521,7 +1569,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[53]
+[50]
 LaTeX Info: Redefining \. on input line 454.
 LaTeX Info: Redefining \% on input line 454.
 
@@ -1532,9 +1580,9 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[54]
-LaTeX Info: Redefining \. on input line 499.
-LaTeX Info: Redefining \% on input line 499.
+[51]
+LaTeX Info: Redefining \. on input line 500.
+LaTeX Info: Redefining \% on input line 500.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1543,9 +1591,55 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
+[52]
+LaTeX Info: Redefining \. on input line 540.
+LaTeX Info: Redefining \% on input line 540.
+
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
+
+[53]
+LaTeX Info: Redefining \. on input line 583.
+LaTeX Info: Redefining \% on input line 583.
+
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
+
+[54]
+Overfull \hbox (1.12903pt too wide) in paragraph at lines 630--630
+[]|[]| 
+ []
+
+
+Underfull \hbox (badness 1038) in paragraph at lines 630--630
+[]|\T1/cmr/m/n/12 Entre los de-ta-lles del ser-vi-cio se
+ []
+
+
+Overfull \hbox (1.12903pt too wide) in paragraph at lines 630--630
+[]|[]| 
+ []
+
+LaTeX Info: Redefining \. on input line 635.
+LaTeX Info: Redefining \% on input line 635.
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
+
 [55]
-LaTeX Info: Redefining \. on input line 539.
-LaTeX Info: Redefining \% on input line 539.
+LaTeX Info: Redefining \. on input line 685.
+LaTeX Info: Redefining \% on input line 685.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1555,8 +1649,8 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
 [56]
-LaTeX Info: Redefining \. on input line 582.
-LaTeX Info: Redefining \% on input line 582.
+LaTeX Info: Redefining \. on input line 729.
+LaTeX Info: Redefining \% on input line 729.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1566,22 +1660,9 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
 [57]
-Overfull \hbox (1.12903pt too wide) in paragraph at lines 629--629
-[]|[]| 
- []
+LaTeX Info: Redefining \. on input line 775.
+LaTeX Info: Redefining \% on input line 775.
 
-
-Underfull \hbox (badness 1038) in paragraph at lines 629--629
-[]|\T1/cmr/m/n/12 Entre los de-ta-lles del ser-vi-cio se
- []
-
-
-Overfull \hbox (1.12903pt too wide) in paragraph at lines 629--629
-[]|[]| 
- []
-
-LaTeX Info: Redefining \. on input line 634.
-LaTeX Info: Redefining \% on input line 634.
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1590,8 +1671,8 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
 [58]
-LaTeX Info: Redefining \. on input line 684.
-LaTeX Info: Redefining \% on input line 684.
+LaTeX Info: Redefining \. on input line 817.
+LaTeX Info: Redefining \% on input line 817.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1601,8 +1682,8 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
 [59]
-LaTeX Info: Redefining \. on input line 728.
-LaTeX Info: Redefining \% on input line 728.
+LaTeX Info: Redefining \. on input line 863.
+LaTeX Info: Redefining \% on input line 863.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1612,8 +1693,8 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
 [60]
-LaTeX Info: Redefining \. on input line 774.
-LaTeX Info: Redefining \% on input line 774.
+LaTeX Info: Redefining \. on input line 912.
+LaTeX Info: Redefining \% on input line 912.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1623,8 +1704,8 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
 [61]
-LaTeX Info: Redefining \. on input line 816.
-LaTeX Info: Redefining \% on input line 816.
+LaTeX Info: Redefining \. on input line 958.
+LaTeX Info: Redefining \% on input line 958.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1634,8 +1715,8 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
 [62]
-LaTeX Info: Redefining \. on input line 862.
-LaTeX Info: Redefining \% on input line 862.
+LaTeX Info: Redefining \. on input line 1006.
+LaTeX Info: Redefining \% on input line 1006.
 
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
@@ -1645,48 +1726,12 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
 [63]
-Underfull \hbox (badness 1668) in paragraph at lines 906--906
-[]|\T1/cmr/bx/n/12 Añadir/eliminar/Modificar ca-te-go-rías de ser-vi-cios
- []
-
-LaTeX Info: Redefining \. on input line 911.
-LaTeX Info: Redefining \% on input line 911.
-
-Package fancyhdr Warning: \headheight is too small (14.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
-
-[64]
-LaTeX Info: Redefining \. on input line 957.
-LaTeX Info: Redefining \% on input line 957.
-
-
-Package fancyhdr Warning: \headheight is too small (14.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
-
-[65]
-LaTeX Info: Redefining \. on input line 1005.
-LaTeX Info: Redefining \% on input line 1005.
-
-
-Package fancyhdr Warning: \headheight is too small (14.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
-
-[66]
-Underfull \hbox (badness 1107) in paragraph at lines 1042--1042
+Underfull \hbox (badness 1107) in paragraph at lines 1043--1043
 []|\T1/cmr/bx/n/12 Modificar da-tos de clien-te-s/-pro-fe-sio-na-le-s/-ser-vi-cios
  []
 
-LaTeX Info: Redefining \. on input line 1047.
-LaTeX Info: Redefining \% on input line 1047.
+LaTeX Info: Redefining \. on input line 1048.
+LaTeX Info: Redefining \% on input line 1048.
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1694,7 +1739,7 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[67])
+[64])
 LaTeX Info: Redefining \. on input line 169.
 LaTeX Info: Redefining \% on input line 169.
 
@@ -1705,22 +1750,22 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[68]
+[65]
 \openout2 = `Apendices/appendixB.aux'.
 
  (./Apendices/appendixB.tex
 Ap\'{e}ndice B.
-<Imagenes/figma/figma1.png, id=1089, 814.04124pt x 583.17876pt>
+<Imagenes/figma/figma1.png, id=1022, 814.04124pt x 583.17876pt>
 File: Imagenes/figma/figma1.png Graphic file (type png)
 <use Imagenes/figma/figma1.png>
 Package pdftex.def Info: Imagenes/figma/figma1.png  used on input line 6.
 (pdftex.def)             Requested size: 426.79135pt x 305.7552pt.
-<Imagenes/figma/figma2.png, id=1090, 814.04124pt x 574.145pt>
+<Imagenes/figma/figma2.png, id=1023, 814.04124pt x 574.145pt>
 File: Imagenes/figma/figma2.png Graphic file (type png)
 <use Imagenes/figma/figma2.png>
 Package pdftex.def Info: Imagenes/figma/figma2.png  used on input line 12.
 (pdftex.def)             Requested size: 426.79135pt x 301.01889pt.
-<Imagenes/figma/figma3.png, id=1091, 815.045pt x 576.1525pt>
+<Imagenes/figma/figma3.png, id=1024, 815.045pt x 576.1525pt>
 File: Imagenes/figma/figma3.png Graphic file (type png)
 <use Imagenes/figma/figma3.png>
 Package pdftex.def Info: Imagenes/figma/figma3.png  used on input line 18.
@@ -1732,15 +1777,12 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[69
+[66
 
 
 
 
  <./Imagenes/figma/figma1.png>]
-LaTeX Info: Redefining \. on input line 170.
-LaTeX Info: Redefining \% on input line 170.
-
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1748,30 +1790,27 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[70 <./Imagenes/figma/figma2.png> <./Imagenes/figma/figma3.png>]
+[67 <./Imagenes/figma/figma2.png> <./Imagenes/figma/figma3.png>]
 \openout2 = `Apendices/appendixC.aux'.
 
  (./Apendices/appendixC.tex
 Ap\'{e}ndice C.
-<Imagenes/drawio/realtime_db.jpg, id=1104, 989.6975pt x 957.5775pt>
+<Imagenes/drawio/realtime_db.jpg, id=1038, 989.6975pt x 957.5775pt>
 File: Imagenes/drawio/realtime_db.jpg Graphic file (type jpg)
 <use Imagenes/drawio/realtime_db.jpg>
 Package pdftex.def Info: Imagenes/drawio/realtime_db.jpg  used on input line 6.
 (pdftex.def)             Requested size: 384.1096pt x 371.6419pt.
-<Imagenes/drawio/firestore_db.png, id=1105, 1023.825pt x 1632.0975pt>
+<Imagenes/drawio/firestore_db.png, id=1039, 1023.825pt x 1632.0975pt>
 File: Imagenes/drawio/firestore_db.png Graphic file (type png)
 <use Imagenes/drawio/firestore_db.png>
 Package pdftex.def Info: Imagenes/drawio/firestore_db.png  used on input line 13.
 (pdftex.def)             Requested size: 384.1096pt x 612.309pt.
-) [71
+) [68
 
 
 
 
  <./Imagenes/drawio/realtime_db.jpg>]
-LaTeX Info: Redefining \. on input line 171.
-LaTeX Info: Redefining \% on input line 171.
-
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1779,7 +1818,65 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
 
-[72 <./Imagenes/drawio/firestore_db.png>] (./TFGTeXiS.aux (./Cascaras/cover.aux)
+[69 <./Imagenes/drawio/firestore_db.png>]
+\openout2 = `Apendices/appendixD.aux'.
+
+ (./Apendices/appendixD.tex
+Ap\'{e}ndice D.
+[70
+
+
+
+
+]
+Overfull \hbox (27.33665pt too wide) in paragraph at lines 26--27
+[]\T1/cmr/m/n/12 Android SDK for Maps: []$\T1/cmtt/m/n/12 https : / / developers . google . com / maps / documentation /
+ []
+
+
+Overfull \hbox (39.96704pt too wide) in paragraph at lines 27--28
+[]\T1/cmr/m/n/12 Android Maps Com-po-se: []$\T1/cmtt/m/n/12 https : / / github . com / googlemaps / android-[]maps-[]compose$[] 
+ []
+
+
+Overfull \hbox (24.71783pt too wide) in paragraph at lines 28--29
+[]\T1/cmr/m/n/12 Compose Des-ti-na-tions: []$\T1/cmtt/m/n/12 https : / / github . com / raamcosta / compose-[]destinations$[] 
+ []
+
+
+Overfull \hbox (29.46658pt too wide) in paragraph at lines 37--38
+[]\T1/cmr/m/n/12 Viewmodel: []$\T1/cmtt/m/n/12 https : / / developer . android . com / topic / libraries / architecture /
+ []
+
+
+Overfull \hbox (19.65259pt too wide) in paragraph at lines 38--39
+[]\T1/cmr/m/n/12 Patrón MVVM: []$\T1/cmtt/m/n/12 https : / / builtin . com / software-[]engineering-[]perspectives /
+ []
+
+
+Overfull \hbox (67.40884pt too wide) in paragraph at lines 39--40
+[]\T1/cmr/m/n/12 Android In-tent: []$\T1/cmtt/m/n/12 https : / / developer . android . com / guide / components / intents-[]filters$[] 
+ []
+
+
+Overfull \hbox (4.95047pt too wide) in paragraph at lines 41--42
+[]\T1/cmr/m/n/12 Expresiones When en Kotlin: []$\T1/cmtt/m/n/12 https : / / kotlinlang . org / docs / control-[]flow .
+ []
+
+
+Overfull \hbox (41.96086pt too wide) in paragraph at lines 42--43
+[]\T1/cmr/m/n/12 Biblioteca Com-po-se Shim-mer: []$\T1/cmtt/m/n/12 https : / / github . com / valentinilk / compose-[]shimmer$[] 
+ []
+
+)
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.49998pt}.
+
+[71] (./TFGTeXiS.aux (./Cascaras/cover.aux)
 LaTeX Info: Redefining \. on input line 27.
 LaTeX Info: Redefining \% on input line 27.
  (./Cascaras/dedicatoria.aux) (./Cascaras/agradecimientos.aux) (./Cascaras/resumen.aux) (./Cascaras/abstract.aux) (./TeXiS/TeXiS_toc.aux)
@@ -1788,23 +1885,26 @@ LaTeX Info: Redefining \% on input line 34.
  (./Capitulos/Introduccion.aux) (./Capitulos/EstadoDeLaCuestion.aux) (./Capitulos/tecnologiasEmpleadas.aux) (./Capitulos/JustificacionYConsideraciones.aux) (./Capitulos/modeloDeDatos.aux) (./Capitulos/ConclusionesTrabajoFuturo.aux) (./Capitulos/Introduction.aux) (./Capitulos/ConclusionsFutureWork.aux) (./Cascaras/bibliografia.aux)
 LaTeX Info: Redefining \. on input line 45.
 LaTeX Info: Redefining \% on input line 45.
- (./Apendices/appendixA.aux) (./Apendices/appendixB.aux) (./Apendices/appendixC.aux))
+ (./Apendices/appendixA.aux) (./Apendices/appendixB.aux) (./Apendices/appendixC.aux) (./Apendices/appendixD.aux))
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `TFGTeXiS.out' has not changed.
-(rerunfilecheck)             Checksum: E13FFAC42EE8202E143F93D5E7DF29F7;9040.
+(rerunfilecheck)             Checksum: 13E03FBDFEB3A462C05994F5A3D112A8;9253.
  ) 
 Here is how much of TeX's memory you used:
- 18879 strings out of 478287
- 319733 string characters out of 5849289
- 718139 words of memory out of 5000000
- 36093 multiletter control sequences out of 15000+600000
+ 18896 strings out of 478287
+ 320636 string characters out of 5849289
+ 718832 words of memory out of 5000000
+ 36107 multiletter control sequences out of 15000+600000
  488276 words of font info for 60 fonts, out of 8000000 for 9000
  1379 hyphenation exceptions out of 8191
- 92i,21n,98p,1172b,743s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 92i,20n,98p,1173b,812s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on TFGTeXiS.pdf (90 pages, 2916891 bytes).
+Output written on TFGTeXiS.pdf (83 pages, 2895988 bytes).
 PDF statistics:
- 1254 PDF objects out of 1440 (max. 8388607)
- 1064 compressed objects within 11 object streams
- 270 named destinations out of 1000 (max. 500000)
- 712 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1243 PDF objects out of 1440 (max. 8388607)
+ 1060 compressed objects within 11 object streams
+ 266 named destinations out of 1000 (max. 500000)
+ 720 words of extra memory for PDF output out of 10000 (max. 10000000)
 
