@@ -9,6 +9,7 @@ import com.google.firebase.firestore.SetOptions
 import com.vzkz.profinder.core.Constants.IS_ACTIVE
 import com.vzkz.profinder.core.Constants.SERVICES_COLLECTION
 import com.vzkz.profinder.core.Constants.USERS_COLLECTION
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.prof2_test
 import com.vzkz.profinder.profDocument2_test
 import com.vzkz.profinder.serviceDocument_test
@@ -22,7 +23,6 @@ import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.assertThrows
 
 class FirestoreServiceTest {
 
@@ -74,7 +74,7 @@ class FirestoreServiceTest {
     }
 
     @Test
-    fun `When getUser succeds, ActorModel is returned`() = runTest {
+    fun `When getUser succeeds, ActorModel is returned`() = runTest {
         //Arrange
         val document = profDocument2_test
 
@@ -92,13 +92,17 @@ class FirestoreServiceTest {
         val result = firestoreService.getUserData("any")
 
         //Assert
-        assert(result.actor == prof2_test.actor)
-        assert(result.description == prof2_test.description)
-        assert(result.firstname == prof2_test.firstname)
-        assert(result.lastname == prof2_test.lastname)
-        assert(result.nickname == prof2_test.nickname)
-        assert(result.profession == prof2_test.profession)
-        assert(result.state == prof2_test.state)
+        assert(result is Result.Success)
+        if(result is Result.Success){
+            assert(result.data.actor == prof2_test.actor)
+            assert(result.data.description == prof2_test.description)
+            assert(result.data.firstname == prof2_test.firstname)
+            assert(result.data.lastname == prof2_test.lastname)
+            assert(result.data.nickname == prof2_test.nickname)
+            assert(result.data.profession == prof2_test.profession)
+            assert(result.data.state == prof2_test.state)
+
+        }
     }
 
     @Test
@@ -118,7 +122,8 @@ class FirestoreServiceTest {
             for (field in profDocument2_test.keys) {
                 document.remove(field)
                 //Assert
-                assertThrows<Exception> { firestoreService.getUserData("any") }
+                val result = firestoreService.getUserData("any")
+                assert(result is Result.Error)
                 document = profDocument2_test.toMutableMap() //Restore the map
             }
         }
@@ -140,12 +145,12 @@ class FirestoreServiceTest {
             for (field in userDocument1_test.keys) {
                 document.remove(field)
                 //Assert
-                assertThrows<Exception> { firestoreService.getUserData("any") }
+                val result = firestoreService.getUserData("any")
+                assert(result is Result.Error)
                 document = profDocument2_test.toMutableMap() //Restore the map
             }
         }
 
-    //todo test modifyUserData()
 
     @Test
     fun `When any service field is not found, exception thrown`() = runTest {
@@ -177,7 +182,8 @@ class FirestoreServiceTest {
             //Act
             document.remove(field)
             //Assert
-            assertThrows<Exception> { firestoreService.getActiveServiceList() }
+            val result = firestoreService.getActiveServiceList()
+            assert(result is Result.Error)
 
             document = profDocument2_test.toMutableMap() //Restore the map
         }

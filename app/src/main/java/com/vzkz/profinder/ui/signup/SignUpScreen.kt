@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -221,7 +222,7 @@ private fun ScreenBody(
                 Box(modifier = Modifier) {
                     var expandedActorDropdownMenu by remember { mutableStateOf(false) }
                     OutlinedTextField(
-                        value = actorType.name,
+                        value = stringResource(id = actorType.string),
                         onValueChange = {/*Only read*/ },
                         label = { Text(stringResource(R.string.user_professional)) },
                         leadingIcon = {
@@ -240,7 +241,7 @@ private fun ScreenBody(
                         Actors.entries.forEach {
                             DropdownMenuItem(
                                 text = {
-                                    Text(it.name, style = MaterialTheme.typography.bodyMedium)
+                                    Text(stringResource(id = it.string), style = MaterialTheme.typography.bodyMedium)
                                 },
                                 onClick = {
                                     actorType = it
@@ -262,7 +263,7 @@ private fun ScreenBody(
                         var expandedProfessionDropdownMenu by remember { mutableStateOf(false) }
                         Column {
                             OutlinedTextField(
-                                value = profession?.name ?: "",
+                                value = profession?.let { it1 -> stringResource(id = it1.string) } ?: "",
                                 onValueChange = {/*Only read*/ },
                                 label = { Text(stringResource(R.string.profession)) },
                                 leadingIcon = {
@@ -289,7 +290,7 @@ private fun ScreenBody(
                             Professions.entries.forEach {
                                 DropdownMenuItem(
                                     text = {
-                                        Text(it.name, style = MaterialTheme.typography.bodyMedium)
+                                        Text(stringResource(id = it.string), style = MaterialTheme.typography.bodyMedium)
                                     },
                                     onClick = {
                                         profession = it

@@ -7,26 +7,18 @@ import com.vzkz.profinder.data.firebase.AuthService
 import com.vzkz.profinder.data.firebase.FirestoreService
 import com.vzkz.profinder.data.firebase.RealtimeService
 import com.vzkz.profinder.data.firebase.StorageService
+import com.vzkz.profinder.domain.error.FirebaseError
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.user1_test
 import io.mockk.MockKAnnotations
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.just
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 class RepositoryImplTest{
-    /*
-    * Functions tested:
-    *   - login
-    *   - getUserFromFirestore
-    *   - signUp
-    * */
-
     private lateinit var repositoryImpl: RepositoryImpl
 
     @RelaxedMockK
@@ -45,7 +37,7 @@ class RepositoryImplTest{
     private lateinit var firebaseUser: FirebaseUser
 
     @RelaxedMockK
-    private lateinit var realtyimeService: RealtimeService
+    private lateinit var realtimeService: RealtimeService
 
     @RelaxedMockK
     private lateinit var locationService: LocationService
@@ -56,11 +48,11 @@ class RepositoryImplTest{
     @Before
     fun setUp(){
         MockKAnnotations.init(this)
-        repositoryImpl = RepositoryImpl(authService, firestoreService, storageService, realtyimeService, context, uidCombiner, locationService)
+        repositoryImpl = RepositoryImpl(authService, firestoreService, storageService, realtimeService, uidCombiner, locationService)
     }
 
     @Test
-    fun `When auth fails, login throws an Exception`() = runTest {
+    fun `When auth fails, login throws an Exception, and is parsed as error`() = runTest {
         //Arrange
         every { context.getString(any()) } returns "Wrong email or password. "
         coEvery { authService.login(any(), any()) } throws Exception()
@@ -68,13 +60,13 @@ class RepositoryImplTest{
         //Act
         val result = repositoryImpl.login("", "")
 
+
         //Assert
-//        assert(result.isFailure)
-//        assert(result.exceptionOrNull()?.message == "Wrong email or password. ")
+        assert(result is Result.Error && result.error == FirebaseError.Authentication.WRONG_EMAIL_OR_PASSWORD)
     }
 
     @Test
-    fun `When auth service returns null FirebaseUser, Exception(Error logging in user) is thrown`() = runTest{
+    fun `When auth service returns null FirebaseUser user not found error`() = runTest{
         //Arrange
         every { context.getString(any()) } returns "Error logging in user"
         coEvery { authService.login(any(), any()) } returns null
@@ -83,8 +75,8 @@ class RepositoryImplTest{
         val result = repositoryImpl.login("", "")
 
         //Assert
-//        assert(result.isFailure)
-//        assert(result.exceptionOrNull()?.message == "Error logging in user")
+        assert(result is Result.Error && result.error == FirebaseError.Firestore.USER_NOT_FOUND_IN_DATABASE)
+
     }
 
     @Test
@@ -92,7 +84,7 @@ class RepositoryImplTest{
         //Arrange
         coEvery { authService.login(any(), any()) } returns firebaseUser
 
-//        coEvery { firestoreService.getUserData(any()) } returns user1_test
+        coEvery { firestoreService.getUserData(any()) } returns Result.Success(user1_test)
 
         coEvery { storageService.getProfilePhoto(any()) } returns null
 
@@ -100,23 +92,21 @@ class RepositoryImplTest{
         val result = repositoryImpl.login("", "")
 
         //Assert
-//        assert(result.isSuccess)
-//        assert(result.getOrNull() == user1_test)
+        assert(result is Result.Success && result.data == user1_test)
     }
     
     @Test
-    fun `When firestoreService throws an exception, getUserFromFirestore throws an exception`() = runTest{
+    fun `When firestoreService throws an exception, getUserFromFirestore returns error`() = runTest{
         val exceptionMsg = "Network failure while checking user existence"
         //Arrange
         every { context.getString(any()) } returns exceptionMsg
-        coEvery { firestoreService.getUserData(any()) } throws Exception()
+        coEvery { firestoreService.getUserData(any()) } returns Result.Error(FirebaseError.Firestore.CONNECTION_ERROR)
 
         //Act
-        val result = runCatching { repositoryImpl.getUserFromFirestore("") }
+        val result = repositoryImpl.getUserFromFirestore("")
 
         //Assert
-        assert(result.isFailure)
-        assert(result.exceptionOrNull()?.message == exceptionMsg)
+        assert(result is Result.Error)
     }
 
     @Test
@@ -130,14 +120,13 @@ class RepositoryImplTest{
         every { firebaseUser.uid } returns user1_test.uid
         coEvery { firestoreService.nicknameExists(any()) } returns false
         coEvery { authService.signUp(email, password) } returns firebaseUser
-//        coEvery { firestoreService.insertUser(actorModel) } just Runs
+        coEvery { firestoreService.insertUser(actorModel) } returns Result.Success(Unit)
 
         // Act
         val result = repositoryImpl.signUp(email, password, user1_test.nickname, user1_test.firstname, user1_test.lastname, user1_test.actor, user1_test.profession)
 
         // Assert
-//        assert(result.isSuccess)
-//        assertEquals(actorModel, result.getOrNull())
+        assert(result is Result.Success && result.data == actorModel)
     }
 
     @Test
@@ -148,13 +137,12 @@ class RepositoryImplTest{
 
 
         coEvery { firestoreService.nicknameExists(any()) } returns true
-        every { context.getString(any()) } returns "Username already in use"
 
         // Act
         val result = repositoryImpl.signUp(email, password, user1_test.nickname, user1_test.firstname, user1_test.lastname, user1_test.actor, user1_test.profession)
 
         // Assert
-//        assert(result.isFailure)
+        assert(result is Result.Error && result.error == FirebaseError.Authentication.USERNAME_ALREADY_IN_USE)
 //        assert(result.exceptionOrNull()?.message == "Username already in use")
     }
 
@@ -163,18 +151,15 @@ class RepositoryImplTest{
         // Arrange
         val email = "test@test.com"
         val password = "password"
-        val exceptionMsg = "An account with that email already exists. The account wasn\\'t created."
 
         coEvery { firestoreService.nicknameExists(any()) } returns false
-        every { context.getString(any()) } returns exceptionMsg
         coEvery { authService.signUp(email, password) } throws Exception()
 
         // Act
         val result = repositoryImpl.signUp(email, password, user1_test.nickname, user1_test.firstname, user1_test.lastname, user1_test.actor, user1_test.profession)
 
         // Assert
-//        assert(result.isFailure)
-//        assert(result.exceptionOrNull()?.message == exceptionMsg)
+        assert(result is Result.Error && result.error == FirebaseError.Authentication.ACCOUNT_WITH_THAT_EMAIL_ALREADY_EXISTS)
     }
 
     @Test
@@ -182,19 +167,16 @@ class RepositoryImplTest{
         // Arrange
         val email = "test@test.com"
         val password = "password"
-        val exceptionMsg = "Couldn\\'t insert user in database"
 
         coEvery { firestoreService.nicknameExists(any()) } returns false
-        every { context.getString(any()) } returns exceptionMsg
         coEvery { authService.signUp(email, password) } returns firebaseUser
-        coEvery { firestoreService.insertUser(any()) } throws Exception()
+        coEvery { firestoreService.insertUser(any()) } returns Result.Error(FirebaseError.Firestore.INSERTION_ERROR)
 
         // Act
         val result = repositoryImpl.signUp(email, password, user1_test.nickname, user1_test.firstname, user1_test.lastname, user1_test.actor, user1_test.profession)
 
         // Assert
-//        assert(result.isFailure)
-//        assert(result.exceptionOrNull()?.message == exceptionMsg)
+        assert(result is Result.Error)
     }
 
 }

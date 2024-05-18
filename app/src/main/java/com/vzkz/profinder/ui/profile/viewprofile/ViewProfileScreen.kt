@@ -252,7 +252,7 @@ private fun ScreenBody(
                             )
                             MySpacer(size = 16)
                             Text(
-                                text = userToSee.profession!!.name,
+                                text = stringResource(id = userToSee.profession!!.string),
                                 style = MaterialTheme.typography.titleLarge,
                                 color = cardContentColor
                             )

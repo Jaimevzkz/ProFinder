@@ -103,9 +103,10 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
         val userData = userDoc.data
 
         if (userData != null) {
-            val isUser = userData[IS_USER] as Boolean
+            val isUser = userData[IS_USER] as Boolean? ?: return Result.Error(FirebaseError.Firestore.NON_EXISTENT_USER_FIELD)
             val description: String? =
-                if (userData[DESCRIPTION] == "-") null else userData[DESCRIPTION] as String
+                if (userData[DESCRIPTION] == "-") null else userData[DESCRIPTION] as String? ?: return Result.Error(FirebaseError.Firestore.NON_EXISTENT_USER_FIELD)
+
             val profession = if (isUser) null else {
                 when (userData[PROFESSION]) {
                     Professions.Plumber.name -> Professions.Plumber
@@ -130,9 +131,9 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
             try {
                 val userModel = ActorModel(
                     uid = uid,
-                    nickname = userData[NICKNAME] as String,
-                    firstname = userData[FIRSTNAME] as String,
-                    lastname = userData[LASTNAME] as String,
+                    nickname = userData[NICKNAME] as String? ?: return Result.Error(FirebaseError.Firestore.NON_EXISTENT_USER_FIELD),
+                    firstname = userData[FIRSTNAME] as String? ?: return Result.Error(FirebaseError.Firestore.NON_EXISTENT_USER_FIELD),
+                    lastname = userData[LASTNAME] as String? ?: return Result.Error(FirebaseError.Firestore.NON_EXISTENT_USER_FIELD),
                     actor = if (isUser) Actors.User else Actors.Professional,
                     description = description,
                     profession = profession,
@@ -358,7 +359,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                 userList.add(userModel)
             }
             Result.Success(userList.toList())
-         } catch (e: Exception) {
+        } catch (e: Exception) {
             Result.Error(FirebaseError.Firestore.CONNECTION_ERROR)
         }
     }
@@ -385,7 +386,13 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
     private suspend fun fillList(querySnapshot: QuerySnapshot): Result<List<ServiceModel>, FirebaseError.Firestore> {
         val serviceList = mutableListOf<ServiceModel>()
         for (document in querySnapshot.documents) {
-            val category = when (document.getString(CATEGORY)) {
+            var categoryName: String?
+            try {
+                categoryName = document.getString(CATEGORY)
+            } catch(e: Exception){
+                return Result.Error(FirebaseError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE)
+            }
+            val category = when (categoryName) {
                 Categories.Beauty.name -> Categories.Beauty
                 Categories.Household.name -> Categories.Household
                 else -> return Result.Error(FirebaseError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE)
@@ -400,7 +407,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                             sid = document.id,
                             uid = ownerUid,
                             name = document.getString(NAME)
-                                ?: throw Exception(NONEXISTENT_SERVICEATTRIBUTE),
+                                ?: return Result.Error(FirebaseError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE),
                             isActive = document.getBoolean(IS_ACTIVE) ?: return Result.Error(
                                 FirebaseError.Firestore.NONEXISTENT_SERVICE_ATTRIBUTE
                             ),

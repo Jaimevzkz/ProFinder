@@ -105,5 +105,20 @@
     <string name="location_permission_is_required_for_the_map_functionality_to_work_grant_it_in_settings_and_try_again">Location permission is required for the map functionality to work. Grant it in settings and try again.</string>
     <string name="passwords_must_coincide">Passwords must coincide.</string>
     <string name="profinder" translatable="false">ProFinder</string>
+    <string name="working" >Working</string>
+    <string name="plumber" >Plumber</string>
+    <string name="hairdresser">Hairdresser</string>
+    <string name="electrician">Electrician</string>
+    <string name="household">Household</string>
+    <string name="beauty">Beauty</string>
+    <string name="psychologist">Psychologist</string>
+    <string name="teacher">Teacher</string>
+    <string name="accountant">Accountant</string>
+    <string name="lawyer">Lawyer</string>
+    <string name="health">Health</string>
+    <string name="education">Education</string>
+    <string name="law">Law</string>
+    <string name="economics">Economics</string>
+
 
 </resources>

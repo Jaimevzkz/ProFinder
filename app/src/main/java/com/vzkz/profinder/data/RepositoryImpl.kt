@@ -1,6 +1,5 @@
 package com.vzkz.profinder.data
 
-import android.content.Context
 import android.net.Uri
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseUser

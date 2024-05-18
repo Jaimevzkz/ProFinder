@@ -100,4 +100,20 @@
     <string name="profile_changes_like_username_may_not_be_undoable">Algunos cambios como el nombre de usuario no se pueden deshacer</string>
     <string name="location_permission_is_required_for_the_map_functionality_to_work_grant_it_in_settings_and_try_again">Permisos de localización necesarios para la funcionalidad de mapa. Concede los permisos en ajustes e intentelo de nuevo.</string>
     <string name="passwords_must_coincide">Las contraseñas deben coincidir.</string>
+    <string name="working">Trabajando</string>
+    <string name="plumber" >Fontanero</string>
+    <string name="hairdresser" >Peluquero</string>
+    <string name="electrician">Electrician</string>
+    <string name="household">Hogar</string>
+    <string name="beauty">Belleza</string>
+    <string name="psychologist">Psicólogo</string>
+    <string name="teacher">Profesor</string>
+    <string name="accountant">Contable</string>
+    <string name="lawyer">Abogado</string>
+    <string name="health">Salud</string>
+    <string name="education">Educación</string>
+    <string name="law">Derecho</string>
+    <string name="economics">Economía</string>
+
+
 </resources>

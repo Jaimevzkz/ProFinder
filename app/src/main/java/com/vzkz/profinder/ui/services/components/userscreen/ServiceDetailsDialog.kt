@@ -92,7 +92,7 @@ fun ServiceDetailsDialog(
                     )
                     MyRow {
                         Text(
-                            text = service.category.name,
+                            text = stringResource(id = service.category.string),
                             style = MaterialTheme.typography.bodyLarge,
                             color = fontColor,
                             fontWeight = FontWeight.Light,

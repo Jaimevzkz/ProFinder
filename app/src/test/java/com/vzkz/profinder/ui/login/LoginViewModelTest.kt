@@ -1,7 +1,10 @@
 package com.vzkz.profinder.ui.login
 
+import com.vzkz.profinder.domain.error.FirebaseError
+import com.vzkz.profinder.domain.error.Result
 import com.vzkz.profinder.domain.usecases.auth.LoginUseCaseImpl
 import com.vzkz.profinder.domain.usecases.user.SaveUidDataStoreUseCase
+import com.vzkz.profinder.ui.asUiText
 import com.vzkz.profinder.user1_test
 import com.vzkz.profinder.util.CoroutineRule
 import io.mockk.MockKAnnotations
@@ -46,15 +49,15 @@ class LoginViewModelTest {
     fun `When onLogin is a success, state is changed to new user`() = runTest {
         //Arrange
         val actor = user1_test
-        coEvery { loginUseCase(any(), any()) } returns Result.success(actor)
+        coEvery { loginUseCase(any(), any()) } returns Result.Success(actor)
 
         //Act
         loginViewModel.onLogin("any", "any")
         assert(loginViewModel.state.loading)
-//        advanceUntilIdle()
+        advanceUntilIdle()
 
         //Assert
-//        assert(loginViewModel.state.user == actor)
+        assert(loginViewModel.state.user == actor)
     }
 
     @Test
@@ -62,21 +65,19 @@ class LoginViewModelTest {
         UnconfinedTestDispatcher()
     ) {
         //Arrange
-        val errorMsg = "Error"
-        coEvery { loginUseCase(any(), any()) } returns Result.failure(Exception(errorMsg))
+        coEvery { loginUseCase(any(), any()) } returns Result.Error(FirebaseError.Firestore.CONNECTION_ERROR)
         //Act
         loginViewModel.onLogin("any", "any")
         advanceUntilIdle()
 
         //Assert
-        assert(loginViewModel.state.error.errorMsg == errorMsg)
+        assert(loginViewModel.state.error == FirebaseError.Firestore.CONNECTION_ERROR.asUiText())
     }
 
     @Test
     fun `When dialog closed, error disappears`() = runTest {
         //Arrange
-        val errorMsg = "Error"
-        coEvery { loginUseCase(any(), any()) } returns Result.failure(Throwable(errorMsg))
+        coEvery { loginUseCase(any(), any()) } returns Result.Error(FirebaseError.Firestore.CONNECTION_ERROR)
         //Act
         loginViewModel.onLogin("any", "any")
         advanceUntilIdle()
@@ -84,7 +85,7 @@ class LoginViewModelTest {
         advanceUntilIdle()
 
         //Assert
-        assert(!loginViewModel.state.error.isError && loginViewModel.state.error.errorMsg == null)
+        assert(loginViewModel.state.error == null)
     }
 
 }
