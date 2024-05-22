@@ -5,37 +5,42 @@ En este capítulo se explican todas la tecnologías, aplicaciones y herramientas
 \section{Aplicaciones y herramientas generales}
 \hypertarget{subsec:android_studio}{}
 \subsection{Android Studio}
-\href{https://developer.android.com/studio/intro}{Android Studio} es el entorno de desarrollo integrado (IDE) oficial utilizado para el desarrollo de aplicaciones en Android. Esta basado en \href{https://www.jetbrains.com/idea}{Intellij Idea}, un editor multiplataforma con soporte para lenguajes como \hyperlink{subsec:kotlin}{Kotlin}, \href{https://www.java.com}{Java} y \href{https://www.scala-lang.org}{Scala} entre otros. 
+Android Studio\hyperlink{cap:biblio}{\endnote{\textbf{Android Studio}: \url{https://developer.android.com/studio/intro}}}
+es el entorno de desarrollo integrado (IDE) oficial utilizado para el desarrollo de aplicaciones en Android. Esta basado en Intellij Idea\hyperlink{cap:biblio}{\endnote{\textbf{Intellij Idea}: \url{https://www.jetbrains.com/idea}}}, un editor multiplataforma con soporte para lenguajes como \hyperlink{subsec:kotlin}{Kotlin}, 
+Java\hyperlink{cap:biblio}{\endnote{\textbf{Java}: \url{https://www.java.com}}} y Scala \hyperlink{cap:biblio}{\endnote{\textbf{Scala}: \url{https://www.scala-lang.org}}}. 
 
 Android Studio ha sido utilizado a lo largo del proceso completo de desarrollo, siendo de gran utilidad sus modernas funcionalidades como ayuda al correcto flujo de trabajo. Este entorno te permite utilizar emuladores para probar las aplicaciones, sin embargo estos emuladores consumen gran cantidad de recursos del ordenador, esto ha sido un poco problemático en el caso de este proyecto ya que el ordenador con el que se contaba para el desarrollo no tenía recursos suficientes para ejecutar el emulador correctamente, provocando en algunos casos problemas de \textit{lag} y \textit{crashes} ocasionales. A pesar de esto, ha sido posible desarrollar la aplicación usando estos emuladores.
 
 \subsection{Obsidian}
-\href{https://obsidian.md/}{Obsidian} es una aplicación de código abierto que sirve como sistema de notas, te permite organizar las mismas con gran cantidad de posibilidades. Cuenta con funcionalidades que han sido de gran utilidad como la referenciación entre notas, vista de grafo y multitud de extensiones desarrolladas por la comunidad.
+Obsidian\hyperlink{cap:biblio}{\endnote{\textbf{Obsidian}: \url{https://obsidian.md/}}} es una aplicación de código abierto que sirve como sistema de notas, te permite organizar las mismas con gran cantidad de posibilidades. Cuenta con funcionalidades que han sido de gran utilidad como la referenciación entre notas, vista de grafo y multitud de extensiones desarrolladas por la comunidad.
 
 En este proyecto, Obsidian ha servido como complemento al desarrollo. Se ha utilizado, entre otras cosas, para la planificación de hitos (apuntes personales sobre los casos de uso, fechas de entrega, dudas para tutoría...), reunión de ideas sobre las funcionalidades y documentación del ciclo de vida del proyecto.
 
 \hypertarget{subsec:figma}{}
 \subsection{Figma}
-\href{https://www.figma.com}{Figma} es una plataforma de diseño basada en la web que permite crear y prototipar diseños de interfaces de usuario, con ella ha sido posible crear diseños de una forma rápida y eficaz, que luego han sido materializados en \hyperlink{subsec:compose}{Jetpack Compose}. 
+Figma\hyperlink{cap:biblio}{\endnote{\textbf{Figma}: \url{https://www.figma.com}}} es una plataforma de diseño basada en la web que permite crear y prototipar diseños de interfaces de usuario, con ella ha sido posible crear diseños de una forma rápida y eficaz, que luego han sido materializados en \hyperlink{subsec:compose}{Jetpack Compose}. 
 
-En este proyecto en particular, figma ha sido utilizada para plasmar las ideas de diseño, sirviendo estas como una referencia no estricta de las interfaces finales. En el apéndice \ref{Appendix:interfacesfigma} se han adjuntado capturas de pantalla de todas las interfaces diseñadas. Como la aplicación se ha desarrollado utilizando \href{https://m3.material.io/}{Material 3} y Dynamic Colors (véase la subseccion \ref{subsec:material_design} para más detalles acerca de Material design) los colores varían dinámicamente en función del tema de cada dispositivo por lo que los colores de los diseños de figma no tienen por qué corresponderse con los colores que luego se han materializado en cada dispositivo.
+En este proyecto en particular, figma ha sido utilizada para plasmar las ideas de diseño, sirviendo estas como una referencia no estricta de las interfaces finales. En el apéndice \ref{Appendix:interfacesfigma} se han adjuntado capturas de pantalla de todas las interfaces diseñadas. Como la aplicación se ha desarrollado utilizando 
+Material 3\hyperlink{cap:biblio}{\endnote{\textbf{Material 3}: \url{https://m3.material.io/}}} y Dynamic Colors (véase la subseccion \ref{subsec:material_design} para más detalles acerca de Material design) los colores varían dinámicamente en función del tema de cada dispositivo por lo que los colores de los diseños de figma no tienen por qué corresponderse con los colores que luego se han materializado en cada dispositivo.
 \hypertarget{subsec:drawio}{}
 \subsection{Drawio}
-\href{https://www.drawio.com/}{Drawio} es una herramienta de código abierto que permite a los usuarios crear una amplia variedad de diagramas (flujo, Gantt...), seleccionada para el proyecto por ser cómoda, personalizable y con gran capacidad de portabilidad, utilizando ficheros con extensión .io y dando la capacidad al usuario de cambiar de herramienta con facilidad. 
+Drawio\hyperlink{cap:biblio}{\endnote{\textbf{Drawio}: \url{https://www.drawio.com/}}} es una herramienta de código abierto que permite a los usuarios crear una amplia variedad de diagramas (flujo, Gantt...), seleccionada para el proyecto por ser cómoda, personalizable y con gran capacidad de portabilidad, utilizando ficheros con extensión .io y dando la capacidad al usuario de cambiar de herramienta con facilidad. 
 
 Esta aplicación ha sido utilizada para la realización de todos los diagramas que han sido necesarios durante el proyecto. Ha sido especialmente útil para el diseño de las bases de datos del proyecto (véase el apéndice \ref{Appendix:bd_design} con los diseños) ya que, al haberse utilizado bases de datos no SQL, ha sido necesario depurar el diseño en varias ocasiones para evitar la duplicación lo máximo posible.
 
 \subsection{Git, Github y Lazygit}
-Para el control de versiones de la aplicación se ha utilizado la conocida herramienta utilizada por la gran mayoría de los desarrolladores de software a nivel mundial: \href{https://git-scm.com/}{Git}. Pese a haber sido un proyecto desarrollado por una sola persona, Git ha sido una herramienta esencial, sirviendo como backup en el desarrollo de nuevas funcionalidades así como herramienta de control general del estado de la aplicación. 
+Para el control de versiones de la aplicación se ha utilizado la conocida herramienta utilizada por la gran mayoría de los desarrolladores de software a nivel mundial:
+Git\hyperlink{cap:biblio}{\endnote{\textbf{Git}: \url{https://git-scm.com/}}}. Pese a haber sido un proyecto desarrollado por una sola persona, Git ha sido una herramienta esencial, sirviendo como backup en el desarrollo de nuevas funcionalidades así como herramienta de control general del estado de la aplicación. 
 
-El repositorio con el código de la aplicación y el código latex utilizado para la redacción de esta memoria se han almacenado de forma pública en \href{https://github.com/}{Github}, plataforma de desarrollo colaborativo basada en la web que utiliza Git como sistema de control de versiones.
+El repositorio con el código de la aplicación y el código latex utilizado para la redacción de esta memoria se han almacenado de forma pública en 
+Github\hyperlink{cap:biblio}{\endnote{\textbf{Github}: \url{https://github.com/}}}, plataforma de desarrollo colaborativo basada en la web que utiliza Git como sistema de control de versiones.
 
-También merece mención en este apartado la herramienta de código abierto \href{https://github.com/jesseduffield/lazygit}{Lazygit}, interfaz gráfico de terminal para linux que proporciona una forma fácil y visual de interactuar con los repositorios de Git. Está diseñado para simplificar el flujo de trabajo al proporcionar una interfaz gráfica intuitiva dentro de la terminal. Ha sido de gran ayuda para la agilización del control de versiones en conjunción con la extension de \hyperlink{subsec:android_studio}{Android Studio} para Git.
+También merece mención en este apartado la herramienta de código abierto Lazygit\hyperlink{cap:biblio}{\endnote{\textbf{Lazygit}: \url{https://github.com/jesseduffield/lazygit}}}, interfaz gráfico de terminal para linux que proporciona una forma fácil y visual de interactuar con los repositorios de Git. Está diseñado para simplificar el flujo de trabajo al proporcionar una interfaz gráfica intuitiva dentro de la terminal. Ha sido de gran ayuda para la agilización del control de versiones en conjunción con la extension de \hyperlink{subsec:android_studio}{Android Studio} para Git.
 \section{Tecnologías específicas de Android}
 
 \hypertarget{subsec:kotlin}{}
 \subsection{Kotlin}
-\href{https://kotlinlang.org/}{Kotlin} es un lenguaje de programación de código abierto creado por JetBrains, es un lenguaje de tipado estático, lo que significa que se puede desarrollar sobre la JVM (Java Virtual Machine) y es totalmente compatible e interoperable con Java lo que facilita la migración desde el primero \footnote{Artículo que explica en detalle qué es kotlin: \href{https://www.plainconcepts.com/es/kotlin-android/}{Plain Concepts}}. 
+Kotlin\hyperlink{cap:biblio}{\endnote{\textbf{Kotlin}: \url{https://kotlinlang.org/}}} es un lenguaje de programación de código abierto creado por JetBrains, es un lenguaje de tipado estático, lo que significa que se puede desarrollar sobre la JVM (Java Virtual Machine) y es totalmente compatible e interoperable con Java lo que facilita la migración desde el primero\endnote{Artículo que explica en detalle qué es kotlin: \href{https://www.plainconcepts.com/es/kotlin-android/}{Plain Concepts}}. 
 
 Este lenguaje de programación ha sido seleccionado para el proyecto ya que, a parte de ser el recomendado por Google y ser muy cómodo y útil de usar, con el paso de los años se está consolidando como el lenguaje de referencia para el desarrollo Android, dejando obsoleto el anterior lenguaje de referencia: Java.
 \subsubsection{Kotlin vs. Java}
@@ -47,10 +52,10 @@ Algunas de las características -entre muchas otras- que hacen a kotlin destacar
     \item Una sintaxis más moderna, que permite hacer más con menos código.
     \item Al ser el lenguaje principal utilizado para Android hoy en día ofrece un mayor -y más actualizado- número de bibliotecas, más comunidad y recursos diponibles.
     \item Inmutabilidad de variables: una variable no puede cambiar a no ser que se indique explicitamente que sí. Esto ahorra muchos posibles errores.
-    \item Kotlin está diseñado ser un lenguaje \textit{null-safe}, es decir ofrece seguridad sobre valores nulos (¡No más NullPointerException!). Esto quiere decir que los valores no pueden ser nulos por defecto, para serlo se debe indicar expresamente con el operador ‘?’.
-    \item Relativo a Android, ofrece soporte nativo para corrutinas y flows, muy útiles en el desarrollo de aplicaciones.
+    \item Kotlin está diseñado ser un lenguaje \textit{null-safe}, es decir ofrece seguridad sobre valores nulos (¡No más \textit{NullPointerException}!). Esto quiere decir que los valores no pueden ser nulos por defecto, para serlo se debe indicar expresamente con el operador ‘?’.
+    \item Relativo a Android, ofrece soporte nativo para corrutinas y \textit{flows}, muy útiles en el desarrollo de aplicaciones.
 \end{itemize}
-A continuación se muestra una breve comparación del mismo código -que declara una variable, sumándola a un número entero, guardándola en otra variable y mostrándola por consola- en los dos lenguajes para intentar ilustrar algunas de las diferencias entre ambos:
+A continuación, en las figuras \ref{fig:javaFun} y \ref{fig:kotlinFun} se muestra una breve comparación del mismo código -que declara una variable, sumándola a un número entero, guardándola en otra variable y mostrándola por consola- en los dos lenguajes para intentar ilustrar algunas de las diferencias entre ambos:
 \begin{figure}[h]
 	\centering
 	\includegraphics[width = 1\textwidth]{Imagenes/Fuentes/javaFun.png}
@@ -66,22 +71,24 @@ A continuación se muestra una breve comparación del mismo código -que declara
 
 \hypertarget{subsec:compose}{}
 \subsection{Jetpack Compose}
-\href{https://developer.android.com/develop/ui/compose}{Jetpack Compose} es un moderno kit de herramientas de desarrollo de interfaces de usuario (UI) para Android, creado por Google. Permite a los desarrolladores construir interfaces de usuario de aplicaciones de forma más fácil y eficiente, utilizando un enfoque declarativo. Jetpack Compose fue elegida como tecnología principal para el desarrollo de las interfaces porque suponía un reto apasionante, es una tecnología puntera y muy demandada actualmente en el mundo profesional, además de divertida de usar y con gran cantidad de posibilidades a nivel programático. 
+Jetpack Compose\hyperlink{cap:biblio}{\endnote{\textbf{Jetpack Compose}: \url{https://developer.android.com/develop/ui/compose}}} es un moderno kit de herramientas de desarrollo de interfaces de usuario (UI) para Android, creado por Google. Permite a los desarrolladores construir interfaces de usuario de aplicaciones de forma más fácil y eficiente, utilizando un enfoque declarativo. Jetpack Compose fue elegida como tecnología principal para el desarrollo de las interfaces porque suponía un reto apasionante, es una tecnología puntera y muy demandada actualmente en el mundo profesional, además de divertida de usar y con gran cantidad de posibilidades a nivel programático. 
 
 Jetpack Composes es una forma más cómoda, sencilla y mejor de desarrollar aplicaciones frente al sistema tradicional de vistas con XML. A continuación se intenta explicar el por qué de esta afirmación.
 \subsubsection{Jetpack Compose vs. Android views}
 Android Views es el enfoque tradicional para construir interfaces de usuario en aplicaciones Android. Se definen las vistas  utilizando archivos XML y se gestionan programáticamente en Java o Kotlin. Esta era la forma de desarrollar interfaces en Android hasta que a partir de 2019, cuando salió Jetpack Compose en modo \textit{preview}, ambas fueron poniendose a la par. Fue en 2021 cuando Google estableció Jetpack Compose como la forma recomendada de aprender a desarrollar aplicaciones en Android. Hoy en día, Jetpack Compose está totalmente asentado y es un hecho que cada vez va dejando más atrás el sistema de vistas, siendo algo lógico puesto que presenta numerosas ventajas:
 \begin{itemize}
     \item Todo en Kotlin: mientras que usando Views las interfaces se definen en XML y se manipulan programáticamente en kotlin -o Java-, en Jetpack Compose se unifica todo en Kotlin. Esto reduce enormemente la cantidad de código necesaria y hace el código mucho más entendible.
-    \item Jetpack Compose ofrece un estilo de programación declarativa y reactiva que se adapta mucho mejor al paradigma de programación funcional de Kotlin, apoyándose mucho por ejemplo, en el uso de \href{https://kotlinlang.org/docs/lambdas.html}{lambdas} para añadir robustez al código.
+    \item Jetpack Compose ofrece un estilo de programación declarativa y reactiva que se adapta mucho mejor al paradigma de programación funcional de Kotlin, apoyándose mucho por ejemplo, en el uso de 
+	lambdas\hyperlink{cap:biblio}{\endnote{\textbf{lambdas}: \url{https://kotlinlang.org/docs/lambdas.html}}} para añadir robustez al código.
     \item Debido a que Jetpack Compose es hoy en día la principal forma de programar interfaces, constanmente van saliendo actualizaciones y nuevas utilidades como el \textit{live edit}, que permite ver los cambios en el diseño de tu aplicación en tiempo real mientras que esta está ejecutandose; o las \textit{previews} que permiten comprobar el diseño en distintos dispositivos y tamaños.
     \item Jetpack Compose permite programar para distintos tipos de dispositivos, esto significa que se podría por ejemplo, crear en el mismo proyecto una aplicación de móvil su versión de wearable y su versión de escritorio sin más complicación que la que tuviero adaptar las interfaces a cada tamaño.
 \end{itemize}
-Para terminar esta comparativa, a continuación se muestran dos formas de hacer exactamente lo mismo (una columna que renderice y muestre los elementos en pantalla) utilizando las dos formas analizadas en este apartado. Como se puede comprobar lo que se hace en 6 líneas de código en Jetpack Compose necesita de cuatro clases en el sistema de vistas (Adapter, Viewholder, XML y Activity):
+Para terminar esta comparativa, las figuras \ref{fig:views_demo} y \ref{fig:compose_demo} muestran dos formas de hacer exactamente lo mismo (una columna que renderice y muestre los elementos en pantalla) utilizando las dos formas analizadas en este apartado\hyperlink{cap:biblio}{\endnote{Imagen sacada del artículo \textit{RecyclerView vs. LazyRow/LazyColumn: Choosing the Right Layout for Dynamic Lists in Android} publicado por Muhammad Humza Khan en \textit{Medium}: \href{https://medium.com/@humzakhalid94/recyclerview-vs-lazyrow-lazycolumn-choosing-the-right-layout-for-dynamic-lists-in-android-ec9912049375}{\textbf{humzakhalid94 on Medium}}}
+	}. Como se puede comprobar lo que se hace en 6 líneas de código en Jetpack Compose necesita de cuatro clases en el sistema de vistas (Adapter, Viewholder, XML y Activity):
 \begin{figure}[h]
 	\centering
 	\includegraphics[width = 1\textwidth]{Imagenes/Fuentes/views_demo.png}
-	\caption{Recycler View utilizando Android views \citep{RecyclerVsLazy}}
+	\caption{Recycler View utilizando Android views.}
 	\label{fig:views_demo}
 \end{figure}
 \newpage
@@ -96,12 +103,12 @@ Para terminar esta comparativa, a continuación se muestran dos formas de hacer 
 \label{subsec:testing}
 Durante el proceso de desarrollo de Profinder, se han encontrado numerosos desafíos que resolver pero sin duda el testing ha sido el más complicado. La cantidad de cosas que se pueden hacer y conocimientos que aprender son un mundo y debido a los ajustados tiempos del proyecto solo ha sido posible rascar la superficie.
 
-Se han implementado pequeños test unitarios usando librerías como \href{https://mockk.io/ANDROID.html}{mockk} sobre todo del repositorio, en el que se han podido probar todas las funciones. También se han podido probar algunos casos de uso y se han intentado probar los viewmodel, pero debido a la complejidad de sus pruebas no ha dado tiempo ha hacer algo que de verdad valga la pena, por eso los tests se clasificarán en el capítulo \ref{cap:conclusiones} como una línea de trabajo futuro.
+Se han implementado pequeños test unitarios usando librerías como mockk\hyperlink{cap:biblio}{\endnote{\textbf{mockk}: \url{https://mockk.io/ANDROID.html}}} sobre todo del repositorio, en el que se han podido probar todas las funciones. También se han podido probar algunos casos de uso y se han intentado probar los viewmodel, pero debido a la complejidad de sus pruebas no ha dado tiempo ha hacer algo que de verdad valga la pena, por eso los tests se clasificarán en el capítulo \ref{cap:conclusiones} como una línea de trabajo futuro.
 
 \subsection{Dagger Hilt}
-Todo el proyecto ha sido implementado utilizando inyección de dependencias mediante \href{https://dagger.dev/hilt/}{Dagger Hilt}. 
+Todo el proyecto ha sido implementado utilizando inyección de dependencias mediante Dagger Hilt \hyperlink{cap:biblio}{\endnote{\textbf{Dagger Hilt}: \url{https://dagger.dev/hilt/}}}. 
 
-Dagger Hilt es un framework que realiza operaciones en tiempo de compilación (autogenerando ficheros) para Android, el cual se encarga de crear y administrar la creación de objetos en toda la aplicación, esto tiene muchas ventajas pero la principal es que facilita la codificación inmensamente ya que evita tener que saber donde se crea cada objeto.
+Dagger Hilt es un framework que realiza operaciones en tiempo de compilación (autogenerando ficheros) para Android, el cual se encarga de crear y administrar la creación de objetos en toda la aplicación, esto tiene muchas ventajas pero la principal es que facilita la codificación inmensamente ya que evita tener que saber donde se crea cada objeto, en la figura \ref{fig:ejemplo_hilt1} se muestra la forma de inyectar dependencias en clases.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width = 1\textwidth]{Imagenes/Fuentes/ejemplo_hilt1.png}
@@ -109,7 +116,7 @@ Dagger Hilt es un framework que realiza operaciones en tiempo de compilación (a
 	\label{fig:ejemplo_hilt1}
 \end{figure}
 
-Se han creado módulos para inyectar todos los servicios remotos de \hyperlink{subsec:firebase}{Firebase}, así como para el servicio de localización, creando automáticamente instancias que serán utilizadas por todas las interfaces que las requieran.
+Se han creado módulos para inyectar todos los servicios remotos de \hyperlink{subsec:firebase}{Firebase} y \hyperlink{subsec:datastore}{Datastore} -en la figura \ref{fig:ejemplo_hilt2} se muestra el módulo de dependencias de Datastore-, así como para el servicio de localización, creando automáticamente instancias que serán utilizadas por todas las interfaces que las requieran.
 \newpage
 \begin{figure}[h]
 	\centering
@@ -118,7 +125,7 @@ Se han creado módulos para inyectar todos los servicios remotos de \hyperlink{s
 	\label{fig:ejemplo_hilt2}
 \end{figure}
 
-Por último, en todas las vistas se han inyectado los \textit{viewmodels}:
+Por último, en todas las vistas se han inyectado los \textit{viewmodels}, como se muestra en la figura \ref{fig:ejemplo_hilt3}.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width = 0.7\textwidth]{Imagenes/Fuentes/ejemplo_hilt3.png}
@@ -127,42 +134,48 @@ Por último, en todas las vistas se han inyectado los \textit{viewmodels}:
 \end{figure}
 
 \subsection{Maps}
-Para la funcionalidad del mapa, se ha usado el \href{https://developers.google.com/maps/documentation/android-sdk}{SDK de Google Maps para Android}. Para utilizarlo es necesario darse de alta en la consola de Google para desarrolladores e introducir un método de pago (aunque el límite de uso gratuito es bastante alto por lo que esto no supone un problema) para recibir la clave de API necesaria.
+Para la funcionalidad del mapa, se ha usado el
+SDK de Google Maps para Android\hyperlink{cap:biblio}{\endnote{\textbf{SDK de Google Maps para Android}: \url{https://developers.google.com/maps/documentation/android-sdk}}}. Para utilizarlo es necesario darse de alta en la consola de Google para desarrolladores e introducir un método de pago (aunque el límite de uso gratuito es bastante alto por lo que esto no supone un problema) para recibir la clave de API necesaria.
 
-Una vez obtenida la clave de API ya es posible implementar mapas en la aplicación, para ello se utilizó una adaptación del SDK para el uso en \hyperlink{subsec:compose}{Jetpack Compsose} creada por múltiples desarrolladores de Google como herramienta \textit{open source}\footnote{Link al repositorio: \href{https://github.com/googlemaps/android-maps-compose}{android-maps-compose}}.
+Una vez obtenida la clave de API ya es posible implementar mapas en la aplicación, para ello se utilizó una adaptación del SDK para el uso en \hyperlink{subsec:compose}{Jetpack Compsose} creada por múltiples desarrolladores de Google\endnote{Link al repositorio android-maps-compose: \url{https://github.com/googlemaps/android-maps-compose}} como herramienta \textit{open source}, que permite utilizar los mapas como un \textit{composable} más, como se muestra en la figura \ref{fig:maps_compose}.
 \begin{figure}[h]
 	\centering
-	\includegraphics[width = 0.6\textwidth]{Imagenes/Fuentes/maps_compose.png}
+	\includegraphics[width = 0.5\textwidth]{Imagenes/Fuentes/maps_compose.png}
 	\caption{Uso del \textit{composable} GoogleMap para dibujar un mapa en la aplicación}
 	\label{fig:maps_compose}
 \end{figure}
+
 \subsection{Compose Destinations}
 La navegación nativa que ofrece \hyperlink{subsec:compose}{Jetpack Compsose} no es demasiado cómoda por el momento ya que usa navegación por rutas en formato de \textit{string}, lo cual puede llegar a ser confuso y poco seguro. 
 
-Para solucionar este problema se ha encontrado una biblioteca creada por la comunidad llamada \href{https://github.com/raamcosta/compose-destinations}{Compose Destinations} que utiliza como base la navegación nativa pero añade una capa encima que permite estructuración y tipado de los argumentos, ofreciendo una navegación más segura y sencilla de utilizar. Este recurso ha sido muy útil, haciendo el desarrollo con múltiples vistas sustancialmente más sencillo.
+Para solucionar este problema se ha encontrado una biblioteca creada por la comunidad llamada 
+Compose Destinations\hyperlink{cap:biblio}{\endnote{\textbf{Compose Destinations}: \url{https://github.com/raamcosta/compose-destinations}}} que utiliza como base la navegación nativa pero añade una capa encima que permite estructuración y tipado de los argumentos, ofreciendo una navegación más segura y sencilla de utilizar. Este recurso ha sido muy útil, haciendo el desarrollo con múltiples vistas sustancialmente más sencillo.
 
-Para utilizarlo basta con marcan con el tag \textit{@Destination} las funciones que participen en la navegación, esta etiqueta autogenera el código necesario -usando la navegación nativa- en tiempo de compilación. 
+Para utilizarlo basta con marcan con el tag \textit{@Destination} las funciones que participen en la navegación, esta etiqueta autogenera el código necesario -usando la navegación nativa- en tiempo de compilación, permitiendo utilizar ese \textit{composable} como destino de la navegación, como se muestra en la figura \ref{fig:ejemplo_destination}. 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width = 0.6\textwidth]{Imagenes/Fuentes/ejemplo_destination.png}
+	\includegraphics[width = 0.7\textwidth]{Imagenes/Fuentes/ejemplo_destination.png}
 	\caption{Ejemplo de declaración de función como Destination.}
 	\label{fig:ejemplo_destination}
 \end{figure}
 
-Una vez generado este código, se podrá utilizar la variable \textit{navigator} para navegar a esas pantallas de forma sencilla. 
+Una vez generado este código, se podrá utilizar la variable \textit{navigator} para navegar a esas pantallas de forma sencilla, en la figura \ref{fig:ejemplo_navigator} se muestra como se ha usado en el código. 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width = 0.6\textwidth]{Imagenes/Fuentes/ejemplo_navigator.png}
+	\includegraphics[width = 0.7\textwidth]{Imagenes/Fuentes/ejemplo_navigator.png}
 	\caption{Ejemplo de uso de variable navigator.}
 	\label{fig:ejemplo_navigator}
 \end{figure}
 
 \hypertarget{subsec:coil}{}
 \subsection{Coil} 
-\href{https://coil-kt.github.io/coil/compose/}{Coil} es una biblioteca creada para \hyperlink{subsec:compose}{Jetpack compose} (equivalente a \href{https://github.com/bumptech/glide}{Glide} en Android views). Sirve para cargar imágenes en las interfaces, proporciona el componente AsyncImage que se ha utilizado para mostrar las fotos de perfil de los usuarios en la aplicación. Se ha optado por Coil en lugar de bibliotecas como \href{https://square.github.io/picasso/}{Picasso} ya que ofrece un rendimiento e integración con \hyperlink{subsec:compose}{Jetpack compose} mucho mejor. 
+Coil\hyperlink{cap:biblio}{\endnote{\textbf{Coil}: \url{https://coil-kt.github.io/coil/compose/}}} es una biblioteca creada para \hyperlink{subsec:compose}{Jetpack compose} (equivalente a
+Glide\hyperlink{cap:biblio}{\endnote{\textbf{Glide}: \url{https://github.com/bumptech/glide}}} en Android views). Sirve para cargar imágenes en las interfaces, proporciona el componente AsyncImage que se ha utilizado para mostrar las fotos de perfil de los usuarios en la aplicación. Se ha optado por Coil en lugar de bibliotecas como 
+Picasso\hyperlink{cap:biblio}{\endnote{\textbf{Picasso}: \url{https://square.github.io/picasso/}}} ya que ofrece un rendimiento e integración con \hyperlink{subsec:compose}{Jetpack compose} mucho mejor. 
+
 \subsection{Material design}
 \label{subsec:material_design}
-\href{https://m3.material.io/}{Material Design} es un sistema de diseño creado por Google que se utiliza para crear experiencias de usuario coherentes y atractivas en aplicaciones. 
+Material Design\hyperlink{cap:biblio}{\endnote{\textbf{Material Design}: \url{https://m3.material.io/}}} es un sistema de diseño creado por Google que se utiliza para crear experiencias de usuario coherentes y atractivas en aplicaciones. 
 
 Para esta aplicación se ha utilizado Material 3 que ofrece la funcionalidad de Dynamic colors, esto significa que no tiene una paleta de colores estática, sino que dependiendo del tema de cada dispositivo específico, crea una paleta de colores personalizada. De esta forma se consigue una mejor experiencia de usuario, que gracias al algoritmo que se usa para crear la paleta de colores mantiene la armonía entre aplicaciones que usen Material.
 

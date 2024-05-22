@@ -1,3 +1,416 @@
 \@doanenote {1}
-macro:->hola
+macro:->\textbf
+{Uber}:
+\url
+{https://www.uber.com}
+\@endanenote 
+\@doanenote {2}
+macro:->\textbf
+{Habitissimo}:
+\url
+{https://www.habitissimo.es}
+\@endanenote 
+\@doanenote {3}
+macro:->\textbf
+{Booksy}:
+\url
+{https://booksy.com/en-us}
+\@endanenote 
+\@doanenote {4}
+macro:->\textbf
+{Upwork}:
+\url
+{https://www.upwork.com}
+\@endanenote 
+\@doanenote {5}
+macro:->\textbf
+{Android
+Studio}:
+\url
+{https://developer.android.com/studio/intro}
+\@endanenote 
+\@doanenote {6}
+macro:->\textbf
+{Intellij
+Idea}:
+\url
+{https://www.jetbrains.com/idea}
+\@endanenote 
+\@doanenote {7}
+macro:->\textbf
+{Java}:
+\url
+{https://www.java.com}
+\@endanenote 
+\@doanenote {8}
+macro:->\textbf
+{Scala}:
+\url
+{https://www.scala-lang.org}
+\@endanenote 
+\@doanenote {9}
+macro:->\textbf
+{Obsidian}:
+\url
+{https://obsidian.md/}
+\@endanenote 
+\@doanenote {10}
+macro:->\textbf
+{Figma}:
+\url
+{https://www.figma.com}
+\@endanenote 
+\@doanenote {11}
+macro:->\textbf
+{Material
+3}:
+\url
+{https://m3.material.io/}
+\@endanenote 
+\@doanenote {12}
+macro:->\textbf
+{Drawio}:
+\url
+{https://www.drawio.com/}
+\@endanenote 
+\@doanenote {13}
+macro:->\textbf
+{Git}:
+\url
+{https://git-scm.com/}
+\@endanenote 
+\@doanenote {14}
+macro:->\textbf
+{Github}:
+\url
+{https://github.com/}
+\@endanenote 
+\@doanenote {15}
+macro:->\textbf
+{Lazygit}:
+\url
+{https://github.com/jesseduffield/lazygit}
+\@endanenote 
+\@doanenote {16}
+macro:->\textbf
+{Kotlin}:
+\url
+{https://kotlinlang.org/}
+\@endanenote 
+\@doanenote {17}
+macro:->Artículo
+que
+explica
+en
+detalle
+qué
+es
+kotlin:
+\href
+{https://www.plainconcepts.com/es/kotlin-android/}{Plain
+Concepts}
+\@endanenote 
+\@doanenote {18}
+macro:->\textbf
+{Jetpack
+Compose}:
+\url
+{https://developer.android.com/develop/ui/compose}
+\@endanenote 
+\@doanenote {19}
+macro:->\textbf
+{lambdas}:
+\url
+{https://kotlinlang.org/docs/lambdas.html}
+\@endanenote 
+\@doanenote {20}
+macro:->Imagen
+sacada
+del
+artículo
+\textit
+{RecyclerView
+vs.
+LazyRow/LazyColumn:
+Choosing
+the
+Right
+Layout
+for
+Dynamic
+Lists
+in
+Android}
+publicado
+por
+Muhammad
+Humza
+Khan
+en
+\textit
+{Medium}:
+\href
+{https://medium.com/@humzakhalid94/recyclerview-vs-lazyrow-lazycolumn-choosing-the-right-layout-for-dynamic-lists-in-android-ec9912049375}{\textbf
+{humzakhalid94
+on
+Medium}}
+\@endanenote 
+\@doanenote {21}
+macro:->\textbf
+{mockk}:
+\url
+{https://mockk.io/ANDROID.html}
+\@endanenote 
+\@doanenote {22}
+macro:->\textbf
+{Dagger
+Hilt}:
+\url
+{https://dagger.dev/hilt/}
+\@endanenote 
+\@doanenote {23}
+macro:->\textbf
+{SDK
+de
+Google
+Maps
+para
+Android}:
+\url
+{https://developers.google.com/maps/documentation/android-sdk}
+\@endanenote 
+\@doanenote {24}
+macro:->Link
+al
+repositorio
+android-maps-compose:
+\url
+{https://github.com/googlemaps/android-maps-compose}
+\@endanenote 
+\@doanenote {25}
+macro:->\textbf
+{Compose
+Destinations}:
+\url
+{https://github.com/raamcosta/compose-destinations}
+\@endanenote 
+\@doanenote {26}
+macro:->\textbf
+{Coil}:
+\url
+{https://coil-kt.github.io/coil/compose/}
+\@endanenote 
+\@doanenote {27}
+macro:->\textbf
+{Glide}:
+\url
+{https://github.com/bumptech/glide}
+\@endanenote 
+\@doanenote {28}
+macro:->\textbf
+{Picasso}:
+\url
+{https://square.github.io/picasso/}
+\@endanenote 
+\@doanenote {29}
+macro:->\textbf
+{Material
+Design}:
+\url
+{https://m3.material.io/}
+\@endanenote 
+\@doanenote {30}
+macro:->\textbf
+{Room}:
+\url
+{https://developer.android.com/training/data-storage/room/}
+\@endanenote 
+\@doanenote {31}
+macro:->
+\textit
+{Clean
+Architecture:
+A
+Craftsman's
+Guide
+to
+Software
+Structure
+and
+Design},
+Robert
+C.
+Martin,
+2017
+\@endanenote 
+\@doanenote {32}
+macro:->\textbf
+{Viewmodels}:
+\url
+{https://developer.android.com/topic/libraries/architecture/viewmodel}
+\@endanenote 
+\@doanenote {33}
+macro:->\textbf
+{MVVM}:
+\url
+{https://builtin.com/software-engineering-perspectives/mvvm-architecture}
+\@endanenote 
+\@doanenote {34}
+macro:->\textbf
+{Intent}:
+\url
+{https://developer.android.com/guide/components/}
+\@endanenote 
+\@doanenote {35}
+macro:->Imagen
+sacada
+del
+articulo
+publicado
+por
+Roberto
+Fuentes
+en
+\textit
+{Medium}:
+\href
+{https://medium.com/@robercoding/qué-es-y-cómo-funciona-la-arquitectura-mvi-desarrollo-android-kotlin-e6a161e1b2db}{\textbf
+{Fuentes
+on
+Medium}}
+\@endanenote 
+\@doanenote {36}
+macro:->\textit
+{Clean
+Code:
+A
+Handbook
+of
+Agile
+Software
+Craftsmanship},
+Robert
+C.
+Martin,
+2008
+\@endanenote 
+\@doanenote {37}
+macro:->\textbf
+{Firebase}:
+\url
+{https://firebase.google.com/}
+\@endanenote 
+\@doanenote {38}
+macro:->\textbf
+{Firebase
+Authentication}:
+\url
+{https://firebase.google.com/docs/auth/}
+\@endanenote 
+\@doanenote {39}
+macro:->\textbf
+{Firebase
+Firestore}:
+\url
+{https://firebase.google.com/docs/firestore/}
+\@endanenote 
+\@doanenote {40}
+macro:->\textbf
+{Realtime
+database}:
+\url
+{https://firebase.google.com/docs/database/}
+\@endanenote 
+\@doanenote {41}
+macro:->\textbf
+{Firebase
+storage}:
+\url
+{https://firebase.google.com/docs/storage/}
+\@endanenote 
+\@doanenote {42}
+macro:->\textbf
+{Datastore}:
+\url
+{https://developer.android.com/topic/libraries/architecture/datastore}
+\@endanenote 
+\@doanenote {43}
+macro:->\textbf
+{Corrutinas}:
+\url
+{https://developer.android.com/kotlin/coroutines}
+\@endanenote 
+\@doanenote {44}
+macro:->\textbf
+{Flows}:
+\url
+{https://developer.android.com/kotlin/flow}
+\@endanenote 
+\@doanenote {45}
+macro:->\textbf
+{Free
+Software
+Foundation}:
+\url
+{https://www.fsf.org/}
+\@endanenote 
+\@doanenote {46}
+macro:->\textbf
+{GNU}:
+\url
+{https://www.gnu.org/}
+\@endanenote 
+\@doanenote {47}
+macro:->\textbf
+{Firefox}:
+\url
+{https://www.mozilla.org/es-ES/firefox/}
+\@endanenote 
+\@doanenote {48}
+macro:->\textbf
+{Neovim}:
+\url
+{https://neovim.io/}
+\@endanenote 
+\@doanenote {49}
+macro:->\textbf
+{Linux}:
+\url
+{https://www.linux.org/pages/}
+\@endanenote 
+\@doanenote {50}
+macro:->\textit
+{The
+Innovators:
+How
+a
+Group
+of
+Hackers,
+Geniuses
+and
+Geeks
+Created
+the
+Digital
+Revolution},
+Walter
+Isaacson,
+2015
+\@endanenote 
+\@doanenote {51}
+macro:->\textbf
+{Philipp
+Lackner
+on
+Error
+handling}:
+\url
+{https://www.youtube.com/watch?v=MiLN2vs2Oe0}
+\@endanenote 
+\@doanenote {52}
+macro:->\textbf
+{when}:
+\url
+{https://www.programiz.com/kotlin-programming/when-expression}
 \@endanenote 

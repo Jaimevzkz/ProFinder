@@ -88,9 +88,8 @@ constantes,guionado,Cascaras/bibliografia,config%
 %
 \ifpdf\hypersetup{%
     pdftitle = {\titulo},
-    pdfsubject = {Plantilla de Tesis},
-    pdfkeywords = {Plantilla, LaTeX, tesis, trabajo de
-      investigación, trabajo de Master},
+    pdfsubject = {trabajo de fin de grado},
+    pdfkeywords = {Plantilla, LaTeX, trabajo de grado},
     pdfauthor = {\textcopyright\ \autor},
     pdfcreator = {\LaTeX\ con el paquete \flqq hyperref\frqq},
     pdfproducer = {pdfeTeX-0.\the\pdftexversion\pdftexrevision},
@@ -141,9 +140,9 @@ constantes,guionado,Cascaras/bibliografia,config%
 \include{Capitulos/EstadoDeLaCuestion}
 % \include{Capitulos/DescripcionTrabajo}
 \include{Capitulos/tecnologiasEmpleadas}
+\include{Capitulos/ArquitecturaYModeloDeDatos}
 \include{Capitulos/JustificacionYConsideraciones}
-\include{Capitulos/modeloDeDatos}
-\include{Capitulos/ConclusionesTrabajoFuturo}
+\include{Capitulos/disenoImpl}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Si el TFG se escribe en inglés, comentar las siguientes líneas 
@@ -161,7 +160,9 @@ constantes,guionado,Cascaras/bibliografia,config%
 %
 % Si el TFM se escribe en inglés, editar TeXiS/TeXiS_bib para cambiar el
 % estilo de las referencias
-\include{Cascaras/bibliografia}
+
+\include{Cascaras/referencias}
+% \include{Cascaras/bibliografia}
 
 
 % Apéndices
@@ -170,6 +171,7 @@ constantes,guionado,Cascaras/bibliografia,config%
 \include{Apendices/appendixB}
 \include{Apendices/appendixC}
 \include{Apendices/appendixD}
+% \include{Apendices/appendixE}
 %\include{...}
 %\include{...}
 \backmatter
