@@ -7,57 +7,59 @@
 \contentsline {section}{\numberline {1.3}Plan de trabajo}{3}{section.17}%
 \contentsline {chapter}{\numberline {2}Estado de la Cuestión}{5}{chapter.19}%
 \contentsline {section}{\numberline {2.1}Uber}{5}{section.20}%
-\contentsline {section}{\numberline {2.2}Habitissimo}{6}{section.22}%
-\contentsline {section}{\numberline {2.3}Booksy}{6}{section.24}%
-\contentsline {section}{\numberline {2.4}Upwork}{7}{section.26}%
-\contentsline {chapter}{\numberline {3}Tecnologías empleadas}{8}{chapter.28}%
-\contentsline {section}{\numberline {3.1}Aplicaciones y herramientas generales}{8}{section.29}%
-\contentsline {subsection}{\numberline {3.1.1}Android Studio}{8}{subsection.30}%
-\contentsline {subsection}{\numberline {3.1.2}Obsidian}{8}{subsection.31}%
-\contentsline {subsection}{\numberline {3.1.3}Figma}{9}{subsection.32}%
-\contentsline {subsection}{\numberline {3.1.4}Drawio}{9}{subsection.33}%
-\contentsline {subsection}{\numberline {3.1.5}Git, Github y Lazygit}{9}{subsection.34}%
-\contentsline {section}{\numberline {3.2}Tecnologías específicas de Android}{10}{section.35}%
-\contentsline {subsection}{\numberline {3.2.1}Kotlin}{10}{subsection.36}%
-\contentsline {subsubsection}{\numberline {3.2.1.1}Kotlin vs. Java}{10}{subsubsection.37}%
-\contentsline {subsection}{\numberline {3.2.2}Jetpack Compose}{11}{subsection.40}%
-\contentsline {subsubsection}{\numberline {3.2.2.1}Jetpack Compose vs. Android views}{11}{subsubsection.41}%
-\contentsline {subsection}{\numberline {3.2.3}Testing}{13}{subsection.44}%
-\contentsline {subsection}{\numberline {3.2.4}Dagger Hilt}{13}{subsection.45}%
-\contentsline {subsection}{\numberline {3.2.5}Maps}{14}{subsection.49}%
-\contentsline {subsection}{\numberline {3.2.6}Compose Destinations}{15}{subsection.51}%
-\contentsline {subsection}{\numberline {3.2.7}Coil}{15}{subsection.54}%
-\contentsline {subsection}{\numberline {3.2.8}Material design}{16}{subsection.55}%
-\contentsline {chapter}{\numberline {4}Arquitectura y modelo de datos}{17}{chapter.56}%
-\contentsline {section}{\numberline {4.1}Arquitectura y patrones}{17}{section.57}%
-\contentsline {subsection}{\numberline {4.1.1}CLEAN architecture}{17}{subsection.58}%
-\contentsline {subsection}{\numberline {4.1.2}MVI}{18}{subsection.63}%
-\contentsline {subsection}{\numberline {4.1.3}Principios SOLID}{19}{subsection.67}%
-\contentsline {section}{\numberline {4.2}Modelo de datos}{21}{section.75}%
-\contentsline {subsection}{\numberline {4.2.1}Descripción detallada}{21}{subsection.76}%
-\contentsline {subsection}{\numberline {4.2.2}Firebase}{24}{subsection.84}%
-\contentsline {subsubsection}{\numberline {4.2.2.1}Authentication}{24}{subsubsection.85}%
-\contentsline {subsubsection}{\numberline {4.2.2.2}Firestore}{24}{subsubsection.87}%
-\contentsline {subsubsection}{\numberline {4.2.2.3}Realtime Database}{25}{subsubsection.89}%
-\contentsline {subsubsection}{\numberline {4.2.2.4}Storage}{25}{subsubsection.91}%
-\contentsline {subsection}{\numberline {4.2.3}Datastore}{26}{subsection.92}%
-\contentsline {subsection}{\numberline {4.2.4}Uso del patrón Singleton como modelo de persistencia}{26}{subsection.93}%
-\contentsline {chapter}{\numberline {5}Diseño e implementación}{28}{chapter.96}%
-\contentsline {section}{\numberline {5.1}Código abierto}{28}{section.97}%
-\contentsline {section}{\numberline {5.2}Idiomas}{28}{section.98}%
-\contentsline {section}{\numberline {5.3}Gestión de errores}{29}{section.99}%
-\contentsline {chapter}{Introduction}{32}{chapter*.105}%
+\contentsline {section}{\numberline {2.2}Habitissimo}{6}{section.21}%
+\contentsline {section}{\numberline {2.3}Booksy}{6}{section.22}%
+\contentsline {section}{\numberline {2.4}Upwork}{7}{section.23}%
+\contentsline {chapter}{\numberline {3}Tecnologías empleadas}{8}{chapter.24}%
+\contentsline {section}{\numberline {3.1}Aplicaciones y herramientas generales}{8}{section.25}%
+\contentsline {subsection}{\numberline {3.1.1}Android Studio}{8}{subsection.26}%
+\contentsline {subsection}{\numberline {3.1.2}Obsidian}{8}{subsection.27}%
+\contentsline {subsection}{\numberline {3.1.3}Figma}{9}{subsection.28}%
+\contentsline {subsection}{\numberline {3.1.4}Drawio}{9}{subsection.29}%
+\contentsline {subsection}{\numberline {3.1.5}Git, Github y Lazygit}{9}{subsection.30}%
+\contentsline {section}{\numberline {3.2}Tecnologías específicas de Android}{10}{section.31}%
+\contentsline {subsection}{\numberline {3.2.1}Kotlin}{10}{subsection.32}%
+\contentsline {subsubsection}{\numberline {3.2.1.1}Kotlin vs. Java}{10}{subsubsection.33}%
+\contentsline {subsection}{\numberline {3.2.2}Jetpack Compose}{11}{subsection.36}%
+\contentsline {subsubsection}{\numberline {3.2.2.1}Jetpack Compose vs. Android views}{11}{subsubsection.37}%
+\contentsline {subsection}{\numberline {3.2.3}Testing}{13}{subsection.40}%
+\contentsline {subsection}{\numberline {3.2.4}Dagger Hilt}{13}{subsection.41}%
+\contentsline {subsection}{\numberline {3.2.5}Maps}{14}{subsection.45}%
+\contentsline {subsection}{\numberline {3.2.6}Compose Destinations}{15}{subsection.47}%
+\contentsline {subsection}{\numberline {3.2.7}Coil}{15}{subsection.50}%
+\contentsline {subsection}{\numberline {3.2.8}Material design}{16}{subsection.51}%
+\contentsline {chapter}{\numberline {4}Arquitectura y modelo de datos}{17}{chapter.52}%
+\contentsline {section}{\numberline {4.1}Arquitectura y patrones}{17}{section.53}%
+\contentsline {subsection}{\numberline {4.1.1}CLEAN architecture}{17}{subsection.54}%
+\contentsline {subsection}{\numberline {4.1.2}MVI}{18}{subsection.59}%
+\contentsline {subsection}{\numberline {4.1.3}Principios SOLID}{19}{subsection.63}%
+\contentsline {section}{\numberline {4.2}Modelo de datos}{21}{section.71}%
+\contentsline {subsection}{\numberline {4.2.1}Descripción detallada}{21}{subsection.72}%
+\contentsline {subsection}{\numberline {4.2.2}Firebase}{24}{subsection.80}%
+\contentsline {subsubsection}{\numberline {4.2.2.1}Authentication}{24}{subsubsection.81}%
+\contentsline {subsubsection}{\numberline {4.2.2.2}Firestore}{24}{subsubsection.83}%
+\contentsline {subsubsection}{\numberline {4.2.2.3}Realtime Database}{25}{subsubsection.85}%
+\contentsline {subsubsection}{\numberline {4.2.2.4}Storage}{25}{subsubsection.87}%
+\contentsline {subsection}{\numberline {4.2.3}Datastore}{26}{subsection.88}%
+\contentsline {subsection}{\numberline {4.2.4}Uso del patrón Singleton como modelo de persistencia}{26}{subsection.89}%
+\contentsline {chapter}{\numberline {5}Diseño e implementación}{28}{chapter.92}%
+\contentsline {section}{\numberline {5.1}Código abierto}{28}{section.93}%
+\contentsline {section}{\numberline {5.2}Idiomas}{28}{section.94}%
+\contentsline {section}{\numberline {5.3}Gestión de errores}{29}{section.95}%
+\contentsline {chapter}{Introduction}{32}{chapter*.101}%
 \babel@toc {english}{}\relax 
-\contentsline {chapter}{Conclusions and Future Work}{36}{chapter*.113}%
-\contentsline {chapter}{Bibliografía}{38}{chapter*.115}%
+\contentsline {chapter}{Conclusions and Future Work}{36}{chapter*.109}%
+\contentsline {chapter}{Bibliografía}{38}{chapter*.111}%
 \babel@toc {spanish}{}\relax 
-\contentsline {chapter}{\numberline {A}Especificación de requisitos}{40}{appendix.116}%
-\contentsline {section}{\numberline {A.1}Actores}{40}{section.117}%
-\contentsline {section}{\numberline {A.2}Casos de Uso}{40}{section.118}%
-\contentsline {subsection}{\numberline {A.2.1}Casos de uso generales}{41}{subsection.119}%
-\contentsline {subsection}{\numberline {A.2.2}Casos de uso de usuarios}{48}{subsection.127}%
-\contentsline {subsection}{\numberline {A.2.3}Casos de uso de profesionales}{52}{subsection.133}%
-\contentsline {subsection}{\numberline {A.2.4}Casos de uso de administrador}{59}{subsection.141}%
-\contentsline {chapter}{\numberline {B}Guía de usuario}{64}{appendix.147}%
-\contentsline {chapter}{\numberline {C}Diseño de las bases de datos}{65}{appendix.148}%
-\contentsline {chapter}{\numberline {D}Interfaces de Profinder diseñadas en figma}{67}{appendix.151}%
+\contentsline {chapter}{\numberline {A}Especificación de requisitos}{40}{appendix.112}%
+\contentsline {section}{\numberline {A.1}Actores}{40}{section.113}%
+\contentsline {section}{\numberline {A.2}Casos de Uso}{40}{section.114}%
+\contentsline {subsection}{\numberline {A.2.1}Casos de uso generales}{41}{subsection.115}%
+\contentsline {subsection}{\numberline {A.2.2}Casos de uso de usuarios}{48}{subsection.123}%
+\contentsline {subsection}{\numberline {A.2.3}Casos de uso de profesionales}{52}{subsection.129}%
+\contentsline {subsection}{\numberline {A.2.4}Casos de uso de administrador}{59}{subsection.137}%
+\contentsline {chapter}{\numberline {B}Guía de uso}{64}{appendix.143}%
+\contentsline {section}{\numberline {B.1}Guía de usuario}{64}{section.144}%
+\contentsline {section}{\numberline {B.2}Guía de profesional}{69}{section.150}%
+\contentsline {chapter}{\numberline {C}Diseño de las bases de datos}{70}{appendix.151}%
+\contentsline {chapter}{\numberline {D}Interfaces de Profinder diseñadas en figma}{72}{appendix.154}%
