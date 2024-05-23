@@ -81,9 +81,16 @@ Los principios SOLID son un conjunto de cinco principios de diseño de software 
 \end{enumerate}
 
 \section{Modelo de datos}
+En esta sección se explica todo el modelo de datos y persistencia de la aplicación, en la figura \ref{fig:er_inicial} se puede encontrar un diagrama entidad relación abstracto que se hizo al comienzo del proyecto -cuando todavía no se sabía ni siquiera que tipo de base de datos se utilizaría- como modelo a seguir, algunos aspectos se han materializado de forma diferente en el modelo final (como por ejemplo la fusión de la estructuras de usuario y profesional o de las estructuras job y request) pero la esencia inicial se ha mantenido y el diagrama ha cumplido correctamente su papel como guía.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Imagenes/drawio/modelo_datos_inicial.png}
+    \caption{Diagrama del modelo de datos inicial.}
+    \label{fig:er_inicial}
+\end{figure}
 \subsection{Descripción detallada}
 \begin{itemize}
-    \item \textbf{ActorModel}: es la estructura de datos que almacena todos los datos de usuario, se usa la misma tanto para usuarios como para profesionales ya que admite campos nulos para aquellos atributos que solo corresponden a un tipo de actor, en esta estructura se guarda también el tipo de actor, la lista de favoritos (lista con otros \textit{ActorModel}), la calificación y el número de calificaciones tal y como se muestra en la figura \ref{fig:actorModel}.
+    \item \textbf{ActorModel}: es la estructura de datos que almacena todos los datos de un actor, se usa la misma tanto para usuarios como para profesionales ya que admite campos nulos para aquellos atributos que solo corresponden a un tipo de actor, en esta estructura se guarda también el tipo de actor, la lista de favoritos (lista con otros \textit{ActorModel}), la calificación y el número de calificaciones tal y como se muestra en la figura \ref{fig:actorModel}.
     \begin{figure}[h]
         \centering
         \includegraphics[width = 0.6\textwidth]{Imagenes/Fuentes/actorModel.png}
