@@ -80,8 +80,8 @@ internal fun ScreenBody(
         contentAlignment = Alignment.Center
     ) {
 
-        var email by remember { mutableStateOf("jaimevzkz1+1@gmail.com") } //todo delete
-        var password by remember { mutableStateOf("1234Qwerty") }
+        var email by remember { mutableStateOf("") }
+        var password by remember { mutableStateOf("") }
         var isValid by remember { mutableStateOf(true) }
 
         MyAuthHeader(Modifier.align(Alignment.TopEnd))
