@@ -2,8 +2,8 @@
 \label{cap:modeloDeDatos}
 En este capítulo se explicará la arquitectura y el modelo de datos utilizado en la aplicación. 
 
-En la sección de arquitectura se explicará la arqitectura seguida en el proyecto, así como los patrones utilizados. Por otro lado, en la sección de modelo de datos, se hará una descripición de todas las estructuras de datos utilizadas, explicándolas brevemente para dar un poco de contexto, sin embargo, siempre se recomienda ver y tocar el código para entenderlo en profundidad. En segundo lugar se explicarán todos los servicios utilizados para mantener la persistencia: Firebase (principal herramienta utilizada como \textit{backend}), Datastore (se ha utilizado para guardar en local preferencias del sistema) y por último se explicará como se ha utilizado el patrón Singleton para evitar tener que usar una base de datos local como 
-Room\hyperlink{cap:biblio}{\endnote{\textbf{Room}: \url{https://developer.android.com/training/data-storage/room/}}}, logrando así una aplicación completa que pueda interactuar con otros dispositivos a través de la red.
+En la primera sección se explicará la arqitectura seguida en el proyecto, así como los patrones utilizados. Por otro lado, en la sección de modelo de datos, se hará una descripición de todas las estructuras de datos utilizadas, explicándolas brevemente para dar un poco de contexto, sin embargo, siempre se recomienda ver y tocar el código para entenderlo en profundidad. En segundo lugar se explicarán todos los servicios utilizados para mantener la persistencia: Firebase (principal herramienta utilizada como \textit{backend}), Datastore (se ha utilizado para guardar en local preferencias del sistema) y por último se explicará como se ha utilizado el patrón Singleton para evitar tener que usar una base de datos local como 
+Room\hyperlink{cap:biblio}{\endnote{\textbf{Room}: \url{https://developer.android.com/training/data-storage/room/}}}, logrando así una aplicación completa.
 \section{Arquitectura y patrones}
 \subsection{CLEAN architecture}
 \label{subsec:cleanArch}
@@ -81,6 +81,7 @@ Los principios SOLID son un conjunto de cinco principios de diseño de software 
 \end{enumerate}
 
 \section{Modelo de datos}
+\label{sec:modeloDatos}
 En esta sección se explica todo el modelo de datos y persistencia de la aplicación, en la figura \ref{fig:er_inicial} se puede encontrar un diagrama entidad relación abstracto que se hizo al comienzo del proyecto -cuando todavía no se sabía ni siquiera que tipo de base de datos se utilizaría- como modelo a seguir, algunos aspectos se han materializado de forma diferente en el modelo final (como por ejemplo la fusión de la estructuras de usuario y profesional o de las estructuras job y request) pero la esencia inicial se ha mantenido y el diagrama ha cumplido correctamente su papel como guía.
 \begin{figure}[h]
     \centering
@@ -147,6 +148,7 @@ En esta sección se explica todo el modelo de datos y persistencia de la aplicac
 \label{subsec:firebase}
 Firebase \hyperlink{cap:biblio}{\endnote{\textbf{Firebase}: \url{https://firebase.google.com/}}} es una plataforma web desarrollada por Google que ofrece una amplia gama de servicios para ayudar a los desarrolladores a crear y mejorar aplicaciones. En Profinder, se ha utilizado como \textit{backend} para toda la aplicación y ha aportado la capacidad de plasmar el modelo de datos de la aplicación a una base datos, así como autenticación y almacenamiento para fotos. A continuación se ha explicado cada servicio utilizado.
 \subsubsection{Authentication}
+\label{subsec:firebaseAuth}
 Firebase Authentication\hyperlink{cap:biblio}{\endnote{\textbf{Firebase Authentication}: \url{https://firebase.google.com/docs/auth/}}} es un servicio de autenticación que ahorra todo el proceso de gurdado y cifrado de contraseñas, también gestiona las sesiones de cada usuario, permitiendo mantener la sesión iniciada.Tiene compatibilidad para configurar diversos métodos de autenticación, sin embargo, en esta aplicación solo se ha considerado oportuno implementar la autenticación con \textit{email} y contraseña aunque si se quisiera sería sencillo añadir otros métodos. En la figura \ref{fig:ejemplo_auth} se muestra el panel de control de usuarios en el que se puede realizar un control sobre los mismos (como cambiar contraseñas o suspender cuentas).
 \begin{figure}[h]
     \centering
@@ -196,6 +198,7 @@ corrutinas\hyperlink{cap:biblio}{\endnote{\textbf{Corrutinas}: \url{https://deve
 \end{itemize}
 
 \subsection{Uso del patrón Singleton como modelo de persistencia}
+\label{subsec:singletonComoModelo}
 En la programación Android, la persistencia de datos es muy importante ya que al contrario que en otro tipo de programas, cada poco tiempo se borran todos los datos no persistidos para evitar que la aplicación ocupe demasiado espacio en el dispositivo. En este contexto es donde se presenta el problema.
 
 A lo largo del desarrollo de otras aplicaciones (en preparación a esta) se encontró que el uso de una base de datos local suponía una carga de espacio en la aplicación y en tiempo de compilación que la ralentizaba, más allá de esto, las necesidades de Profinder implicaban que los datos fueran actualizados cada no demasiado tiempo puesto que tanto servicios; como favoritos; como los datos de usuario están diseñados para cambiar con frecuencia entre los distintos actores de la aplicación. Por estos motivos se decidió buscar un sistema alternativo que se adecuara a las necesidades de la aplicación: actualización frecuente y poca carga en memoria sin tener que estar accediendo constantemente al servicio remoto (\hyperlink{subsec:firestore}{Firestore}) ya que esto supondría un coste económico.

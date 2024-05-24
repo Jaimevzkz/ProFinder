@@ -414,3 +414,17 @@ macro:->\textbf
 \url
 {https://www.programiz.com/kotlin-programming/when-expression}
 \@endanenote 
+\@doanenote {53}
+macro:->\textbf
+{Repositorio
+compose-shimmer}:
+\url
+{https://github.com/valentinilk/compose-shimmer}
+\@endanenote 
+\@doanenote {54}
+macro:->\textbf
+{Kotlin
+Multiplatform}:
+\url
+{https://kotlinlang.org/docs/multiplatform.html}
+\@endanenote 

@@ -32,7 +32,7 @@
 \contentsline {section}{\numberline {4.1}Arquitectura y patrones}{17}{section.53}%
 \contentsline {subsection}{\numberline {4.1.1}CLEAN architecture}{17}{subsection.54}%
 \contentsline {subsection}{\numberline {4.1.2}MVI}{18}{subsection.59}%
-\contentsline {subsection}{\numberline {4.1.3}Principios SOLID}{19}{subsection.63}%
+\contentsline {subsection}{\numberline {4.1.3}Principios SOLID}{20}{subsection.63}%
 \contentsline {section}{\numberline {4.2}Modelo de datos}{21}{section.71}%
 \contentsline {subsection}{\numberline {4.2.1}Descripción detallada}{22}{subsection.73}%
 \contentsline {subsection}{\numberline {4.2.2}Firebase}{24}{subsection.81}%
@@ -43,28 +43,38 @@
 \contentsline {subsection}{\numberline {4.2.3}Datastore}{27}{subsection.89}%
 \contentsline {subsection}{\numberline {4.2.4}Uso del patrón Singleton como modelo de persistencia}{27}{subsection.90}%
 \contentsline {chapter}{\numberline {5}Diseño e implementación}{29}{chapter.93}%
-\contentsline {section}{\numberline {5.1}Código abierto}{29}{section.94}%
-\contentsline {section}{\numberline {5.2}Idiomas}{29}{section.95}%
-\contentsline {section}{\numberline {5.3}Gestión de errores}{30}{section.96}%
-\contentsline {chapter}{Introduction}{33}{chapter*.102}%
+\contentsline {section}{\numberline {5.1}Diseño}{29}{section.94}%
+\contentsline {subsection}{\numberline {5.1.1}Experiencia de usuario}{29}{subsection.95}%
+\contentsline {subsection}{\numberline {5.1.2}Open source}{30}{subsection.97}%
+\contentsline {subsection}{\numberline {5.1.3}Idiomas}{30}{subsection.98}%
+\contentsline {section}{\numberline {5.2}Implementación}{31}{section.100}%
+\contentsline {subsection}{\numberline {5.2.1}Autenticación}{31}{subsection.101}%
+\contentsline {subsection}{\numberline {5.2.2}Usuarios y profesionales}{32}{subsection.104}%
+\contentsline {subsection}{\numberline {5.2.3}Trabajos y Servicios}{32}{subsection.105}%
+\contentsline {subsection}{\numberline {5.2.4}Chat}{33}{subsection.107}%
+\contentsline {subsection}{\numberline {5.2.5}Gestión de errores}{34}{subsection.109}%
+\contentsline {chapter}{\numberline {6}Conclusiones y Trabajo Futuro}{36}{chapter.115}%
+\contentsline {section}{\numberline {6.1}Conclusiones}{36}{section.116}%
+\contentsline {section}{\numberline {6.2}Líneas de trabajo futuro}{37}{section.117}%
+\contentsline {chapter}{Introduction}{39}{chapter*.118}%
 \babel@toc {english}{}\relax 
-\contentsline {chapter}{Conclusions and Future Work}{37}{chapter*.110}%
-\contentsline {chapter}{Bibliografía}{39}{chapter*.112}%
+\contentsline {chapter}{Conclusions and Future Work}{43}{chapter*.126}%
+\contentsline {chapter}{Bibliografía}{45}{chapter*.128}%
 \babel@toc {spanish}{}\relax 
-\contentsline {chapter}{\numberline {A}Especificación de requisitos}{41}{appendix.113}%
-\contentsline {section}{\numberline {A.1}Actores}{41}{section.114}%
-\contentsline {section}{\numberline {A.2}Casos de Uso}{41}{section.115}%
-\contentsline {subsection}{\numberline {A.2.1}Casos de uso generales}{42}{subsection.116}%
-\contentsline {subsection}{\numberline {A.2.2}Casos de uso de usuarios}{49}{subsection.124}%
-\contentsline {subsection}{\numberline {A.2.3}Casos de uso de profesionales}{53}{subsection.130}%
-\contentsline {subsection}{\numberline {A.2.4}Casos de uso de administrador}{60}{subsection.138}%
-\contentsline {chapter}{\numberline {B}Guía de uso}{65}{appendix.144}%
-\contentsline {section}{\numberline {B.1}Guía de usuario}{66}{section.145}%
-\contentsline {subsection}{\numberline {B.1.1}Inicio de sesión, registro, y localización}{66}{subsection.146}%
-\contentsline {subsection}{\numberline {B.1.2}Pantalla de Home, valoración de profesionales y Pantalla de servicios (lista)}{67}{subsection.148}%
-\contentsline {subsection}{\numberline {B.1.3}Detalles de servicio, pantalla de servicios (mapa), y pantalla de búsqueda}{68}{subsection.150}%
-\contentsline {subsection}{\numberline {B.1.4}Pantalla para ver otro perfil, chats recientes y chat individual}{69}{subsection.152}%
-\contentsline {subsection}{\numberline {B.1.5}Pantalla de perfil, modo claro y editar perfil}{70}{subsection.154}%
-\contentsline {section}{\numberline {B.2}Guía de profesional}{70}{section.156}%
-\contentsline {chapter}{\numberline {C}Diseño de las bases de datos}{71}{appendix.157}%
-\contentsline {chapter}{\numberline {D}Interfaces de Profinder diseñadas en figma}{73}{appendix.160}%
+\contentsline {chapter}{\numberline {A}Especificación de requisitos}{47}{appendix.129}%
+\contentsline {section}{\numberline {A.1}Actores}{47}{section.130}%
+\contentsline {section}{\numberline {A.2}Casos de Uso}{47}{section.131}%
+\contentsline {subsection}{\numberline {A.2.1}Casos de uso generales}{48}{subsection.132}%
+\contentsline {subsection}{\numberline {A.2.2}Casos de uso de usuarios}{55}{subsection.140}%
+\contentsline {subsection}{\numberline {A.2.3}Casos de uso de profesionales}{59}{subsection.146}%
+\contentsline {subsection}{\numberline {A.2.4}Casos de uso de administrador}{66}{subsection.154}%
+\contentsline {chapter}{\numberline {B}Guía de uso}{71}{appendix.160}%
+\contentsline {section}{\numberline {B.1}Guía de usuario}{72}{section.161}%
+\contentsline {subsection}{\numberline {B.1.1}Inicio de sesión, registro, y localización}{72}{subsection.162}%
+\contentsline {subsection}{\numberline {B.1.2}Pantalla de Home, valoración de profesionales y Pantalla de servicios (lista)}{73}{subsection.164}%
+\contentsline {subsection}{\numberline {B.1.3}Detalles de servicio, pantalla de servicios (mapa), y pantalla de búsqueda}{74}{subsection.166}%
+\contentsline {subsection}{\numberline {B.1.4}Pantalla para ver otro perfil, chats recientes y chat individual}{75}{subsection.168}%
+\contentsline {subsection}{\numberline {B.1.5}Pantalla de perfil, modo claro y editar perfil}{76}{subsection.170}%
+\contentsline {section}{\numberline {B.2}Guía de profesional}{76}{section.172}%
+\contentsline {chapter}{\numberline {C}Diseño de las bases de datos}{77}{appendix.173}%
+\contentsline {chapter}{\numberline {D}Interfaces de Profinder diseñadas en figma}{79}{appendix.176}%
