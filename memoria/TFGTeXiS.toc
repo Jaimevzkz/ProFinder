@@ -7,74 +7,76 @@
 \contentsline {section}{\numberline {1.3}Plan de trabajo}{3}{section.17}%
 \contentsline {chapter}{\numberline {2}Estado de la Cuestión}{5}{chapter.19}%
 \contentsline {section}{\numberline {2.1}Uber}{5}{section.20}%
-\contentsline {section}{\numberline {2.2}Habitissimo}{6}{section.21}%
+\contentsline {section}{\numberline {2.2}Habitissimo}{5}{section.21}%
 \contentsline {section}{\numberline {2.3}Booksy}{6}{section.22}%
-\contentsline {section}{\numberline {2.4}Upwork}{7}{section.23}%
-\contentsline {chapter}{\numberline {3}Tecnologías empleadas}{8}{chapter.24}%
-\contentsline {section}{\numberline {3.1}Aplicaciones y herramientas generales}{8}{section.25}%
-\contentsline {subsection}{\numberline {3.1.1}Android Studio}{8}{subsection.26}%
-\contentsline {subsection}{\numberline {3.1.2}Obsidian}{8}{subsection.27}%
-\contentsline {subsection}{\numberline {3.1.3}Figma}{9}{subsection.28}%
-\contentsline {subsection}{\numberline {3.1.4}Drawio}{9}{subsection.29}%
-\contentsline {subsection}{\numberline {3.1.5}Git, Github y Lazygit}{9}{subsection.30}%
-\contentsline {section}{\numberline {3.2}Tecnologías específicas de Android}{10}{section.31}%
-\contentsline {subsection}{\numberline {3.2.1}Kotlin}{10}{subsection.32}%
-\contentsline {subsubsection}{\numberline {3.2.1.1}Kotlin vs. Java}{10}{subsubsection.33}%
-\contentsline {subsection}{\numberline {3.2.2}Jetpack Compose}{11}{subsection.36}%
-\contentsline {subsubsection}{\numberline {3.2.2.1}Jetpack Compose vs. Android views}{11}{subsubsection.37}%
-\contentsline {subsection}{\numberline {3.2.3}Testing}{13}{subsection.40}%
-\contentsline {subsection}{\numberline {3.2.4}Dagger Hilt}{13}{subsection.41}%
-\contentsline {subsection}{\numberline {3.2.5}Maps}{14}{subsection.45}%
-\contentsline {subsection}{\numberline {3.2.6}Compose Destinations}{15}{subsection.47}%
-\contentsline {subsection}{\numberline {3.2.7}Coil}{15}{subsection.50}%
-\contentsline {subsection}{\numberline {3.2.8}Material design}{16}{subsection.51}%
-\contentsline {chapter}{\numberline {4}Arquitectura y modelo de datos}{17}{chapter.52}%
-\contentsline {section}{\numberline {4.1}Arquitectura y patrones}{17}{section.53}%
-\contentsline {subsection}{\numberline {4.1.1}CLEAN architecture}{17}{subsection.54}%
-\contentsline {subsection}{\numberline {4.1.2}MVI}{18}{subsection.59}%
-\contentsline {subsection}{\numberline {4.1.3}Principios SOLID}{20}{subsection.63}%
-\contentsline {section}{\numberline {4.2}Modelo de datos}{21}{section.71}%
-\contentsline {subsection}{\numberline {4.2.1}Descripción detallada}{22}{subsection.73}%
-\contentsline {subsection}{\numberline {4.2.2}Firebase}{24}{subsection.81}%
-\contentsline {subsubsection}{\numberline {4.2.2.1}Authentication}{25}{subsubsection.82}%
-\contentsline {subsubsection}{\numberline {4.2.2.2}Firestore}{25}{subsubsection.84}%
-\contentsline {subsubsection}{\numberline {4.2.2.3}Realtime Database}{25}{subsubsection.86}%
-\contentsline {subsubsection}{\numberline {4.2.2.4}Storage}{26}{subsubsection.88}%
-\contentsline {subsection}{\numberline {4.2.3}Datastore}{27}{subsection.89}%
-\contentsline {subsection}{\numberline {4.2.4}Uso del patrón Singleton como modelo de persistencia}{27}{subsection.90}%
-\contentsline {chapter}{\numberline {5}Diseño e implementación}{29}{chapter.93}%
-\contentsline {section}{\numberline {5.1}Diseño}{29}{section.94}%
-\contentsline {subsection}{\numberline {5.1.1}Experiencia de usuario}{29}{subsection.95}%
-\contentsline {subsection}{\numberline {5.1.2}Open source}{30}{subsection.97}%
-\contentsline {subsection}{\numberline {5.1.3}Idiomas}{30}{subsection.98}%
-\contentsline {section}{\numberline {5.2}Implementación}{31}{section.100}%
-\contentsline {subsection}{\numberline {5.2.1}Autenticación}{31}{subsection.101}%
-\contentsline {subsection}{\numberline {5.2.2}Usuarios y profesionales}{32}{subsection.104}%
-\contentsline {subsection}{\numberline {5.2.3}Trabajos y Servicios}{32}{subsection.105}%
-\contentsline {subsection}{\numberline {5.2.4}Chat}{33}{subsection.107}%
-\contentsline {subsection}{\numberline {5.2.5}Gestión de errores}{34}{subsection.109}%
-\contentsline {chapter}{\numberline {6}Conclusiones y Trabajo Futuro}{36}{chapter.115}%
-\contentsline {section}{\numberline {6.1}Conclusiones}{36}{section.116}%
-\contentsline {section}{\numberline {6.2}Líneas de trabajo futuro}{37}{section.117}%
-\contentsline {chapter}{Introduction}{39}{chapter*.118}%
+\contentsline {section}{\numberline {2.4}Upwork}{6}{section.23}%
+\contentsline {chapter}{\numberline {3}Tecnologías empleadas}{7}{chapter.24}%
+\contentsline {section}{\numberline {3.1}Aplicaciones y herramientas generales}{7}{section.25}%
+\contentsline {subsection}{\numberline {3.1.1}Android Studio}{7}{subsection.26}%
+\contentsline {subsection}{\numberline {3.1.2}Obsidian}{7}{subsection.27}%
+\contentsline {subsection}{\numberline {3.1.3}Figma}{8}{subsection.28}%
+\contentsline {subsection}{\numberline {3.1.4}Drawio}{8}{subsection.29}%
+\contentsline {subsection}{\numberline {3.1.5}Git, Github y Lazygit}{8}{subsection.30}%
+\contentsline {section}{\numberline {3.2}Tecnologías específicas de Android}{9}{section.31}%
+\contentsline {subsection}{\numberline {3.2.1}Kotlin}{9}{subsection.32}%
+\contentsline {subsubsection}{\numberline {3.2.1.1}Kotlin vs. Java}{9}{subsubsection.33}%
+\contentsline {subsection}{\numberline {3.2.2}Jetpack Compose}{10}{subsection.36}%
+\contentsline {subsubsection}{\numberline {3.2.2.1}Jetpack Compose vs. Android views}{10}{subsubsection.37}%
+\contentsline {subsection}{\numberline {3.2.3}Testing}{12}{subsection.40}%
+\contentsline {subsection}{\numberline {3.2.4}Dagger Hilt}{12}{subsection.41}%
+\contentsline {subsection}{\numberline {3.2.5}Maps}{13}{subsection.45}%
+\contentsline {subsection}{\numberline {3.2.6}Compose Destinations}{13}{subsection.47}%
+\contentsline {subsection}{\numberline {3.2.7}Coil}{14}{subsection.50}%
+\contentsline {subsection}{\numberline {3.2.8}Material design}{14}{subsection.51}%
+\contentsline {chapter}{\numberline {4}Arquitectura y modelo de datos}{16}{chapter.52}%
+\contentsline {section}{\numberline {4.1}Arquitectura y patrones}{16}{section.53}%
+\contentsline {subsection}{\numberline {4.1.1}CLEAN architecture}{16}{subsection.54}%
+\contentsline {subsection}{\numberline {4.1.2}MVI}{17}{subsection.59}%
+\contentsline {subsection}{\numberline {4.1.3}Principios SOLID}{19}{subsection.63}%
+\contentsline {section}{\numberline {4.2}Modelo de datos}{20}{section.71}%
+\contentsline {subsection}{\numberline {4.2.1}Descripción detallada}{21}{subsection.73}%
+\contentsline {subsection}{\numberline {4.2.2}Firebase}{23}{subsection.81}%
+\contentsline {subsubsection}{\numberline {4.2.2.1}Authentication}{24}{subsubsection.82}%
+\contentsline {subsubsection}{\numberline {4.2.2.2}Firestore}{24}{subsubsection.84}%
+\contentsline {subsubsection}{\numberline {4.2.2.3}Realtime Database}{24}{subsubsection.86}%
+\contentsline {subsubsection}{\numberline {4.2.2.4}Storage}{25}{subsubsection.88}%
+\contentsline {subsection}{\numberline {4.2.3}Datastore}{26}{subsection.89}%
+\contentsline {subsection}{\numberline {4.2.4}Uso del patrón Singleton como modelo de persistencia}{26}{subsection.90}%
+\contentsline {chapter}{\numberline {5}Diseño e implementación}{28}{chapter.93}%
+\contentsline {section}{\numberline {5.1}Diseño}{28}{section.94}%
+\contentsline {subsection}{\numberline {5.1.1}Experiencia de usuario}{28}{subsection.95}%
+\contentsline {subsection}{\numberline {5.1.2}Open source}{29}{subsection.97}%
+\contentsline {subsection}{\numberline {5.1.3}Idiomas}{29}{subsection.98}%
+\contentsline {section}{\numberline {5.2}Implementación}{30}{section.100}%
+\contentsline {subsection}{\numberline {5.2.1}Autenticación}{30}{subsection.101}%
+\contentsline {subsection}{\numberline {5.2.2}Usuarios y profesionales}{31}{subsection.104}%
+\contentsline {subsection}{\numberline {5.2.3}Trabajos y Servicios}{31}{subsection.105}%
+\contentsline {subsection}{\numberline {5.2.4}Chat}{32}{subsection.107}%
+\contentsline {subsection}{\numberline {5.2.5}Gestión de errores}{32}{subsection.109}%
+\contentsline {chapter}{\numberline {6}Conclusiones y Trabajo Futuro}{35}{chapter.115}%
+\contentsline {section}{\numberline {6.1}Conclusiones}{35}{section.116}%
+\contentsline {section}{\numberline {6.2}Líneas de trabajo futuro}{36}{section.117}%
+\contentsline {chapter}{Introduction}{38}{chapter*.118}%
 \babel@toc {english}{}\relax 
-\contentsline {chapter}{Conclusions and Future Work}{43}{chapter*.126}%
-\contentsline {chapter}{Bibliografía}{45}{chapter*.128}%
+\contentsline {chapter}{Conclusions and Future Work}{42}{chapter*.126}%
+\contentsline {chapter}{Bibliografía}{44}{chapter*.128}%
 \babel@toc {spanish}{}\relax 
-\contentsline {chapter}{\numberline {A}Especificación de requisitos}{47}{appendix.129}%
-\contentsline {section}{\numberline {A.1}Actores}{47}{section.130}%
-\contentsline {section}{\numberline {A.2}Casos de Uso}{47}{section.131}%
-\contentsline {subsection}{\numberline {A.2.1}Casos de uso generales}{48}{subsection.132}%
-\contentsline {subsection}{\numberline {A.2.2}Casos de uso de usuarios}{55}{subsection.140}%
-\contentsline {subsection}{\numberline {A.2.3}Casos de uso de profesionales}{59}{subsection.146}%
-\contentsline {subsection}{\numberline {A.2.4}Casos de uso de administrador}{66}{subsection.154}%
-\contentsline {chapter}{\numberline {B}Guía de uso}{71}{appendix.160}%
-\contentsline {section}{\numberline {B.1}Guía de usuario}{72}{section.161}%
-\contentsline {subsection}{\numberline {B.1.1}Inicio de sesión, registro, y localización}{72}{subsection.162}%
-\contentsline {subsection}{\numberline {B.1.2}Pantalla de Home, valoración de profesionales y Pantalla de servicios (lista)}{73}{subsection.164}%
-\contentsline {subsection}{\numberline {B.1.3}Detalles de servicio, pantalla de servicios (mapa), y pantalla de búsqueda}{74}{subsection.166}%
-\contentsline {subsection}{\numberline {B.1.4}Pantalla para ver otro perfil, chats recientes y chat individual}{75}{subsection.168}%
-\contentsline {subsection}{\numberline {B.1.5}Pantalla de perfil, modo claro y editar perfil}{76}{subsection.170}%
+\contentsline {chapter}{\numberline {A}Especificación de requisitos}{46}{appendix.129}%
+\contentsline {section}{\numberline {A.1}Actores}{46}{section.130}%
+\contentsline {section}{\numberline {A.2}Casos de Uso}{46}{section.131}%
+\contentsline {subsection}{\numberline {A.2.1}Casos de uso generales}{47}{subsection.132}%
+\contentsline {subsection}{\numberline {A.2.2}Casos de uso de usuarios}{54}{subsection.140}%
+\contentsline {subsection}{\numberline {A.2.3}Casos de uso de profesionales}{58}{subsection.146}%
+\contentsline {subsection}{\numberline {A.2.4}Casos de uso de administrador}{65}{subsection.154}%
+\contentsline {chapter}{\numberline {B}Guía de uso}{70}{appendix.160}%
+\contentsline {section}{\numberline {B.1}Guía de usuario}{71}{section.161}%
+\contentsline {subsection}{\numberline {B.1.1}Inicio de sesión, registro, y localización}{71}{subsection.162}%
+\contentsline {subsection}{\numberline {B.1.2}Pantalla de Home, valoración de profesionales y Pantalla de servicios (lista)}{72}{subsection.164}%
+\contentsline {subsection}{\numberline {B.1.3}Detalles de servicio, pantalla de servicios (mapa) y pantalla de búsqueda}{73}{subsection.166}%
+\contentsline {subsection}{\numberline {B.1.4}Pantalla para ver otro perfil, chats recientes y chat individual}{74}{subsection.168}%
+\contentsline {subsection}{\numberline {B.1.5}Pantalla de perfil, modo claro y editar perfil}{75}{subsection.170}%
 \contentsline {section}{\numberline {B.2}Guía de profesional}{76}{section.172}%
-\contentsline {chapter}{\numberline {C}Diseño de las bases de datos}{77}{appendix.173}%
-\contentsline {chapter}{\numberline {D}Interfaces de Profinder diseñadas en figma}{79}{appendix.176}%
+\contentsline {subsection}{\numberline {B.2.1}Home profesional, servicios activos, servicios inactivos}{76}{subsection.173}%
+\contentsline {subsection}{\numberline {B.2.2}Añadir servicio, perfil de profesional, cambiar estado}{77}{subsection.175}%
+\contentsline {chapter}{\numberline {C}Diseño de las bases de datos}{78}{appendix.177}%
+\contentsline {chapter}{\numberline {D}Interfaces de Profinder diseñadas en figma}{80}{appendix.180}%

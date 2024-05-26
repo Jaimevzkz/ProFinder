@@ -98,32 +98,19 @@ macro:->\textbf
 {https://kotlinlang.org/}
 \@endanenote 
 \@doanenote {17}
-macro:->Artículo
-que
-explica
-en
-detalle
-qué
-es
-kotlin:
-\href
-{https://www.plainconcepts.com/es/kotlin-android/}{Plain
-Concepts}
-\@endanenote 
-\@doanenote {18}
 macro:->\textbf
 {Jetpack
 Compose}:
 \url
 {https://developer.android.com/develop/ui/compose}
 \@endanenote 
-\@doanenote {19}
+\@doanenote {18}
 macro:->\textbf
 {lambdas}:
 \url
 {https://kotlinlang.org/docs/lambdas.html}
 \@endanenote 
-\@doanenote {20}
+\@doanenote {19}
 macro:->Imagen
 sacada
 del
@@ -155,20 +142,20 @@ en
 on
 Medium}}
 \@endanenote 
-\@doanenote {21}
+\@doanenote {20}
 macro:->\textbf
 {mockk}:
 \url
 {https://mockk.io/ANDROID.html}
 \@endanenote 
-\@doanenote {22}
+\@doanenote {21}
 macro:->\textbf
 {Dagger
 Hilt}:
 \url
 {https://dagger.dev/hilt/}
 \@endanenote 
-\@doanenote {23}
+\@doanenote {22}
 macro:->\textbf
 {SDK
 de
@@ -178,6 +165,49 @@ para
 Android}:
 \url
 {https://developers.google.com/maps/documentation/android-sdk}
+\@endanenote 
+\@doanenote {23}
+macro:->Es
+necesario
+añadir
+la
+clave
+al
+fichero
+\textit
+{local.properties}
+del
+proyecto,
+esta
+clave
+es
+individual
+por
+lo
+que
+no
+se
+ha
+subido
+a
+al
+repositorio
+remoto.
+Para
+conseguir
+una
+clave
+y
+poder
+usar
+la
+funcionalidad
+de
+mapa
+entrar
+en:
+\url
+{https://console.cloud.google.com/welcome?pli=1&project=profinder-9545f}
 \@endanenote 
 \@doanenote {24}
 macro:->Link

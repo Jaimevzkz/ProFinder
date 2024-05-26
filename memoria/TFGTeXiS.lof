@@ -5,62 +5,64 @@
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Diagrama de Gantt del proyecto\relax }}{3}{figure.caption.18}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Función en Java\relax }}{11}{figure.caption.34}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Función en Kotlin\relax }}{11}{figure.caption.35}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Recycler View utilizando Android views.\relax }}{12}{figure.caption.38}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces LazyColumn utilizando Jetpack Compose\relax }}{13}{figure.caption.39}%
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Ejemplo de inyección de un caso de uso usando Hilt\relax }}{13}{figure.caption.42}%
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Ejemplo de módulo de dependencias\relax }}{14}{figure.caption.43}%
-\contentsline {figure}{\numberline {3.7}{\ignorespaces Ejemplo de viewmodel inyectado\relax }}{14}{figure.caption.44}%
-\contentsline {figure}{\numberline {3.8}{\ignorespaces Uso del \textit {composable} GoogleMap para dibujar un mapa en la aplicación\relax }}{14}{figure.caption.46}%
-\contentsline {figure}{\numberline {3.9}{\ignorespaces Ejemplo de declaración de función como Destination.\relax }}{15}{figure.caption.48}%
-\contentsline {figure}{\numberline {3.10}{\ignorespaces Ejemplo de uso de variable navigator.\relax }}{15}{figure.caption.49}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Función en Java\relax }}{10}{figure.caption.34}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Función en Kotlin\relax }}{10}{figure.caption.35}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Recycler View utilizando Android views.\relax }}{11}{figure.caption.38}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces LazyColumn utilizando Jetpack Compose\relax }}{11}{figure.caption.39}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Ejemplo de inyección de un caso de uso usando Hilt\relax }}{12}{figure.caption.42}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Ejemplo de módulo de dependencias\relax }}{12}{figure.caption.43}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Ejemplo de viewmodel inyectado\relax }}{13}{figure.caption.44}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Uso del \textit {composable} GoogleMap para dibujar un mapa en la aplicación\relax }}{13}{figure.caption.46}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Ejemplo de declaración de función como Destination.\relax }}{14}{figure.caption.48}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Ejemplo de uso de variable navigator.\relax }}{14}{figure.caption.49}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Ejemplo de estado.\relax }}{19}{figure.caption.60}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Ejemplo de definición de los \textit {intents} de una vista.\relax }}{19}{figure.caption.61}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Representación gráfica del ciclo MVI.\relax }}{20}{figure.caption.62}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Ejemplo de primer principio SOLID.\relax }}{20}{figure.caption.65}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Ejemplo del quinto principio SOLID.\relax }}{21}{figure.caption.70}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Diagrama del modelo de datos inicial.\relax }}{22}{figure.caption.72}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Clase ActorModel.\relax }}{22}{figure.caption.74}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces Clase ServiceModel.\relax }}{23}{figure.caption.75}%
-\contentsline {figure}{\numberline {4.9}{\ignorespaces Clase JobModel.\relax }}{23}{figure.caption.76}%
-\contentsline {figure}{\numberline {4.10}{\ignorespaces Clase ChatListItemModel.\relax }}{23}{figure.caption.77}%
-\contentsline {figure}{\numberline {4.11}{\ignorespaces Clase ChatMsgModel.\relax }}{24}{figure.caption.78}%
-\contentsline {figure}{\numberline {4.12}{\ignorespaces Clase LocationModel.\relax }}{24}{figure.caption.79}%
-\contentsline {figure}{\numberline {4.13}{\ignorespaces Ejemplo de enumerado (actores).\relax }}{24}{figure.caption.80}%
-\contentsline {figure}{\numberline {4.14}{\ignorespaces Captura de pantalla del panel de control de Firebase Authentication.\relax }}{25}{figure.caption.83}%
-\contentsline {figure}{\numberline {4.15}{\ignorespaces Captura de pantalla del panel de control de la base de datos Firestore.\relax }}{26}{figure.caption.85}%
-\contentsline {figure}{\numberline {4.16}{\ignorespaces Captura de pantalla de la estructura de Realtime Database\relax }}{26}{figure.caption.87}%
-\contentsline {figure}{\numberline {4.17}{\ignorespaces Ejemplo de función getData()\relax }}{27}{figure.caption.91}%
-\contentsline {figure}{\numberline {4.18}{\ignorespaces Ejemplo de Singleton con datos de usuario\relax }}{28}{figure.caption.92}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Ejemplo de estado.\relax }}{18}{figure.caption.60}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Ejemplo de definición de los \textit {intents} de una vista.\relax }}{18}{figure.caption.61}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Representación gráfica del ciclo MVI.\relax }}{19}{figure.caption.62}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Ejemplo de primer principio SOLID.\relax }}{19}{figure.caption.65}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Ejemplo del quinto principio SOLID.\relax }}{20}{figure.caption.70}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Diagrama del modelo de datos inicial.\relax }}{21}{figure.caption.72}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Clase ActorModel.\relax }}{21}{figure.caption.74}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Clase ServiceModel.\relax }}{22}{figure.caption.75}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Clase JobModel.\relax }}{22}{figure.caption.76}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Clase ChatListItemModel.\relax }}{22}{figure.caption.77}%
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Clase ChatMsgModel.\relax }}{23}{figure.caption.78}%
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Clase LocationModel.\relax }}{23}{figure.caption.79}%
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Ejemplo de enumerado (actores).\relax }}{23}{figure.caption.80}%
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Captura de pantalla del panel de control de Firebase Authentication.\relax }}{24}{figure.caption.83}%
+\contentsline {figure}{\numberline {4.15}{\ignorespaces Captura de pantalla del panel de control de la base de datos Firestore.\relax }}{25}{figure.caption.85}%
+\contentsline {figure}{\numberline {4.16}{\ignorespaces Captura de pantalla de la estructura de Realtime Database\relax }}{25}{figure.caption.87}%
+\contentsline {figure}{\numberline {4.17}{\ignorespaces Ejemplo de función getData()\relax }}{26}{figure.caption.91}%
+\contentsline {figure}{\numberline {4.18}{\ignorespaces Ejemplo de Singleton con datos de usuario\relax }}{27}{figure.caption.92}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Ejemplo de la bottom bar.\relax }}{29}{figure.caption.96}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Parte del fichero strings.xml en su versión en inglés y español.\relax }}{31}{figure.caption.99}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Ejemplo de validación del campo email.\relax }}{31}{figure.caption.102}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Función que comprueba si hay una sesión guardada.\relax }}{32}{figure.caption.103}%
-\contentsline {figure}{\numberline {5.5}{\ignorespaces Ejemplo de función condicionada por solicitud o trabajo.\relax }}{33}{figure.caption.106}%
-\contentsline {figure}{\numberline {5.6}{\ignorespaces Ejemplo de uso de flows para sacar los chats recientes y recogerlos en el viewmodel.\relax }}{33}{figure.caption.108}%
-\contentsline {figure}{\numberline {5.7}{\ignorespaces Interfaz Error.\relax }}{34}{figure.caption.110}%
-\contentsline {figure}{\numberline {5.8}{\ignorespaces Interfaz Result.\relax }}{34}{figure.caption.111}%
-\contentsline {figure}{\numberline {5.9}{\ignorespaces Ejemplo de tipo de error.\relax }}{35}{figure.caption.112}%
-\contentsline {figure}{\numberline {5.10}{\ignorespaces Ejemplo de implementación de Result.\relax }}{35}{figure.caption.113}%
-\contentsline {figure}{\numberline {5.11}{\ignorespaces Ejemplo de llamada a función implementando Result.\relax }}{35}{figure.caption.114}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Ejemplo de la bottom bar.\relax }}{28}{figure.caption.96}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Parte del fichero strings.xml en su versión en inglés y español.\relax }}{30}{figure.caption.99}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Ejemplo de validación del campo email.\relax }}{30}{figure.caption.102}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Función que comprueba si hay una sesión guardada.\relax }}{31}{figure.caption.103}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Ejemplo de función condicionada por solicitud o trabajo.\relax }}{32}{figure.caption.106}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Ejemplo de uso de flows para sacar los chats recientes y recogerlos en el viewmodel.\relax }}{32}{figure.caption.108}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Interfaz Error.\relax }}{33}{figure.caption.110}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Interfaz Result.\relax }}{33}{figure.caption.111}%
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Ejemplo de tipo de error.\relax }}{34}{figure.caption.112}%
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Ejemplo de implementación de Result.\relax }}{34}{figure.caption.113}%
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Ejemplo de llamada a función implementando Result.\relax }}{34}{figure.caption.114}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Gantt chart of the project\relax }}{41}{figure.caption.125}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Gantt chart of the project\relax }}{40}{figure.caption.125}%
 \babel@toc {english}{}\relax 
 \babel@toc {spanish}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {B.1}{\ignorespaces Login Screen, Sign up Screen, permiso de localización\relax }}{72}{figure.caption.163}%
-\contentsline {figure}{\numberline {B.2}{\ignorespaces Home Screen, Valorar profesional, Services Screen\relax }}{73}{figure.caption.165}%
-\contentsline {figure}{\numberline {B.3}{\ignorespaces Service Details, Map Screen, Search Screen\relax }}{74}{figure.caption.167}%
-\contentsline {figure}{\numberline {B.4}{\ignorespaces View profile Screen, Recent chats Screen, Individual chat Screen\relax }}{75}{figure.caption.169}%
-\contentsline {figure}{\numberline {B.5}{\ignorespaces Profile Screen, Profile Screen (light), Edit profile Screen\relax }}{76}{figure.caption.171}%
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Login Screen, Sign up Screen, permiso de localización\relax }}{71}{figure.caption.163}%
+\contentsline {figure}{\numberline {B.2}{\ignorespaces Home Screen, Valorar profesional, Services Screen\relax }}{72}{figure.caption.165}%
+\contentsline {figure}{\numberline {B.3}{\ignorespaces Service Details, Map Screen, Search Screen\relax }}{73}{figure.caption.167}%
+\contentsline {figure}{\numberline {B.4}{\ignorespaces View profile Screen, Recent chats Screen, Individual chat Screen\relax }}{74}{figure.caption.169}%
+\contentsline {figure}{\numberline {B.5}{\ignorespaces Profile Screen, Profile Screen (light), Edit profile Screen\relax }}{75}{figure.caption.171}%
+\contentsline {figure}{\numberline {B.6}{\ignorespaces Home Screen professional, Active Services screen, Inactive services screen\relax }}{76}{figure.caption.174}%
+\contentsline {figure}{\numberline {B.7}{\ignorespaces Add service, Professional profile, change state\relax }}{77}{figure.caption.176}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {C.1}{\ignorespaces Diseño de la base de datos Realtime usando Drawio.\relax }}{77}{figure.caption.174}%
-\contentsline {figure}{\numberline {C.2}{\ignorespaces Diseño de la base de datos Firestore usando Drawio.\relax }}{78}{figure.caption.175}%
+\contentsline {figure}{\numberline {C.1}{\ignorespaces Diseño de la base de datos Realtime usando Drawio.\relax }}{78}{figure.caption.178}%
+\contentsline {figure}{\numberline {C.2}{\ignorespaces Diseño de la base de datos Firestore usando Drawio.\relax }}{79}{figure.caption.179}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {D.1}{\ignorespaces Splash Screen, Login Screen y Sing Up Screen.\relax }}{79}{figure.caption.177}%
-\contentsline {figure}{\numberline {D.2}{\ignorespaces Home Screen, Services Screen (professional) y Chat Screen.\relax }}{80}{figure.caption.178}%
-\contentsline {figure}{\numberline {D.3}{\ignorespaces Services Screen (user), Profile Screen y Individual Chat Screen.\relax }}{80}{figure.caption.179}%
+\contentsline {figure}{\numberline {D.1}{\ignorespaces Splash Screen, Login Screen y Sing Up Screen.\relax }}{80}{figure.caption.181}%
+\contentsline {figure}{\numberline {D.2}{\ignorespaces Home Screen, Services Screen (professional) y Chat Screen.\relax }}{81}{figure.caption.182}%
+\contentsline {figure}{\numberline {D.3}{\ignorespaces Services Screen (user), Profile Screen y Individual Chat Screen.\relax }}{81}{figure.caption.183}%
