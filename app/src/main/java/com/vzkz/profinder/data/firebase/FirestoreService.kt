@@ -249,7 +249,7 @@ class FirestoreService @Inject constructor(firestore: FirebaseFirestore) {
                 }
                 Result.Success(favActorList.toList())
             } else {
-                Result.Error(FirebaseError.Firestore.CORRUPTED_DATABASE_DATA)
+                Result.Success(emptyList())
             }
         } catch (e: Exception) {
             Result.Error(FirebaseError.Firestore.CORRUPTED_DATABASE_DATA)
